@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.6.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 
@@ -33,7 +33,10 @@ library
       Data.Number.Flint.Flint
       Data.Number.Flint.Flint.FFI
       Data.Number.Flint.Fmpz
-      Data.Number.Flint.Fmpz.FFI
+      Data.Number.Flint.Fmpz.Factor
+      Data.Number.Flint.Fmpz.Factor.Struct
+      Data.Number.Flint.Fmpz.Functions
+      Data.Number.Flint.Fmpz.Struct
       Data.Number.Flint.Internal
       Data.Number.Flint.Internal.FFI
       Data.Number.Flint.NMod
