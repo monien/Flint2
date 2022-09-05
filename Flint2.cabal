@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 
@@ -27,11 +27,15 @@ source-repository head
 
 library
   exposed-modules:
+      Data.Number.Flint.External
+      Data.Number.Flint.External.GMP.FFI
+      Data.Number.Flint.External.Mpfr.FFI
       Data.Number.Flint.Flint
+      Data.Number.Flint.Flint.FFI
+      Data.Number.Flint.Fmpz
       Data.Number.Flint.Fmpz.FFI
       Data.Number.Flint.Internal
       Data.Number.Flint.Internal.FFI
-      Lib
   other-modules:
       Paths_Flint2
   hs-source-dirs:

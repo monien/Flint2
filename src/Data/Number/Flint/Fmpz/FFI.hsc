@@ -280,8 +280,9 @@ import Foreign.Marshal ( free )
 import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
 import Numeric.GMP.Types (MPZ)
 
-import Data.Number.Flint.Flint
 import Data.Number.Flint.Internal
+import Data.Number.Flint.External
+import Data.Number.Flint.Flint
 
 #include <flint/flint.h>
 
@@ -478,28 +479,28 @@ foreign import ccall "fmpz.h fmpz_init_set_si"
 -- Generates a random signed integer whose absolute value has precisely the
 -- given number of bits.
 foreign import ccall "fmpz.h fmpz_randbits"
-  fmpz_randbits :: Ptr CFmpz -> Ptr CFRandState -> FlintBitcnt -> IO ()
+  fmpz_randbits :: Ptr CFmpz -> Ptr CFRandState -> CFBitCnt -> IO ()
 
 -- | /fmpz_randtest/ /f/ /state/ /bits/ 
 -- 
 -- Generates a random signed integer whose absolute value has a number of
 -- bits which is random from \(0\) up to @bits@ inclusive.
 foreign import ccall "fmpz.h fmpz_randtest"
-  fmpz_randtest :: Ptr CFmpz -> Ptr CFRandState -> FlintBitcnt -> IO ()
+  fmpz_randtest :: Ptr CFmpz -> Ptr CFRandState -> CFBitCnt -> IO ()
 
 -- | /fmpz_randtest_unsigned/ /f/ /state/ /bits/ 
 -- 
 -- Generates a random unsigned integer whose value has a number of bits
 -- which is random from \(0\) up to @bits@ inclusive.
 foreign import ccall "fmpz.h fmpz_randtest_unsigned"
-  fmpz_randtest_unsigned :: Ptr CFmpz -> Ptr CFRandState -> FlintBitcnt -> IO ()
+  fmpz_randtest_unsigned :: Ptr CFmpz -> Ptr CFRandState -> CFBitCnt -> IO ()
 
 -- | /fmpz_randtest_not_zero/ /f/ /state/ /bits/ 
 -- 
 -- As per @fmpz_randtest@, but the result will not be \(0\). If @bits@ is
 -- set to \(0\), an exception will result.
 foreign import ccall "fmpz.h fmpz_randtest_not_zero"
-  fmpz_randtest_not_zero :: Ptr CFmpz -> Ptr CFRandState -> FlintBitcnt -> IO ()
+  fmpz_randtest_not_zero :: Ptr CFmpz -> Ptr CFRandState -> CFBitCnt -> IO ()
 
 -- | /fmpz_randm/ /f/ /state/ /m/ 
 -- 
@@ -537,7 +538,7 @@ foreign import ccall "fmpz.h fmpz_randtest_mod_signed"
 -- If @proved@ is nonzero, then the integer returned is guaranteed to
 -- actually be prime.
 foreign import ccall "fmpz.h fmpz_randprime"
-  fmpz_randprime :: Ptr CFmpz -> Ptr CFRandState -> FlintBitcnt -> CInt -> IO ()
+  fmpz_randprime :: Ptr CFmpz -> Ptr CFRandState -> CFBitCnt -> CInt -> IO ()
 
 -- Conversion ------------------------------------------------------------------
 
@@ -561,13 +562,13 @@ foreign import ccall "fmpz.h fmpz_get_ui"
 -- high and low limbs, otherwise @*low@ is set to the low limb and @*hi@ is
 -- set to \(0\).
 foreign import ccall "fmpz.h fmpz_get_uiui"
-  fmpz_get_uiui :: Ptr MpLimb -> Ptr MpLimb -> Ptr CFmpz -> IO ()
+  fmpz_get_uiui :: Ptr CMpLimb -> Ptr CMpLimb -> Ptr CFmpz -> IO ()
 
 -- | /fmpz_get_nmod/ /f/ /mod/ 
 -- 
 -- Returns \(f \mod n\).
 foreign import ccall "fmpz.h fmpz_get_nmod"
-  fmpz_get_nmod :: Ptr CFmpz -> Ptr NMod -> IO MpLimb
+  fmpz_get_nmod :: Ptr CFmpz -> Ptr CNMod -> IO CMpLimb
 
 -- | /fmpz_get_d/ /f/ 
 -- 
@@ -666,14 +667,14 @@ foreign import ccall "fmpz.h fmpz_neg_ui"
 -- 
 -- Sets \(f\) to @lo@, plus @hi@ shifted to the left by @FLINT_BITS@.
 foreign import ccall "fmpz.h fmpz_set_uiui"
-  fmpz_set_uiui :: Ptr CFmpz -> MpLimb -> MpLimb -> IO ()
+  fmpz_set_uiui :: Ptr CFmpz -> CMpLimb -> CMpLimb -> IO ()
 
 -- | /fmpz_neg_uiui/ /f/ /hi/ /lo/ 
 -- 
 -- Sets \(f\) to @lo@, plus @hi@ shifted to the left by @FLINT_BITS@, and
 -- then negates \(f\).
 foreign import ccall "fmpz.h fmpz_neg_uiui"
-  fmpz_neg_uiui :: Ptr CFmpz -> MpLimb -> MpLimb -> IO ()
+  fmpz_neg_uiui :: Ptr CFmpz -> CMpLimb -> CMpLimb -> IO ()
 
 -- | /fmpz_set_signed_uiui/ /f/ /hi/ /lo/ 
 -- 
@@ -754,7 +755,7 @@ foreign import ccall "fmpz.h fmpz_set_str"
 -- \(-m/2 < y \leq m/2\), given \(x\) which is assumed to satisfy
 -- \(0 \leq x < m\).
 foreign import ccall "fmpz.h fmpz_set_ui_smod"
-  fmpz_set_ui_smod :: Ptr CFmpz -> MpLimb -> MpLimb -> IO ()
+  fmpz_set_ui_smod :: Ptr CFmpz -> CMpLimb -> CMpLimb -> IO ()
 
 -- | /flint_mpz_init_set_readonly/ /z/ /f/ 
 -- 
@@ -936,14 +937,14 @@ foreign import ccall "fmpz.h fmpz_sizeinbase"
 -- Returns the number of bits required to store the absolute value of
 -- \(f\). If \(f\) is \(0\) then \(0\) is returned.
 foreign import ccall "fmpz.h fmpz_bits"
-  fmpz_bits :: Ptr CFmpz -> IO FlintBitcnt
+  fmpz_bits :: Ptr CFmpz -> IO CFBitCnt
 
 -- | /fmpz_size/ /f/ 
 -- 
 -- Returns the number of limbs required to store the absolute value of
 -- \(f\). If \(f\) is zero then \(0\) is returned.
 foreign import ccall "fmpz.h fmpz_size"
-  fmpz_size :: Ptr CFmpz -> IO MpSize
+  fmpz_size :: Ptr CFmpz -> IO CMpSize
 
 -- | /fmpz_sgn/ /f/ 
 -- 
@@ -958,7 +959,7 @@ foreign import ccall "fmpz.h fmpz_sgn"
 -- equivalently the number of trailing zeros in the binary expansion of
 -- \(f\). If \(f\) is zero then \(0\) is returned.
 foreign import ccall "fmpz.h fmpz_val2"
-  fmpz_val2 :: Ptr CFmpz -> IO FlintBitcnt
+  fmpz_val2 :: Ptr CFmpz -> IO CFBitCnt
 
 -- | /fmpz_swap/ /f/ /g/ 
 -- 
@@ -1015,7 +1016,7 @@ foreign import ccall "fmpz.h fmpz_tstbit"
 -- of bits must be between 1 and @FLINT_BITS@ inclusive. The mantissa is
 -- guaranteed to be correctly rounded.
 foreign import ccall "fmpz.h fmpz_abs_lbound_ui_2exp"
-  fmpz_abs_lbound_ui_2exp :: Ptr CLong -> Ptr CFmpz -> CInt -> IO MpLimb
+  fmpz_abs_lbound_ui_2exp :: Ptr CLong -> Ptr CFmpz -> CInt -> IO CMpLimb
 
 -- | /fmpz_abs_ubound_ui_2exp/ /exp/ /x/ /bits/ 
 -- 
@@ -1025,7 +1026,7 @@ foreign import ccall "fmpz.h fmpz_abs_lbound_ui_2exp"
 -- either correctly rounded or one unit too large (possibly meaning that
 -- the exponent is one too large, if the mantissa is a power of two).
 foreign import ccall "fmpz.h fmpz_abs_ubound_ui_2exp"
-  fmpz_abs_ubound_ui_2exp :: Ptr CLong -> Ptr CFmpz -> CInt -> IO MpLimb
+  fmpz_abs_ubound_ui_2exp :: Ptr CLong -> Ptr CFmpz -> CInt -> IO CMpLimb
 
 -- Comparison ------------------------------------------------------------------
 
@@ -1333,14 +1334,14 @@ foreign import ccall "fmpz.h fmpz_smod"
 -- Compute a precomputed inverse @inv@ of @f@ for use in the @preinvn@
 -- functions listed below.
 foreign import ccall "fmpz.h fmpz_preinvn_init"
-  fmpz_preinvn_init :: Ptr CFmpzPreInv -> Ptr CFmpz -> IO ()
+  fmpz_preinvn_init :: Ptr CFmpzPreInvN -> Ptr CFmpz -> IO ()
 
 -- | /fmpz_preinvn_clear/ /inv/ 
 -- 
 -- Clean up the resources used by a precomputed inverse created with the
 -- @fmpz_preinvn_init@ function.
 foreign import ccall "fmpz.h fmpz_preinvn_clear"
-  fmpz_preinvn_clear :: Ptr CFmpzPreInv -> IO ()
+  fmpz_preinvn_clear :: Ptr CFmpzPreInvN -> IO ()
 
 -- | /fmpz_fdiv_qr_preinvn/ /f/ /s/ /g/ /h/ /hinv/ 
 -- 
@@ -1350,7 +1351,7 @@ foreign import ccall "fmpz.h fmpz_preinvn_clear"
 -- This function will be faster than @fmpz_fdiv_qr_preinvn@ when the number
 -- of limbs of \(h\) is at least @PREINVN_CUTOFF@.
 foreign import ccall "fmpz.h fmpz_fdiv_qr_preinvn"
-  fmpz_fdiv_qr_preinvn :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpzPreInv -> IO ()
+  fmpz_fdiv_qr_preinvn :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpzPreInvN -> IO ()
 
 -- | /fmpz_pow_ui/ /f/ /g/ /x/ 
 -- 
@@ -1694,7 +1695,7 @@ foreign import ccall "fmpz.h fmpz_divides_mod_list"
 -- The value of @coeff@ may also be optionally (and notionally) negated
 -- before it is used, by setting the @negate@ parameter to \(-1\).
 foreign import ccall "fmpz.h fmpz_bit_pack"
-  fmpz_bit_pack :: Ptr MpLimb -> FlintBitcnt -> FlintBitcnt -> Ptr CFmpz -> CInt -> CInt -> IO CInt
+  fmpz_bit_pack :: Ptr CMpLimb -> CFBitCnt -> CFBitCnt -> Ptr CFmpz -> CInt -> CInt -> IO CInt
 
 -- | /fmpz_bit_unpack/ /coeff/ /arr/ /shift/ /bits/ /negate/ /borrow/ 
 -- 
@@ -1706,7 +1707,7 @@ foreign import ccall "fmpz.h fmpz_bit_pack"
 -- 
 -- The value of @shift@ is expected to be less than @FLINT_BITS@.
 foreign import ccall "fmpz.h fmpz_bit_unpack"
-  fmpz_bit_unpack :: Ptr CFmpz -> Ptr MpLimb -> FlintBitcnt -> FlintBitcnt -> CInt -> CInt -> IO CInt
+  fmpz_bit_unpack :: Ptr CFmpz -> Ptr CMpLimb -> CFBitCnt -> CFBitCnt -> CInt -> CInt -> IO CInt
 
 -- | /fmpz_bit_unpack_unsigned/ /coeff/ /arr/ /shift/ /bits/ 
 -- 
@@ -1715,7 +1716,7 @@ foreign import ccall "fmpz.h fmpz_bit_unpack"
 -- 
 -- The value of @shift@ is expected to be less than @FLINT_BITS@.
 foreign import ccall "fmpz.h fmpz_bit_unpack_unsigned"
-  fmpz_bit_unpack_unsigned :: Ptr CFmpz -> Ptr MpLimb -> FlintBitcnt -> FlintBitcnt -> IO ()
+  fmpz_bit_unpack_unsigned :: Ptr CFmpz -> Ptr CMpLimb -> CFBitCnt -> CFBitCnt -> IO ()
 
 -- Logic Operations ------------------------------------------------------------
 
@@ -1820,7 +1821,7 @@ foreign import ccall "fmpz.h fmpz_CRT"
 -- which must be provided by @fmpz_comb_temp_init@ and cleared by
 -- @fmpz_comb_temp_clear@.
 foreign import ccall "fmpz.h fmpz_multi_mod_ui"
-  fmpz_multi_mod_ui :: Ptr MpLimb -> Ptr CFmpz -> Ptr CFmpzComb -> Ptr CFmpzCombTemp -> IO ()
+  fmpz_multi_mod_ui :: Ptr CMpLimb -> Ptr CFmpz -> Ptr CFmpzComb -> Ptr CFmpzCombTemp -> IO ()
 
 -- | /fmpz_multi_CRT_ui/ /output/ /residues/ /comb/ /ctemp/ /sign/ 
 -- 
@@ -1835,6 +1836,29 @@ foreign import ccall "fmpz.h fmpz_multi_mod_ui"
 -- @fmpz_comb_temp_init@ and cleared by @fmpz_comb_temp_clear@.
 foreign import ccall "fmpz.h fmpz_multi_CRT_ui"
   fmpz_multi_CRT_ui :: Ptr CFmpz -> Ptr CMp -> Ptr CFmpzComb -> Ptr CFmpzCombTemp -> CInt -> IO ()
+
+-- fmpz_comb_t -----------------------------------------------------------------
+
+data FmpzComb = FmpzComb {-# UNPACK #-} !(ForeignPtr CFmpzComb)
+type CFmpzComb = CFlint FmpzComb
+
+instance Storable CFmpzComb where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_comb_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_comb_t}
+  peek = error "CFmpzComb.peek: Not defined"
+  poke = error "CFmpzComb.poke: Not defined"
+
+newFmpzComb primes num_primes = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> fmpz_comb_init p primes num_primes
+  addForeignPtrFinalizer p_fmpz_comb_clear p
+  return $ FmpzComb p
+
+{-# INLINE withFmpzComb #-}
+withFmpzComb (FmpzComb p) f = do
+  withForeignPtr p $ \fp -> f fp >>= return . (FmpzComb p,)
 
 -- fmpz_comb_temp_t ------------------------------------------------------------
 
@@ -1921,7 +1945,7 @@ withFmpzMultiCRT (FmpzMultiCRT p) f = do
 -- 
 -- Initialize @CRT@ for Chinese remaindering.
 foreign import ccall "fmpz.h fmpz_multi_crt_init"
-  fmpz_multi_crt_init :: Ptr CFmpzMultiCrt -> IO ()
+  fmpz_multi_crt_init :: Ptr CFmpzMultiCRT -> IO ()
 
 -- | /fmpz_multi_crt_precompute/ /CRT/ /moduli/ /len/ 
 -- 
@@ -1933,14 +1957,14 @@ foreign import ccall "fmpz.h fmpz_multi_crt_init"
 -- @len == 1@ and @modulus + 0@ is nonzero, or (2) no modulus is \(0,1,-1\)
 -- and all moduli are pairwise relatively prime.
 foreign import ccall "fmpz.h fmpz_multi_crt_precompute"
-  fmpz_multi_crt_precompute :: Ptr CFmpzMultiCrt -> Ptr CFmpz -> CLong -> IO CInt
+  fmpz_multi_crt_precompute :: Ptr CFmpzMultiCRT -> Ptr CFmpz -> CLong -> IO CInt
 
 -- | /fmpz_multi_crt_precomp/ /output/ /P/ /inputs/ 
 -- 
 -- Set @output@ to an integer of smallest absolute value that is congruent
 -- to @values + i@ modulo the @moduli + i@ in @fmpz_crt_precompute@.
 foreign import ccall "fmpz.h fmpz_multi_crt_precomp"
-  fmpz_multi_crt_precomp :: Ptr CFmpz -> Ptr CFmpzMultiCrt -> Ptr CFmpz -> IO ()
+  fmpz_multi_crt_precomp :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
 -- | /fmpz_multi_crt/ /output/ /moduli/ /values/ /len/ 
 -- 
@@ -1954,7 +1978,7 @@ foreign import ccall "fmpz.h fmpz_multi_crt"
 -- 
 -- Free all space used by @CRT@.
 foreign import ccall "fmpz.h fmpz_multi_crt_clear"
-  fmpz_multi_crt_clear :: Ptr CFmpzMultiCrt -> IO ()
+  fmpz_multi_crt_clear :: Ptr CFmpzMultiCRT -> IO ()
 
 -- | /_nmod_poly_crt_local_size/ /CRT/ 
 -- 
@@ -1969,7 +1993,7 @@ foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
 -- and @outputs@ should contain space for all temporaries and should be at
 -- least as long as @_fmpz_multi_crt_local_size(CRT)@.
 foreign import ccall "fmpz.h _fmpz_multi_crt_run"
-  _fmpz_multi_crt_run :: Ptr CFmpz -> Ptr CFmpzMultiCrt -> Ptr CFmpz -> IO ()
+  _fmpz_multi_crt_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
 -- Primality testing -----------------------------------------------------------
 
