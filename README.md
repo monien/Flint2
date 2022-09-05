@@ -1,1 +1,3 @@
-# Flint2
+# Flint
+
+A Haskell wrapper for flintlib.
