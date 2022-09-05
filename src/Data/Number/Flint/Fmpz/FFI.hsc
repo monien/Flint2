@@ -283,11 +283,10 @@ import Numeric.GMP.Types (MPZ)
 import Data.Number.Flint.Internal
 import Data.Number.Flint.External
 import Data.Number.Flint.Flint
+import Data.Number.Flint.NMod.Struct
 
 #include <flint/flint.h>
-
 #include <flint/fmpz.h>
-#include <flint/fmpq.h>
 
 -- fmpz_t ----------------------------------------------------------------------
 
@@ -305,15 +304,15 @@ instance Storable CFmpz where
 
 -- | Create a new `Fmpz` structure.
 newFmpz = do
-  p <- mallocForeignPtr
+  x <- mallocForeignPtr
   withForeignPtr p fmpz_init
-  addForeignPtrFinalizer p_fmpz_clear p
-  return $ Fmpz p
+  addForeignPtrFinalizer p_fmpz_clear x
+  return $ Fmpz x
 
 -- | Use `Fmpz` structure.
 {-# INLINE withFmpz #-}
-withFmpz (Fmpz p) f = do
-  withForeignPtr p $ \fp -> f fp >>= return . (Fmpz p,)
+withFmpz (Fmpz x) f = do
+  withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
 
 withNewFmpz f = do
   x <- newFmpz

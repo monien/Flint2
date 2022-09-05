@@ -36,6 +36,9 @@ library
       Data.Number.Flint.Fmpz.FFI
       Data.Number.Flint.Internal
       Data.Number.Flint.Internal.FFI
+      Data.Number.Flint.NMod
+      Data.Number.Flint.NMod.Functions
+      Data.Number.Flint.NMod.Struct
   other-modules:
       Paths_Flint2
   hs-source-dirs:
