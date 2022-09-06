@@ -1,16 +1,16 @@
-{-# language 
-  TupleSections
-#-}
+{-# language
+    CApiFFI
+  , FlexibleInstances
+  , ForeignFunctionInterface
+  , TupleSections
+  #-}
 
 module Data.Number.Flint.NMod.Struct (
   -- * Integers mod n (word-size n)
     NMod (..)
   , CNMod (..)
-  -- * Memory management
-  , newNMod
-  , withNMod
-  , withNewNMod
-  , nmod_init
+  , NModDiscreteLogPohligHellman (..)
+  , CNModDiscreteLogPohligHellman (..)
   ) where
   
 -- integers mod n (word-size n) ------------------------------------------------
@@ -22,6 +22,7 @@ import Foreign.Storable
 
 import Data.Number.Flint.Internal
 import Data.Number.Flint.External
+import Data.Number.Flint.Flint
 
 #include <flint/nmod.h>
 
@@ -41,26 +42,16 @@ instance Storable CNMod where
     <*> #{peek nmod_t, norm} ptr
   poke = error "CNMod.poke: Not defined"
 
--- | Create a new `NMod` structure
-newNMod n = do
-  x <- mallocForeignPtr
-  withForeignPtr x $ \x -> nmod_init x n
-  return $ NMod x
+-- NmodDiscreteLogPohligHellman ------------------------------------------------
 
--- | Use `Nmod` structure
-{-# INLINE withNMod #-}
-withNMod (NMod x) f = do
-  withForeignPtr x $ \xp -> f xp >>= return . (NMod x,)
+data NModDiscreteLogPohligHellman =
+   NModDiscreteLogPohligHellman !(ForeignPtr CNModDiscreteLogPohligHellman)
+type CNModDiscreteLogPohligHellman = CFlint NModDiscreteLogPohligHellman
 
-withNewNMod n f = do
-  x <- newNMod n
-  withNMod x $ \x -> f x
-
---------------------------------------------------------------------------------
-
--- | /nmod_init/ /mod/ /n/ 
--- 
--- Initialises the given @nmod_t@ structure for reduction modulo \(n\) with
--- a precomputed inverse.
-foreign import ccall "nmod.h nmod_init"
-  nmod_init :: Ptr CNMod -> CMpLimb -> IO ()
+instance Storable CNModDiscreteLogPohligHellman where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size nmod_discrete_log_pohlig_hellman_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment nmod_discrete_log_pohlig_hellman_t}
+  peek ptr = error "CNModDiscreteLogPohligHellman poke: Not defined"
+  poke = error "CNMod.poke: Not defined"

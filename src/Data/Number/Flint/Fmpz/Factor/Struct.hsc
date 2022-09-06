@@ -11,12 +11,8 @@ module Data.Number.Flint.Fmpz.Factor.Struct (
   -- * Types
     FmpzFactor (..)
   , CFmpzFactor (..)
-  , newFmpzFactor
-  , withFmpzFactor
-  , withNewFmpzFactor
-  -- * Memory management
-  , fmpz_factor_init
-  , fmpz_factor_clear
+  , Ecm (..)
+  , CEcm (..)
   ) where
 
 import Foreign.C.String
@@ -53,38 +49,6 @@ instance Storable CFmpzFactor where
     <*> #{peek fmpz_factor_struct, num  } ptr
   poke = error "CFmpzFactor.poke: Not defined"
 
-newFmpzFactor = do
-  p <- mallocForeignPtr
-  withForeignPtr p fmpz_factor_init
-  addForeignPtrFinalizer p_fmpz_factor_clear p
-  return $ FmpzFactor p
+data Ecm = Ecm {-# UNPACK #-} !(ForeignPtr CEcm)
+type CEcm = CFlint Ecm
 
-{-# INLINE withFmpzFactor #-}
-withFmpzFactor (FmpzFactor p) f = do
-  withForeignPtr p $ \fp -> f fp >>= return . (FmpzFactor p,)
-
-{-# INLINE withNewFmpzFactor #-}
-withNewFmpzFactor f = do
-  x <- newFmpzFactor
-  withFmpzFactor x f
-
--- An integer may be represented in factored form using the @fmpz_factor_t@
--- data structure. This consists of two @fmpz@ vectors representing bases
--- and exponents, respectively. Canonically, the bases will be prime
--- numbers sorted in ascending order and the exponents will be positive. A
--- separate @int@ field holds the sign, which may be \(-1\), 0 or 1.
---
--- | /fmpz_factor_init/ /factor/ 
--- 
--- Initialises an @fmpz_factor_t@ structure.
-foreign import capi "flint/fmpz.h fmpz_factor_init"
-  fmpz_factor_init :: Ptr CFmpzFactor -> IO ()
-
--- | /fmpz_factor_clear/ /factor/ 
--- 
--- Clears an @fmpz_factor_t@ structure.
-foreign import capi "flint/fmpz.h fmpz_factor_clear"
-  fmpz_factor_clear :: Ptr CFmpzFactor -> IO ()
-
-foreign import capi "flint/fmpz.h &fmpz_factor_clear"
-  p_fmpz_factor_clear :: FunPtr (Ptr CFmpzFactor -> IO ())

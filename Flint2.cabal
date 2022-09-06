@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Data.Number.Flint
       Data.Number.Flint.External
       Data.Number.Flint.External.GMP.FFI
       Data.Number.Flint.External.Mpfr.FFI
@@ -34,6 +35,7 @@ library
       Data.Number.Flint.Flint.FFI
       Data.Number.Flint.Fmpz
       Data.Number.Flint.Fmpz.Factor
+      Data.Number.Flint.Fmpz.Factor.Functions
       Data.Number.Flint.Fmpz.Factor.Struct
       Data.Number.Flint.Fmpz.Functions
       Data.Number.Flint.Fmpz.Struct
@@ -55,6 +57,20 @@ library
   build-depends:
       base >=4.7 && <5
     , hgmp
+  default-language: Haskell2010
+
+executable flint_test
+  main-is: Main.hs
+  other-modules:
+      Fmpz
+      UFD
+      Paths_Flint2
+  hs-source-dirs:
+      app
+  build-depends:
+      Flint2
+    , QuickCheck
+    , base >=4.7 && <5
   default-language: Haskell2010
 
 test-suite Flint2-test

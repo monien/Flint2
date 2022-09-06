@@ -1,7 +1,30 @@
+{-# language
+    CApiFFI
+  , FlexibleInstances
+  , ForeignFunctionInterface
+  , TupleSections
+  #-}
+
 module Data.Number.Flint.Fmpz.Functions (
-  -- * Conversion Integer <-> Fmpz
-    fromFmpz
-  , toFmpz
+  -- * Fmpz
+    newFmpz
+  , withFmpz
+  , withNewFmpz
+  -- * Memory management mpz
+  , _fmpz_new_mpz
+  , _fmpz_cleanup_mpz_content
+  , _fmpz_cleanup
+  , _fmpz_promote
+  , _fmpz_promote_val
+  , _fmpz_demote
+  , _fmpz_demote_val
+  -- * Memory management
+  , fmpz_init
+  , fmpz_init2
+  , fmpz_clear
+  , fmpz_init_set
+  , fmpz_init_set_ui
+  , fmpz_init_set_si
   -- * Random generation
   , fmpz_randbits
   , fmpz_randtest
@@ -12,6 +35,8 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_randtest_mod_signed
   , fmpz_randprime
   -- * Conversion
+  , toFmpz
+  , fromFmpz
   , fmpz_get_si
   , fmpz_get_ui
   , fmpz_get_uiui
@@ -86,13 +111,23 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_neg
   , fmpz_abs
   , fmpz_add
+  , fmpz_add_ui         
+  , fmpz_add_si       
   , fmpz_sub
+  , fmpz_sub_ui
+  , fmpz_sub_si
   , fmpz_mul
+  , fmpz_mul_ui
+  , fmpz_mul_si
   , fmpz_mul2_uiui
   , fmpz_mul_2exp
   , fmpz_one_2exp
   , fmpz_addmul
+  , fmpz_addmul_ui
+  , fmpz_addmul_si
   , fmpz_submul
+  , fmpz_submul_ui
+  , fmpz_submul_si
   , fmpz_fmma
   , fmpz_fmms
   , fmpz_cdiv_qr
@@ -186,15 +221,23 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_CRT
   , fmpz_multi_mod_ui
   , fmpz_multi_CRT_ui
-  -- , fmpz_comb_init
-  -- , fmpz_comb_temp_init
-  -- , fmpz_comb_clear
-  -- , fmpz_comb_temp_clear
-  -- , fmpz_multi_crt_init
+  -- ** Comb
+  , newFmpzComb
+  , withFmpzComb
+  , fmpz_comb_init
+  , newFmpzCombTemp
+  , withFmpzCombTemp
+  , fmpz_comb_temp_init
+  , fmpz_comb_clear
+  , fmpz_comb_temp_clear
+  -- ** Multi CRT
+  , newFmpzMultiCRT
+  , withFmpzMultiCRT
+  , fmpz_multi_crt_init
   , fmpz_multi_crt_precompute
   , fmpz_multi_crt_precomp
   , fmpz_multi_crt
-  -- , fmpz_multi_crt_clear
+  , fmpz_multi_crt_clear
   , _nmod_poly_crt_local_size
   , _fmpz_multi_crt_run
   -- * Primality testing
@@ -221,7 +264,7 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_factor_euler_phi
   , fmpz_factor_moebius_mu
   , fmpz_factor_divisor_sigma
-) where 
+) where
 
 import System.IO.Unsafe
 
@@ -230,30 +273,154 @@ import Control.Monad
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, nullPtr )
+import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr, castPtr )
 import Foreign.Storable
+import Foreign.Marshal ( free )
 
 import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
 import Numeric.GMP.Types (MPZ)
 
-import Data.Number.Flint.Flint
 import Data.Number.Flint.Internal
 import Data.Number.Flint.External
+import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz.Struct
 import Data.Number.Flint.Fmpz.Factor.Struct
 import Data.Number.Flint.NMod.Struct
 import Data.Number.Flint.NMod.Poly.Struct
 
+#include <flint/flint.h>
+#include <flint/fmpz.h>
+#include <flint/fmpz_factor.h>
+
+-- Fmpz ------------------------------------------------------------------------
+
+-- | Create a new `Fmpz` structure.
+newFmpz = do
+  x <- mallocForeignPtr
+  withForeignPtr x fmpz_init
+  addForeignPtrFinalizer p_fmpz_clear x
+  return $ Fmpz x
+
+-- | Use `Fmpz` structure.
+{-# INLINE withFmpz #-}
+withFmpz (Fmpz x) f = do
+  withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
+
+withNewFmpz f = do
+  x <- newFmpz
+  withFmpz x $ \x -> f x
+  
 --- conversion Integer <-> Fmpz ------------------------------------------------
 
-fromFmpz x = withOutInteger_ $ \y -> withFmpz x $ \x -> fmpz_get_mpz y x
+fromFmpz x =
+  withOutInteger_ $ \y ->
+    withFmpz x $ \x ->
+      fmpz_get_mpz (castPtr y) x
       
 toFmpz x = do
   y <- newFmpz
   withInInteger x $ \x ->
     withFmpz y $ \y ->
-      fmpz_set_mpz y x
+      fmpz_set_mpz y (castPtr x)
   return y
+
+-- Types, macros and constants -------------------------------------------------
+
+-- | /_fmpz_new_mpz/ 
+-- 
+-- initialises a new @mpz_t@ and returns a pointer to it. This is only used
+-- internally.
+foreign import ccall "fmpz.h _fmpz_new_mpz"
+  _fmpz_new_mpz :: IO (Ptr CMpz)
+
+-- | /_fmpz_cleanup_mpz_content/ 
+-- 
+-- this function does nothing in the reentrant version of @fmpz@.
+foreign import ccall "fmpz.h _fmpz_cleanup_mpz_content"
+  _fmpz_cleanup_mpz_content :: IO ()
+
+-- | /_fmpz_cleanup/ 
+-- 
+-- this function does nothing in the reentrant version of @fmpz@.
+foreign import ccall "fmpz.h _fmpz_cleanup"
+  _fmpz_cleanup :: IO ()
+
+-- | /_fmpz_promote/ /f/ 
+-- 
+-- if \(f\) doesn\'t represent an @mpz_t@, initialise one and associate it
+-- to \(f\).
+foreign import ccall "fmpz.h _fmpz_promote"
+  _fmpz_promote :: Ptr CFmpz -> IO (Ptr CMpz)
+
+-- | /_fmpz_promote_val/ /f/ 
+-- 
+-- if \(f\) doesn\'t represent an @mpz_t@, initialise one and associate it
+-- to \(f\), but preserve the value of \(f\).
+-- 
+-- This function is for internal use. The resulting @fmpz@ will be backed
+-- by an @mpz_t@ that can be passed to GMP, but the @fmpz@ will be in an
+-- inconsistent state with respect to the other Flint @fmpz@ functions such
+-- as @fmpz_is_zero@, etc.
+foreign import ccall "fmpz.h _fmpz_promote_val"
+  _fmpz_promote_val :: Ptr CFmpz -> IO (Ptr CMpz)
+
+-- | /_fmpz_demote/ /f/ 
+-- 
+-- if \(f\) represents an @mpz_t@ clear it and make \(f\) just represent an
+-- @slong@.
+foreign import ccall "fmpz.h _fmpz_demote"
+  _fmpz_demote :: Ptr CFmpz -> IO ()
+
+-- | /_fmpz_demote_val/ /f/ 
+-- 
+-- if \(f\) represents an @mpz_t@ and its value will fit in an @slong@,
+-- preserve the value in \(f\) which we make to represent an @slong@, and
+-- clear the @mpz_t@.
+foreign import ccall "fmpz.h _fmpz_demote_val"
+  _fmpz_demote_val :: Ptr CFmpz -> IO ()
+
+-- Memory management -----------------------------------------------------------
+
+-- | /fmpz_init/ /f/ 
+-- 
+-- A small @fmpz_t@ is initialised, i.e.just a @slong@. The value is set to
+-- zero.
+foreign import ccall "fmpz.h fmpz_init"
+  fmpz_init :: Ptr CFmpz -> IO ()
+
+-- | /fmpz_init2/ /f/ /limbs/ 
+-- 
+-- Initialises the given @fmpz_t@ to have space for the given number of
+-- limbs.
+-- 
+-- If @limbs@ is zero then a small @fmpz_t@ is allocated, i.e.just a
+-- @slong@. The value is also set to zero. It is not necessary to call this
+-- function except to save time. A call to @fmpz_init@ will do just fine.
+foreign import ccall "fmpz.h fmpz_init2"
+  fmpz_init2 :: Ptr CFmpz -> CULong -> IO ()
+
+-- | /fmpz_clear/ /f/ 
+-- 
+-- Clears the given @fmpz_t@, releasing any memory associated with it,
+-- either back to the stack or the OS, depending on whether the reentrant
+-- or non-reentrant version of FLINT is built.
+foreign import ccall "fmpz.h fmpz_clear"
+  fmpz_clear :: Ptr CFmpz -> IO ()
+
+foreign import ccall "fmpz.h &fmpz_clear"
+  p_fmpz_clear :: FunPtr (Ptr CFmpz -> IO ())
+
+foreign import ccall "fmpz.h fmpz_init_set"
+  fmpz_init_set :: Ptr CFmpz -> Ptr CFmpz -> IO ()
+
+foreign import ccall "fmpz.h fmpz_init_set_ui"
+  fmpz_init_set_ui :: Ptr CFmpz -> CULong -> IO ()
+
+-- | /fmpz_init_set_si/ /f/ /g/ 
+-- 
+-- Initialises \(f\) and sets it to the value of \(g\).
+foreign import ccall "fmpz.h fmpz_init_set_si"
+  fmpz_init_set_si :: Ptr CFmpz -> CLong -> IO ()
 
 -- Random generation -----------------------------------------------------------
 
@@ -385,7 +552,7 @@ foreign import ccall "fmpz.h fmpz_get_mpf"
 -- Sets the value of \(x\) from \(f\), rounded toward the given direction
 -- @rnd@.
 foreign import ccall "fmpz.h fmpz_get_mpfr"
-  fmpz_get_mpfr :: Ptr CMpfr -> Ptr CFmpz -> mpfr_rnd -> IO ()
+  fmpz_get_mpfr :: Ptr CMpfr -> Ptr CFmpz -> CMpfrRnd -> IO ()
 
 -- | /fmpz_get_d_2exp/ /exp/ /f/ 
 -- 
@@ -911,11 +1078,23 @@ foreign import ccall "fmpz.h fmpz_abs"
 foreign import ccall "fmpz.h fmpz_add"
   fmpz_add :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
+foreign import ccall "fmpz.h fmpz_add_ui"
+  fmpz_add_ui :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
+
+foreign import ccall "fmpz.h fmpz_add_si"
+  fmpz_add_si :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
+
 -- | /fmpz_sub/ /f/ /g/ /h/ 
 -- 
 -- Sets \(f\) to \(g - h\).
 foreign import ccall "fmpz.h fmpz_sub"
   fmpz_sub :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+
+foreign import ccall "fmpz.h fmpz_sub_ui"
+  fmpz_sub_ui :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
+
+foreign import ccall "fmpz.h fmpz_sub_si"
+  fmpz_sub_si :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
 
 -- | /fmpz_mul/ /f/ /g/ /h/ 
 -- 
@@ -923,6 +1102,12 @@ foreign import ccall "fmpz.h fmpz_sub"
 foreign import ccall "fmpz.h fmpz_mul"
   fmpz_mul :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
+foreign import ccall "fmpz.h fmpz_mul_ui"
+  fmpz_mul_ui :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
+
+foreign import ccall "fmpz.h fmpz_mul_si"
+  fmpz_mul_si :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
+  
 -- | /fmpz_mul2_uiui/ /f/ /g/ /x/ /y/ 
 -- 
 -- Sets \(f\) to \(g \times x \times y\) where \(x\) and \(y\) are of type
@@ -950,11 +1135,23 @@ foreign import ccall "fmpz.h fmpz_one_2exp"
 foreign import ccall "fmpz.h fmpz_addmul"
   fmpz_addmul :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
+foreign import ccall "fmpz.h fmpz_addmul_ui"
+  fmpz_addmul_ui :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
+
+foreign import ccall "fmpz.h fmpz_addmul_si"
+  fmpz_addmul_si :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
+
 -- | /fmpz_submul/ /f/ /g/ /h/ 
 -- 
 -- Sets \(f\) to \(f - g \times h\).
 foreign import ccall "fmpz.h fmpz_submul"
   fmpz_submul :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+
+foreign import ccall "fmpz.h fmpz_submul_ui"
+  fmpz_submul_ui :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
+
+foreign import ccall "fmpz.h fmpz_submul_si"
+  fmpz_submul_si :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
 
 -- | /fmpz_fmma/ /f/ /a/ /b/ /c/ /d/ 
 -- 
@@ -1553,6 +1750,30 @@ foreign import ccall "fmpz.h fmpz_xor"
 foreign import ccall "fmpz.h fmpz_popcnt"
   fmpz_popcnt :: Ptr CFmpz -> IO CInt
 
+-- FmpzComb --------------------------------------------------------------------
+
+newFmpzComb primes num_primes = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> fmpz_comb_init p primes num_primes
+  addForeignPtrFinalizer p_fmpz_comb_clear p
+  return $ FmpzComb p
+
+{-# INLINE withFmpzCombTemp #-}
+withFmpzComb (FmpzComb p) f = do
+  withForeignPtr p $ \fp -> f fp >>= return . (FmpzComb p,)
+
+-- FmpzCombTemp ----------------------------------------------------------------
+
+newFmpzCombTemp comb = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> fmpz_comb_temp_init p comb
+  addForeignPtrFinalizer p_fmpz_comb_temp_clear p
+  return $ FmpzCombTemp p
+
+{-# INLINE withFmpzComb #-}
+withFmpzCombTemp (FmpzCombTemp p) f = do
+  withForeignPtr p $ \fp -> f fp >>= return . (FmpzCombTemp p,)
+
 -- Chinese remaindering --------------------------------------------------------
 
 -- The following functions can be used to reconstruct an integer from its
@@ -1626,6 +1847,61 @@ foreign import ccall "fmpz.h fmpz_multi_mod_ui"
 foreign import ccall "fmpz.h fmpz_multi_CRT_ui"
   fmpz_multi_CRT_ui :: Ptr CFmpz -> Ptr CMp -> Ptr CFmpzComb -> Ptr CFmpzCombTemp -> CInt -> IO ()
 
+-- | /fmpz_comb_init/ /comb/ /primes/ /num_primes/ 
+-- 
+-- Initialises a @comb@ structure for multimodular reduction and
+-- recombination. The array @primes@ is assumed to contain @num_primes@
+-- primes each of @FLINT_BITS - 1@ bits. Modular reductions and
+-- recombinations will be done modulo this list of primes. The @primes@
+-- array must not be @free@\'d until the @comb@ structure is no longer
+-- required and must be cleared by the user.
+foreign import ccall "fmpz.h fmpz_comb_init"
+  fmpz_comb_init :: Ptr CFmpzComb -> Ptr CMp -> CLong -> IO ()
+
+-- | /fmpz_comb_temp_init/ /temp/ /comb/ 
+-- 
+-- Creates temporary space to be used by multimodular and CRT functions
+-- based on an initialised @comb@ structure.
+foreign import ccall "fmpz.h fmpz_comb_temp_init"
+  fmpz_comb_temp_init :: Ptr CFmpzCombTemp -> Ptr CFmpzComb -> IO ()
+
+-- | /fmpz_comb_clear/ /comb/ 
+-- 
+-- Clears the given @comb@ structure, releasing any memory it uses.
+foreign import ccall "fmpz.h fmpz_comb_clear"
+  fmpz_comb_clear :: Ptr CFmpzComb -> IO ()
+
+foreign import ccall "fmpz.h &fmpz_comb_clear"
+  p_fmpz_comb_clear :: FunPtr (Ptr CFmpzComb -> IO ())
+
+-- | /fmpz_comb_temp_clear/ /temp/ 
+-- 
+-- Clears temporary space @temp@ used by multimodular and CRT functions
+-- using the given @comb@ structure.
+foreign import ccall "fmpz.h fmpz_comb_temp_clear"
+  fmpz_comb_temp_clear :: Ptr CFmpzCombTemp -> IO ()
+
+foreign import ccall "fmpz.h &fmpz_comb_temp_clear"
+  p_fmpz_comb_temp_clear :: FunPtr (Ptr CFmpzCombTemp -> IO ())
+
+-- FmpzMultiCRT ----------------------------------------------------------------
+
+newFmpzMultiCRT = do
+  p <- mallocForeignPtr
+  withForeignPtr p fmpz_multi_crt_init
+  addForeignPtrFinalizer p_fmpz_multi_crt_clear p
+  return $ FmpzMultiCRT p
+
+{-# INLINE withFmpzMultiCRT #-}
+withFmpzMultiCRT (FmpzMultiCRT p) f = do
+  withForeignPtr p $ \fp -> f fp >>= return . (FmpzMultiCRT p,)
+
+-- | /fmpz_multi_crt_init/ /CRT/ 
+-- 
+-- Initialize @CRT@ for Chinese remaindering.
+foreign import ccall "fmpz.h fmpz_multi_crt_init"
+  fmpz_multi_crt_init :: Ptr CFmpzMultiCRT -> IO ()
+
 -- | /fmpz_multi_crt_precompute/ /CRT/ /moduli/ /len/ 
 -- 
 -- Configure @CRT@ for repeated Chinese remaindering of @moduli@. The
@@ -1652,6 +1928,15 @@ foreign import ccall "fmpz.h fmpz_multi_crt_precomp"
 -- @fmpz_multi_crt_precompute@ apply.
 foreign import ccall "fmpz.h fmpz_multi_crt"
   fmpz_multi_crt :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> IO CInt
+
+-- | /fmpz_multi_crt_clear/ /P/ 
+-- 
+-- Free all space used by @CRT@.
+foreign import ccall "fmpz.h fmpz_multi_crt_clear"
+  fmpz_multi_crt_clear :: Ptr CFmpzMultiCRT -> IO ()
+
+foreign import ccall "fmpz.h &fmpz_multi_crt_clear"
+  p_fmpz_multi_crt_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())
 
 -- | /_nmod_poly_crt_local_size/ /CRT/ 
 -- 

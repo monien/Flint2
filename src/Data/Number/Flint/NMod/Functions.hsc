@@ -1,6 +1,15 @@
+{-# language 
+  TupleSections
+#-}
+
 module Data.Number.Flint.NMod.Functions (
+  -- * Memory management
+    newNMod
+  , withNMod
+  , withNewNMod
+  , nmod_init
   -- * Modular reduction and arithmetic
-    _nmod_add
+  , _nmod_add
   , nmod_add
   , _nmod_sub
   , nmod_sub
@@ -35,6 +44,30 @@ import Data.Number.Flint.NMod.Struct
 #include <flint/nmod.h>
 
 -- Modular reduction and arithmetic --------------------------------------------
+
+-- | Create a new `NMod` structure
+newNMod n = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> nmod_init x n
+  return $ NMod x
+
+-- | Use `Nmod` structure
+{-# INLINE withNMod #-}
+withNMod (NMod x) f = do
+  withForeignPtr x $ \xp -> f xp >>= return . (NMod x,)
+
+withNewNMod n f = do
+  x <- newNMod n
+  withNMod x $ \x -> f x
+
+--------------------------------------------------------------------------------
+
+-- | /nmod_init/ /mod/ /n/ 
+-- 
+-- Initialises the given @nmod_t@ structure for reduction modulo \(n\) with
+-- a precomputed inverse.
+foreign import ccall "nmod.h nmod_init"
+  nmod_init :: Ptr CNMod -> CMpLimb -> IO ()
 
 -- | /_nmod_add/ /a/ /b/ /mod/ 
 -- 
@@ -118,22 +151,17 @@ foreign import ccall "nmod.h nmod_pow_fmpz"
 
 -- Discrete Logarithms via Pohlig-Hellman --------------------------------------
 
-data NmodDiscreteLogPohligHellma = NmodDiscreteLogPohligHellma {-# UNPACK #-}
-  !(ForeignPtr CNmodDiscreteLogPohligHellma)
-
-typw CNmodDiscreteLogPohligHellma = CFlint NmodDiscreteLogPohligHellma
-
 -- | /nmod_discrete_log_pohlig_hellman_init/ /L/ 
 -- 
 -- Initialize @L@. Upon initialization @L@ is not ready for computation.
 foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_init"
-  nmod_discrete_log_pohlig_hellman_init :: Ptr CNmodDiscreteLogPohligHellman -> IO ()
+  nmod_discrete_log_pohlig_hellman_init :: Ptr CNModDiscreteLogPohligHellman -> IO ()
 
 -- | /nmod_discrete_log_pohlig_hellman_clear/ /L/ 
 -- 
 -- Free any space used by @L@.
 foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_clear"
-  nmod_discrete_log_pohlig_hellman_clear :: Ptr CNmodDiscreteLogPohligHellman -> IO ()
+  nmod_discrete_log_pohlig_hellman_clear :: Ptr CNModDiscreteLogPohligHellman -> IO ()
 
 -- | /nmod_discrete_log_pohlig_hellman_precompute_prime/ /L/ /p/ 
 -- 
@@ -141,13 +169,13 @@ foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_clear"
 -- base. It is assumed that @p@ is prime. The return is an estimate on the
 -- number of multiplications needed for one run.
 foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_precompute_prime"
-  nmod_discrete_log_pohlig_hellman_precompute_prime :: Ptr CNmodDiscreteLogPohligHellman -> CMpLimb -> IO CDouble
+  nmod_discrete_log_pohlig_hellman_precompute_prime :: Ptr CNModDiscreteLogPohligHellman -> CMpLimb -> IO CDouble
 
 -- | /nmod_discrete_log_pohlig_hellman_primitive_root/ /L/ 
 -- 
 -- Return the internally stored base.
 foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_primitive_root"
-  nmod_discrete_log_pohlig_hellman_primitive_root :: Ptr CNmodDiscreteLogPohligHellman -> IO CMpLimb
+  nmod_discrete_log_pohlig_hellman_primitive_root :: Ptr CNModDiscreteLogPohligHellman -> IO CMpLimb
 
 -- | /nmod_discrete_log_pohlig_hellman_run/ /L/ /y/ 
 -- 
@@ -155,5 +183,5 @@ foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_primitive_root"
 -- @y@ is expected to be reduced modulo the @p@. The function is undefined
 -- if the logarithm does not exist.
 foreign import ccall "nmod.h nmod_discrete_log_pohlig_hellman_run"
-  nmod_discrete_log_pohlig_hellman_run :: Ptr CNmodDiscreteLogPohligHellman -> CMpLimb -> IO CULong
+  nmod_discrete_log_pohlig_hellman_run :: Ptr CNModDiscreteLogPohligHellman -> CMpLimb -> IO CULong
 
