@@ -28,13 +28,10 @@ module Data.Number.Flint.Fmpz.Struct (
   , fmpz_init_set
   , fmpz_init_set_ui
   , fmpz_init_set_si
-  -- * Conversion Haskell Integer
-  , fromFmpz
-  , toFmpz
   -- * Macros
-  , ptr_to_coeff
-  , coeff_to_ptr
-  , coeff_is_mpz
+  -- , ptr_to_coeff
+  -- , coeff_to_ptr
+  -- , coeff_is_mpz
   -- * Precomputed inverse
   , FmpzPreInvN (..)
   , CFmpzPreInvN (..)
@@ -45,8 +42,8 @@ module Data.Number.Flint.Fmpz.Struct (
   , CFmpzCombTemp (..)
   , fmpz_comb_init
   , fmpz_comb_clear
-  , fmpz_comb_tmp_init
-  , fmpz_comb_tmp_clear
+  , fmpz_comb_temp_init
+  , fmpz_comb_temp_clear
   -- * Multi CRT
   , FmpzMultiCRT (..)
   , CFmpzMultiCRT(..)
@@ -74,7 +71,6 @@ import Data.Number.Flint.Internal
 import Data.Number.Flint.External
 import Data.Number.Flint.Flint
 import Data.Number.Flint.NMod.Struct
-import Data.Number.Flint.Fmpz.Factor.Struct
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
@@ -97,7 +93,7 @@ instance Storable CFmpz where
 -- | Create a new `Fmpz` structure.
 newFmpz = do
   x <- mallocForeignPtr
-  withForeignPtr p fmpz_init
+  withForeignPtr x fmpz_init
   addForeignPtrFinalizer p_fmpz_clear x
   return $ Fmpz x
 
@@ -117,40 +113,29 @@ data FmpzPreInvN = FmpzPreInvN
   {-# UNPACK #-} !(ForeignPtr CFmpzPreInvN) 
 type CFmpzPreInvN = CFlint FmpzPreInvN 
 
---- conversion Integer <-> Fmpz ------------------------------------------------
-
-fromFmpz x = withOutInteger_ $ \y -> withFmpz x $ \x -> fmpz_get_mpz y x
-      
-toFmpz x = do
-  y <- newFmpz
-  withInInteger x $ \x ->
-    withFmpz y $ \y ->
-      fmpz_set_mpz y x
-  return y
-
 -- macros ----------------------------------------------------------------------
 
--- | /PTR_TO_COEFF/ /ptr/ 
--- 
--- a macro to convert an @mpz_t@ (or more generally any @__mpz_struct *@)
--- to an @fmpz@ (shifts the pointer right by \(2\) and sets the second most
--- significant bit).
-foreign import ccall "fmpz.h PTR_TO_COEFF"
-  ptr_to_coeff :: Ptr CMpz -> IO CFmpz
+-- -- | /PTR_TO_COEFF/ /ptr/ 
+-- -- 
+-- -- a macro to convert an @mpz_t@ (or more generally any @__mpz_struct *@)
+-- -- to an @fmpz@ (shifts the pointer right by \(2\) and sets the second most
+-- -- significant bit).
+-- foreign import ccall "fmpz.h PTR_TO_COEFF"
+--   ptr_to_coeff :: Ptr CMpz -> IO CFmpz
 
--- | /COEFF_TO_PTR/ /f/ 
--- 
--- a macro to convert an @fmpz@ which represents a pointer into an actual
--- pointer to an @__mpz_struct@ (i.e. to an @mpz_t@).
-foreign import ccall "fmpz.h COEFF_TO_PTR"
-  coeff_to_ptr :: CFmpz -> IO (Ptr CMpz)
+-- -- | /COEFF_TO_PTR/ /f/ 
+-- -- 
+-- -- a macro to convert an @fmpz@ which represents a pointer into an actual
+-- -- pointer to an @__mpz_struct@ (i.e. to an @mpz_t@).
+-- foreign import ccall "fmpz.h COEFF_TO_PTR"
+--   coeff_to_ptr :: CFmpz -> IO (Ptr CMpz)
 
--- | /COEFF_IS_MPZ/ /f/ 
--- 
--- a macro which returns \(1\) if \(f\) represents an @mpz_t@, otherwise
--- \(0\) is returned.
-foreign import ccall "fmpz.h COEFF_IS_MPZ"
-  coeff_is_mpz :: CFmpz -> IO CInt
+-- -- | /COEFF_IS_MPZ/ /f/ 
+-- -- 
+-- -- a macro which returns \(1\) if \(f\) represents an @mpz_t@, otherwise
+-- -- \(0\) is returned.
+-- foreign import ccall "fmpz.h COEFF_IS_MPZ"
+--   coeff_is_mpz :: CFmpz -> IO CInt
 
 -- Memory management -----------------------------------------------------------
 
@@ -166,7 +151,7 @@ foreign import ccall "fmpz.h _fmpz_new_mpz"
 -- clears the @mpz_t@ \"pointed to\" by the @fmpz@ \(f\). This is only used
 -- internally.
 foreign import ccall "fmpz.h _fmpz_clear_mpz"
-  _fmpz_clear_mpz :: CFmpz -> IO ()
+  _fmpz_clear_mpz :: Ptr CFmpz -> IO ()
 
 -- | /_fmpz_cleanup_mpz_content/ 
 -- 
@@ -329,12 +314,18 @@ foreign import ccall "fmpz.h fmpz_comb_temp_init"
 foreign import ccall "fmpz.h fmpz_comb_clear"
   fmpz_comb_clear :: Ptr CFmpzComb -> IO ()
 
+foreign import ccall "fmpz.h &fmpz_comb_clear"
+  p_fmpz_comb_clear :: FunPtr (Ptr CFmpzComb -> IO ())
+
 -- | /fmpz_comb_temp_clear/ /temp/ 
 -- 
 -- Clears temporary space @temp@ used by multimodular and CRT functions
 -- using the given @comb@ structure.
 foreign import ccall "fmpz.h fmpz_comb_temp_clear"
   fmpz_comb_temp_clear :: Ptr CFmpzCombTemp -> IO ()
+
+foreign import ccall "fmpz.h &fmpz_comb_temp_clear"
+  p_fmpz_comb_temp_clear :: FunPtr (Ptr CFmpzCombTemp -> IO ())
 
 -- fmpz_multi_crt_t ------------------------------------------------------------
 
@@ -371,4 +362,7 @@ foreign import ccall "fmpz.h fmpz_multi_crt_init"
 -- 
 -- Free all space used by @CRT@.
 foreign import ccall "fmpz.h fmpz_multi_crt_clear"
-   :: Ptr CFmpzMultiCRT -> IO ()
+  fmpz_multi_crt_clear :: Ptr CFmpzMultiCRT -> IO ()
+
+foreign import ccall "fmpz.h &fmpz_multi_crt_clear"
+  p_fmpz_multi_crt_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())

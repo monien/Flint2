@@ -45,8 +45,8 @@ instance Storable CFmpzFactor where
   sizeOf _ = #{size fmpz_factor_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpz_factor_t}
-  peek ptr = CFmpzFactor 
-    <*> #{peek fmpz_factor_struct, sign } ptr
+  peek ptr = CFmpzFactor
+    <$> #{peek fmpz_factor_struct, sign } ptr
     <*> #{peek fmpz_factor_struct, p    } ptr
     <*> #{peek fmpz_factor_struct, exp  } ptr
     <*> #{peek fmpz_factor_struct, alloc} ptr

@@ -1,6 +1,9 @@
 module Data.Number.Flint.Fmpz.Functions (
+  -- * Conversion Integer <-> Fmpz
+    fromFmpz
+  , toFmpz
   -- * Random generation
-    fmpz_randbits
+  , fmpz_randbits
   , fmpz_randtest
   , fmpz_randtest_unsigned
   , fmpz_randtest_not_zero
@@ -227,11 +230,26 @@ import Control.Monad
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr )
+import Foreign.Ptr ( Ptr )
 import Foreign.Storable
-import Foreign.Marshal ( free )
 
+import Data.Number.Flint.Flint
+import Data.Number.Flint.Internal
+import Data.Number.Flint.External
 import Data.Number.Flint.Fmpz.Struct
+import Data.Number.Flint.Fmpz.Factor.Struct
+import Data.Number.Flint.NMod.Struct
+
+--- conversion Integer <-> Fmpz ------------------------------------------------
+
+fromFmpz x = withOutInteger_ $ \y -> withFmpz x $ \x -> fmpz_get_mpz y x
+      
+toFmpz x = do
+  y <- newFmpz
+  withInInteger x $ \x ->
+    withFmpz y $ \y ->
+      fmpz_set_mpz y x
+  return y
 
 -- Random generation -----------------------------------------------------------
 
