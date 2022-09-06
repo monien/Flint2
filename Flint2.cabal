@@ -41,6 +41,8 @@ library
       Data.Number.Flint.Internal.FFI
       Data.Number.Flint.NMod
       Data.Number.Flint.NMod.Functions
+      Data.Number.Flint.NMod.Poly
+      Data.Number.Flint.NMod.Poly.Struct
       Data.Number.Flint.NMod.Struct
   other-modules:
       Paths_Flint2

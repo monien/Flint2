@@ -230,8 +230,11 @@ import Control.Monad
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr )
+import Foreign.Ptr ( Ptr, nullPtr )
 import Foreign.Storable
+
+import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
+import Numeric.GMP.Types (MPZ)
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Internal
@@ -239,6 +242,7 @@ import Data.Number.Flint.External
 import Data.Number.Flint.Fmpz.Struct
 import Data.Number.Flint.Fmpz.Factor.Struct
 import Data.Number.Flint.NMod.Struct
+import Data.Number.Flint.NMod.Poly.Struct
 
 --- conversion Integer <-> Fmpz ------------------------------------------------
 
@@ -403,7 +407,7 @@ foreign import ccall "fmpz.h fmpz_get_mpz"
 -- integer is number of limbs allocated to \(n\), minimum number of limbs
 -- required to hold the value stored in \(n_{in}\).
 foreign import ccall "fmpz.h fmpz_get_mpn"
-  fmpz_get_mpn :: Ptr Ptr CMp -> Ptr CFmpz -> IO CInt
+  fmpz_get_mpn :: Ptr CMp -> Ptr CFmpz -> IO CInt
 
 -- | /fmpz_get_str/ /str/ /b/ /f/ 
 -- 
@@ -1653,7 +1657,7 @@ foreign import ccall "fmpz.h fmpz_multi_crt"
 -- 
 -- Return the required length of the output for @_nmod_poly_crt_run@.
 foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
-  _nmod_poly_crt_local_size :: Ptr CNmodPolyCrt -> IO CLong
+  _nmod_poly_crt_local_size :: Ptr CNModPolyCRT -> IO CLong
 
 -- | /_fmpz_multi_crt_run/ /outputs/ /CRT/ /inputs/ 
 -- 
