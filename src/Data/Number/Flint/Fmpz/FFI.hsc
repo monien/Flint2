@@ -252,7 +252,6 @@ module Data.Number.Flint.Fmpz.FFI (
   , fmpz_multi_CRT_precomp
   , fmpz_multi_CRT
   , fmpz_multi_CRT_clear
-  , _nmod_poly_crt_local_size
   -- * Primality testing
   , fmpz_is_strong_probabprime
   , fmpz_is_probabprime_lucas
