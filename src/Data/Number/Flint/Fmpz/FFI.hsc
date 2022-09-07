@@ -1941,6 +1941,8 @@ foreign import ccall "fmpz.h fmpz_multi_mod_ui"
 foreign import ccall "fmpz.h fmpz_multi_CRT_ui"
   fmpz_multi_CRT_ui :: Ptr CFmpz -> Ptr CMp -> Ptr CFmpzComb -> Ptr CFmpzCombTemp -> CInt -> IO ()
 
+--------------------------------------------------------------------------------
+
 -- | /fmpz_comb_init/ /comb/ /primes/ /num_primes/ 
 -- 
 -- Initialises a @comb@ structure for multimodular reduction and
@@ -2038,14 +2040,15 @@ foreign import ccall "fmpz.h &fmpz_multi_CRT_clear"
 foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
   _nmod_poly_crt_local_size :: Ptr CNModPolyCRT -> IO CLong
 
--- | /_fmpz_multi_CRT_run/ /outputs/ /CRT/ /inputs/ 
--- 
--- Perform the same operation as fmpz::fmpz_multi_CRT_precomp using
--- supplied temporary space. The actual output is placed in @outputs + 0@,
--- and @outputs@ should contain space for all temporaries and should be at
--- least as long as @_fmpz_multi_CRT_local_size(CRT)@.
-foreign import ccall "fmpz.h _fmpz_multi_CRT_run"
-  _fmpz_multi_CRT_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
+-- not present in flintlib 2.9.0 -----------------------------------------------
+-- -- | /_fmpz_multi_CRT_run/ /outputs/ /CRT/ /inputs/ 
+-- -- 
+-- -- Perform the same operation as fmpz::fmpz_multi_CRT_precomp using
+-- -- supplied temporary space. The actual output is placed in @outputs + 0@,
+-- -- and @outputs@ should contain space for all temporaries and should be at
+-- -- least as long as @_fmpz_multi_CRT_local_size(CRT)@.
+-- foreign import ccall "fmpz.h _fmpz_multi_CRT_run"
+--   _fmpz_multi_CRT_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
 -- Primality testing -----------------------------------------------------------
 
