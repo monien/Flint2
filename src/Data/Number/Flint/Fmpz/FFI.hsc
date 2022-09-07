@@ -5,11 +5,19 @@
   , TupleSections
   #-}
 
-module Data.Number.Flint.Fmpz.Functions (
-  -- * Fmpz
-    newFmpz
+module Data.Number.Flint.Fmpz.FFI (
+  -- * Integers @Fmpz@
+    Fmpz (..)
+  , CFmpz (..)
+  , newFmpz
   , withFmpz
   , withNewFmpz
+  -- * Precomputed inverse
+  , FmpzPreInvN (..)
+  , CFmpzPreInvN (..)
+  -- * Factorization structure @FmpzFactor@
+  , FmpzFactor (..)
+  , CFmpzFactor (..)
   -- * Memory management mpz
   , _fmpz_new_mpz
   , _fmpz_cleanup_mpz_content
@@ -221,7 +229,11 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_CRT
   , fmpz_multi_mod_ui
   , fmpz_multi_CRT_ui
-  -- ** Comb
+  -- ** Comb for multi CRT
+  , FmpzComb (..)
+  , CFmpzComb (..)
+  , FmpzCombTemp (..)
+  , CFmpzCombTemp (..)
   , newFmpzComb
   , withFmpzComb
   , fmpz_comb_init
@@ -231,15 +243,17 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_comb_clear
   , fmpz_comb_temp_clear
   -- ** Multi CRT
+  , FmpzMultiCRT (..)
+  , CFmpzMultiCRT(..)
   , newFmpzMultiCRT
   , withFmpzMultiCRT
-  , fmpz_multi_crt_init
-  , fmpz_multi_crt_precompute
-  , fmpz_multi_crt_precomp
-  , fmpz_multi_crt
-  , fmpz_multi_crt_clear
+  , fmpz_multi_CRT_init
+  , fmpz_multi_CRT_precompute
+  , fmpz_multi_CRT_precomp
+  , fmpz_multi_CRT
+  , fmpz_multi_CRT_clear
   , _nmod_poly_crt_local_size
-  , _fmpz_multi_crt_run
+  , _fmpz_multi_CRT_run
   -- * Primality testing
   , fmpz_is_strong_probabprime
   , fmpz_is_probabprime_lucas
@@ -280,17 +294,97 @@ import Foreign.Marshal ( free )
 import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
 import Numeric.GMP.Types (MPZ)
 
-import Data.Number.Flint.Internal
-import Data.Number.Flint.External
 import Data.Number.Flint.Flint
-import Data.Number.Flint.Fmpz.Struct
-import Data.Number.Flint.Fmpz.Factor.Struct
-import Data.Number.Flint.NMod.Struct
+import Data.Number.Flint.NMod
 import Data.Number.Flint.NMod.Poly.Struct
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 #include <flint/fmpz_factor.h>
+
+-- Data structures -------------------------------------------------------------
+
+-- fmpz_t ----------------------------------------------------------------------
+
+-- | Integer (opaque pointer)
+data Fmpz = Fmpz {-# UNPACK #-} !(ForeignPtr CFmpz)
+type CFmpz = CFlint Fmpz
+
+instance Storable CFmpz where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_t}
+  peek = error "CFmpz.peek: Not defined"
+  poke = error "CFmpz.poke: Not defined"
+  
+-- fmpz_preinv_t --------------------------------------------------
+
+-- | Data structure containing the /CFmpz/ pointer
+data FmpzPreInvN = FmpzPreInvN
+  {-# UNPACK #-} !(ForeignPtr CFmpzPreInvN) 
+type CFmpzPreInvN = CFlint FmpzPreInvN 
+
+-- fmpz_comb_t -----------------------------------------------------------------
+
+-- | Data structure containing /CFmpzComb/ pointer
+data FmpzComb = FmpzComb {-# UNPACK #-} !(ForeignPtr CFmpzComb)
+type CFmpzComb = CFlint FmpzComb
+
+instance Storable CFmpzComb where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_comb_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_comb_t}
+  peek = error "CFmpzComb.peek: Not defined"
+  poke = error "CFmpzComb.poke: Not defined"
+
+-- fmpz_comb_temp_t ------------------------------------------------------------
+
+-- | Data structure containing /CFmpzCombTemp/ pointer
+data FmpzCombTemp = FmpzCombTemp {-# UNPACK #-} !(ForeignPtr CFmpzCombTemp)
+type CFmpzCombTemp = CFlint FmpzCombTemp
+
+instance Storable CFmpzCombTemp where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_comb_temp_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_comb_temp_t}
+  peek = error "CFmpzCombTemp.peek: Not defined"
+  poke = error "CFmpzCombTemp.poke: Not defined"
+
+-- fmpz_multi_crt_t ------------------------------------------------------------
+
+-- | Data structure containing /CFmpzMultiCRT/ pointer
+data FmpzMultiCRT = FmpzMultiCRT {-# UNPACK #-} !(ForeignPtr CFmpzMultiCRT)
+type CFmpzMultiCRT = CFlint FmpzMultiCRT
+
+instance Storable CFmpzMultiCRT where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_multi_crt_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_multi_crt_t}
+  peek = error "CFmpzMultiCRT.peek: Not defined"
+  poke = error "CFmpzMultiCRT.poke: Not defined"
+
+-- fmpz_factor_t ---------------------------------------------------------------
+
+-- | Data structure containing /CFmpzFactor/ pointer
+data FmpzFactor = FmpzFactor {-# UNPACK #-} !(ForeignPtr CFmpzFactor)
+data CFmpzFactor = CFmpzFactor CInt (Ptr CFmpz) (Ptr CULong) CLong CLong
+
+instance Storable CFmpzFactor where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_factor_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_factor_t}
+  peek ptr = CFmpzFactor
+    <$> #{peek fmpz_factor_struct, sign } ptr
+    <*> #{peek fmpz_factor_struct, p    } ptr
+    <*> #{peek fmpz_factor_struct, exp  } ptr
+    <*> #{peek fmpz_factor_struct, alloc} ptr
+    <*> #{peek fmpz_factor_struct, num  } ptr
+  poke = error "CFmpzFactor.poke: Not defined"
 
 -- Fmpz ------------------------------------------------------------------------
 
@@ -1888,21 +1982,21 @@ foreign import ccall "fmpz.h &fmpz_comb_temp_clear"
 
 newFmpzMultiCRT = do
   p <- mallocForeignPtr
-  withForeignPtr p fmpz_multi_crt_init
-  addForeignPtrFinalizer p_fmpz_multi_crt_clear p
+  withForeignPtr p fmpz_multi_CRT_init
+  addForeignPtrFinalizer p_fmpz_multi_CRT_clear p
   return $ FmpzMultiCRT p
 
 {-# INLINE withFmpzMultiCRT #-}
 withFmpzMultiCRT (FmpzMultiCRT p) f = do
   withForeignPtr p $ \fp -> f fp >>= return . (FmpzMultiCRT p,)
 
--- | /fmpz_multi_crt_init/ /CRT/ 
+-- | /fmpz_multi_CRT_init/ /CRT/ 
 -- 
 -- Initialize @CRT@ for Chinese remaindering.
-foreign import ccall "fmpz.h fmpz_multi_crt_init"
-  fmpz_multi_crt_init :: Ptr CFmpzMultiCRT -> IO ()
+foreign import ccall "fmpz.h fmpz_multi_CRT_init"
+  fmpz_multi_CRT_init :: Ptr CFmpzMultiCRT -> IO ()
 
--- | /fmpz_multi_crt_precompute/ /CRT/ /moduli/ /len/ 
+-- | /fmpz_multi_CRT_precompute/ /CRT/ /moduli/ /len/ 
 -- 
 -- Configure @CRT@ for repeated Chinese remaindering of @moduli@. The
 -- number of moduli, @len@, should be positive. A return of @0@ indicates
@@ -1911,32 +2005,32 @@ foreign import ccall "fmpz.h fmpz_multi_crt_init"
 -- compilation was successful, which occurs if and only if either (1)
 -- @len == 1@ and @modulus + 0@ is nonzero, or (2) no modulus is \(0,1,-1\)
 -- and all moduli are pairwise relatively prime.
-foreign import ccall "fmpz.h fmpz_multi_crt_precompute"
-  fmpz_multi_crt_precompute :: Ptr CFmpzMultiCRT -> Ptr CFmpz -> CLong -> IO CInt
+foreign import ccall "fmpz.h fmpz_multi_CRT_precompute"
+  fmpz_multi_CRT_precompute :: Ptr CFmpzMultiCRT -> Ptr CFmpz -> CLong -> IO CInt
 
--- | /fmpz_multi_crt_precomp/ /output/ /P/ /inputs/ 
+-- | /fmpz_multi_CRT_precomp/ /output/ /P/ /inputs/ 
 -- 
 -- Set @output@ to an integer of smallest absolute value that is congruent
 -- to @values + i@ modulo the @moduli + i@ in @fmpz_crt_precompute@.
-foreign import ccall "fmpz.h fmpz_multi_crt_precomp"
-  fmpz_multi_crt_precomp :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
+foreign import ccall "fmpz.h fmpz_multi_CRT_precomp"
+  fmpz_multi_CRT_precomp :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
--- | /fmpz_multi_crt/ /output/ /moduli/ /values/ /len/ 
+-- | /fmpz_multi_CRT/ /output/ /moduli/ /values/ /len/ 
 -- 
--- Perform the same operation as @fmpz_multi_crt_precomp@ while internally
+-- Perform the same operation as @fmpz_multi_CRT_precomp@ while internally
 -- constructing and destroying the precomputed data. All of the remarks in
--- @fmpz_multi_crt_precompute@ apply.
-foreign import ccall "fmpz.h fmpz_multi_crt"
-  fmpz_multi_crt :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> IO CInt
+-- @fmpz_multi_CRT_precompute@ apply.
+foreign import ccall "fmpz.h fmpz_multi_CRT"
+  fmpz_multi_CRT :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> IO CInt
 
--- | /fmpz_multi_crt_clear/ /P/ 
+-- | /fmpz_multi_CRT_clear/ /P/ 
 -- 
 -- Free all space used by @CRT@.
-foreign import ccall "fmpz.h fmpz_multi_crt_clear"
-  fmpz_multi_crt_clear :: Ptr CFmpzMultiCRT -> IO ()
+foreign import ccall "fmpz.h fmpz_multi_CRT_clear"
+  fmpz_multi_CRT_clear :: Ptr CFmpzMultiCRT -> IO ()
 
-foreign import ccall "fmpz.h &fmpz_multi_crt_clear"
-  p_fmpz_multi_crt_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())
+foreign import ccall "fmpz.h &fmpz_multi_CRT_clear"
+  p_fmpz_multi_CRT_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())
 
 -- | /_nmod_poly_crt_local_size/ /CRT/ 
 -- 
@@ -1944,14 +2038,14 @@ foreign import ccall "fmpz.h &fmpz_multi_crt_clear"
 foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
   _nmod_poly_crt_local_size :: Ptr CNModPolyCRT -> IO CLong
 
--- | /_fmpz_multi_crt_run/ /outputs/ /CRT/ /inputs/ 
+-- | /_fmpz_multi_CRT_run/ /outputs/ /CRT/ /inputs/ 
 -- 
--- Perform the same operation as fmpz::fmpz_multi_crt_precomp using
+-- Perform the same operation as fmpz::fmpz_multi_CRT_precomp using
 -- supplied temporary space. The actual output is placed in @outputs + 0@,
 -- and @outputs@ should contain space for all temporaries and should be at
--- least as long as @_fmpz_multi_crt_local_size(CRT)@.
-foreign import ccall "fmpz.h _fmpz_multi_crt_run"
-  _fmpz_multi_crt_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
+-- least as long as @_fmpz_multi_CRT_local_size(CRT)@.
+foreign import ccall "fmpz.h _fmpz_multi_CRT_run"
+  _fmpz_multi_CRT_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
 -- Primality testing -----------------------------------------------------------
 
@@ -2269,3 +2363,10 @@ foreign import ccall "fmpz.h fmpz_factor_moebius_mu"
 foreign import ccall "fmpz.h fmpz_factor_divisor_sigma"
   fmpz_factor_divisor_sigma :: Ptr CFmpz -> CULong -> Ptr CFmpzFactor -> IO ()
 
+-- | /nmod_pow_fmpz/ /a/ /e/ /mod/ 
+-- 
+-- Returns \(a^e\) modulo @mod.n@. No assumptions are made about @mod.n@.
+-- It is assumed that \(a\) is already reduced modulo @mod.n@ and that
+-- \(e\) is not negative.
+foreign import ccall "nmod.h nmod_pow_fmpz"
+  nmod_pow_fmpz :: CMpLimb -> Ptr CFmpz -> Ptr CNMod -> IO CMpLimb

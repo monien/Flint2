@@ -1,10 +1,10 @@
-module Data.Number.Flint.External.GMP.FFI where
+module Data.Number.Flint.Flint.External.GMP.FFI where
 
 import Data.Int
 import Data.Word
 import Foreign.ForeignPtr
 import Foreign.C.Types
-import Data.Number.Flint.Internal
+import Data.Number.Flint.Flint.Internal
 
 #undef _LONG_LONG_LIMB
 

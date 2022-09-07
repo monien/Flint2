@@ -108,18 +108,6 @@ instance Arbitrary Fmpz where
   arbitrary = do
     x <- arbitrary
     return $ fromInteger x
-    
--- fac x = snd $ snd $ unsafePerformIO $ do
---   y <- toFmpz x
---   withFmpz y $ \y -> do
---     f <- newFmpzFactor
---     withFmpzFactor f $ \f -> do
---       fmpz_factor f y
---       (CFmpzFactor _ d e _ n) <- peek f
---       forM [0 .. fromIntegral n-1] $ \j -> do
---         f <- withOutInteger_ $ \y -> fmpz_get_mpz y (d `advancePtr` j)
---         m <- peek (e `advancePtr` j)
---         return (f, fromIntegral m)
       
 lift1 f x = unsafePerformIO $ do
   z <- newFmpz
@@ -133,12 +121,3 @@ lift2 f x y = unsafePerformIO $ do
     withFmpz y $ \y ->
       withFmpz z $ \z -> f z x y
   return z
-
--- lift1Integer f x = unsafePerformIO $ do
---   x' <- toFmpz x
---   let result = f x'
---   fromFmpz result
-
--- withInteger x f = do
---   x' <- toFmpz x
---   withFmpz x' $ \x' -> f x'

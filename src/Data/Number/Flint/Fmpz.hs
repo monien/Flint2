@@ -27,9 +27,7 @@ Running main yields:
 -}
 
 module Data.Number.Flint.Fmpz (
-    module Data.Number.Flint.Fmpz.Struct
-  , module Data.Number.Flint.Fmpz.Functions
+    module Data.Number.Flint.Fmpz.FFI
 ) where
 
-import Data.Number.Flint.Fmpz.Struct
-import Data.Number.Flint.Fmpz.Functions
+import Data.Number.Flint.Fmpz.FFI

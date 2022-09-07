@@ -1,7 +1,5 @@
 module Data.Number.Flint.Fmpz.Factor (
-  module Data.Number.Flint.Fmpz.Factor.Struct
-, module Data.Number.Flint.Fmpz.Factor.Functions
+  module Data.Number.Flint.Fmpz.Factor.FFI
   ) where
 
-import Data.Number.Flint.Fmpz.Factor.Struct
-import Data.Number.Flint.Fmpz.Factor.Functions
+import Data.Number.Flint.Fmpz.Factor.FFI

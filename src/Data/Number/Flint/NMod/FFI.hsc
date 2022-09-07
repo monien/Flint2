@@ -1,10 +1,16 @@
-{-# language 
-  TupleSections
-#-}
+{-# language
+    CApiFFI
+  , FlexibleInstances
+  , ForeignFunctionInterface
+  , TupleSections
+  #-}
 
-module Data.Number.Flint.NMod.Functions (
+module Data.Number.Flint.NMod.FFI (
+  -- * Integers mod n (word-size n)
+    NMod (..)
+  , CNMod (..)
   -- * Memory management
-    newNMod
+  , newNMod
   , withNMod
   , withNewNMod
   , nmod_init
@@ -19,8 +25,9 @@ module Data.Number.Flint.NMod.Functions (
   , nmod_inv
   , nmod_div
   , nmod_pow_ui
-  , nmod_pow_fmpz
   -- * Discrete Logarithms via Pohlig-Hellman
+  , NModDiscreteLogPohligHellman (..)
+  , CNModDiscreteLogPohligHellman (..)
   , nmod_discrete_log_pohlig_hellman_init
   , nmod_discrete_log_pohlig_hellman_clear
   , nmod_discrete_log_pohlig_hellman_precompute_prime
@@ -35,13 +42,39 @@ import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr )
 import Foreign.Storable
 
-import Data.Number.Flint.Internal
-import Data.Number.Flint.External
-
-import Data.Number.Flint.Fmpz
-import Data.Number.Flint.NMod.Struct
+import Data.Number.Flint.Flint
 
 #include <flint/nmod.h>
+
+-- NMod ------------------------------------------------------------------------
+
+data NMod = NMod {-# UNPACK #-} !(ForeignPtr CNMod)
+data CNMod = CNMod CMpLimb CMpLimb CFBitCnt
+
+instance Storable CNMod where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size nmod_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment nmod_t}
+  peek ptr = return CNMod 
+    <*> #{peek nmod_t, n   } ptr
+    <*> #{peek nmod_t, ninv} ptr
+    <*> #{peek nmod_t, norm} ptr
+  poke = error "CNMod.poke: Not defined"
+
+-- NmodDiscreteLogPohligHellman ------------------------------------------------
+
+data NModDiscreteLogPohligHellman =
+   NModDiscreteLogPohligHellman !(ForeignPtr CNModDiscreteLogPohligHellman)
+type CNModDiscreteLogPohligHellman = CFlint NModDiscreteLogPohligHellman
+
+instance Storable CNModDiscreteLogPohligHellman where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size nmod_discrete_log_pohlig_hellman_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment nmod_discrete_log_pohlig_hellman_t}
+  peek ptr = error "CNModDiscreteLogPohligHellman poke: Not defined"
+  poke = error "CNMod.poke: Not defined"
 
 -- Modular reduction and arithmetic --------------------------------------------
 
@@ -140,14 +173,6 @@ foreign import ccall "nmod.h nmod_div"
 -- It is assumed that \(a\) is already reduced modulo @mod.n@.
 foreign import ccall "nmod.h nmod_pow_ui"
   nmod_pow_ui :: CMpLimb -> CULong -> Ptr CNMod -> IO CMpLimb
-
--- | /nmod_pow_fmpz/ /a/ /e/ /mod/ 
--- 
--- Returns \(a^e\) modulo @mod.n@. No assumptions are made about @mod.n@.
--- It is assumed that \(a\) is already reduced modulo @mod.n@ and that
--- \(e\) is not negative.
-foreign import ccall "nmod.h nmod_pow_fmpz"
-  nmod_pow_fmpz :: CMpLimb -> Ptr CFmpz -> Ptr CNMod -> IO CMpLimb
 
 -- Discrete Logarithms via Pohlig-Hellman --------------------------------------
 

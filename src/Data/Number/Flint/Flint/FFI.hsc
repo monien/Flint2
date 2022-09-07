@@ -36,7 +36,7 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
-import Data.Number.Flint.Internal
+import Data.Number.Flint.Flint.Internal
 
 #include <flint/flint.h>
 

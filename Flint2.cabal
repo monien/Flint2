@@ -28,26 +28,21 @@ source-repository head
 library
   exposed-modules:
       Data.Number.Flint
-      Data.Number.Flint.External
-      Data.Number.Flint.External.GMP.FFI
-      Data.Number.Flint.External.Mpfr.FFI
       Data.Number.Flint.Flint
-      Data.Number.Flint.Flint.FFI
       Data.Number.Flint.Fmpz
       Data.Number.Flint.Fmpz.Factor
-      Data.Number.Flint.Fmpz.Factor.Functions
-      Data.Number.Flint.Fmpz.Factor.Struct
-      Data.Number.Flint.Fmpz.Functions
-      Data.Number.Flint.Fmpz.Struct
-      Data.Number.Flint.Internal
-      Data.Number.Flint.Internal.FFI
+      Data.Number.Flint.Flint.External
+      Data.Number.Flint.Flint.Internal
       Data.Number.Flint.NMod
-      Data.Number.Flint.NMod.Functions
-      Data.Number.Flint.NMod.Poly
       Data.Number.Flint.NMod.Poly.Struct
-      Data.Number.Flint.NMod.Struct
   other-modules:
-      Paths_Flint2
+      Data.Number.Flint.Flint.FFI
+      Data.Number.Flint.Flint.External.GMP.FFI
+      Data.Number.Flint.Flint.External.Mpfr.FFI
+      Data.Number.Flint.Flint.Internal.FFI
+      Data.Number.Flint.Fmpz.FFI
+      Data.Number.Flint.Fmpz.Factor.FFI
+      Data.Number.Flint.NMod.FFI
   hs-source-dirs:
       src
   extra-libraries:
@@ -67,6 +62,8 @@ executable flint_test
       Paths_Flint2
   hs-source-dirs:
       app
+  extra-libraries:
+      flint, gmp, mpfr
   build-depends:
       Flint2
     , QuickCheck

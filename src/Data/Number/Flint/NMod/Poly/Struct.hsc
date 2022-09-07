@@ -6,7 +6,7 @@ module Data.Number.Flint.NMod.Poly.Struct (
 ) where
 
 import Foreign.ForeignPtr
-import Data.Number.Flint.Internal
+import Data.Number.Flint.Flint.Internal
 
 data NModPoly = NModPoly {-# UNPACK #-} !(ForeignPtr CNModPoly)
 type CNModPoly = CFlint NModPoly

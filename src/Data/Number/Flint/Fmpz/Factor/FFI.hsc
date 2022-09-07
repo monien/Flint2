@@ -2,7 +2,7 @@
   TupleSections
 #-}
 
-module Data.Number.Flint.Fmpz.Factor.Functions (
+module Data.Number.Flint.Fmpz.Factor.FFI (
   -- * Integer factorisation
   -- * Memory management
     newFmpzFactor
@@ -24,6 +24,8 @@ module Data.Number.Flint.Fmpz.Factor.Functions (
   , fmpz_factor_pollard_brent_single
   , fmpz_factor_pollard_brent
   -- * Elliptic curve (ECM) method
+  , Ecm (..)
+  , CEcm (..)
   , fmpz_factor_ecm_init
   , fmpz_factor_ecm_clear
   , fmpz_factor_ecm_addmod
@@ -46,11 +48,8 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
-import Data.Number.Flint.External
-import Data.Number.Flint.Internal
 import Data.Number.Flint.Flint
-import Data.Number.Flint.Fmpz.Struct
-import Data.Number.Flint.Fmpz.Factor.Struct
+import Data.Number.Flint.Fmpz
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
@@ -72,7 +71,12 @@ withFmpzFactor (FmpzFactor p) f = do
 withNewFmpzFactor f = do
   x <- newFmpzFactor
   withFmpzFactor x f
-  
+
+-- Ecm -------------------------------------------------------------------------
+
+data Ecm = Ecm {-# UNPACK #-} !(ForeignPtr CEcm)
+type CEcm = CFlint Ecm
+
 -- Factoring integers ----------------------------------------------------------
 
 -- An integer may be represented in factored form using the @fmpz_factor_t@
