@@ -247,13 +247,13 @@ module Data.Number.Flint.Fmpz.FFI (
   , CFmpzMultiCRT(..)
   , newFmpzMultiCRT
   , withFmpzMultiCRT
-  , fmpz_multi_crt_init
-  , fmpz_multi_crt_precompute
-  , fmpz_multi_crt_precomp
-  , fmpz_multi_crt
-  , fmpz_multi_crt_clear
+  , fmpz_multi_CRT_init
+  , fmpz_multi_CRT_precompute
+  , fmpz_multi_CRT_precomp
+  , fmpz_multi_CRT
+  , fmpz_multi_CRT_clear
   , _nmod_poly_crt_local_size
-  , _fmpz_multi_crt_run
+  , _fmpz_multi_CRT_run
   -- * Primality testing
   , fmpz_is_strong_probabprime
   , fmpz_is_probabprime_lucas
@@ -1982,21 +1982,21 @@ foreign import ccall "fmpz.h &fmpz_comb_temp_clear"
 
 newFmpzMultiCRT = do
   p <- mallocForeignPtr
-  withForeignPtr p fmpz_multi_crt_init
-  addForeignPtrFinalizer p_fmpz_multi_crt_clear p
+  withForeignPtr p fmpz_multi_CRT_init
+  addForeignPtrFinalizer p_fmpz_multi_CRT_clear p
   return $ FmpzMultiCRT p
 
 {-# INLINE withFmpzMultiCRT #-}
 withFmpzMultiCRT (FmpzMultiCRT p) f = do
   withForeignPtr p $ \fp -> f fp >>= return . (FmpzMultiCRT p,)
 
--- | /fmpz_multi_crt_init/ /CRT/ 
+-- | /fmpz_multi_CRT_init/ /CRT/ 
 -- 
 -- Initialize @CRT@ for Chinese remaindering.
-foreign import ccall "fmpz.h fmpz_multi_crt_init"
-  fmpz_multi_crt_init :: Ptr CFmpzMultiCRT -> IO ()
+foreign import ccall "fmpz.h fmpz_multi_CRT_init"
+  fmpz_multi_CRT_init :: Ptr CFmpzMultiCRT -> IO ()
 
--- | /fmpz_multi_crt_precompute/ /CRT/ /moduli/ /len/ 
+-- | /fmpz_multi_CRT_precompute/ /CRT/ /moduli/ /len/ 
 -- 
 -- Configure @CRT@ for repeated Chinese remaindering of @moduli@. The
 -- number of moduli, @len@, should be positive. A return of @0@ indicates
@@ -2005,32 +2005,32 @@ foreign import ccall "fmpz.h fmpz_multi_crt_init"
 -- compilation was successful, which occurs if and only if either (1)
 -- @len == 1@ and @modulus + 0@ is nonzero, or (2) no modulus is \(0,1,-1\)
 -- and all moduli are pairwise relatively prime.
-foreign import ccall "fmpz.h fmpz_multi_crt_precompute"
-  fmpz_multi_crt_precompute :: Ptr CFmpzMultiCRT -> Ptr CFmpz -> CLong -> IO CInt
+foreign import ccall "fmpz.h fmpz_multi_CRT_precompute"
+  fmpz_multi_CRT_precompute :: Ptr CFmpzMultiCRT -> Ptr CFmpz -> CLong -> IO CInt
 
--- | /fmpz_multi_crt_precomp/ /output/ /P/ /inputs/ 
+-- | /fmpz_multi_CRT_precomp/ /output/ /P/ /inputs/ 
 -- 
 -- Set @output@ to an integer of smallest absolute value that is congruent
 -- to @values + i@ modulo the @moduli + i@ in @fmpz_crt_precompute@.
-foreign import ccall "fmpz.h fmpz_multi_crt_precomp"
-  fmpz_multi_crt_precomp :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
+foreign import ccall "fmpz.h fmpz_multi_CRT_precomp"
+  fmpz_multi_CRT_precomp :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
--- | /fmpz_multi_crt/ /output/ /moduli/ /values/ /len/ 
+-- | /fmpz_multi_CRT/ /output/ /moduli/ /values/ /len/ 
 -- 
--- Perform the same operation as @fmpz_multi_crt_precomp@ while internally
+-- Perform the same operation as @fmpz_multi_CRT_precomp@ while internally
 -- constructing and destroying the precomputed data. All of the remarks in
--- @fmpz_multi_crt_precompute@ apply.
-foreign import ccall "fmpz.h fmpz_multi_crt"
-  fmpz_multi_crt :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> IO CInt
+-- @fmpz_multi_CRT_precompute@ apply.
+foreign import ccall "fmpz.h fmpz_multi_CRT"
+  fmpz_multi_CRT :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> IO CInt
 
--- | /fmpz_multi_crt_clear/ /P/ 
+-- | /fmpz_multi_CRT_clear/ /P/ 
 -- 
 -- Free all space used by @CRT@.
-foreign import ccall "fmpz.h fmpz_multi_crt_clear"
-  fmpz_multi_crt_clear :: Ptr CFmpzMultiCRT -> IO ()
+foreign import ccall "fmpz.h fmpz_multi_CRT_clear"
+  fmpz_multi_CRT_clear :: Ptr CFmpzMultiCRT -> IO ()
 
-foreign import ccall "fmpz.h &fmpz_multi_crt_clear"
-  p_fmpz_multi_crt_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())
+foreign import ccall "fmpz.h &fmpz_multi_CRT_clear"
+  p_fmpz_multi_CRT_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())
 
 -- | /_nmod_poly_crt_local_size/ /CRT/ 
 -- 
@@ -2038,14 +2038,14 @@ foreign import ccall "fmpz.h &fmpz_multi_crt_clear"
 foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
   _nmod_poly_crt_local_size :: Ptr CNModPolyCRT -> IO CLong
 
--- | /_fmpz_multi_crt_run/ /outputs/ /CRT/ /inputs/ 
+-- | /_fmpz_multi_CRT_run/ /outputs/ /CRT/ /inputs/ 
 -- 
--- Perform the same operation as fmpz::fmpz_multi_crt_precomp using
+-- Perform the same operation as fmpz::fmpz_multi_CRT_precomp using
 -- supplied temporary space. The actual output is placed in @outputs + 0@,
 -- and @outputs@ should contain space for all temporaries and should be at
--- least as long as @_fmpz_multi_crt_local_size(CRT)@.
-foreign import ccall "fmpz.h _fmpz_multi_crt_run"
-  _fmpz_multi_crt_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
+-- least as long as @_fmpz_multi_CRT_local_size(CRT)@.
+foreign import ccall "fmpz.h _fmpz_multi_CRT_run"
+  _fmpz_multi_CRT_run :: Ptr CFmpz -> Ptr CFmpzMultiCRT -> Ptr CFmpz -> IO ()
 
 -- Primality testing -----------------------------------------------------------
 
