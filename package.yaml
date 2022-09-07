@@ -28,12 +28,30 @@ executables:
   flint_test:
     source-dirs: app
     main: Main.hs
-    dependencies:
+    dependencies: 
     - QuickCheck
     - Flint2
+    extra-libraries: flint, gmp, mpfr
       
 library:
-  source-dirs: src
+  exposed-modules:
+   - Data.Number.Flint
+   - Data.Number.Flint.Flint
+   - Data.Number.Flint.Fmpz
+   - Data.Number.Flint.Fmpz.Factor
+   - Data.Number.Flint.Flint.External
+   - Data.Number.Flint.Flint.Internal
+   - Data.Number.Flint.NMod
+   - Data.Number.Flint.NMod.Poly.Struct
+  other-modules:
+   - Data.Number.Flint.Flint.FFI
+   - Data.Number.Flint.Flint.External.GMP.FFI 
+   - Data.Number.Flint.Flint.External.Mpfr.FFI 
+   - Data.Number.Flint.Flint.Internal.FFI 
+   - Data.Number.Flint.Fmpz.FFI
+   - Data.Number.Flint.Fmpz.Factor.FFI
+   - Data.Number.Flint.NMod.FFI 
+  source-dirs: src 
   build-tools: hsc2hs
   dependencies:
   - hgmp
