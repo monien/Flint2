@@ -1,0 +1,7 @@
+Not consistent with documentation:
+
+- fmpz_multi_crt_run does not exist.
+- all fmpz_multi_crt functions are renamed to fmpz_multi_CRT
+
+- nmod.h not in documentation
+- nmod_poly_crt_local_size not in fmpz.h

@@ -2033,11 +2033,12 @@ foreign import ccall "fmpz.h fmpz_multi_CRT_clear"
 foreign import ccall "fmpz.h &fmpz_multi_CRT_clear"
   p_fmpz_multi_CRT_clear :: FunPtr (Ptr CFmpzMultiCRT -> IO ())
 
--- | /_nmod_poly_crt_local_size/ /CRT/ 
--- 
--- Return the required length of the output for @_nmod_poly_crt_run@.
-foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
-  _nmod_poly_crt_local_size :: Ptr CNModPolyCRT -> IO CLong
+-- not presentin fmpz.h in flintlib 2.9.0 --------------------------------------
+-- -- | /_nmod_poly_crt_local_size/ /CRT/ 
+-- -- 
+-- -- Return the required length of the output for @_nmod_poly_crt_run@.
+-- foreign import ccall "fmpz.h _nmod_poly_crt_local_size"
+--   _nmod_poly_crt_local_size :: Ptr CNModPolyCRT -> IO CLong
 
 -- not present in flintlib 2.9.0 -----------------------------------------------
 -- -- | /_fmpz_multi_CRT_run/ /outputs/ /CRT/ /inputs/ 
