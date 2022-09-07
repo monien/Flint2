@@ -5,11 +5,19 @@
   , TupleSections
   #-}
 
-module Data.Number.Flint.Fmpz.Functions (
-  -- * Fmpz
-    newFmpz
+module Data.Number.Flint.Fmpz.FFI (
+  -- * Integers @Fmpz@
+    Fmpz (..)
+  , CFmpz (..)
+  , newFmpz
   , withFmpz
   , withNewFmpz
+  -- * Precomputed inverse
+  , FmpzPreInvN (..)
+  , CFmpzPreInvN (..)
+  -- * Factorization structure @FmpzFactor@
+  , FmpzFactor (..)
+  , CFmpzFactor (..)
   -- * Memory management mpz
   , _fmpz_new_mpz
   , _fmpz_cleanup_mpz_content
@@ -221,7 +229,11 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_CRT
   , fmpz_multi_mod_ui
   , fmpz_multi_CRT_ui
-  -- ** Comb
+  -- ** Comb for multi CRT
+  , FmpzComb (..)
+  , CFmpzComb (..)
+  , FmpzCombTemp (..)
+  , CFmpzCombTemp (..)
   , newFmpzComb
   , withFmpzComb
   , fmpz_comb_init
@@ -231,6 +243,8 @@ module Data.Number.Flint.Fmpz.Functions (
   , fmpz_comb_clear
   , fmpz_comb_temp_clear
   -- ** Multi CRT
+  , FmpzMultiCRT (..)
+  , CFmpzMultiCRT(..)
   , newFmpzMultiCRT
   , withFmpzMultiCRT
   , fmpz_multi_crt_init
@@ -280,17 +294,97 @@ import Foreign.Marshal ( free )
 import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
 import Numeric.GMP.Types (MPZ)
 
-import Data.Number.Flint.Internal
-import Data.Number.Flint.External
 import Data.Number.Flint.Flint
-import Data.Number.Flint.Fmpz.Struct
-import Data.Number.Flint.Fmpz.Factor.Struct
-import Data.Number.Flint.NMod.Struct
+import Data.Number.Flint.NMod
 import Data.Number.Flint.NMod.Poly.Struct
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 #include <flint/fmpz_factor.h>
+
+-- Data structures -------------------------------------------------------------
+
+-- fmpz_t ----------------------------------------------------------------------
+
+-- | Integer (opaque pointer)
+data Fmpz = Fmpz {-# UNPACK #-} !(ForeignPtr CFmpz)
+type CFmpz = CFlint Fmpz
+
+instance Storable CFmpz where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_t}
+  peek = error "CFmpz.peek: Not defined"
+  poke = error "CFmpz.poke: Not defined"
+  
+-- fmpz_preinv_t --------------------------------------------------
+
+-- | Data structure containing the /CFmpz/ pointer
+data FmpzPreInvN = FmpzPreInvN
+  {-# UNPACK #-} !(ForeignPtr CFmpzPreInvN) 
+type CFmpzPreInvN = CFlint FmpzPreInvN 
+
+-- fmpz_comb_t -----------------------------------------------------------------
+
+-- | Data structure containing /CFmpzComb/ pointer
+data FmpzComb = FmpzComb {-# UNPACK #-} !(ForeignPtr CFmpzComb)
+type CFmpzComb = CFlint FmpzComb
+
+instance Storable CFmpzComb where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_comb_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_comb_t}
+  peek = error "CFmpzComb.peek: Not defined"
+  poke = error "CFmpzComb.poke: Not defined"
+
+-- fmpz_comb_temp_t ------------------------------------------------------------
+
+-- | Data structure containing /CFmpzCombTemp/ pointer
+data FmpzCombTemp = FmpzCombTemp {-# UNPACK #-} !(ForeignPtr CFmpzCombTemp)
+type CFmpzCombTemp = CFlint FmpzCombTemp
+
+instance Storable CFmpzCombTemp where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_comb_temp_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_comb_temp_t}
+  peek = error "CFmpzCombTemp.peek: Not defined"
+  poke = error "CFmpzCombTemp.poke: Not defined"
+
+-- fmpz_multi_crt_t ------------------------------------------------------------
+
+-- | Data structure containing /CFmpzMultiCRT/ pointer
+data FmpzMultiCRT = FmpzMultiCRT {-# UNPACK #-} !(ForeignPtr CFmpzMultiCRT)
+type CFmpzMultiCRT = CFlint FmpzMultiCRT
+
+instance Storable CFmpzMultiCRT where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_multi_crt_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_multi_crt_t}
+  peek = error "CFmpzMultiCRT.peek: Not defined"
+  poke = error "CFmpzMultiCRT.poke: Not defined"
+
+-- fmpz_factor_t ---------------------------------------------------------------
+
+-- | Data structure containing /CFmpzFactor/ pointer
+data FmpzFactor = FmpzFactor {-# UNPACK #-} !(ForeignPtr CFmpzFactor)
+data CFmpzFactor = CFmpzFactor CInt (Ptr CFmpz) (Ptr CULong) CLong CLong
+
+instance Storable CFmpzFactor where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_factor_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_factor_t}
+  peek ptr = CFmpzFactor
+    <$> #{peek fmpz_factor_struct, sign } ptr
+    <*> #{peek fmpz_factor_struct, p    } ptr
+    <*> #{peek fmpz_factor_struct, exp  } ptr
+    <*> #{peek fmpz_factor_struct, alloc} ptr
+    <*> #{peek fmpz_factor_struct, num  } ptr
+  poke = error "CFmpzFactor.poke: Not defined"
 
 -- Fmpz ------------------------------------------------------------------------
 
@@ -2269,3 +2363,10 @@ foreign import ccall "fmpz.h fmpz_factor_moebius_mu"
 foreign import ccall "fmpz.h fmpz_factor_divisor_sigma"
   fmpz_factor_divisor_sigma :: Ptr CFmpz -> CULong -> Ptr CFmpzFactor -> IO ()
 
+-- | /nmod_pow_fmpz/ /a/ /e/ /mod/ 
+-- 
+-- Returns \(a^e\) modulo @mod.n@. No assumptions are made about @mod.n@.
+-- It is assumed that \(a\) is already reduced modulo @mod.n@ and that
+-- \(e\) is not negative.
+foreign import ccall "nmod.h nmod_pow_fmpz"
+  nmod_pow_fmpz :: CMpLimb -> Ptr CFmpz -> Ptr CNMod -> IO CMpLimb

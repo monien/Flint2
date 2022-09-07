@@ -1,9 +1,9 @@
-module Data.Number.Flint.External.Mpfr.FFI where
+module Data.Number.Flint.Flint.External.Mpfr.FFI where
 
 import Data.Word
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Data.Number.Flint.Internal
+import Data.Number.Flint.Flint.Internal
 
 -- MPFR ------------------------------------------------------------------------
 

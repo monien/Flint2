@@ -2,7 +2,7 @@
   TypeFamilies
 #-}
 
-module Data.Number.Flint.Internal.FFI (
+module Data.Number.Flint.Flint.Internal.FFI (
     Flint (..)
   , CFlint (..)
   , printCStr
