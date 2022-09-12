@@ -10,6 +10,11 @@ module Data.Number.Flint.Fmpz.Factor.FFI (
   , withNewFmpzFactor
   , fmpz_factor_init
   , fmpz_factor_clear
+  -- * Output
+  , fmpz_factor_get_str
+  , fmpz_factor_print
+  , fmpz_factor_fprint
+  -- * Modification
   , _fmpz_factor_append_ui
   , _fmpz_factor_append
   -- * Factoring integers
@@ -101,6 +106,27 @@ foreign import ccall "fmpz_factor.h fmpz_factor_clear"
 
 foreign import ccall "fmpz_factor.h &fmpz_factor_clear"
   p_fmpz_factor_clear :: FunPtr (Ptr CFmpzFactor -> IO ())
+
+-- Output ----------------------------------------------------------------------
+
+-- | /fmpz_factor_get_str/ /factor/
+--
+-- Get string representation of factorization
+foreign import ccall "fmpz_factor_get_str"
+  fmpz_factor_get_str :: Ptr CFmpzFactor -> IO CString
+
+-- | /fmpz_factor_print/ /factor/
+--
+-- Print factorization
+fmpz_factor_print = printCStr fmpz_factor_get_str
+
+-- | /fmpz_factor_fprint/ /factor/
+--
+-- Print factorization to file
+foreign import ccall "fmpz_factor_fprint"
+  fmpz_factor_fprint :: Ptr CFile -> Ptr CFmpzFactor -> IO ()
+
+--------------------------------------------------------------------------------
 
 -- | /_fmpz_factor_append_ui/ /factor/ /p/ /exp/ 
 -- 

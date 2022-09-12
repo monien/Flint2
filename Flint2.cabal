@@ -45,6 +45,9 @@ library
       Data.Number.Flint.NMod.FFI
   hs-source-dirs:
       src
+  c-sources:
+      csrc/fmpz_factor/fprint.c
+      csrc/fmpz_factor/get_str.c
   extra-libraries:
       flint
   build-tools:
@@ -58,6 +61,7 @@ executable flint_test
   main-is: Main.hs
   other-modules:
       Fmpz
+      FmpzFactor
       UFD
       Paths_Flint2
   hs-source-dirs:

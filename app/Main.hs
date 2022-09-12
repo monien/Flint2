@@ -5,6 +5,7 @@ import Control.Monad
 
 import Data.Number.Flint
 import Fmpz
+import FmpzFactor
 
 main = do
   x <- newFmpz
@@ -17,6 +18,11 @@ main = do
       x = a * b
   print x
   print $ factor x
+  withFmpz x $ \x -> do
+    withNewFmpzFactor $ \f -> do
+      fmpz_factor f x
+      fmpz_factor_print f
+      putStrLn ""
   r <- newFRandState
   replicateM_ 10 $ do
     withFRandState r $ \r -> do

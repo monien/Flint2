@@ -34,6 +34,7 @@ executables:
     extra-libraries: flint, gmp, mpfr
       
 library:
+  source-dirs: src 
   exposed-modules:
    - Data.Number.Flint
    - Data.Number.Flint.Flint
@@ -50,8 +51,10 @@ library:
    - Data.Number.Flint.Flint.Internal.FFI 
    - Data.Number.Flint.Fmpz.FFI
    - Data.Number.Flint.Fmpz.Factor.FFI
-   - Data.Number.Flint.NMod.FFI 
-  source-dirs: src 
+   - Data.Number.Flint.NMod.FFI
+  c-sources:
+    - csrc/fmpz_factor/fprint.c
+    - csrc/fmpz_factor/get_str.c
   build-tools: hsc2hs
   dependencies:
   - hgmp
