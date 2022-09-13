@@ -2357,6 +2357,9 @@ foreign import ccall "fmpz.h fmpz_factor_euler_phi"
 foreign import ccall "fmpz.h fmpz_factor_moebius_mu"
   fmpz_factor_moebius_mu :: Ptr CFmpzFactor -> IO CInt
 
+foreign import ccall "fmpz.h fmpz_moebius_mu"
+  fmpz_moebius_mu :: Ptr CFmpz -> Ptr CFmpz -> CInt
+
 -- | /fmpz_factor_divisor_sigma/ /res/ /k/ /fac/ 
 -- 
 -- Sets @res@ to \(\sigma_k(n)\), the sum of \(k`th powers of all 
