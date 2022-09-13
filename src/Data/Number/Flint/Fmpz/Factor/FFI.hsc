@@ -64,6 +64,7 @@ import Data.Number.Flint.Fmpz
 
 newFmpzFactor = do
   p <- mallocForeignPtr
+  putStrLn $ "newFmpzFactor " ++ show p
   withForeignPtr p fmpz_factor_init
   addForeignPtrFinalizer p_fmpz_factor_clear p
   return $ FmpzFactor p

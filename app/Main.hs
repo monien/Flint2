@@ -18,19 +18,24 @@ main = do
       x = a * b
   print x
   print $ factor x
-  withFmpz x $ \x -> do
+  withFmpz x $ \x ->
     withNewFmpzFactor $ \f -> do
       fmpz_factor f x
       fmpz_factor_print f
       putStrLn ""
-  r <- newFRandState
-  replicateM_ 10 $ do
-    withFRandState r $ \r -> do
-      withFmpz x $ \x -> do
-        fmpz_randbits x r 64 
-        fmpz_print x
-        putStrLn ""
-      print $ factor x
-  l <- sample' arbitrary :: IO ([Fmpz])
-  print l
+  -- withFmpz x $ \x -> do
+  --   withNewFmpzFactor $ \f -> do
+  --     fmpz_factor f x
+  --     fmpz_factor_print f
+  --     putStrLn ""
+  -- r <- newFRandState
+  -- replicateM_ 10 $ do
+  --   withFRandState r $ \r -> do
+  --     withFmpz x $ \x -> do
+  --       fmpz_randbits x r 64 
+  --       fmpz_print x
+  --       putStrLn ""
+  --     print $ factor x
+  -- l <- sample' arbitrary :: IO ([Fmpz])
+  -- print l
     

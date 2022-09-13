@@ -53,6 +53,8 @@ library:
    - Data.Number.Flint.Fmpz.Factor.FFI
    - Data.Number.Flint.NMod.FFI
   c-sources:
+    - csrc/fmpz/init.c
+    - csrc/fmpz/clear.c
     - csrc/fmpz_factor/fprint.c
     - csrc/fmpz_factor/get_str.c
   build-tools: hsc2hs
