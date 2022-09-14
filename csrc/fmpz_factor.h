@@ -8,6 +8,12 @@
 #include <flint/fmpz_factor.h>
 
 void
+fmpz_factor_init_(fmpz_factor_t x);
+
+void
+fmpz_factor_clear_(fmpz_factor_t x);
+
+void
 fmpz_factor_fprint(FILE * out, const fmpz_factor_t factor);
 
 char*

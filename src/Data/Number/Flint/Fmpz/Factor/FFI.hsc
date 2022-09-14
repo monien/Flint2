@@ -95,8 +95,13 @@ type CEcm = CFlint Ecm
 -- | /fmpz_factor_init/ /factor/ 
 -- 
 -- Initialises an @fmpz_factor_t@ structure.
+#ifndef DEBUG
 foreign import ccall "fmpz_factor.h fmpz_factor_init"
   fmpz_factor_init :: Ptr CFmpzFactor -> IO ()
+#else
+foreign import ccall "fmpz_factor_init_"
+  fmpz_factor_init :: Ptr CFmpzFactor -> IO ()
+#endif
 
 -- | /fmpz_factor_clear/ /factor/ 
 -- 
@@ -104,8 +109,13 @@ foreign import ccall "fmpz_factor.h fmpz_factor_init"
 foreign import ccall "fmpz_factor.h fmpz_factor_clear"
   fmpz_factor_clear :: Ptr CFmpzFactor -> IO ()
 
+#ifndef DEBUG
 foreign import ccall "fmpz_factor.h &fmpz_factor_clear"
   p_fmpz_factor_clear :: FunPtr (Ptr CFmpzFactor -> IO ())
+#else
+foreign import ccall "&fmpz_factor_clear_"
+  p_fmpz_factor_clear :: FunPtr (Ptr CFmpzFactor -> IO ())
+#endif
 
 -- Output ----------------------------------------------------------------------
 

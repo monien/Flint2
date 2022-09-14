@@ -3,7 +3,7 @@
 
 #include <flint/fmpz.h>
 
-void p_fmpz_init(fmpz_t t);
-void p_fmpz_clear(fmpz_t t);
+void fmpz_init_(fmpz_t t);
+void fmpz_clear_(fmpz_t t);
 
 #endif // FMPZ_H_

@@ -55,6 +55,8 @@ library:
   c-sources:
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c
+    - csrc/fmpz_factor/init.c
+    - csrc/fmpz_factor/clear.c
     - csrc/fmpz_factor/fprint.c
     - csrc/fmpz_factor/get_str.c
   build-tools: hsc2hs
