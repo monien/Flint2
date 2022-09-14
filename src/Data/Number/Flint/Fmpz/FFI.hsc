@@ -389,7 +389,7 @@ instance Storable CFmpzFactor where
 -- | Create a new `Fmpz` structure.
 newFmpz = do
   x <- mallocForeignPtr
-  withForeignPtr x fmpz_init
+  withForeignPtr x p_fmpz_init
   addForeignPtrFinalizer p_fmpz_clear x
   return $ Fmpz x
 
@@ -480,6 +480,9 @@ foreign import ccall "fmpz.h _fmpz_demote_val"
 foreign import ccall "fmpz.h fmpz_init"
   fmpz_init :: Ptr CFmpz -> IO ()
 
+foreign import ccall "p_fmpz_init"
+  p_fmpz_init :: Ptr CFmpz -> IO ()
+
 -- | /fmpz_init2/ /f/ /limbs/ 
 -- 
 -- Initialises the given @fmpz_t@ to have space for the given number of
@@ -499,7 +502,8 @@ foreign import ccall "fmpz.h fmpz_init2"
 foreign import ccall "fmpz.h fmpz_clear"
   fmpz_clear :: Ptr CFmpz -> IO ()
 
-foreign import ccall "fmpz.h &fmpz_clear"
+-- foreign import ccall "fmpz.h &fmpz_clear"
+foreign import ccall "&p_fmpz_clear"
   p_fmpz_clear :: FunPtr (Ptr CFmpz -> IO ())
 
 foreign import ccall "fmpz.h fmpz_init_set"

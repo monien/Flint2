@@ -81,6 +81,7 @@ instance Storable CNModDiscreteLogPohligHellman where
 -- | Create a new `NMod` structure
 newNMod n = do
   x <- mallocForeignPtr
+  putStrLn $ "newNMod " ++ show x
   withForeignPtr x $ \x -> nmod_init x n
   return $ NMod x
 
