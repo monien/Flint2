@@ -45,7 +45,6 @@ library
       Data.Number.Flint.NMod.FFI
   hs-source-dirs:
       src
-  cpp-options: -DDEBUG
   c-sources:
       csrc/fmpz/init.c
       csrc/fmpz/clear.c
@@ -71,7 +70,6 @@ executable flint_test
       Paths_Flint2
   hs-source-dirs:
       app
-  cpp-options: -DDEBUG
   extra-libraries:
       flint, gmp, mpfr
   build-depends:
