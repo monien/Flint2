@@ -7,6 +7,6 @@
 #include "../fmpz_factor.h"
 
 void fmpz_factor_clear_(fmpz_factor_t x) {
-  flint_fprintf(stderr, "p_fmpz_factor_init 0x%016p\n", x);
+  flint_fprintf(stderr, "p_fmpz_factor_clear 0x%016p\n", x);
   fmpz_factor_clear(x);
 }
