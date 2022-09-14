@@ -390,7 +390,7 @@ instance Storable CFmpzFactor where
 newFmpz = do
   x <- mallocForeignPtr
   putStrLn $ "newFmpz " ++ show x
-  withForeignPtr x p_fmpz_init
+  withForeignPtr x fmpz_init
   addForeignPtrFinalizer p_fmpz_clear x
   return $ Fmpz x
 
@@ -478,11 +478,13 @@ foreign import ccall "fmpz.h _fmpz_demote_val"
 -- 
 -- A small @fmpz_t@ is initialised, i.e.just a @slong@. The value is set to
 -- zero.
+#ifndef DEBUG
 foreign import ccall "fmpz.h fmpz_init"
   fmpz_init :: Ptr CFmpz -> IO ()
-
-foreign import ccall "p_fmpz_init"
-  p_fmpz_init :: Ptr CFmpz -> IO ()
+#else
+foreign import ccall "fmpz_init_"
+  fmpz_init :: Ptr CFmpz -> IO ()
+#endif
 
 -- | /fmpz_init2/ /f/ /limbs/ 
 -- 
@@ -503,9 +505,13 @@ foreign import ccall "fmpz.h fmpz_init2"
 foreign import ccall "fmpz.h fmpz_clear"
   fmpz_clear :: Ptr CFmpz -> IO ()
 
--- foreign import ccall "fmpz.h &fmpz_clear"
-foreign import ccall "&p_fmpz_clear"
+#ifndef DEBUG
+foreign import ccall "fmpz.h &fmpz_clear"
   p_fmpz_clear :: FunPtr (Ptr CFmpz -> IO ())
+#else
+foreign import ccall "&fmpz_clear_"
+  p_fmpz_clear :: FunPtr (Ptr CFmpz -> IO ())
+#endif
 
 foreign import ccall "fmpz.h fmpz_init_set"
   fmpz_init_set :: Ptr CFmpz -> Ptr CFmpz -> IO ()

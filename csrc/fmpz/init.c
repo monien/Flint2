@@ -3,7 +3,7 @@
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 
-void p_fmpz_init(fmpz_t x) {
-  flint_fprintf(stderr, "p_fmpz_init 0x%016p\n", x);
+void fmpz_init_(fmpz_t x) {
+  flint_fprintf(stderr, "fmpz_init_ 0x%016p\n", x);
   fmpz_init(x);
 }
