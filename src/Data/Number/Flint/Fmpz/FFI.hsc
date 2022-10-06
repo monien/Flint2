@@ -319,8 +319,7 @@ instance Storable CFmpz where
 -- fmpz_preinv_t --------------------------------------------------
 
 -- | Data structure containing the /CFmpz/ pointer
-data FmpzPreInvN = FmpzPreInvN
-  {-# UNPACK #-} !(ForeignPtr CFmpzPreInvN) 
+data FmpzPreInvN = FmpzPreInvN {-# UNPACK #-} !(ForeignPtr CFmpzPreInvN) 
 type CFmpzPreInvN = CFlint FmpzPreInvN 
 
 -- fmpz_comb_t -----------------------------------------------------------------
@@ -398,9 +397,7 @@ newFmpz = do
 withFmpz (Fmpz x) f = do
   withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
 
-withNewFmpz f = do
-  x <- newFmpz
-  withFmpz x $ \x -> f x
+withNewFmpz f = newFmpz >>= flip withFmpz f
   
 --- conversion Integer <-> Fmpz ------------------------------------------------
 
