@@ -389,7 +389,7 @@ instance Storable CFmpzFactor where
 -- | Create a new `Fmpz` structure.
 newFmpz = do
   x <- mallocForeignPtr
-  withForeignPtr x p_fmpz_init
+  withForeignPtr x fmpz_init
   addForeignPtrFinalizer p_fmpz_clear x
   return $ Fmpz x
 
