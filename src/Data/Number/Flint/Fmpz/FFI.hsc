@@ -394,9 +394,10 @@ newFmpz = do
 
 -- | Use `Fmpz` structure.
 {-# INLINE withFmpz #-}
-withFmpz (Fmpz x) f = do
-  withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
+withFmpz (Fmpz x) f = withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
 
+-- | Use new `Fmpz` structure.
+{-# INLINE withNewFmpz #-}
 withNewFmpz f = newFmpz >>= flip withFmpz f
   
 --- conversion Integer <-> Fmpz ------------------------------------------------
