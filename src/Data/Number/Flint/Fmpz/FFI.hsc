@@ -43,8 +43,8 @@ module Data.Number.Flint.Fmpz.FFI (
   , fmpz_randtest_mod_signed
   , fmpz_randprime
   -- * Conversion
-  , toFmpz
-  , fromFmpz
+  -- , toFmpz
+  -- , fromFmpz
   , fmpz_get_si
   , fmpz_get_ui
   , fmpz_get_uiui
@@ -402,17 +402,17 @@ withNewFmpz f = newFmpz >>= flip withFmpz f
   
 --- conversion Integer <-> Fmpz ------------------------------------------------
 
-fromFmpz x =
-  withOutInteger_ $ \y ->
-    withFmpz x $ \x ->
-      fmpz_get_mpz (castPtr y) x
+-- fromFmpz x =
+--   withOutInteger_ $ \y ->
+--     withFmpz x $ \x ->
+--       fmpz_get_mpz (castPtr y) x
       
-toFmpz x = do
-  y <- newFmpz
-  withInInteger x $ \x ->
-    withFmpz y $ \y ->
-      fmpz_set_mpz y (castPtr x)
-  return y
+-- toFmpz x = do
+--   y <- newFmpz
+--   withInInteger x $ \x ->
+--     withFmpz y $ \y ->
+--       fmpz_set_mpz y (castPtr x)
+--   return y
 
 -- Types, macros and constants -------------------------------------------------
 

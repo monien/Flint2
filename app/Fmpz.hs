@@ -31,8 +31,12 @@ instance Show Fmpz where
 
 instance Read Fmpz where
   readsPrec d s = unsafePerformIO $ do
-    let [(n, r)] = readsPrec d s
-    result <- toFmpz n
+    let n :: Integer
+        [(n, r)] = readsPrec d s
+    result <- newFmpz
+    withFmpz result $ \result -> 
+      withCString (show n) $ \s -> 
+        fmpz_set_str result s 10
     return [(result, r)]
 
 instance Eq Fmpz where
@@ -50,10 +54,13 @@ instance Ord Fmpz where
         return $ if ord > 0 then GT else (if ord < 0 then LT else EQ)
 
 instance Enum Fmpz where
-  toEnum x = unsafePerformIO $ toFmpz $ fromIntegral x
-  fromEnum x = unsafePerformIO $ do
-    y <- fromFmpz x
-    return $ fromIntegral y
+  toEnum = undefined
+  fromEnum = undefined
+-- instance Enum Fmpz where
+--   toEnum x = unsafePerformIO $ toFmpz $ fromIntegral x
+--   fromEnum x = unsafePerformIO $ do
+--     y <- fromFmpz x
+--     return $ fromIntegral y
   succ x = unsafePerformIO $ do
     y <- newFmpz 
     withFmpz x $ \x -> withFmpz y $ \y -> fmpz_add_ui y x 1
@@ -68,16 +75,18 @@ instance Num Fmpz where
   (*) = lift2 fmpz_mul
   negate = lift1 fmpz_neg
   abs    = lift1 fmpz_abs
-  fromInteger x = unsafePerformIO $ toFmpz x
+  -- fromInteger x = unsafePerformIO $ toFmpz x
+  fromInteger x = read (show x) :: Fmpz
   signum = lift1 sgn where
     sgn result x = do
       s <- fmpz_sgn x
       fmpz_set_si result (fromIntegral s)
 
 instance Real Fmpz where
-  toRational x = unsafePerformIO $ do
-    n <- fromFmpz x
-    return $ n % 1
+  toRational = undefined
+  -- toRational x = unsafePerformIO $ do
+  --   n <- fromFmpz x
+  --   return $ n % 1
 
 instance Integral Fmpz where
   quotRem x y = unsafePerformIO $ do
@@ -89,7 +98,8 @@ instance Integral Fmpz where
           withFmpz rem $ \rem -> 
             fmpz_tdiv_qr quot rem x y
     return (quot, rem)
-  toInteger x = unsafePerformIO $ fromFmpz x
+  toInteger = undefined
+  -- toInteger x = unsafePerformIO $ fromFmpz x
 
 instance UFD Fmpz where
   factor x = snd $ snd $ unsafePerformIO $
