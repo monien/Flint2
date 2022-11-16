@@ -54,13 +54,8 @@ instance Ord Fmpz where
         return $ if ord > 0 then GT else (if ord < 0 then LT else EQ)
 
 instance Enum Fmpz where
-  toEnum = undefined
-  fromEnum = undefined
--- instance Enum Fmpz where
---   toEnum x = unsafePerformIO $ toFmpz $ fromIntegral x
---   fromEnum x = unsafePerformIO $ do
---     y <- fromFmpz x
---     return $ fromIntegral y
+  toEnum = fromInteger . fromIntegral
+  fromEnum = fromIntegral . toInteger
   succ x = unsafePerformIO $ do
     y <- newFmpz 
     withFmpz x $ \x -> withFmpz y $ \y -> fmpz_add_ui y x 1
@@ -75,7 +70,6 @@ instance Num Fmpz where
   (*) = lift2 fmpz_mul
   negate = lift1 fmpz_neg
   abs    = lift1 fmpz_abs
-  -- fromInteger x = unsafePerformIO $ toFmpz x
   fromInteger x = read (show x) :: Fmpz
   signum = lift1 sgn where
     sgn result x = do
@@ -83,10 +77,7 @@ instance Num Fmpz where
       fmpz_set_si result (fromIntegral s)
 
 instance Real Fmpz where
-  toRational = undefined
-  -- toRational x = unsafePerformIO $ do
-  --   n <- fromFmpz x
-  --   return $ n % 1
+  toRational x = (toInteger x) % 1
 
 instance Integral Fmpz where
   quotRem x y = unsafePerformIO $ do
@@ -98,8 +89,7 @@ instance Integral Fmpz where
           withFmpz rem $ \rem -> 
             fmpz_tdiv_qr quot rem x y
     return (quot, rem)
-  toInteger = undefined
-  -- toInteger x = unsafePerformIO $ fromFmpz x
+  toInteger x = read (show x) :: Integer
 
 instance UFD Fmpz where
   factor x = snd $ snd $ unsafePerformIO $

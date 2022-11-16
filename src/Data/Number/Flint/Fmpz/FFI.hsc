@@ -300,8 +300,6 @@ import Data.Number.Flint.NMod.Poly.Struct
 #include <flint/fmpz.h>
 #include <flint/fmpz_factor.h>
 
--- Data structures -------------------------------------------------------------
-
 -- fmpz_t ----------------------------------------------------------------------
 
 -- | Integer (opaque pointer)
