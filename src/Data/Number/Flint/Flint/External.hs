@@ -1,6 +1,6 @@
 module Data.Number.Flint.Flint.External (
-    module Data.Number.Flint.Flint.External.GMP.FFI
-  , module Data.Number.Flint.Flint.External.Mpfr.FFI   
+  module Data.Number.Flint.Flint.External.GMP.FFI
+, module Data.Number.Flint.Flint.External.Mpfr.FFI   
 ) where
 
 import Data.Number.Flint.Flint.External.GMP.FFI

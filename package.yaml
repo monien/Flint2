@@ -40,6 +40,7 @@ library:
    - Data.Number.Flint.Flint
    - Data.Number.Flint.Fmpz
    - Data.Number.Flint.Fmpz.Factor
+   - Data.Number.Flint.Fmpz.Vec
    - Data.Number.Flint.Fmpq
    - Data.Number.Flint.Flint.External
    - Data.Number.Flint.Flint.Internal
@@ -52,6 +53,7 @@ library:
    - Data.Number.Flint.Flint.Internal.FFI 
    - Data.Number.Flint.Fmpz.FFI
    - Data.Number.Flint.Fmpz.Factor.FFI
+   - Data.Number.Flint.Fmpz.Vec.FFI
    - Data.Number.Flint.Fmpq.FFI
    - Data.Number.Flint.NMod.FFI
   c-sources:
@@ -61,6 +63,7 @@ library:
     - csrc/fmpz_factor/clear.c
     - csrc/fmpz_factor/fprint.c
     - csrc/fmpz_factor/get_str.c
+    - csrc/fmpz_vec/get_str.c
   build-tools: hsc2hs
   extra-libraries: flint
   

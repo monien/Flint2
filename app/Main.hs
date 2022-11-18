@@ -1,5 +1,7 @@
 module Main where
 
+import Foreign.Marshal (advancePtr)
+
 import Test.QuickCheck
 import Control.Monad
 
@@ -39,5 +41,12 @@ main = do
       print $ factor x
   l <- sample' arbitrary :: IO ([Fmpz])
   print l
+  let n = 10
+  v <- _fmpz_vec_init n
+  forM_ [0..fromIntegral n-1] $ \j -> do
+    fmpz_set_si (v `advancePtr` j) (fromIntegral j^2)
+  _fmpz_vec_print v n
+  endl
+  _fmpz_vec_clear v n
 
 endl = putStrLn ""
