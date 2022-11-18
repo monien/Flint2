@@ -274,8 +274,11 @@ module Data.Number.Flint.Fmpz.FFI (
   -- * Special functions
   , fmpz_primorial
   , fmpz_factor_euler_phi
+  , fmpz_euler_phi
   , fmpz_factor_moebius_mu
+  , fmpz_moebius_mu
   , fmpz_factor_divisor_sigma
+  , fmpz_divisor_sigma
 ) where
 
 import System.IO.Unsafe
@@ -288,9 +291,6 @@ import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
-
-import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
-import Numeric.GMP.Types (MPZ)
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.NMod
@@ -397,22 +397,8 @@ withFmpz (Fmpz x) f = withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
 -- | Use new `Fmpz` structure.
 {-# INLINE withNewFmpz #-}
 withNewFmpz f = newFmpz >>= flip withFmpz f
-  
---- conversion Integer <-> Fmpz ------------------------------------------------
 
--- fromFmpz x =
---   withOutInteger_ $ \y ->
---     withFmpz x $ \x ->
---       fmpz_get_mpz (castPtr y) x
-      
--- toFmpz x = do
---   y <- newFmpz
---   withInInteger x $ \x ->
---     withFmpz y $ \y ->
---       fmpz_set_mpz y (castPtr x)
---   return y
-
--- Types, macros and constants -------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- | /_fmpz_new_mpz/ 
 -- 
@@ -2346,6 +2332,9 @@ foreign import ccall "fmpz.h fmpz_primorial"
 foreign import ccall "fmpz.h fmpz_factor_euler_phi"
   fmpz_factor_euler_phi :: Ptr CFmpz -> Ptr CFmpzFactor -> IO ()
 
+foreign import ccall "fmpz.h fmpz_euler_phi"
+  fmpz_euler_phi :: Ptr CFmpz -> Ptr CFmpz -> IO ()
+
 -- | /fmpz_factor_moebius_mu/ /fac/ 
 -- 
 -- Computes the Moebius function \(\mu(n)\), which is defined as
@@ -2367,6 +2356,9 @@ foreign import ccall "fmpz.h fmpz_moebius_mu"
 -- factorisation of \(n\).
 foreign import ccall "fmpz.h fmpz_factor_divisor_sigma"
   fmpz_factor_divisor_sigma :: Ptr CFmpz -> CULong -> Ptr CFmpzFactor -> IO ()
+
+foreign import ccall "fmpz.h fmpz_divisor_sigma"
+  fmpz_divisor_sigma :: Ptr CFmpz -> CULong -> Ptr CFmpz -> IO ()
 
 -- | /nmod_pow_fmpz/ /a/ /e/ /mod/ 
 -- 

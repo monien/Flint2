@@ -40,6 +40,7 @@ library:
    - Data.Number.Flint.Flint
    - Data.Number.Flint.Fmpz
    - Data.Number.Flint.Fmpz.Factor
+   - Data.Number.Flint.Fmpq
    - Data.Number.Flint.Flint.External
    - Data.Number.Flint.Flint.Internal
    - Data.Number.Flint.NMod
@@ -51,6 +52,7 @@ library:
    - Data.Number.Flint.Flint.Internal.FFI 
    - Data.Number.Flint.Fmpz.FFI
    - Data.Number.Flint.Fmpz.Factor.FFI
+   - Data.Number.Flint.Fmpq.FFI
    - Data.Number.Flint.NMod.FFI
   c-sources:
     - csrc/fmpz/init.c
@@ -60,14 +62,12 @@ library:
     - csrc/fmpz_factor/fprint.c
     - csrc/fmpz_factor/get_str.c
   build-tools: hsc2hs
-  dependencies:
-  - hgmp
   extra-libraries: flint
   
 tests:
   Flint2-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs:  test
     ghc-options:
     - -threaded
     - -rtsopts
