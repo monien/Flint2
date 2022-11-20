@@ -9,10 +9,8 @@
 
 module Data.Number.Flint.Fmpz.Arith.FFI (
   -- * Arithmetic and special functions
-  -- * Primorials
-    arith_primorial
   -- * Harmonic numbers
-  , _arith_harmonic_number
+    _arith_harmonic_number
   -- * Stirling numbers
   , arith_stirling_number_1u
   , arith_stirling_number_1
@@ -51,7 +49,6 @@ module Data.Number.Flint.Fmpz.Arith.FFI (
   , arith_euler_polynomial
   , _arith_euler_number_zeta
   -- * Multiplicative functions
-  , arith_euler_phi
   , arith_divisors
   , arith_ramanujan_tau
   , arith_ramanujan_tau_series
@@ -60,8 +57,6 @@ module Data.Number.Flint.Fmpz.Arith.FFI (
   , arith_cos_minpoly
   -- * Landau\'s function
   , arith_landau_function_vec
-  -- * Dedekind sums
-  , arith_dedekind_sum_naive
   -- * Number of partitions
   , arith_number_of_partitions_vec
   , arith_number_of_partitions_nmod_vec
@@ -94,15 +89,6 @@ import Data.Number.Flint.NMod
 
 data FTrigProd = FTrigProd {-# UNPACK #-} !(ForeignPtr CFTrigProd) 
 type CFTrigProd = CFlint FTrigProd
-
--- Primorials ------------------------------------------------------------------
-
--- | /arith_primorial/ /res/ /n/ 
--- 
--- Sets @res@ to @n@ primorial or \(n \#\), the product of all prime
--- numbers less than or equal to \(n\).
-foreign import ccall "arith.h arith_primorial"
-  arith_primorial :: Ptr CFmpz -> CLong -> IO ()
 
 -- Harmonic numbers ------------------------------------------------------------
 
@@ -498,12 +484,6 @@ foreign import ccall "arith.h _arith_euler_number_zeta"
 
 -- Multiplicative functions ----------------------------------------------------
 
--- | /arith_euler_phi/ /res/ /n/ 
--- 
--- These are aliases for the functions in the fmpz module.
-foreign import ccall "arith.h arith_euler_phi"
-  arith_euler_phi :: Ptr CFmpz -> Ptr CFmpz -> IO ()
-
 -- | /arith_divisors/ /res/ /n/ 
 -- 
 -- Set the coefficients of the polynomial @res@ to the divisors of \(n\),
@@ -600,14 +580,6 @@ foreign import ccall "arith.h arith_cos_minpoly"
 -- \(O(n^{3/2} / \sqrt{\log n})\).
 foreign import ccall "arith.h arith_landau_function_vec"
   arith_landau_function_vec :: Ptr CFmpz -> CLong -> IO ()
-
--- Dedekind sums ---------------------------------------------------------------
-
--- | /arith_dedekind_sum_naive/ /s/ /h/ /k/ 
--- 
--- These are aliases for the functions in the fmpq module.
-foreign import ccall "arith.h arith_dedekind_sum_naive"
-  arith_dedekind_sum_naive :: Ptr CFmpq -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
 -- Number of partitions --------------------------------------------------------
 

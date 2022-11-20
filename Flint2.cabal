@@ -37,6 +37,7 @@ library
       Data.Number.Flint.Fmpz.Poly
       Data.Number.Flint.Fmpz.Poly.Factor
       Data.Number.Flint.Fmpq
+      Data.Number.Flint.Fmpq.Vec
       Data.Number.Flint.Fmpq.Poly
       Data.Number.Flint.Flint.External
       Data.Number.Flint.Flint.Internal
@@ -59,6 +60,7 @@ library
       Data.Number.Flint.Fmpz.Poly.FFI
       Data.Number.Flint.Fmpz.Poly.Factor.FFI
       Data.Number.Flint.Fmpq.FFI
+      Data.Number.Flint.Fmpq.Vec.FFI
       Data.Number.Flint.Fmpq.Poly.FFI
       Data.Number.Flint.NMod.FFI
       Data.Number.Flint.NMod.Mat.Struct
@@ -78,6 +80,7 @@ library
       csrc/fmpz_vec/get_str.c
       csrc/fmpz_mat/get_str.c
       csrc/fmpz_mat/get_str_pretty.c
+      csrc/fmpq_vec/get_str.c
   extra-libraries:
       flint
   build-tools:

@@ -216,7 +216,7 @@ foreign import ccall "_fmpz_vec_get_str"
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
 foreign import ccall "fmpz_vec.h _fmpz_vec_fread"
-  _fmpz_vec_fread :: Ptr CFile -> Ptr (Ptr CFmpz) -> Ptr CLong -> IO CInt
+  _fmpz_vec_fread :: Ptr CFile -> Ptr CFmpz -> Ptr CLong -> IO CInt
 
 -- | /_fmpz_vec_read/ /vec/ /len/ 
 -- 
@@ -224,7 +224,7 @@ foreign import ccall "fmpz_vec.h _fmpz_vec_fread"
 -- 
 -- For further details, see @_fmpz_vec_fread()@.
 foreign import ccall "fmpz_vec.h _fmpz_vec_read"
-  _fmpz_vec_read :: Ptr (Ptr CFmpz) -> Ptr CLong -> IO CInt
+  _fmpz_vec_read :: Ptr CFmpz -> Ptr CLong -> IO CInt
 
 -- | /_fmpz_vec_fprint/ /file/ /vec/ /len/ 
 -- 
