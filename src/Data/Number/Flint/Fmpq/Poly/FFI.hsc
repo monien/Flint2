@@ -115,6 +115,11 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , _fmpq_poly_scalar_div_ui
   , _fmpq_poly_scalar_div_fmpq
   , fmpq_poly_scalar_div_si
+  , fmpq_poly_scalar_div_ui
+  , fmpq_poly_scalar_div_fmpz
+  , fmpq_poly_scalar_div_fmpq
+  , fmpq_poly_scalar_div_mpz
+  , fmpq_poly_scalar_div_mpq
   -- * Multiplication
   , _fmpq_poly_mul
   , fmpq_poly_mul
@@ -1133,6 +1138,21 @@ foreign import ccall "fmpq_poly.h _fmpq_poly_scalar_div_fmpq"
 foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_si"
   fmpq_poly_scalar_div_si :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> CLong -> IO ()
 
+foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_ui"
+  fmpq_poly_scalar_div_ui :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> CLong -> IO ()
+
+foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_fmpz"
+  fmpq_poly_scalar_div_fmpz :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CFmpz -> IO ()
+
+foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_fmpq"
+  fmpq_poly_scalar_div_fmpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CFmpq -> IO ()
+
+foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_mpz"
+  fmpq_poly_scalar_div_mpz :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr Mpz -> IO ()
+
+foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_mpq"
+  fmpq_poly_scalar_div_mpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr Mpq -> IO ()
+  
 -- Multiplication --------------------------------------------------------------
 
 -- | /_fmpq_poly_mul/ /rpoly/ /rden/ /poly1/ /den1/ /len1/ /poly2/ /den2/ /len2/ 
@@ -2375,8 +2395,9 @@ foreign import ccall "fmpq_poly.h _fmpq_poly_print"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fmpq_poly.h fmpq_poly_print"
-  fmpq_poly_print :: Ptr CFmpqPoly -> IO CInt
+-- foreign import ccall "fmpq_poly.h fmpq_poly_print"
+fmpq_poly_print :: Ptr CFmpqPoly -> IO CInt
+fmpq_poly_print poly = printCStr fmpq_poly_get_str poly
 
 foreign import ccall "fmpq_poly.h _fmpq_poly_print_pretty"
   _fmpq_poly_print_pretty :: Ptr CFmpz -> Ptr CFmpz -> CLong -> CString -> IO CInt
@@ -2388,8 +2409,9 @@ foreign import ccall "fmpq_poly.h _fmpq_poly_print_pretty"
 -- name.
 -- 
 -- In the current implementation always returns~\`1\`.
-foreign import ccall "fmpq_poly.h fmpq_poly_print_pretty"
-  fmpq_poly_print_pretty :: Ptr CFmpqPoly -> CString -> IO CInt
+fmpq_poly_print_pretty :: Ptr CFmpqPoly -> CString -> IO CInt
+fmpq_poly_print_pretty poly var =
+  printCStr (flip fmpq_poly_get_str_pretty var) poly
 
 -- | /_fmpq_poly_fprint/ /file/ /poly/ /den/ /len/ 
 -- 

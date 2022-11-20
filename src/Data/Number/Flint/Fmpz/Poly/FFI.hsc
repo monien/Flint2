@@ -4006,8 +4006,8 @@ foreign import ccall "fmpz_poly.h _fmpz_poly_print"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fmpz_poly.h fmpz_poly_print"
-  fmpz_poly_print :: Ptr CFmpzPoly -> IO CInt
+fmpz_poly_print :: Ptr CFmpzPoly -> IO CInt
+fmpz_poly_print poly = printCStr fmpz_poly_get_str poly
 
 -- | /_fmpz_poly_print_pretty/ /poly/ /len/ /x/ 
 -- 
@@ -4026,8 +4026,8 @@ foreign import ccall "fmpz_poly.h _fmpz_poly_print_pretty"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fmpz_poly.h fmpz_poly_print_pretty"
-  fmpz_poly_print_pretty :: Ptr CFmpzPoly -> CString -> IO CInt
+fmpz_poly_print_pretty poly var =
+  printCStr (flip fmpz_poly_get_str_pretty var) poly
 
 -- | /_fmpz_poly_fprint/ /file/ /poly/ /len/ 
 -- 

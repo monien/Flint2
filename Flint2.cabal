@@ -90,6 +90,7 @@ executable flint_test
   main-is: Main.hs
   other-modules:
       Fmpq
+      FmpqPoly
       Fmpz
       FmpzFactor
       FmpzPoly

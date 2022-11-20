@@ -12,6 +12,8 @@ import Data.Number.Flint
 import Fmpz
 import FmpzFactor
 import FmpzPoly
+import Fmpq
+import FmpqPoly
 
 main = do
   x <- newFmpz
@@ -76,5 +78,11 @@ main = do
       forM_ [0..2] $ \j -> do
         x <- d_mat_get_entry d i j
         print $ x
+  poly <- newFmpqPoly
+  withFmpqPoly poly $ \poly -> do
+    fmpq_poly_legendre_p poly 7
+  print poly
+  print $ poly^3
+  
   
 endl = putStrLn ""
