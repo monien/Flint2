@@ -1627,21 +1627,22 @@ foreign import ccall "fmpz.h fmpz_xgcd"
 
 -- | /fmpz_xgcd_canonical_bezout/ /d/ /a/ /b/ /f/ /g/ 
 -- 
--- Computes the extended GCD \(\operatorname{xgcd}(f, g) = (d, a, b)\) such
+-- Computes the extended GCD \(\mathrm{xgcd}(f, g) = (d, a, b)\) such
 -- that the solution is the canonical solution to Bézout\'s identity. We
 -- define the canonical solution to satisfy one of the following if one of
 -- the given conditions apply:
--- 
--- \[`\]
--- \[\operatorname{xgcd}(\pm g, g) &= \bigl(|g|, 0, \operatorname{sgn}(g)\bigr)\]
--- \[\operatorname{xgcd}(f, 0) &= \bigl(|f|, \operatorname{sgn}(f), 0\bigr)\]
--- \[\operatorname{xgcd}(0, g) &= \bigl(|g|, 0, \operatorname{sgn}(g)\bigr)\]
--- \[\operatorname{xgcd}(f, \mp 1) &= (1, 0, \mp 1)\]
--- \[\operatorname{xgcd}(\mp 1, g) &= (1, \mp 1, 0)\quad g \neq 0, \pm 1\]
--- \[\operatorname{xgcd}(\mp 2 d, g) &=
---         \bigl(d, {\textstyle\frac{d - |g|}{\mp 2 d}}, \operatorname{sgn}(g)\bigr)\]
--- \[\operatorname{xgcd}(f, \mp 2 d) &=
---         \bigl(d, \operatorname{sgn}(f), {\textstyle\frac{d - |g|}{\mp 2 d}}\bigr).\]
+--
+-- \[\begin{aligned}
+-- \operatorname{xgcd}(\pm g, g) &= \bigl(|g|, 0, \operatorname{sgn}(g)\bigr)\\
+-- \operatorname{xgcd}(f, 0) &= \bigl(|f|, \operatorname{sgn}(f), 0\bigr)\\
+-- \operatorname{xgcd}(0, g) &= \bigl(|g|, 0, \operatorname{sgn}(g)\bigr)\\
+-- \operatorname{xgcd}(f, \mp 1) &= (1, 0, \mp 1)\\
+-- \operatorname{xgcd}(\mp 1, g) &= (1, \mp 1, 0)\quad g \neq 0, \pm 1\\
+-- \operatorname{xgcd}(\mp 2 d, g) &=
+-- \bigl(d, {\textstyle\frac{d - |g|}{\mp 2 d}}, \operatorname{sgn}(g)\bigr)\\
+-- \operatorname{xgcd}(f, \mp 2 d) &=
+-- \bigl(d, \operatorname{sgn}(f), {\textstyle\frac{d - |g|}{\mp 2 d}}\bigr).
+-- \end{aligned}\]
 -- 
 -- If the pair \((f, g)\) does not satisfy any of these conditions, the
 -- solution \((d, a, b)\) will satisfy the following:

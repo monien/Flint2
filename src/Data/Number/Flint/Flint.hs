@@ -1,3 +1,5 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
+
 module Data.Number.Flint.Flint (
   module Data.Number.Flint.Flint.FFI
 , module Data.Number.Flint.Flint.Internal

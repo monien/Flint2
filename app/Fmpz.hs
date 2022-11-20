@@ -80,6 +80,12 @@ instance Real Fmpz where
   toRational x = (toInteger x) % 1
 
 instance Integral Fmpz where
+  mod x y = unsafePerformIO $ do
+    result <- newFmpz
+    withFmpz result $ \result ->
+      withFmpz x $ \x ->
+        withFmpz y $ \y -> fmpz_mod result x y
+    return result
   quotRem x y = unsafePerformIO $ do
     quot <- newFmpz
     rem <- newFmpz
