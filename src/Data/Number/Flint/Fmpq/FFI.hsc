@@ -147,6 +147,8 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
+import Data.Functor ((<&>))
+
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 
@@ -178,7 +180,7 @@ newFmpq = do
 
 -- | Use `Fmpq` structure.
 {-# INLINE withFmpq #-}
-withFmpq (Fmpq x) f = withForeignPtr x $ \xp -> f xp >>= return . (Fmpq x,)
+withFmpq (Fmpq x) f = withForeignPtr x $ \xp -> f xp <&> (Fmpq x,)
 
 -- | Use new `Fmpq` structure.
 {-# INLINE withNewFmpq #-}

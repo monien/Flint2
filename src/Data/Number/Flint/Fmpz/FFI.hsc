@@ -292,6 +292,8 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
+import Data.Functor ((<&>))
+
 import Data.Number.Flint.Flint
 import Data.Number.Flint.NMod
 import Data.Number.Flint.NMod.Poly.Struct
@@ -392,7 +394,7 @@ newFmpz = do
 
 -- | Use `Fmpz` structure.
 {-# INLINE withFmpz #-}
-withFmpz (Fmpz x) f = withForeignPtr x $ \xp -> f xp >>= return . (Fmpz x,)
+withFmpz (Fmpz x) f = withForeignPtr x $ \xp -> f xp <&> (Fmpz x,)
 
 -- | Use new `Fmpz` structure.
 {-# INLINE withNewFmpz #-}
