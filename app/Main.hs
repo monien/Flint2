@@ -31,27 +31,29 @@ main = do
       fmpz_factor f x
       fmpz_factor_print f
       endl
-  withFmpz x $ \x -> do
-    withNewFmpzFactor $ \f -> do
-      fmpz_factor f x
-      fmpz_factor_print f
-      endl
   r <- newFRandState
   replicateM_ 10 $ do
     withFRandState r $ \r -> do
       withFmpz x $ \x -> do
-        fmpz_randbits x r 64 
+        fmpz_randbits x r 64
+        putStr "random number: "
         fmpz_print x
         endl
-      print $ factor x
+        withNewFmpzFactor $ \f -> do
+          fmpz_factor f x
+          putStr "factorization: "
+          fmpz_factor_print f
+          endl
+      -- print x 
+      -- print $ factor x
   l <- sample' arbitrary :: IO ([Fmpz])
   print l
   let n = 10
   v <- _fmpz_vec_init n
-  f <- newFmpzFactor
   forM_ [0..fromIntegral n-1] $ \j -> do
     fmpz_set_si (v `advancePtr` j) (fromIntegral (j+1)^2)
   _fmpz_vec_print v n
+  f <- newFmpzFactor
   forM_ [0..fromIntegral n-1] $ \j -> do
     withFmpzFactor f $ \f -> do
       fmpz_factor f (v `advancePtr` j)
@@ -91,7 +93,7 @@ testPadic = do
   let p = 7 :: Fmpz
   withNewPadicCtx p 0 128 padic_series $ \ctx -> do
     withNewPadic $ \x -> do
-      padic_set_ui x 11 ctx
+      padic_set_ui x 2 ctx
       padic_print x ctx
       endl
       padic_sqrt x x ctx
