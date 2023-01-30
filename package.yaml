@@ -48,6 +48,7 @@ library:
    - Data.Number.Flint.NMod.Mat
    - Data.Number.Flint.NMod.Poly
    - Data.Number.Flint.NMod.Poly.Factor
+   - Data.Number.Flint.Padic
    - Data.Number.Flint.Support.D.Mat
    - Data.Number.Flint.Support.Mpf.Mat
   other-modules:
@@ -70,6 +71,7 @@ library:
    - Data.Number.Flint.NMod.Mat.Struct
    - Data.Number.Flint.NMod.Poly.Struct
    - Data.Number.Flint.NMod.Poly.Factor.Struct
+   - Data.Number.Flint.Padic.FFI
    - Data.Number.Flint.Support.D.Mat.FFI
    - Data.Number.Flint.Support.Mpf.Mat.FFI
   c-sources:

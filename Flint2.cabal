@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.0.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 
@@ -46,6 +46,7 @@ library
       Data.Number.Flint.NMod.Mat
       Data.Number.Flint.NMod.Poly
       Data.Number.Flint.NMod.Poly.Factor
+      Data.Number.Flint.Padic
       Data.Number.Flint.Support.D.Mat
       Data.Number.Flint.Support.Mpf.Mat
   other-modules:
@@ -68,6 +69,7 @@ library
       Data.Number.Flint.NMod.Mat.Struct
       Data.Number.Flint.NMod.Poly.Struct
       Data.Number.Flint.NMod.Poly.Factor.Struct
+      Data.Number.Flint.Padic.FFI
       Data.Number.Flint.Support.D.Mat.FFI
       Data.Number.Flint.Support.Mpf.Mat.FFI
   hs-source-dirs:

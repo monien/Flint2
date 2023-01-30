@@ -83,6 +83,31 @@ main = do
     fmpq_poly_legendre_p poly 7
   print poly
   print $ poly^3
-  
+  testPadic
   
 endl = putStrLn ""
+
+testPadic = do
+  let p = 7 :: Fmpz
+  withNewPadicCtx p 0 128 padic_series $ \ctx -> do
+    withNewPadic $ \x -> do
+      padic_set_ui x 11 ctx
+      padic_print x ctx
+      endl
+      padic_sqrt x x ctx
+      padic_print x ctx
+      endl
+      padic_neg x x ctx
+      padic_print x ctx
+      endl
+      padic_mul x x x ctx
+      padic_print x ctx
+      endl
+      v <- padic_get_val x
+      print v
+      prec <- padic_get_prec x
+      print prec
+      u <- padic_unit x
+      fmpz_print u
+      endl
+
