@@ -29,7 +29,7 @@ module Data.Number.Flint.Padic.Poly.FFI (
   , padic_poly_degree
   , padic_poly_length
   , padic_poly_val
-  , padic_poly_prec
+  -- , padic_poly_prec
   -- * Randomisation
   , padic_poly_randtest
   , padic_poly_randtest_not_zero
@@ -96,7 +96,7 @@ module Data.Number.Flint.Padic.Poly.FFI (
   , padic_poly_fprint_pretty
   , _padic_poly_print_pretty
   , padic_poly_print_pretty
-  , _padic_poly_get_str
+  , padic_poly_get_str_pretty
   , padic_poly_get_str
   -- * Testing
   , _padic_poly_is_canonical
@@ -281,8 +281,8 @@ foreign import ccall "padic_poly.h padic_poly_val"
 -- 
 -- Note that increasing the precision might require a call to
 -- @padic_poly_reduce@.
-foreign import ccall "padic_poly.h padic_poly_prec"
-  padic_poly_prec :: Ptr CPadicPoly -> IO CLong
+-- foreign import ccall "padic_poly.h padic_poly_prec"
+--   padic_poly_prec :: Ptr CPadicPoly -> IO CLong
 
 -- Randomisation ---------------------------------------------------------------
 
@@ -759,14 +759,9 @@ padic_poly_print_pretty  poly var ctx = do
   putStr s
   return (1 :: CInt)
 
-foreign import ccall "_padic_poly_get_str"
-  _padic_poly_get_str :: CString -> Ptr CFmpz -> CLong -> CLong -> Ptr CPadicCtx -> IO CString
 
 foreign import ccall "padic_poly_get_str"
   padic_poly_get_str :: CString -> Ptr CPadicPoly -> Ptr CPadicCtx -> IO CString
-
-foreign import ccall "_padic_poly_get_str_pretty"
-  _padic_poly_get_str_pretty :: Ptr CFmpz -> CLong -> CLong -> CString -> Ptr CPadicCtx -> IO CString
   
 foreign import ccall "padic_poly_get_str_pretty"
   padic_poly_get_str_pretty :: Ptr CPadicPoly -> CString -> Ptr CPadicCtx -> IO CString
