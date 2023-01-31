@@ -47,6 +47,7 @@ library
       Data.Number.Flint.NMod.Poly
       Data.Number.Flint.NMod.Poly.Factor
       Data.Number.Flint.Padic
+      Data.Number.Flint.Padic.Poly
       Data.Number.Flint.Support.D.Mat
       Data.Number.Flint.Support.Mpf.Mat
   other-modules:
@@ -70,6 +71,7 @@ library
       Data.Number.Flint.NMod.Poly.Struct
       Data.Number.Flint.NMod.Poly.Factor.Struct
       Data.Number.Flint.Padic.FFI
+      Data.Number.Flint.Padic.Poly.FFI
       Data.Number.Flint.Support.D.Mat.FFI
       Data.Number.Flint.Support.Mpf.Mat.FFI
   hs-source-dirs:
@@ -85,6 +87,8 @@ library
       csrc/fmpz_mat/get_str.c
       csrc/fmpz_mat/get_str_pretty.c
       csrc/fmpq_vec/get_str.c
+      csrc/padic_poly/get_str.c
+      csrc/padic_poly/get_str_pretty.c
   extra-libraries:
       flint
   build-tools:

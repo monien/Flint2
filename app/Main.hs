@@ -35,7 +35,7 @@ main = do
   replicateM_ 10 $ do
     withFRandState r $ \r -> do
       withFmpz x $ \x -> do
-        fmpz_randbits x r 64
+        fmpz_randbits x r 128
         putStr "random number: "
         fmpz_print x
         endl
