@@ -3,7 +3,6 @@ module Main where
 import System.IO.Unsafe
 
 import Foreign.Marshal (advancePtr)
-import Foreign.C.String
 
 import Test.QuickCheck
 import Control.Monad
@@ -36,7 +35,7 @@ main = do
   replicateM_ 10 $ do
     withFRandState r $ \r -> do
       withFmpz x $ \x -> do
-        fmpz_randbits x r 128
+        fmpz_randbits x r 64
         putStr "random number: "
         fmpz_print x
         endl
@@ -114,15 +113,3 @@ testPadic = do
       fmpz_print u
       endl
 
-testPadicPoly = do
-  let poly = fromList [5, 0, 3, 0, 1] :: FmpzPoly
-      p = 7 :: Fmpz
-  q <- newPadicPoly
-  withNewPadicCtx p 0 128 padic_series $ \ctx -> do
-    withFmpzPoly poly $ \poly -> do
-      withPadicPoly q $ \q -> do
-        padic_poly_set_fmpz_poly q poly ctx
-        withCString "x" $ \var -> do
-          padic_poly_print_pretty q var ctx
-          endl
-      

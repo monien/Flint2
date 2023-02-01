@@ -11,7 +11,6 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpq.Vec
 , module Data.Number.Flint.Fmpq.Poly
 , module Data.Number.Flint.Padic
-, module Data.Number.Flint.Padic.Poly
 , module Data.Number.Flint.Support.D.Mat
 , module Data.Number.Flint.Support.Mpf.Mat
 ) where
@@ -28,7 +27,6 @@ import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Vec
 import Data.Number.Flint.Fmpq.Poly
 import Data.Number.Flint.Padic
-import Data.Number.Flint.Padic.Poly
 import Data.Number.Flint.Support.D.Mat
 import Data.Number.Flint.Support.Mpf.Mat
 
