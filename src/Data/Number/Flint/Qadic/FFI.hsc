@@ -130,7 +130,6 @@ import Foreign.Storable
 import Foreign.Marshal ( free )
 import Foreign.Marshal.Array
 
-import Data.Number.Flint
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Vec
@@ -174,13 +173,12 @@ instance Storable CQadicCtx where
   sizeOf _ = #{size qadic_ctx_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment qadic_ctx_t}
-  peek ptr = do
-    pctx <- return $ castPtr ptr
-    a    <- #{peek qadic_ctx_struct, a   } ptr
-    j    <- #{peek qadic_ctx_struct, j   } ptr
-    len  <- #{peek qadic_ctx_struct, len } ptr
-    var  <- #{peek qadic_ctx_struct, var } ptr
-    return $ CQadicCtx pctx a j len var 
+  peek ptr = return CQadicCtx
+    `ap` (return $ castPtr ptr)
+    `ap` #{peek qadic_ctx_struct, a   } ptr
+    `ap` #{peek qadic_ctx_struct, j   } ptr
+    `ap` #{peek qadic_ctx_struct, len } ptr
+    `ap` #{peek qadic_ctx_struct, var } ptr
   poke = undefined
 
 {-# INLINE _newQadicCtx #-}
@@ -872,6 +870,12 @@ foreign import ccall "qadic.h qadic_fprint_pretty"
 -- In the current implementation, always returns \(1\). The return code is
 -- part of the function\'s signature to allow for a later implementation to
 -- return the number of characters printed or a non-positive error code.
-foreign import ccall "qadic.h qadic_print_pretty"
-  qadic_print_pretty :: Ptr CQadic -> Ptr CQadicCtx -> IO CInt
+qadic_print_pretty x ctx = printCStr (flip qadic_get_str_pretty ctx) x
+
+-- | /qadic_get_str__pretty/ /op/ /ctx/
+--
+-- Returns a pretty representation of @op@ in a C string.
+foreign import ccall "qadic_get_str_pretty"
+  qadic_get_str_pretty :: Ptr CQadic -> Ptr CQadicCtx -> IO CString
+
 

@@ -214,14 +214,13 @@ instance Storable CPadicCtx where
   sizeOf _ = #{size padic_ctx_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment padic_ctx_t}
-  peek ptr = do
-    p    <- return $ castPtr ptr
-    pinv <- #{peek padic_ctx_struct, pinv} ptr
-    pow  <- #{peek padic_ctx_struct, pow } ptr
-    min  <- #{peek padic_ctx_struct, min } ptr
-    max  <- #{peek padic_ctx_struct, max } ptr
-    mode <- #{peek padic_ctx_struct, mode} ptr
-    return $ CPadicCtx p pinv pow min max mode
+  peek ptr = return CPadicCtx
+    `ap` (return $ castPtr ptr)
+    `ap` #{peek padic_ctx_struct, pinv} ptr
+    `ap` #{peek padic_ctx_struct, pow } ptr
+    `ap` #{peek padic_ctx_struct, min } ptr
+    `ap` #{peek padic_ctx_struct, max } ptr
+    `ap` #{peek padic_ctx_struct, mode } ptr
   poke = undefined
 
 -- | Create p-adic context with prime \(p\), precomputed powers \(p^{min}\)
