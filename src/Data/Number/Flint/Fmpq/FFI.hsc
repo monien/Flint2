@@ -134,7 +134,7 @@ module Data.Number.Flint.Fmpq.FFI (
   , fmpq_dedekind_sum_naive
 ) where 
 
--- Types, macros and constants -------------------------------------------------
+-- rational numbers ------------------------------------------------------------
 
 import System.IO.Unsafe
 

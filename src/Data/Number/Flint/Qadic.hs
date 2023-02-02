@@ -28,34 +28,39 @@ import Data.Number.Flint
 main = do
   let c = [1,10,9,8,8,0,2,9,1,3,1]
   p <- newFmpz
-  withFmpz p $ \\p -> fmpz_set_ui p 11
-  withNewQadicCtx p 4 0 128 "a" padic_series $ \\ctx -> do
+  withFmpz p $ \p -> fmpz_set_ui p 11
+  withNewQadicCtx p 4 0 128 "a" padic_series $ \ctx -> do
     CQadicCtx pctx _ _ _ _ <- peek ctx
-    withNewQadic $ \\x -> do
-        withFmpzPoly (fromList [3,0,4,8]) $ \\poly -> do
-          padic_poly_set_fmpz_poly x poly pctx
-        newton c x ctx
-        putStr "x = "
-        qadic_print_pretty x ctx
-        putStr "\\n"
-        
-newton c x ctx = do
-  withNewQadic $ \\y ->
-    withNewQadic $ \\y' -> do
+    withNewQadic $ \x -> do
+      withFmpzPoly (fromList [3,0,4,8]) $ \poly -> do
+        padic_poly_set_fmpz_poly x poly pctx
+      newton x c ctx
+      putStr "x = "
+      qadic_print_pretty x ctx
+      putStr "\n"
+      y <- horner x c ctx
+      withQadic y $ \y -> do
+        putStr "y = "
+        qadic_print_pretty y ctx
+        putStr "\n"
+         
+newton x c ctx = do
+  withNewQadic $ \y ->
+    withNewQadic $ \y' -> do
       qadic_set_ui y (c!!0) ctx
       qadic_set_ui y' 0 ctx
-      withNewQadic $ \\tmp -> 
-        forM_ (tail c) $ \\c -> do
+      withNewQadic $ \tmp -> 
+        forM_ (tail c) $ \c -> do
           qadic_set_ui tmp c ctx
           qadic_mul y' y' x ctx
           qadic_add y' y' y ctx
           qadic_mul y y x ctx
-          qadic_add y y tmp ctx          
+          qadic_add y y tmp ctx
+      is_zero <- qadic_is_zero y
       qadic_inv y' y' ctx
       qadic_mul y y y' ctx
       qadic_sub x x y ctx
-      is_zero <- qadic_is_zero x
-      when (is_zero == 1) $ newton c x ctx
+      when (is_zero /= 1) $ newton x c ctx
   return ()
 
 fromList c = fst $ unsafePerformIO $ do
