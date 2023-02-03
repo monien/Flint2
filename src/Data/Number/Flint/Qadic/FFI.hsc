@@ -15,7 +15,7 @@ module Data.Number.Flint.Qadic.FFI (
   -- ** q-adic numbers 
   -- | Data structures
   -- We represent an element of the
-  -- extension \(\mathbb{Q}_q \cong \mathbb{Q}_p[X] \/ (f(X))
+  -- extension \(\mathbb{Q}_q \cong \mathbb{Q}_p[X]\ /\ f(X)\)
   -- as a polynomial in \(\mathbb{Q}_p[X]\) of degree less than \(\deg(f)\).
   -- As such, @qadic_struct@ and @qadic_t@ are typedef\'ed as
   -- @padic_poly_struct@ and @padic_poly_t@.
@@ -28,14 +28,14 @@ module Data.Number.Flint.Qadic.FFI (
   --
   -- | Context
   -- We represent an unramified extension of \(\mathbb{Q}_p\) 
-  -- via \(\mathbb{Q}_q \cong \mathbb{Q}_p[X] / (f(X))\), 
+  -- via \(\mathbb{Q}_q \cong \mathbb{Q}_p[X]\ /\ f(X)\), 
   -- where \(f \in \mathbb{Q}_p[X]\) is a monic, irreducible polynomial which we
   -- assume to actually be in \(\mathbb{Z}[X]\). The first field in the
   -- context structure is a \(p\)-adic context struct @pctx@, which contains
   -- data about the prime \(p\), precomputed powers, the printing mode etc.
   -- The polynomial \(f\) is represented as a sparse polynomial using two
   -- arrays \(j\) and \(a\) of length @len@,
-  -- where f(X) = sum_{i} a_{i} X^{j_{i}}.
+  -- where \(f(X) = \sum_{i} a_{i} X^{j_{i}}\).
   -- We also assume that the array \(j\) is sorted in ascending
   -- order. We choose this data structure to improve reduction modulo \(f(X)\)
   -- in \(\mathbb{Q}_p[X]\), assuming a sparse polynomial \(f(X)\)
@@ -330,8 +330,8 @@ foreign import ccall "qadic.h &qadic_clear"
 
 -- | /_fmpz_poly_reduce/ /R/ /lenR/ /a/ /j/ /len/ 
 -- 
--- Reduces a polynomial @(R, lenR)@ modulo a sparse monic polynomial
--- \(f(X) = \sum_{i} a_{i} X^{j_{i}}\) of degree at least \(2\).
+-- Reduces a polynomial @(R, lenR)@ modulo a sparse monic
+-- polynomial \(f(X) = \sum_{i} a_{i} X^{j_{i}}\) of degree at least \(2\).
 -- 
 -- Assumes that the array \(j\) of positive length @len@ is sorted in
 -- ascending order.
@@ -342,8 +342,8 @@ foreign import ccall "qadic.h _fmpz_poly_reduce"
 
 -- | /_fmpz_mod_poly_reduce/ /R/ /lenR/ /a/ /j/ /len/ /p/ 
 -- 
--- Reduces a polynomial @(R, lenR)@ modulo a sparse monic polynomial
--- \(f(X) = \sum_{i} a_{i} X^{j_{i}}\) of degree at least \(2\) in
+-- Reduces a polynomial @(R, lenR)@ modulo a sparse monic
+-- polynomial \(f(X) = \sum_{i} a_{i} X^{j_{i}}\) of degree at least \(2\) in
 -- \(\mathbb{Z}/(p)\), where \(p\) is typically a prime power.
 -- 
 -- Assumes that the array \(j\) of positive length @len@ is sorted in

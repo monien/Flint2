@@ -45,8 +45,6 @@ main = do
           putStr "factorization: "
           fmpz_factor_print f
           endl
-      -- print x 
-      -- print $ factor x
   l <- sample' arbitrary :: IO ([Fmpz])
   print l
   let n = 10
