@@ -1,11 +1,11 @@
-module ({-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
+{-# language
+  CApiFFI
+, FlexibleInstances
+, ForeignFunctionInterface
+, MultiParamTypeClasses
+, TupleSections
+, TypeFamilies
+#-}
 
 module Data.Number.Flint.Padic.Mat.FFI (
   -- * Matrices over p-adic numbers
@@ -78,17 +78,15 @@ module Data.Number.Flint.Padic.Mat.FFI (
 
 -- matrices over p-adic numbers ------------------------------------------------
 
+import Control.Monad
+
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Ptr ( Ptr, FunPtr, plusPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
-import Numeric.GMP.Utils (withInInteger, withOutInteger_) 
-import Numeric.GMP.Types (MPZ)
-
-import Data.Number.Flint.Lib
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Mat
@@ -102,7 +100,7 @@ import Data.Number.Flint.Padic
 -- padic_mat_t -----------------------------------------------------------------
 
 data PadicMat = PadicMat {-# UNPACK #-} !(ForeignPtr CPadicMat)
-type CPadicMat = CPadicMat CFmpzMat CLong CLong
+data CPadicMat = CPadicMat CFmpzMat CLong CLong
 
 instance Storable CPadicMat where
   {-# INLINE sizeOf #-}
@@ -110,7 +108,7 @@ instance Storable CPadicMat where
   {-# INLINE alignment #-}
   alignment _ = #{alignment padic_mat_t}
   peek ptr = return CPadicMat
-    `ap` (return $ castPtr ptr)
+    `ap` #{peek padic_mat_struct, mat} ptr
     `ap` #{peek padic_mat_struct, val} ptr
     `ap` #{peek padic_mat_struct, N  } ptr
   poke = undefined
@@ -144,10 +142,8 @@ withPadicMat (PadicMat x) f = do
 -- The return value can be used as an argument to the functions in the
 -- @fmpz_mat@ module.
 padic_mat :: Ptr CPadicMat -> IO (Ptr CFmpzMat)
-padic_mat x = do
-  CPadicMat ptr _ _ = peek x
-  return ptr
-
+padic_mat ptr = return $ castPtr ptr
+  
 -- | /padic_mat_entry/ /A/ /i/ /j/ 
 -- 
 -- Returns a pointer to unit part of the entry in position \((i, j)\). Note
@@ -203,6 +199,9 @@ foreign import ccall "padic_mat.h padic_mat_init2"
 -- Clears the matrix \(A\).
 foreign import ccall "padic_mat.h padic_mat_clear"
   padic_mat_clear :: Ptr CPadicMat -> IO ()
+
+foreign import ccall "padic_mat.h &padic_mat_clear"
+  p_padic_mat_clear :: FunPtr (Ptr CPadicMat -> IO ())
 
 -- | /_padic_mat_canonicalise/ /A/ /ctx/ 
 -- 
@@ -330,6 +329,12 @@ foreign import ccall "padic_mat.h padic_mat_is_zero"
 
 -- Input and output ------------------------------------------------------------
 
+foreign import ccall "padic_mat.h padic_mat_get_str"
+  padic_mat_get_str:: Ptr CPadicMat -> IO CString
+  
+foreign import ccall "padic_mat.h padic_mat_get_str_pretty"
+  padic_mat_get_str_pretty:: Ptr CPadicMat -> IO CString
+  
 -- | /padic_mat_fprint/ /file/ /A/ /ctx/ 
 -- 
 -- Prints a simple representation of the matrix \(A\) to the output stream
@@ -350,8 +355,24 @@ foreign import ccall "padic_mat.h padic_mat_fprint"
 foreign import ccall "padic_mat.h padic_mat_fprint_pretty"
   padic_mat_fprint_pretty :: Ptr CFile -> Ptr CPadicMat -> Ptr CPadicCtx -> IO CInt
 
-foreign import ccall "padic_mat.h padic_mat_print"
-  padic_mat_print :: Ptr CPadicMat -> Ptr CPadicCtx -> IO CInt
+-- | /padic_mat_print/ /file/ /A/ /ctx/ 
+-- 
+-- Prints a simple representation of the matrix \(A\) to @stdout@. The
+-- format is the number of rows, a space, the number of columns, two
+-- spaces, followed by a list of all the entries, one row after the
+-- other.
+-- 
+-- In the current implementation, always returns \(1\).
+padic_mat_print :: Ptr CPadicMat -> IO CInt
+padic_mat_print mat = printCStr (padic_mat_get_str) mat
+
+-- | /padic_mat_print_pretty/ /file/ /A/ /ctx/ 
+-- 
+-- Prints a /pretty/ representation of the matrix \(A\) to @stdout@.
+-- 
+-- In the current implementation, always returns \(1\).
+padic_mat_print_pretty :: Ptr CPadicMat -> IO CInt
+padic_mat_print_pretty mat = printCStr (padic_mat_get_str_pretty) mat
 
 -- Random matrix generation ----------------------------------------------------
 

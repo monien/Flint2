@@ -8,10 +8,12 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpz.Poly.Factor
 , module Data.Number.Flint.Fmpz.LLL
 , module Data.Number.Flint.Fmpq
+, module Data.Number.Flint.Fmpq.Mat
 , module Data.Number.Flint.Fmpq.Vec
 , module Data.Number.Flint.Fmpq.Poly
 , module Data.Number.Flint.Padic
 , module Data.Number.Flint.Padic.Poly
+, module Data.Number.Flint.Padic.Mat
 , module Data.Number.Flint.Qadic
 , module Data.Number.Flint.Support.D.Mat
 , module Data.Number.Flint.Support.Mpf.Mat
@@ -26,10 +28,12 @@ import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Poly.Factor
 import Data.Number.Flint.Fmpz.LLL
 import Data.Number.Flint.Fmpq
+import Data.Number.Flint.Fmpq.Mat
 import Data.Number.Flint.Fmpq.Vec
 import Data.Number.Flint.Fmpq.Poly
 import Data.Number.Flint.Padic
 import Data.Number.Flint.Padic.Poly
+import Data.Number.Flint.Padic.Mat
 import Data.Number.Flint.Qadic
 import Data.Number.Flint.Support.D.Mat
 import Data.Number.Flint.Support.Mpf.Mat
