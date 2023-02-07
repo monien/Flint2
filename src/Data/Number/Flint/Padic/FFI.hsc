@@ -10,16 +10,12 @@
 
 module Data.Number.Flint.Padic.FFI (
   -- * Data structures
-  -- A \(p\)-adic number of type @Padict@ comprises a unit \(u\), a
-  -- valuation \(v\), and a precision \(N\). We provide the following macros
-  -- to access these fields, so that code can be developed somewhat
-  -- independently from the underlying data layout.
+  -- A \(p\)-adic number of type @CPadic@ comprises a unit \(u\), a
+  -- valuation \(v\), and a precision \(N\). 
   -- ** p-adic numbers
   -- | A p-adic number of type Padic comprises \(a\) unit \(u\), a valuation
   -- \(v\), and a precision \(N\). Create with `newPadic`.
     Padic (..)
-  --
-  -- | Haskell wrapper for the Flint `padic_t` structure. 
   , CPadic (..)
   , newPadic
   , withPadic
@@ -33,8 +29,6 @@ module Data.Number.Flint.Padic.FFI (
   -- precomputed powers of \(p\) in the range given by min and max, and the
   -- printing mode. Create with `newPadicCtx`.
   , PadicCtx (..)
-  --
-  -- | Haskell wrapper for the Flint `padic_ctx_t`.
   , CPadicCtx (..)
   , newPadicCtx
   , withPadicCtx
@@ -216,10 +210,10 @@ instance Storable CPadicCtx where
   alignment _ = #{alignment padic_ctx_t}
   peek ptr = return CPadicCtx
     `ap` (return $ castPtr ptr)
-    `ap` #{peek padic_ctx_struct, pinv} ptr
-    `ap` #{peek padic_ctx_struct, pow } ptr
-    `ap` #{peek padic_ctx_struct, min } ptr
-    `ap` #{peek padic_ctx_struct, max } ptr
+    `ap` #{peek padic_ctx_struct, pinv } ptr
+    `ap` #{peek padic_ctx_struct, pow  } ptr
+    `ap` #{peek padic_ctx_struct, min  } ptr
+    `ap` #{peek padic_ctx_struct, max  } ptr
     `ap` #{peek padic_ctx_struct, mode } ptr
   poke = undefined
 
@@ -288,16 +282,17 @@ padic_get_prec x = do
 -- or @PADIC_VAL_UNIT@. Using the example \(x = 7^{-1} 12\) in
 -- \(\mathbf{Q}_7\), these behave as follows:
 -- 
--- In @PADIC_TERSE@ mode, a \(p\)-adic number is printed in the same way as
+-- In @padic_terseE@ mode, a \(p\)-adic number is printed in the same way as
 -- a rational number, e.g. @12\/7@.
 -- 
--- In @PADIC_SERIES@ mode, a \(p\)-adic number is printed digit by digit,
+-- In @padic_series@ mode, a \(p\)-adic number is printed digit by digit,
 -- e.g. @5*7^-1 + 1@.
 -- 
--- In @PADIC_VAL_UNIT@ mode, a \(p\)-adic number is printed showing the
+-- In @padic_val_unit@ mode, a \(p\)-adic number is printed showing the
 -- valuation and unit parts separately, e.g. @12*7^-1@.
 foreign import ccall "padic.h padic_ctx_init"
-  padic_ctx_init :: Ptr CPadicCtx -> Ptr CFmpz -> CLong -> CLong -> PadicPrintMode -> IO ()
+  padic_ctx_init :: Ptr CPadicCtx
+                 -> Ptr CFmpz -> CLong -> CLong -> PadicPrintMode -> IO ()
 
 newtype PadicPrintMode = PadicPrintMode {_PadicPrintMode :: CInt} deriving Eq
 
