@@ -165,11 +165,13 @@ horner x c ctx = do
   return y
 
 testPadicMat = do
-  let p = 7 :: Fmpz
+  let p = 11 :: Fmpz
   withNewPadicCtx p 0 128 padic_terse $ \ctx -> do
     mat <- newPadicMat 3 3 20
     withPadicMat mat $ \mat -> do
-      padic_mat_one mat
+      withNewFmpqMat 3 3 $ \r -> do
+        fmpq_mat_hilbert_matrix r
+        padic_mat_set_fmpq_mat mat r ctx
       padic_mat_print mat ctx
       endl
       padic_mat_print_pretty mat ctx

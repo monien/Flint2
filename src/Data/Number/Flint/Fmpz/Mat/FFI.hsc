@@ -235,6 +235,14 @@ import Data.Number.Flint.Support.Mpf.Mat
 data FmpzMat = FmpzMat {-# UNPACK #-} !(ForeignPtr CFmpzMat) 
 data CFmpzMat = CFmpzMat (Ptr CFmpz) CLong CLong (Ptr (Ptr CFmpz)) 
 
+instance Storable CFmpzMat where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_mat_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_mat_t}
+  peek = error "CFmpzMat.peek: Not defined."
+  poke = error "CFmpzMat.poke: Not defined."
+ 
 newFmpzMat rows cols = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x -> fmpz_mat_init x rows cols
@@ -250,14 +258,6 @@ withNewFmpzMat rows cols f = do
   x <- newFmpzMat rows cols
   withFmpzMat x f
   
-instance Storable CFmpzMat where
-  {-# INLINE sizeOf #-}
-  sizeOf _ = #{size fmpz_mat_t}
-  {-# INLINE alignment #-}
-  alignment _ = #{alignment fmpz_mat_t}
-  peek = error "CFmpzMat.peek: Not defined."
-  poke = error "CFmpzMat.poke: Not defined."
- 
 -- Memory management -----------------------------------------------------------
 
 -- | /fmpz_mat_init/ /mat/ /rows/ /cols/ 

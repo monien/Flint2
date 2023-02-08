@@ -13,6 +13,7 @@ module Data.Number.Flint.Fmpq.Mat.FFI (
   , CFmpqMat (..)
   , newFmpqMat
   , withFmpqMat
+  , withNewFmpqMat
   -- * Memory management
   , fmpq_mat_init
   , fmpq_mat_init_set
@@ -153,7 +154,12 @@ newFmpqMat rows cols = do
 {-# INLINE withFmpqMat #-}
 withFmpqMat (FmpqMat x) f = do
   withForeignPtr x $ \px -> f px >>= return . (FmpqMat x,)
-  
+
+{-# INLINE withNewFmpqMat #-}
+withNewFmpqMat rows cols f = do
+  x <- newFmpqMat rows cols
+  withFmpqMat x f
+ 
 -- Memory management -----------------------------------------------------------
 
 -- | /fmpq_mat_init/ /mat/ /rows/ /cols/ 
