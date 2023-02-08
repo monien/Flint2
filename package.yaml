@@ -95,6 +95,8 @@ library:
     - csrc/fmpq_vec/get_str.c
     - csrc/padic_poly/get_str.c
     - csrc/padic_poly/get_str_pretty.c
+    - csrc/padic_mat/get_str.c
+    - csrc/padic_mat/get_str_pretty.c
     - csrc/qadic/get_str_pretty.c
   build-tools: hsc2hs
   extra-libraries: flint

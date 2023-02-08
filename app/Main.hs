@@ -84,7 +84,9 @@ main = do
     fmpq_poly_legendre_p poly 7
   print poly
   print $ poly^3
+  testFmpqMat
   testPadic
+  testPadicMat
   testQadic
   
 endl = putStrLn ""
@@ -161,3 +163,23 @@ horner x c ctx = do
         qadic_set_ui tmp c ctx
         qadic_add y y tmp ctx
   return y
+
+testPadicMat = do
+  let p = 7 :: Fmpz
+  withNewPadicCtx p 0 128 padic_terse $ \ctx -> do
+    mat <- newPadicMat 3 3 20
+    withPadicMat mat $ \mat -> do
+      padic_mat_one mat
+      padic_mat_print mat ctx
+      endl
+      padic_mat_print_pretty mat ctx
+      endl
+
+testFmpqMat = do
+  mat <- newFmpqMat 3 3
+  withFmpqMat mat $ \mat -> do
+    fmpq_mat_one mat
+    p <- fmpq_mat_entry mat 1 2
+    fmpq_set_ui p 2 5
+    fmpq_mat_print mat
+    endl

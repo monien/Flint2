@@ -72,7 +72,6 @@ module Data.Number.Flint.Padic.Mat.FFI (
   , padic_mat_scalar_mul_fmpz
   , padic_mat_scalar_div_fmpz
   -- * Multiplication
-  , _padic_mat_mul
   , padic_mat_mul
 ) where 
 
@@ -115,7 +114,7 @@ instance Storable CPadicMat where
 
 newPadicMat rows cols prec = do
   x <- mallocForeignPtr
-  withForeignPtr x $ \x -> padic_mat_init rows cols prec
+  withForeignPtr x $ \x -> padic_mat_init x rows cols prec
   addForeignPtrFinalizer p_padic_mat_clear x
   return $ PadicMat x
 
@@ -185,7 +184,7 @@ foreign import ccall "padic_mat.h padic_mat_ncols"
 -- Initialises the matrix \(A\) as a zero matrix with the specified numbers
 -- of rows and columns and precision @PADIC_DEFAULT_PREC@.
 foreign import ccall "padic_mat.h padic_mat_init"
-  padic_mat_init :: Ptr CPadicMat -> CLong -> CLong -> IO ()
+  padic_mat_init :: Ptr CPadicMat -> CLong -> CLong -> CLong -> IO ()
 
 -- | /padic_mat_init2/ /A/ /r/ /c/ /prec/ 
 -- 
@@ -330,10 +329,10 @@ foreign import ccall "padic_mat.h padic_mat_is_zero"
 -- Input and output ------------------------------------------------------------
 
 foreign import ccall "padic_mat.h padic_mat_get_str"
-  padic_mat_get_str:: Ptr CPadicMat -> IO CString
+  padic_mat_get_str:: Ptr CPadicMat -> Ptr CPadicCtx -> IO CString
   
 foreign import ccall "padic_mat.h padic_mat_get_str_pretty"
-  padic_mat_get_str_pretty:: Ptr CPadicMat -> IO CString
+  padic_mat_get_str_pretty:: Ptr CPadicMat -> Ptr CPadicCtx -> IO CString
   
 -- | /padic_mat_fprint/ /file/ /A/ /ctx/ 
 -- 
@@ -363,16 +362,16 @@ foreign import ccall "padic_mat.h padic_mat_fprint_pretty"
 -- other.
 -- 
 -- In the current implementation, always returns \(1\).
-padic_mat_print :: Ptr CPadicMat -> IO CInt
-padic_mat_print mat = printCStr (padic_mat_get_str) mat
+padic_mat_print :: Ptr CPadicMat -> Ptr CPadicCtx -> IO CInt
+padic_mat_print mat ctx = printCStr (flip padic_mat_get_str ctx) mat
 
 -- | /padic_mat_print_pretty/ /file/ /A/ /ctx/ 
 -- 
 -- Prints a /pretty/ representation of the matrix \(A\) to @stdout@.
 -- 
 -- In the current implementation, always returns \(1\).
-padic_mat_print_pretty :: Ptr CPadicMat -> IO CInt
-padic_mat_print_pretty mat = printCStr (padic_mat_get_str_pretty) mat
+padic_mat_print_pretty :: Ptr CPadicMat -> Ptr CPadicCtx -> IO CInt
+padic_mat_print_pretty mat ctx = printCStr (flip padic_mat_get_str_pretty ctx) mat
 
 -- Random matrix generation ----------------------------------------------------
 
@@ -468,13 +467,6 @@ foreign import ccall "padic_mat.h padic_mat_scalar_div_fmpz"
   padic_mat_scalar_div_fmpz :: Ptr CPadicMat -> Ptr CPadicMat -> Ptr CFmpz -> Ptr CPadicCtx -> IO ()
 
 -- Multiplication --------------------------------------------------------------
-
--- | /_padic_mat_mul/ /C/ /A/ /B/ /ctx/ 
--- 
--- Sets \(C\) to the product \(A B\) of the two matrices \(A\) and \(B\),
--- ensuring that \(C\) is in canonical form.
-foreign import ccall "padic_mat.h _padic_mat_mul"
-  _padic_mat_mul :: Ptr CPadicMat -> Ptr CPadicMat -> Ptr CPadicMat -> Ptr CPadicCtx -> IO ()
 
 -- | /padic_mat_mul/ /C/ /A/ /B/ /ctx/ 
 -- 
