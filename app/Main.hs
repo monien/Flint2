@@ -178,10 +178,18 @@ testPadicMat = do
       endl
 
 testFmpqMat = do
-  mat <- newFmpqMat 3 3
+  mat <- newFmpqMat 4 4
   withFmpqMat mat $ \mat -> do
-    fmpq_mat_one mat
+    fmpq_mat_hilbert_matrix mat
     p <- fmpq_mat_entry mat 1 2
-    fmpq_set_ui p 2 5
-    fmpq_mat_print mat
+    -- fmpq_set_ui p 2 5
+    -- fmpq_mat_print mat
     endl
+    withNewFmpq $ \d -> do
+      fmpq_mat_det d mat
+      fmpq_print d
+      endl
+    poly <- newFmpqPoly
+    withFmpqPoly poly $ \poly -> fmpq_mat_charpoly poly mat
+    print poly
+      

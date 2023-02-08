@@ -43,6 +43,8 @@ module Data.Number.Flint.Fmpq.Mat.FFI (
   , fmpq_mat_scalar_mul_fmpz
   , fmpq_mat_scalar_div_fmpz
   -- * Input and output
+  , fmpq_mat_get_str
+  , fmpq_mat_fprint
   , fmpq_mat_print
   -- * Random matrix generation
   , fmpq_mat_randbits
@@ -354,11 +356,23 @@ foreign import ccall "fmpq_mat.h fmpq_mat_scalar_div_fmpz"
 
 -- Input and output ------------------------------------------------------------
 
+-- | /fmpq_mat_get_str/ /mat/
+--
+-- Returns a string representation.
+foreign import ccall "fmpq_mat.h fmpq_mat_get_str"
+  fmpq_mat_get_str :: Ptr CFmpqMat -> IO CString
+
+-- | /fmpq_mat_fprint/ /file/ /mat/ 
+-- 
+-- Prints the matrix @mat@ to the stream @file@.
+foreign import ccall "fmpq_mat.h fmpq_mat_fprint"
+  fmpq_mat_fprint :: Ptr CFile -> Ptr CFmpqMat -> IO ()
+
 -- | /fmpq_mat_print/ /mat/ 
 -- 
 -- Prints the matrix @mat@ to standard output.
-foreign import ccall "fmpq_mat.h fmpq_mat_print"
-  fmpq_mat_print :: Ptr CFmpqMat -> IO ()
+fmpq_mat_print :: Ptr CFmpqMat -> IO CInt
+fmpq_mat_print mat = printCStr (fmpq_mat_get_str) mat
 
 -- Random matrix generation ----------------------------------------------------
 

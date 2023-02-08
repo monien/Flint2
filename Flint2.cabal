@@ -92,6 +92,8 @@ library
       csrc/fmpz_vec/get_str.c
       csrc/fmpz_mat/get_str.c
       csrc/fmpz_mat/get_str_pretty.c
+      csrc/fmpq_mat/get_str.c
+      csrc/fmpq_mat/fprint.c
       csrc/fmpq_vec/get_str.c
       csrc/padic_poly/get_str.c
       csrc/padic_poly/get_str_pretty.c
