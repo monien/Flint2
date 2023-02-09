@@ -159,7 +159,7 @@ import Data.Number.Flint.Fmpz
 
 -- | Rational numbers (opaque pointer)
 data Fmpq = Fmpq {-# UNPACK #-} !(ForeignPtr CFmpq)
-type CFmpq = CFlint Fmpq
+data CFmpq = CFmpq CFmpz CFmpz
 
 instance Storable CFmpq where
   {-# INLINE sizeOf #-}

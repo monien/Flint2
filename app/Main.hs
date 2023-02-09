@@ -88,6 +88,7 @@ main = do
   testPadic
   testPadicMat
   testQadic
+  testHilbert
   
 endl = putStrLn ""
 
@@ -192,4 +193,20 @@ testFmpqMat = do
     poly <- newFmpqPoly
     withFmpqPoly poly $ \poly -> fmpq_mat_charpoly poly mat
     print poly
-      
+
+testHilbert = do
+  putStrLn "testHilbert:"
+  d <- newFmpq
+  a <- newFmpz
+  b <- newFmpz
+  forM_ [1..10] $ \n -> do
+    putStr $ show n ++ " "
+    mat <- newFmpqMat n n
+    withFmpqMat mat $ \mat -> do
+      fmpq_mat_hilbert_matrix mat
+      withFmpq d $ \d -> do
+        fmpq_mat_det d mat
+        fmpq_inv d d
+        fmpq_print d
+        endl
+
