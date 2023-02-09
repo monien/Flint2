@@ -196,17 +196,16 @@ testFmpqMat = do
 
 testHilbert = do
   putStrLn "testHilbert:"
-  d <- newFmpq
-  a <- newFmpz
-  b <- newFmpz
   forM_ [1..10] $ \n -> do
     putStr $ show n ++ " "
     mat <- newFmpqMat n n
     withFmpqMat mat $ \mat -> do
       fmpq_mat_hilbert_matrix mat
-      withFmpq d $ \d -> do
+      withNewFmpq $ \d -> do
         fmpq_mat_det d mat
-        fmpq_inv d d
-        fmpq_print d
-        endl
+        withNewFmpz $ \a -> do
+          b <- newFmpz
+          withFmpz b $ \b -> do
+            fmpq_get_fmpz_frac a b d
+          print $ factor b
 

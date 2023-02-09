@@ -42,6 +42,7 @@ module Data.Number.Flint.Fmpq.FFI (
   , fmpq_height_bits
   -- * Conversion
   , fmpq_set_fmpz_frac
+  , fmpq_get_fmpz_frac
   , fmpq_get_mpz_frac
   , fmpq_set_si
   , _fmpq_set_si
@@ -364,6 +365,9 @@ foreign import ccall "fmpq.h fmpq_height_bits"
 -- calling @fmpq_canonicalise@.
 foreign import ccall "fmpq.h fmpq_set_fmpz_frac"
   fmpq_set_fmpz_frac :: Ptr CFmpq -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+
+foreign import ccall "fmpq.h fmpq_get_fmpz_frac"
+  fmpq_get_fmpz_frac :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpq -> IO ()
 
 -- | /fmpq_get_mpz_frac/ /a/ /b/ /c/ 
 -- 

@@ -100,16 +100,21 @@ instance Integral Fmpz where
 instance UFD Fmpz where
   factor x = snd $ snd $ unsafePerformIO $
     withFmpz x $ \y -> do
+      is_one <- fmpz_is_one y
       f <- newFmpzFactor
       withFmpzFactor f $ \f -> do
-        fmpz_factor f y
-        (CFmpzFactor s d e _ n) <- peek f
-        result <- forM [0 .. fromIntegral n-1] $ \j -> do
-          f <- newFmpz
-          m <- peek (e `advancePtr` j)
-          withFmpz f $ \f -> fmpz_set f (d `advancePtr` j)
-          return (f, fromIntegral m)
-        return $ if s < 1 then (-1, 1) : result else result
+        if not (is_one == 1) then do
+          fmpz_factor f y
+          CFmpzFactor s d e _ n <- peek f
+          result <- forM [0 .. fromIntegral n-1] $ \j -> do
+            f <- newFmpz
+            m <- peek (e `advancePtr` j)
+            withFmpz f $ \f -> fmpz_set f (d `advancePtr` j)
+            return (f, fromIntegral m)
+          return $ if s < 1 then (-1, 1) : result else result
+        else do
+          return [(1, 1)]
+
 
 instance Arbitrary Fmpz where
   arbitrary = do
