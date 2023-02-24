@@ -11,6 +11,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpq.Mat
 , module Data.Number.Flint.Fmpq.Vec
 , module Data.Number.Flint.Fmpq.Poly
+, module Data.Number.Flint.Groups.Perm
 , module Data.Number.Flint.Padic
 , module Data.Number.Flint.Padic.Poly
 , module Data.Number.Flint.Padic.Mat
@@ -31,6 +32,7 @@ import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Mat
 import Data.Number.Flint.Fmpq.Vec
 import Data.Number.Flint.Fmpq.Poly
+import Data.Number.Flint.Groups.Perm
 import Data.Number.Flint.Padic
 import Data.Number.Flint.Padic.Poly
 import Data.Number.Flint.Padic.Mat
