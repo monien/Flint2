@@ -2,11 +2,13 @@ module Main where
 
 import System.IO.Unsafe
 
-import Foreign.Marshal (advancePtr)
+import Foreign.Marshal
 import Foreign.Storable
 
 import Test.QuickCheck
 import Control.Monad
+
+import Data.List (permutations)
 
 import Data.Number.Flint
 
@@ -208,4 +210,12 @@ testHilbert = do
           withFmpz b $ \b -> do
             fmpq_get_fmpz_frac a b d
           print $ factor b
+
+testPerm = do
+  p <- _perm_init 4
+  a <- peekArray 4 p
+  print a
+  forM_ (permutations [1..4]) $ \perm -> do
+    pokeArray p perm
+    _perm_print p 4
 
