@@ -10,7 +10,7 @@
 module Data.Number.Flint.Fmpz.Mod.FFI (
   -- * Arithmetic modulo integers
   -- * Context object
-  , FmpzModCtx (..)
+    FmpzModCtx (..)
   , CFmpzModCtx (..)
   , newFmpzModCtx
   , withFmpzModCtx
@@ -54,13 +54,12 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
-import Data.Number.Flint.Lib
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
-#include <flint/fmpz_mod.h
+#include <flint/fmpz_mod.h>
 
 -- fmpz_mod_ctx_t --------------------------------------------------------------
 
@@ -252,7 +251,7 @@ foreign import ccall "fmpz_mod.h fmpz_mod_discrete_log_pohlig_hellman_clear"
   fmpz_mod_discrete_log_pohlig_hellman_clear :: Ptr CFmpzModDiscreteLogPohligHellmann -> IO ()
 
 foreign import ccall "fmpz_mod.h &fmpz_mod_discrete_log_pohlig_hellman_clear"
-  fmpz_mod_discrete_log_pohlig_hellman_clear :: FunPtr (Ptr CFmpzModDiscreteLogPohligHellmann -> IO ())
+  p_fmpz_mod_discrete_log_pohlig_hellman_clear :: FunPtr (Ptr CFmpzModDiscreteLogPohligHellmann -> IO ())
   
 -- | /fmpz_mod_discrete_log_pohlig_hellman_precompute_prime/ /L/ /p/ 
 -- 
