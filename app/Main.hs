@@ -2,11 +2,13 @@ module Main where
 
 import System.IO.Unsafe
 
-import Foreign.Marshal (advancePtr)
+import Foreign.Marshal
 import Foreign.Storable
 
 import Test.QuickCheck
 import Control.Monad
+
+import Data.List (permutations)
 
 import Data.Number.Flint
 
@@ -17,6 +19,9 @@ import Fmpq
 import FmpqPoly
 
 main = do
+  putStrLn "done."
+  
+main' = do
   x <- newFmpz
   withFmpz x $ \x -> do
     fmpz_set_ui x 7
@@ -89,6 +94,7 @@ main = do
   testPadicMat
   testQadic
   testHilbert
+  testPerm
   
 endl = putStrLn ""
 
@@ -208,4 +214,19 @@ testHilbert = do
           withFmpz b $ \b -> do
             fmpq_get_fmpz_frac a b d
           print $ factor b
+
+testPerm = do
+  p <- _perm_init 4
+  q <- _perm_init 4
+  a <- peekArray 4 p
+  print a
+  pokeArray p [3, 0, 1, 2]
+  _perm_print p 4
+  putStr "\n"
+  _perm_compose p p p 4
+  _perm_print q 4
+  putStr "\n"
+  _perm_compose q p p 4
+  _perm_print q 4
+  putStr "\n"
 

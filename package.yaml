@@ -49,6 +49,7 @@ library:
    - Data.Number.Flint.NMod.Mat
    - Data.Number.Flint.NMod.Poly
    - Data.Number.Flint.NMod.Poly.Factor
+   - Data.Number.Flint.Groups.Perm
    - Data.Number.Flint.Padic
    - Data.Number.Flint.Padic.Poly
    - Data.Number.Flint.Padic.Mat
@@ -76,6 +77,7 @@ library:
    - Data.Number.Flint.NMod.Mat.Struct
    - Data.Number.Flint.NMod.Poly.Struct
    - Data.Number.Flint.NMod.Poly.Factor.Struct
+   - Data.Number.Flint.Groups.Perm.FFI
    - Data.Number.Flint.Padic.FFI
    - Data.Number.Flint.Padic.Poly.FFI
    - Data.Number.Flint.Padic.Mat.FFI
