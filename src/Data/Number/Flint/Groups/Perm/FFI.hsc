@@ -25,7 +25,7 @@ import Foreign.C.Types
 import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
-import Foreign.Marshal ( free )
+import Foreign.Marshal ( free, peekArray )
 
 import Data.Number.Flint.Flint
 
@@ -105,6 +105,10 @@ foreign import ccall "perm.h _perm_randtest"
 -- | /_perm_print/ /vec/ /n/ 
 -- 
 -- Prints the permutation vector of length \(n\) to @stdout@.
-foreign import ccall "perm.h _perm_print"
-  _perm_print :: Ptr CLong -> CLong -> IO CInt
+_perm_print :: Ptr CLong -> CLong -> IO CInt
+_perm_print p n = do
+  a <- peekArray 4 p
+  putStr $ show n ++ " "
+  forM_ a $ \x -> putStr $ " " ++ show x
+  return 1
 
