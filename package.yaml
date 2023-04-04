@@ -39,6 +39,8 @@ library:
    - Data.Number.Flint.Fmpz.Poly
    - Data.Number.Flint.Fmpz.Poly.Factor
    - Data.Number.Flint.Fmpz.LLL
+   - Data.Number.Flint.Fmpz.Mod
+   - Data.Number.Flint.Fmpz.Mod.Poly
    - Data.Number.Flint.Fmpq
    - Data.Number.Flint.Fmpq.Mat 
    - Data.Number.Flint.Fmpq.Vec
@@ -69,6 +71,8 @@ library:
    - Data.Number.Flint.Fmpz.Poly.FFI
    - Data.Number.Flint.Fmpz.Poly.Factor.FFI
    - Data.Number.Flint.Fmpz.LLL.FFI
+   - Data.Number.Flint.Fmpq.Mod.FFI
+   - Data.Number.Flint.Fmpq.Mod.Poly.FFI 
    - Data.Number.Flint.Fmpq.FFI
    - Data.Number.Flint.Fmpq.Mat.FFI
    - Data.Number.Flint.Fmpq.Vec.FFI
@@ -78,10 +82,7 @@ library:
    - Data.Number.Flint.NMod.Poly.Struct
    - Data.Number.Flint.NMod.Poly.Factor.Struct
    - Data.Number.Flint.Groups.Perm.FFI
-<<<<<<< HEAD
-=======
    - Data.Number.Flint.Fq.FFI
->>>>>>> b84bf20c72741cd1d11ed8baef469309275df29c
    - Data.Number.Flint.Padic.FFI
    - Data.Number.Flint.Padic.Poly.FFI
    - Data.Number.Flint.Padic.Mat.FFI

@@ -7,6 +7,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpz.Poly
 , module Data.Number.Flint.Fmpz.Poly.Factor
 , module Data.Number.Flint.Fmpz.LLL
+, module Data.Number.Flint.Fmpz.Mod
+, module Data.Number.Flint.Fmpz.Mod.Poly
 , module Data.Number.Flint.Fmpq
 , module Data.Number.Flint.Fmpq.Mat
 , module Data.Number.Flint.Fmpq.Vec
@@ -28,6 +30,8 @@ import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Poly.Factor
 import Data.Number.Flint.Fmpz.LLL
+import Data.Number.Flint.Fmpz.Mod
+import Data.Number.Flint.Fmpz.Mod.Poly
 import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Mat
 import Data.Number.Flint.Fmpq.Vec

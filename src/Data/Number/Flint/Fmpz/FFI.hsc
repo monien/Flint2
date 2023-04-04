@@ -281,6 +281,8 @@ module Data.Number.Flint.Fmpz.FFI (
   , fmpz_divisor_sigma
 ) where
 
+-- Integers --------------------------------------------------------------------
+
 import System.IO.Unsafe
 
 import Control.Monad
