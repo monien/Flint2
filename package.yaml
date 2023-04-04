@@ -78,6 +78,10 @@ library:
    - Data.Number.Flint.NMod.Poly.Struct
    - Data.Number.Flint.NMod.Poly.Factor.Struct
    - Data.Number.Flint.Groups.Perm.FFI
+<<<<<<< HEAD
+=======
+   - Data.Number.Flint.Fq.FFI
+>>>>>>> b84bf20c72741cd1d11ed8baef469309275df29c
    - Data.Number.Flint.Padic.FFI
    - Data.Number.Flint.Padic.Poly.FFI
    - Data.Number.Flint.Padic.Mat.FFI
