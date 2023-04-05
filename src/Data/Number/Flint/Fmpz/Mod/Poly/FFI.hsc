@@ -313,10 +313,11 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
-import Data.Number.Flint
+import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Mat
+import Data.Number.Flint.Fmpz.Mod
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
@@ -2448,7 +2449,7 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_invsqrt_series"
 -- Set \(g\) to the series expansion of \(1/\sqrt{h}\) to order \(O(x^n)\).
 -- It is assumed that \(h\) has constant term 1.
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_invsqrt_series"
-  fmpz_mod_poly_invsqrt_series :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzCtx -> IO ()
+  fmpz_mod_poly_invsqrt_series :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_sqrt_series/ /g/ /h/ /n/ /ctx/ 
 -- 

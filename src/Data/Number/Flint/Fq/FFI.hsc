@@ -132,7 +132,7 @@ import Foreign.Marshal ( free )
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Poly
--- import Data.Number.Flint.Fmpz.Mod.Poly
+import Data.Number.Flint.Fmpz.Mod.Poly
 -- import Data.Number.Flint.Fmpz.Mod.Mat
 import Data.Number.Flint.Fmpq
 
