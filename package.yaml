@@ -59,6 +59,7 @@ library:
    - Data.Number.Flint.Qadic
    - Data.Number.Flint.Support.D.Mat
    - Data.Number.Flint.Support.Mpf.Mat
+   - Data.Number.Flint.ThreadPool
   other-modules:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
@@ -91,6 +92,7 @@ library:
    - Data.Number.Flint.Qadic.FFI
    - Data.Number.Flint.Support.D.Mat.FFI
    - Data.Number.Flint.Support.Mpf.Mat.FFI
+   - Data.Number.Flint.ThreadPool.FFI
   c-sources:
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c

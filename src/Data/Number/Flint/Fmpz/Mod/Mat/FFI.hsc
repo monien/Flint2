@@ -103,7 +103,10 @@ import Data.Number.Flint.Flint
 import Data.Number.Flint.ThreadPool
 
 import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Mat
+import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Mod
+import Data.Number.Flint.Fmpz.Mod.Poly
 import Data.Number.Flint.Fmpq
 
 #include <flint/flint.h>
@@ -114,7 +117,7 @@ import Data.Number.Flint.Fmpq
 -- fmpz_mod_mat_t --------------------------------------------------------------
 
 data FmpzModMat = FmpzModMat {-# UNPACK #-} !(ForeignPtr CFmpzModMat)
-type CFmpzModMat = CFlintLib FmpzModMat
+type CFmpzModMat = CFlint FmpzModMat
 
 instance Storable CFmpzModMat where
   {-# INLINE sizeOf #-}
@@ -606,4 +609,3 @@ foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_charpoly"
 -- The modulus is assumed to be prime.
 foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_minpoly"
   fmpz_mod_mat_minpoly :: Ptr CFmpzModPoly -> Ptr CFmpzModMat -> Ptr CFmpzModCtx -> IO ()
-

@@ -318,6 +318,10 @@ import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpz.Mod
+import Data.Number.Flint.Fmpz.Mod.Mat
+import Data.Number.Flint.NMod
+import Data.Number.Flint.NMod.Poly
+import Data.Number.Flint.ThreadPool
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
@@ -331,9 +335,9 @@ data CFmpzModPoly = CFmpzModPoly (Ptr CFmpz) CLong CLong
 newFmpzModPoly n = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x ->
-    withFmpz n $ \n -> 
+    withFmpzModCtx n $ \n -> do
       fmpz_mod_poly_init x n
-  addForeignPtrFinalizer p_fmpz_mod_poly_clear x
+      addForeignPtrFinalizerEnv p_fmpz_mod_poly_clear n =<< newForeignPtr_ x
   return $ FmpzModPoly x
 
 {-# INLINE withFmpzModPoly #-}
@@ -393,6 +397,9 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_init2"
 -- reinitialised in order to be used again.
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_clear"
   fmpz_mod_poly_clear :: Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+
+foreign import ccall "fmpz_mod_poly.h &fmpz_mod_poly_clear"
+  p_fmpz_mod_poly_clear :: FunPtr (Ptr CFmpzModCtx -> Ptr CFmpzModPoly -> IO ())
 
 -- | /fmpz_mod_poly_realloc/ /poly/ /alloc/ /ctx/ 
 -- 
@@ -2550,7 +2557,7 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_reduce_matrix_mod_poly"
 -- Worker function version of @_fmpz_mod_poly_precompute_matrix@.
 -- Input\/output is stored in @fmpz_mod_poly_matrix_precompute_arg_t@.
 foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_precompute_matrix_worker"
-  _fmpz_mod_poly_precompute_matrix_worker :: Ptr  -> IO ()
+  _fmpz_mod_poly_precompute_matrix_worker :: Ptr () -> IO ()
 
 -- | /_fmpz_mod_poly_precompute_matrix/ /A/ /f/ /g/ /leng/ /ginv/ /lenginv/ /p/ 
 -- 
@@ -2578,7 +2585,7 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_precompute_matrix"
 -- @_fmpz_mod_poly_compose_mod_brent_kung_precomp_preinv@. Input\/output is
 -- stored in @fmpz_mod_poly_compose_mod_precomp_preinv_arg_t@.
 foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_compose_mod_brent_kung_precomp_preinv_worker"
-  _fmpz_mod_poly_compose_mod_brent_kung_precomp_preinv_worker :: Ptr  -> IO ()
+  _fmpz_mod_poly_compose_mod_brent_kung_precomp_preinv_worker :: Ptr () -> IO ()
 
 -- | /_fmpz_mod_poly_compose_mod_brent_kung_precomp_preinv/ /res/ /f/ /lenf/ /A/ /h/ /lenh/ /hinv/ /lenhinv/ /p/ 
 -- 
