@@ -300,6 +300,10 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , fmpz_mod_berlekamp_massey_points
   , fmpz_mod_berlekamp_massey_V_poly
   , fmpz_mod_berlekamp_massey_R_poly
+  -- * Characteristic polynomial
+  , fmpz_mod_mat_charpoly
+  -- * Minimal polynomial
+  , fmpz_mod_mat_minpoly
 ) where 
 
 -- polynomials over integers mod n ---------------------------------------------
@@ -2953,3 +2957,22 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_berlekamp_massey_V_poly"
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_berlekamp_massey_R_poly"
   fmpz_mod_berlekamp_massey_R_poly :: Ptr CFmpzModBerlekampMassey -> IO (Ptr CFmpzModPoly)
 
+-- Characteristic polynomial ---------------------------------------------------
+
+-- | /fmpz_mod_mat_charpoly/ /p/ /M/ /ctx/ 
+-- 
+-- Compute the characteristic polynomial \(p\) of the matrix \(M\). The
+-- matrix is required to be square, otherwise an exception is raised.
+foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_charpoly"
+  fmpz_mod_mat_charpoly :: Ptr CFmpzModPoly -> Ptr CFmpzModMat -> Ptr CFmpzModCtx -> IO ()
+
+-- Minimal polynomial ----------------------------------------------------------
+
+-- | /fmpz_mod_mat_minpoly/ /p/ /M/ /ctx/ 
+-- 
+-- Compute the minimal polynomial \(p\) of the matrix \(M\). The matrix is
+-- required to be square, otherwise an exception is raised.
+-- 
+-- The modulus is assumed to be prime.
+foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_minpoly"
+  fmpz_mod_mat_minpoly :: Ptr CFmpzModPoly -> Ptr CFmpzModMat -> Ptr CFmpzModCtx -> IO ()

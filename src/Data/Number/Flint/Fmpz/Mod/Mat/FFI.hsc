@@ -84,10 +84,6 @@ module Data.Number.Flint.Fmpz.Mod.Mat.FFI (
   , fmpz_mod_mat_can_solve
   -- * Transforms
   , fmpz_mod_mat_similarity
-  -- * Characteristic polynomial
-  , fmpz_mod_mat_charpoly
-  -- * Minimal polynomial
-  , fmpz_mod_mat_minpoly
 ) where
 
 -- matrices over integers mod n ------------------------------------------------
@@ -106,7 +102,6 @@ import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Mod
-import Data.Number.Flint.Fmpz.Mod.Poly
 import Data.Number.Flint.Fmpq
 
 #include <flint/flint.h>
@@ -590,22 +585,3 @@ foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_can_solve"
 foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_similarity"
   fmpz_mod_mat_similarity :: Ptr CFmpzModMat -> CLong -> Ptr CFmpz -> Ptr CFmpzModCtx -> IO ()
 
--- Characteristic polynomial ---------------------------------------------------
-
--- | /fmpz_mod_mat_charpoly/ /p/ /M/ /ctx/ 
--- 
--- Compute the characteristic polynomial \(p\) of the matrix \(M\). The
--- matrix is required to be square, otherwise an exception is raised.
-foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_charpoly"
-  fmpz_mod_mat_charpoly :: Ptr CFmpzModPoly -> Ptr CFmpzModMat -> Ptr CFmpzModCtx -> IO ()
-
--- Minimal polynomial ----------------------------------------------------------
-
--- | /fmpz_mod_mat_minpoly/ /p/ /M/ /ctx/ 
--- 
--- Compute the minimal polynomial \(p\) of the matrix \(M\). The matrix is
--- required to be square, otherwise an exception is raised.
--- 
--- The modulus is assumed to be prime.
-foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_minpoly"
-  fmpz_mod_mat_minpoly :: Ptr CFmpzModPoly -> Ptr CFmpzModMat -> Ptr CFmpzModCtx -> IO ()

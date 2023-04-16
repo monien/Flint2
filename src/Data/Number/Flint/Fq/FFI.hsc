@@ -132,8 +132,9 @@ import Foreign.Marshal ( free )
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Poly
+import Data.Number.Flint.Fmpz.Mod
 import Data.Number.Flint.Fmpz.Mod.Poly
--- import Data.Number.Flint.Fmpz.Mod.Mat
+import Data.Number.Flint.Fmpz.Mod.Mat
 import Data.Number.Flint.Fmpq
 
 #include <flint/flint.h>
@@ -216,18 +217,19 @@ withNewFqCtxConway p d var f = do
   withFqCtx ctx f
  
 -- | Create a new `Fq` context using `fq_ctx_init_modulus`.
-newFqCtxModulus modulus var = do
+newFqCtxModulus modulus mod_ctx var = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x ->
     withFmpzModPoly modulus $ \modulus ->
-      withCString var $ \var ->
-        fq_ctx_init_modulus x modulus var
-  addForeignPtrFinalizer p_fq_ctx_clear x
+      withFmpzModCtx mod_ctx $ \mod_ctx ->  
+        withCString var $ \var ->
+          fq_ctx_init_modulus x modulus mod_ctx var
+  addForeignPtrFinalizerEnv p_fq_ctx_clear mod_ctx =<< newForeignPtr_ x
   return $ FqCtx x
 
 -- | Create a new `Fq` initialized using `fq_ctx_init_modulus`.
-withNewFqCtxModulus modulus var f = do
-  ctx <- newFqCtxModulus modulus var
+withNewFqCtxModulus modulus mod_ctx var f = do
+  ctx <- newFqCtxModulus modulus mod_ctx var
   withFqCtx ctx f
  
 -- Context Management ----------------------------------------------------------
