@@ -360,9 +360,9 @@ type CFmpzMultiCRT = CFlint FmpzMultiCRT
 
 instance Storable CFmpzMultiCRT where
   {-# INLINE sizeOf #-}
-  sizeOf _ = #{size fmpz_multi_crt_t}
+  sizeOf _ = #{size fmpz_multi_CRT_t}
   {-# INLINE alignment #-}
-  alignment _ = #{alignment fmpz_multi_crt_t}
+  alignment _ = #{alignment fmpz_multi_CRT_t}
   peek = error "CFmpzMultiCRT.peek: Not defined"
   poke = error "CFmpzMultiCRT.poke: Not defined"
 
