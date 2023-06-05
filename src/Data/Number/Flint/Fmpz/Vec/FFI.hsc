@@ -33,7 +33,7 @@ module Data.Number.Flint.Fmpz.Vec.FFI (
   , _fmpz_vec_get_fft
   , _fmpz_vec_set_fft
   , _fmpz_vec_get_d_vec_2exp
-  , _fmpz_vec_get_mpf_vec
+  -- , _fmpz_vec_get_mpf_vec
   -- * Assignment and basic manipulation
   , _fmpz_vec_set
   , _fmpz_vec_swap
@@ -293,12 +293,12 @@ foreign import ccall "fmpz_vec.h _fmpz_vec_set_fft"
 foreign import ccall "fmpz_vec.h _fmpz_vec_get_d_vec_2exp"
   _fmpz_vec_get_d_vec_2exp :: Ptr CDouble -> Ptr CFmpz -> CLong -> IO CLong
 
--- | /_fmpz_vec_get_mpf_vec/ /appv/ /vec/ /len/ 
--- 
--- Export the array of @len@ entries starting at the pointer @vec@ to an
--- array of mpfs @appv@.
-foreign import ccall "fmpz_vec.h _fmpz_vec_get_mpf_vec"
-  _fmpz_vec_get_mpf_vec :: Ptr CMpf -> Ptr CFmpz -> CLong -> IO ()
+-- -- | /_fmpz_vec_get_mpf_vec/ /appv/ /vec/ /len/ 
+-- -- 
+-- -- Export the array of @len@ entries starting at the pointer @vec@ to an
+-- -- array of mpfs @appv@.
+-- foreign import ccall "fmpz_vec.h _fmpz_vec_get_mpf_vec"
+--   _fmpz_vec_get_mpf_vec :: Ptr CMpf -> Ptr CFmpz -> CLong -> IO ()
 
 -- Assignment and basic manipulation -------------------------------------------
 

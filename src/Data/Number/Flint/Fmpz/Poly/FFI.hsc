@@ -308,7 +308,7 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   , fmpz_poly_evaluate_horner_fmpq
   , _fmpz_poly_evaluate_fmpq
   , fmpz_poly_evaluate_fmpq
-  , fmpz_poly_evaluate_mpq
+  -- , fmpz_poly_evaluate_mpq
   , _fmpz_poly_evaluate_mod
   , fmpz_poly_evaluate_mod
   , fmpz_poly_evaluate_fmpz_vec
@@ -3143,12 +3143,12 @@ foreign import ccall "fmpz_poly.h _fmpz_poly_evaluate_fmpq"
 foreign import ccall "fmpz_poly.h fmpz_poly_evaluate_fmpq"
   fmpz_poly_evaluate_fmpq :: Ptr CFmpq -> Ptr CFmpzPoly -> Ptr CFmpq -> IO ()
 
--- | /fmpz_poly_evaluate_mpq/ /res/ /f/ /a/ 
--- 
--- Evaluates the polynomial \(f\) at the rational \(a\) and sets @res@ to
--- the result.
-foreign import ccall "fmpz_poly.h fmpz_poly_evaluate_mpq"
-  fmpz_poly_evaluate_mpq :: Ptr CMpq -> Ptr CFmpzPoly -> Ptr CMpq -> IO ()
+-- -- | /fmpz_poly_evaluate_mpq/ /res/ /f/ /a/ 
+-- -- 
+-- -- Evaluates the polynomial \(f\) at the rational \(a\) and sets @res@ to
+-- -- the result.
+-- foreign import ccall "fmpz_poly.h fmpz_poly_evaluate_mpq"
+--   fmpz_poly_evaluate_mpq :: Ptr CMpq -> Ptr CFmpzPoly -> Ptr CMpq -> IO ()
 
 -- | /_fmpz_poly_evaluate_mod/ /poly/ /len/ /a/ /n/ /ninv/ 
 -- 
