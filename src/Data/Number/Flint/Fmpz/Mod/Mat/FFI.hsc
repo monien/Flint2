@@ -60,7 +60,7 @@ module Data.Number.Flint.Fmpz.Mod.Mat.FFI (
   -- * Matrix multiplication
   , fmpz_mod_mat_mul
   , _fmpz_mod_mat_mul_classical_threaded_pool_op
-  , _fmpz_mod_mat_mul_classical_threaded_op
+  -- , _fmpz_mod_mat_mul_classical_threaded_op
   , fmpz_mod_mat_mul_classical_threaded
   , fmpz_mod_mat_sqr
   , fmpz_mod_mat_mul_fmpz_vec
@@ -387,11 +387,11 @@ foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_mul"
 foreign import ccall "fmpz_mod_mat.h _fmpz_mod_mat_mul_classical_threaded_pool_op"
   _fmpz_mod_mat_mul_classical_threaded_pool_op :: Ptr CFmpzModMat -> Ptr CFmpzModMat -> Ptr CFmpzModMat -> Ptr CFmpzModMat -> CInt -> Ptr CThreadPoolHandle -> CLong -> IO ()
 
--- | /_fmpz_mod_mat_mul_classical_threaded_op/ /D/ /C/ /A/ /B/ /op/ 
--- 
--- Set @D@ to @A\\times B + op*C@ where @op@ is @+1@, @-1@ or @0@.
-foreign import ccall "fmpz_mod_mat.h _fmpz_mod_mat_mul_classical_threaded_op"
-  _fmpz_mod_mat_mul_classical_threaded_op :: Ptr CFmpzModMat -> Ptr CFmpzModMat -> Ptr CFmpzModMat -> Ptr CFmpzModMat -> CInt -> IO ()
+-- -- | /_fmpz_mod_mat_mul_classical_threaded_op/ /D/ /C/ /A/ /B/ /op/ 
+-- -- 
+-- -- Set @D@ to @A\\times B + op*C@ where @op@ is @+1@, @-1@ or @0@.
+-- foreign import ccall "fmpz_mod_mat.h _fmpz_mod_mat_mul_classical_threaded_op"
+--   _fmpz_mod_mat_mul_classical_threaded_op :: Ptr CFmpzModMat -> Ptr CFmpzModMat -> Ptr CFmpzModMat -> Ptr CFmpzModMat -> CInt -> IO ()
 
 -- | /fmpz_mod_mat_mul_classical_threaded/ /C/ /A/ /B/ 
 -- 

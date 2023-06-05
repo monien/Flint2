@@ -53,6 +53,7 @@ library:
    - Data.Number.Flint.NMod.Poly
    - Data.Number.Flint.NMod.Poly.Factor
    - Data.Number.Flint.Groups.Perm
+   - Data.Number.Flint.Fq
    - Data.Number.Flint.Padic
    - Data.Number.Flint.Padic.Poly
    - Data.Number.Flint.Padic.Mat

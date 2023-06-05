@@ -30,7 +30,7 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   , fmpz_poly_set_si
   , fmpz_poly_set_ui
   , fmpz_poly_set_fmpz
-  , fmpz_poly_set_mpz
+  -- , fmpz_poly_set_mpz
   , _fmpz_poly_set_str
   , fmpz_poly_set_str
   , _fmpz_poly_get_str
@@ -77,7 +77,7 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   -- * Scalar absolute value, multiplication and division
   , fmpz_poly_scalar_abs
   , fmpz_poly_scalar_mul_fmpz
-  , fmpz_poly_scalar_mul_mpz
+  --, fmpz_poly_scalar_mul_mpz
   , fmpz_poly_scalar_mul_si
   , fmpz_poly_scalar_mul_ui
   , fmpz_poly_scalar_mul_2exp
@@ -86,7 +86,7 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   , fmpz_poly_scalar_addmul_fmpz
   , fmpz_poly_scalar_submul_fmpz
   , fmpz_poly_scalar_fdiv_fmpz
-  , fmpz_poly_scalar_fdiv_mpz
+  --, fmpz_poly_scalar_fdiv_mpz
   , fmpz_poly_scalar_fdiv_si
   , fmpz_poly_scalar_fdiv_ui
   , fmpz_poly_scalar_fdiv_2exp
@@ -95,7 +95,7 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   , fmpz_poly_scalar_tdiv_ui
   , fmpz_poly_scalar_tdiv_2exp
   , fmpz_poly_scalar_divexact_fmpz
-  , fmpz_poly_scalar_divexact_mpz
+  --, fmpz_poly_scalar_divexact_mpz
   , fmpz_poly_scalar_divexact_si
   , fmpz_poly_scalar_divexact_ui
   , fmpz_poly_scalar_mod_fmpz
@@ -284,8 +284,8 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   , fmpz_poly_pseudo_divrem_cohen
   , _fmpz_poly_pseudo_rem_cohen
   , fmpz_poly_pseudo_rem_cohen
-  , _fmpz_poly_pseudo_divrem
-  , fmpz_poly_pseudo_divrem
+  --, _fmpz_poly_pseudo_divrem
+  --, fmpz_poly_pseudo_divrem
   , _fmpz_poly_pseudo_div
   , fmpz_poly_pseudo_div
   , _fmpz_poly_pseudo_rem
@@ -652,11 +652,11 @@ foreign import ccall "fmpz_poly.h fmpz_poly_set_ui"
 foreign import ccall "fmpz_poly.h fmpz_poly_set_fmpz"
   fmpz_poly_set_fmpz :: Ptr CFmpzPoly -> Ptr CFmpz -> IO ()
 
--- | /fmpz_poly_set_mpz/ /poly/ /c/ 
--- 
--- Sets @poly@ to the integer @c@.
-foreign import ccall "fmpz_poly.h fmpz_poly_set_mpz"
-  fmpz_poly_set_mpz :: Ptr CFmpzPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpz_poly_set_mpz/ /poly/ /c/ 
+-- -- 
+-- -- Sets @poly@ to the integer @c@.
+-- foreign import ccall "fmpz_poly.h fmpz_poly_set_mpz"
+--   fmpz_poly_set_mpz :: Ptr CFmpzPoly -> Ptr CMpz -> IO ()
 
 -- | /_fmpz_poly_set_str/ /poly/ /str/ 
 -- 
@@ -1001,11 +1001,11 @@ foreign import ccall "fmpz_poly.h fmpz_poly_scalar_abs"
 foreign import ccall "fmpz_poly.h fmpz_poly_scalar_mul_fmpz"
   fmpz_poly_scalar_mul_fmpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CFmpz -> IO ()
 
--- | /fmpz_poly_scalar_mul_mpz/ /poly1/ /poly2/ /x/ 
--- 
--- Sets @poly1@ to @poly2@ times the @mpz_t@ \(x\).
-foreign import ccall "fmpz_poly.h fmpz_poly_scalar_mul_mpz"
-  fmpz_poly_scalar_mul_mpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpz_poly_scalar_mul_mpz/ /poly1/ /poly2/ /x/ 
+-- -- 
+-- -- Sets @poly1@ to @poly2@ times the @mpz_t@ \(x\).
+-- foreign import ccall "fmpz_poly.h fmpz_poly_scalar_mul_mpz"
+--   fmpz_poly_scalar_mul_mpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CMpz -> IO ()
 
 -- | /fmpz_poly_scalar_mul_si/ /poly1/ /poly2/ /x/ 
 -- 
@@ -1050,12 +1050,12 @@ foreign import ccall "fmpz_poly.h fmpz_poly_scalar_submul_fmpz"
 foreign import ccall "fmpz_poly.h fmpz_poly_scalar_fdiv_fmpz"
   fmpz_poly_scalar_fdiv_fmpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CFmpz -> IO ()
 
--- | /fmpz_poly_scalar_fdiv_mpz/ /poly1/ /poly2/ /x/ 
--- 
--- Sets @poly1@ to @poly2@ divided by the @mpz_t x@, rounding coefficients
--- down toward \(- \infty\).
-foreign import ccall "fmpz_poly.h fmpz_poly_scalar_fdiv_mpz"
-  fmpz_poly_scalar_fdiv_mpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpz_poly_scalar_fdiv_mpz/ /poly1/ /poly2/ /x/ 
+-- -- 
+-- -- Sets @poly1@ to @poly2@ divided by the @mpz_t x@, rounding coefficients
+-- -- down toward \(- \infty\).
+-- foreign import ccall "fmpz_poly.h fmpz_poly_scalar_fdiv_mpz"
+--   fmpz_poly_scalar_fdiv_mpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CMpz -> IO ()
 
 -- | /fmpz_poly_scalar_fdiv_si/ /poly1/ /poly2/ /x/ 
 -- 
@@ -1113,12 +1113,12 @@ foreign import ccall "fmpz_poly.h fmpz_poly_scalar_tdiv_2exp"
 foreign import ccall "fmpz_poly.h fmpz_poly_scalar_divexact_fmpz"
   fmpz_poly_scalar_divexact_fmpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CFmpz -> IO ()
 
--- | /fmpz_poly_scalar_divexact_mpz/ /poly1/ /poly2/ /x/ 
--- 
--- Sets @poly1@ to @poly2@ divided by the @mpz_t x@, assuming the
--- coefficient is exact for every coefficient.
-foreign import ccall "fmpz_poly.h fmpz_poly_scalar_divexact_mpz"
-  fmpz_poly_scalar_divexact_mpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpz_poly_scalar_divexact_mpz/ /poly1/ /poly2/ /x/ 
+-- -- 
+-- -- Sets @poly1@ to @poly2@ divided by the @mpz_t x@, assuming the
+-- -- coefficient is exact for every coefficient.
+-- foreign import ccall "fmpz_poly.h fmpz_poly_scalar_divexact_mpz"
+--   fmpz_poly_scalar_divexact_mpz :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CMpz -> IO ()
 
 -- | /fmpz_poly_scalar_divexact_si/ /poly1/ /poly2/ /x/ 
 -- 
@@ -2952,33 +2952,33 @@ foreign import ccall "fmpz_poly.h _fmpz_poly_pseudo_rem_cohen"
 foreign import ccall "fmpz_poly.h fmpz_poly_pseudo_rem_cohen"
   fmpz_poly_pseudo_rem_cohen :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CFmpzPoly -> IO ()
 
--- | /_fmpz_poly_pseudo_divrem/ /Q/ /R/ /d/ /A/ /lenA/ /B/ /lenB/ /inv/ 
--- 
--- If \(\ell\) is the leading coefficient of \(B\), then computes
--- @(Q, lenA - lenB + 1)@, @(R, lenB - 1)@ and \(d\) such that
--- \(\ell^d A = B Q + R\). This function is used for simulating division
--- over \(\mathbb{Q}\).
--- 
--- Assumes that \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\).
--- Assumes that \(Q\) can fit
--- \(\operatorname{len}(A) - \operatorname{len}(B) + 1\) coefficients, and
--- that \(R\) can fit \(\operatorname{len}(A)\) coefficients, although on
--- exit only the bottom \(\operatorname{len}(B)\) coefficients will carry
--- meaningful data.
--- 
--- Supports aliasing of @(R, lenA)@ and @(A, lenA)@. But other than this,
--- no aliasing of the inputs and outputs is supported.
--- 
--- An optional precomputed inverse of the leading coefficient of \(B\) from
--- @fmpz_preinvn_init@ can be supplied. Otherwise @inv@ should be @NULL@.
-foreign import ccall "fmpz_poly.h _fmpz_poly_pseudo_divrem"
-  _fmpz_poly_pseudo_divrem :: Ptr CFmpz -> Ptr CFmpz -> Ptr CULong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpzPreInvN -> IO ()
+-- -- | /_fmpz_poly_pseudo_divrem/ /Q/ /R/ /d/ /A/ /lenA/ /B/ /lenB/ /inv/ 
+-- -- 
+-- -- If \(\ell\) is the leading coefficient of \(B\), then computes
+-- -- @(Q, lenA - lenB + 1)@, @(R, lenB - 1)@ and \(d\) such that
+-- -- \(\ell^d A = B Q + R\). This function is used for simulating division
+-- -- over \(\mathbb{Q}\).
+-- -- 
+-- -- Assumes that \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\).
+-- -- Assumes that \(Q\) can fit
+-- -- \(\operatorname{len}(A) - \operatorname{len}(B) + 1\) coefficients, and
+-- -- that \(R\) can fit \(\operatorname{len}(A)\) coefficients, although on
+-- -- exit only the bottom \(\operatorname{len}(B)\) coefficients will carry
+-- -- meaningful data.
+-- -- 
+-- -- Supports aliasing of @(R, lenA)@ and @(A, lenA)@. But other than this,
+-- -- no aliasing of the inputs and outputs is supported.
+-- -- 
+-- -- An optional precomputed inverse of the leading coefficient of \(B\) from
+-- -- @fmpz_preinvn_init@ can be supplied. Otherwise @inv@ should be @NULL@.
+-- foreign import ccall "fmpz_poly.h _fmpz_poly_pseudo_divrem"
+--   _fmpz_poly_pseudo_divrem :: Ptr CFmpz -> Ptr CFmpz -> Ptr CULong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpzPreInvN -> IO ()
 
--- | /fmpz_poly_pseudo_divrem/ /Q/ /R/ /d/ /A/ /B/ 
--- 
--- Computes \(Q\), \(R\), and \(d\) such that \(\ell^d A = B Q + R\).
-foreign import ccall "fmpz_poly.h fmpz_poly_pseudo_divrem"
-  fmpz_poly_pseudo_divrem :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CULong -> Ptr CFmpzPoly -> Ptr CFmpzPoly -> IO ()
+-- -- | /fmpz_poly_pseudo_divrem/ /Q/ /R/ /d/ /A/ /B/ 
+-- -- 
+-- -- Computes \(Q\), \(R\), and \(d\) such that \(\ell^d A = B Q + R\).
+-- foreign import ccall "fmpz_poly.h fmpz_poly_pseudo_divrem"
+--   fmpz_poly_pseudo_divrem :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CULong -> Ptr CFmpzPoly -> Ptr CFmpzPoly -> IO ()
 
 -- | /_fmpz_poly_pseudo_div/ /Q/ /d/ /A/ /lenA/ /B/ /lenB/ /inv/ 
 -- 

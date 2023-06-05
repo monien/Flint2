@@ -42,14 +42,14 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_set_ui
   , fmpq_poly_set_fmpz
   , fmpq_poly_set_fmpq
-  , fmpq_poly_set_mpz
-  , fmpq_poly_set_mpq
+  -- , fmpq_poly_set_mpz -- deprecated
+  -- , fmpq_poly_set_mpq -- deprecated
   , fmpq_poly_set_fmpz_poly
   , fmpq_poly_set_nmod_poly
   , fmpq_poly_get_nmod_poly
   , fmpq_poly_get_nmod_poly_den
-  , _fmpq_poly_set_array_mpq
-  , fmpq_poly_set_array_mpq
+  -- , _fmpq_poly_set_array_mpq  -- deprecated
+  -- , fmpq_poly_set_array_mpq   -- deprecated
   , _fmpq_poly_set_str
   , fmpq_poly_set_str
   , fmpq_poly_get_str
@@ -66,13 +66,13 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   -- * Getting and setting coefficients
   , fmpq_poly_get_coeff_fmpz
   , fmpq_poly_get_coeff_fmpq
-  , fmpq_poly_get_coeff_mpq
+  -- , fmpq_poly_get_coeff_mpq
   , fmpq_poly_set_coeff_si
   , fmpq_poly_set_coeff_ui
   , fmpq_poly_set_coeff_fmpz
   , fmpq_poly_set_coeff_fmpq
-  , fmpq_poly_set_coeff_mpz
-  , fmpq_poly_set_coeff_mpq
+  -- , fmpq_poly_set_coeff_mpz -- deprecated
+  -- , fmpq_poly_set_coeff_mpq -- deprecated
   -- * Comparison
   , fmpq_poly_equal
   , _fmpq_poly_equal_trunc
@@ -108,8 +108,8 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_scalar_mul_ui
   , fmpq_poly_scalar_mul_fmpz
   , fmpq_poly_scalar_mul_fmpq
-  , fmpq_poly_scalar_mul_mpz
-  , fmpq_poly_scalar_mul_mpq
+  -- , fmpq_poly_scalar_mul_mpz -- deprecated
+  -- , fmpq_poly_scalar_mul_mpq -- deprecated
   , _fmpq_poly_scalar_div_fmpz
   , _fmpq_poly_scalar_div_si
   , _fmpq_poly_scalar_div_ui
@@ -118,8 +118,8 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_scalar_div_ui
   , fmpq_poly_scalar_div_fmpz
   , fmpq_poly_scalar_div_fmpq
-  , fmpq_poly_scalar_div_mpz
-  , fmpq_poly_scalar_div_mpq
+  -- , fmpq_poly_scalar_div_mpz -- deprecated
+  -- , fmpq_poly_scalar_div_mpq -- deprecated
   -- * Multiplication
   , _fmpq_poly_mul
   , fmpq_poly_mul
@@ -231,8 +231,8 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_evaluate_fmpz
   , _fmpq_poly_evaluate_fmpq
   , fmpq_poly_evaluate_fmpq
-  , fmpq_poly_evaluate_mpz
-  , fmpq_poly_evaluate_mpq
+  -- , fmpq_poly_evaluate_mpz -- deprecated
+  -- , fmpq_poly_evaluate_mpq -- deprecated
   -- * Interpolation
   , _fmpq_poly_interpolate_fmpz_vec
   , fmpq_poly_interpolate_fmpz_vec
@@ -565,18 +565,18 @@ foreign import ccall "fmpq_poly.h fmpq_poly_set_fmpz"
 foreign import ccall "fmpq_poly.h fmpq_poly_set_fmpq"
   fmpq_poly_set_fmpq :: Ptr CFmpqPoly -> Ptr CFmpq -> IO ()
 
--- | /fmpq_poly_set_mpz/ /poly/ /x/ 
--- 
--- Sets @poly@ to the integer \(x\).
-foreign import ccall "fmpq_poly.h fmpq_poly_set_mpz"
-  fmpq_poly_set_mpz :: Ptr CFmpqPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpq_poly_set_mpz/ /poly/ /x/ 
+-- -- 
+-- -- Sets @poly@ to the integer \(x\).
+-- foreign import ccall "fmpq_poly.h fmpq_poly_set_mpz"
+--   fmpq_poly_set_mpz :: Ptr CFmpqPoly -> Ptr CMpz -> IO ()
 
--- | /fmpq_poly_set_mpq/ /poly/ /x/ 
--- 
--- Sets @poly@ to the rational \(x\), which is assumed to be given in
--- lowest terms.
-foreign import ccall "fmpq_poly.h fmpq_poly_set_mpq"
-  fmpq_poly_set_mpq :: Ptr CFmpqPoly -> Ptr CMpq -> IO ()
+-- -- | /fmpq_poly_set_mpq/ /poly/ /x/ 
+-- -- 
+-- -- Sets @poly@ to the rational \(x\), which is assumed to be given in
+-- -- lowest terms.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_set_mpq"
+--   fmpq_poly_set_mpq :: Ptr CFmpqPoly -> Ptr CMpq -> IO ()
 
 -- | /fmpq_poly_set_fmpz_poly/ /rop/ /op/ 
 -- 
@@ -610,25 +610,25 @@ foreign import ccall "fmpq_poly.h fmpq_poly_get_nmod_poly"
 foreign import ccall "fmpq_poly.h fmpq_poly_get_nmod_poly_den"
   fmpq_poly_get_nmod_poly_den :: Ptr CNModPoly -> Ptr CFmpqPoly -> CInt -> IO ()
 
--- | /_fmpq_poly_set_array_mpq/ /poly/ /den/ /a/ /n/ 
--- 
--- Sets @(poly, den)@ to the polynomial given by the first \(n \geq 1\)
--- coefficients in the array \(a\), from lowest degree to highest degree.
--- 
--- The result is only guaranteed to be in lowest terms if all input
--- coefficients are given in lowest terms.
-foreign import ccall "fmpq_poly.h _fmpq_poly_set_array_mpq"
-  _fmpq_poly_set_array_mpq :: Ptr CFmpz -> Ptr CFmpz -> Ptr CMpq -> CLong -> IO ()
+-- -- | /_fmpq_poly_set_array_mpq/ /poly/ /den/ /a/ /n/ 
+-- -- 
+-- -- Sets @(poly, den)@ to the polynomial given by the first \(n \geq 1\)
+-- -- coefficients in the array \(a\), from lowest degree to highest degree.
+-- -- 
+-- -- The result is only guaranteed to be in lowest terms if all input
+-- -- coefficients are given in lowest terms.
+-- foreign import ccall "fmpq_poly.h _fmpq_poly_set_array_mpq"
+--   _fmpq_poly_set_array_mpq :: Ptr CFmpz -> Ptr CFmpz -> Ptr CMpq -> CLong -> IO ()
 
--- | /fmpq_poly_set_array_mpq/ /poly/ /a/ /n/ 
--- 
--- Sets @poly@ to the polynomial with coefficients as given in the array
--- \(a\) of length \(n \geq 0\), from lowest degree to highest degree.
--- 
--- The result is only guaranteed to be in canonical form if all input
--- coefficients are given in lowest terms.
-foreign import ccall "fmpq_poly.h fmpq_poly_set_array_mpq"
-  fmpq_poly_set_array_mpq :: Ptr CFmpqPoly -> Ptr CMpq -> CLong -> IO ()
+-- -- | /fmpq_poly_set_array_mpq/ /poly/ /a/ /n/ 
+-- -- 
+-- -- Sets @poly@ to the polynomial with coefficients as given in the array
+-- -- \(a\) of length \(n \geq 0\), from lowest degree to highest degree.
+-- -- 
+-- -- The result is only guaranteed to be in canonical form if all input
+-- -- coefficients are given in lowest terms.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_set_array_mpq"
+--   fmpq_poly_set_array_mpq :: Ptr CFmpqPoly -> Ptr CMpq -> CLong -> IO ()
 
 -- | /_fmpq_poly_set_str/ /poly/ /den/ /str/ /len/ 
 -- 
@@ -752,11 +752,11 @@ foreign import ccall "fmpq_poly.h fmpq_poly_get_coeff_fmpz"
 foreign import ccall "fmpq_poly.h fmpq_poly_get_coeff_fmpq"
   fmpq_poly_get_coeff_fmpq :: Ptr CFmpq -> Ptr CFmpqPoly -> CLong -> IO ()
 
--- | /fmpq_poly_get_coeff_mpq/ /x/ /poly/ /n/ 
--- 
--- Retrieves the \(n`th coefficient of \)poly\`, in lowest terms.
-foreign import ccall "fmpq_poly.h fmpq_poly_get_coeff_mpq"
-  fmpq_poly_get_coeff_mpq :: Ptr CMpq -> Ptr CFmpqPoly -> CLong -> IO ()
+-- -- | /fmpq_poly_get_coeff_mpq/ /x/ /poly/ /n/ 
+-- -- 
+-- -- Retrieves the \(n`th coefficient of \)poly\`, in lowest terms.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_get_coeff_mpq"
+--   fmpq_poly_get_coeff_mpq :: Ptr CMpq -> Ptr CFmpqPoly -> CLong -> IO ()
 
 -- | /fmpq_poly_set_coeff_si/ /poly/ /n/ /x/ 
 -- 
@@ -782,18 +782,18 @@ foreign import ccall "fmpq_poly.h fmpq_poly_set_coeff_fmpz"
 foreign import ccall "fmpq_poly.h fmpq_poly_set_coeff_fmpq"
   fmpq_poly_set_coeff_fmpq :: Ptr CFmpqPoly -> CLong -> Ptr CFmpq -> IO ()
 
--- | /fmpq_poly_set_coeff_mpz/ /rop/ /n/ /x/ 
--- 
--- Sets the \(n`th coefficient in \)poly to the integer :math:\`x.
-foreign import ccall "fmpq_poly.h fmpq_poly_set_coeff_mpz"
-  fmpq_poly_set_coeff_mpz :: Ptr CFmpqPoly -> CLong -> Ptr CMpz -> IO ()
+-- -- | /fmpq_poly_set_coeff_mpz/ /rop/ /n/ /x/ 
+-- -- 
+-- -- Sets the \(n`th coefficient in \)poly to the integer :math:\`x.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_set_coeff_mpz"
+--   fmpq_poly_set_coeff_mpz :: Ptr CFmpqPoly -> CLong -> Ptr CMpz -> IO ()
 
--- | /fmpq_poly_set_coeff_mpq/ /rop/ /n/ /x/ 
--- 
--- Sets the \(n`th coefficient in \)poly to the rational~\`x, which is
--- expected to be provided in lowest terms.
-foreign import ccall "fmpq_poly.h fmpq_poly_set_coeff_mpq"
-  fmpq_poly_set_coeff_mpq :: Ptr CFmpqPoly -> CLong -> Ptr CMpq -> IO ()
+-- -- | /fmpq_poly_set_coeff_mpq/ /rop/ /n/ /x/ 
+-- -- 
+-- -- Sets the \(n`th coefficient in \)poly to the rational~\`x, which is
+-- -- expected to be provided in lowest terms.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_set_coeff_mpq"
+--   fmpq_poly_set_coeff_mpq :: Ptr CFmpqPoly -> CLong -> Ptr CMpq -> IO ()
 
 -- Comparison ------------------------------------------------------------------
 
@@ -1077,17 +1077,17 @@ foreign import ccall "fmpq_poly.h fmpq_poly_scalar_mul_fmpz"
 foreign import ccall "fmpq_poly.h fmpq_poly_scalar_mul_fmpq"
   fmpq_poly_scalar_mul_fmpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CMpq -> IO ()
 
--- | /fmpq_poly_scalar_mul_mpz/ /rop/ /op/ /c/ 
--- 
--- Sets @rop@ to \(c\) times @op@.
-foreign import ccall "fmpq_poly.h fmpq_poly_scalar_mul_mpz"
-  fmpq_poly_scalar_mul_mpz :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpq_poly_scalar_mul_mpz/ /rop/ /op/ /c/ 
+-- -- 
+-- -- Sets @rop@ to \(c\) times @op@.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_scalar_mul_mpz"
+--   fmpq_poly_scalar_mul_mpz :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CMpz -> IO ()
 
--- | /fmpq_poly_scalar_mul_mpq/ /rop/ /op/ /c/ 
--- 
--- Sets @rop@ to \(c\) times @op@.
-foreign import ccall "fmpq_poly.h fmpq_poly_scalar_mul_mpq"
-  fmpq_poly_scalar_mul_mpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CFmpq -> IO ()
+-- -- | /fmpq_poly_scalar_mul_mpq/ /rop/ /op/ /c/ 
+-- -- 
+-- -- Sets @rop@ to \(c\) times @op@.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_scalar_mul_mpq"
+--   fmpq_poly_scalar_mul_mpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CFmpq -> IO ()
 
 -- | /_fmpq_poly_scalar_div_fmpz/ /rpoly/ /rden/ /poly/ /den/ /len/ /c/ 
 -- 
@@ -1147,11 +1147,11 @@ foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_fmpz"
 foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_fmpq"
   fmpq_poly_scalar_div_fmpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr CFmpq -> IO ()
 
-foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_mpz"
-  fmpq_poly_scalar_div_mpz :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr Mpz -> IO ()
+-- foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_mpz"
+--   fmpq_poly_scalar_div_mpz :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr Mpz -> IO ()
 
-foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_mpq"
-  fmpq_poly_scalar_div_mpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr Mpq -> IO ()
+-- foreign import ccall "fmpq_poly.h fmpq_poly_scalar_div_mpq"
+--   fmpq_poly_scalar_div_mpq :: Ptr CFmpqPoly -> Ptr CFmpqPoly -> Ptr Mpq -> IO ()
   
 -- Multiplication --------------------------------------------------------------
 
@@ -2031,19 +2031,19 @@ foreign import ccall "fmpq_poly.h _fmpq_poly_evaluate_fmpq"
 foreign import ccall "fmpq_poly.h fmpq_poly_evaluate_fmpq"
   fmpq_poly_evaluate_fmpq :: Ptr CFmpq -> Ptr CFmpqPoly -> Ptr CFmpq -> IO ()
 
--- | /fmpq_poly_evaluate_mpz/ /res/ /poly/ /a/ 
--- 
--- Evaluates the polynomial @poly@ at the integer \(a\) of type @mpz@ and
--- sets @res@ to the result.
-foreign import ccall "fmpq_poly.h fmpq_poly_evaluate_mpz"
-  fmpq_poly_evaluate_mpz :: Ptr CMpq -> Ptr CFmpqPoly -> Ptr CMpz -> IO ()
+-- -- | /fmpq_poly_evaluate_mpz/ /res/ /poly/ /a/ 
+-- -- 
+-- -- Evaluates the polynomial @poly@ at the integer \(a\) of type @mpz@ and
+-- -- sets @res@ to the result.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_evaluate_mpz"
+--   fmpq_poly_evaluate_mpz :: Ptr CMpq -> Ptr CFmpqPoly -> Ptr CMpz -> IO ()
 
--- | /fmpq_poly_evaluate_mpq/ /res/ /poly/ /a/ 
--- 
--- Evaluates the polynomial @poly@ at the rational \(a\) of type @mpq@ and
--- sets @res@ to the result.
-foreign import ccall "fmpq_poly.h fmpq_poly_evaluate_mpq"
-  fmpq_poly_evaluate_mpq :: Ptr CMpq -> Ptr CFmpqPoly -> Ptr CMpq -> IO ()
+-- -- | /fmpq_poly_evaluate_mpq/ /res/ /poly/ /a/ 
+-- -- 
+-- -- Evaluates the polynomial @poly@ at the rational \(a\) of type @mpq@ and
+-- -- sets @res@ to the result.
+-- foreign import ccall "fmpq_poly.h fmpq_poly_evaluate_mpq"
+--   fmpq_poly_evaluate_mpq :: Ptr CMpq -> Ptr CFmpqPoly -> Ptr CMpq -> IO ()
 
 -- Interpolation ---------------------------------------------------------------
 

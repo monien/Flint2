@@ -64,8 +64,8 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , fmpz_mod_poly_set_coeff_fmpz
   , fmpz_mod_poly_set_coeff_ui
   , fmpz_mod_poly_get_coeff_fmpz
-  , fmpz_mod_poly_set_coeff_mpz
-  , fmpz_mod_poly_get_coeff_mpz
+  -- , fmpz_mod_poly_set_coeff_mpz
+  -- , fmpz_mod_poly_get_coeff_mpz
   -- * Shifting
   , _fmpz_mod_poly_shift_left
   , fmpz_mod_poly_shift_left
@@ -132,38 +132,38 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , fmpz_mod_poly_divrem_basecase
   , _fmpz_mod_poly_divrem_newton_n_preinv
   , fmpz_mod_poly_divrem_newton_n_preinv
-  , _fmpz_mod_poly_div_basecase
-  , fmpz_mod_poly_div_basecase
-  , _fmpz_mod_poly_div_divconquer_recursive
-  , _fmpz_mod_poly_div_newton
-  , fmpz_mod_poly_div_newton
+  -- , _fmpz_mod_poly_div_basecase -- deprecated
+  -- , fmpz_mod_poly_div_basecase -- deprecated
+  -- , _fmpz_mod_poly_div_divconquer_recursive -- deprecated
+  -- , _fmpz_mod_poly_div_newton -- deprecated
+  -- , fmpz_mod_poly_div_newton -- deprecated
   , _fmpz_mod_poly_div_newton_n_preinv
   , fmpz_mod_poly_div_newton_n_preinv
   , fmpz_mod_poly_remove
   , _fmpz_mod_poly_rem_basecase
   , fmpz_mod_poly_rem_basecase
-  , _fmpz_mod_poly_divrem_divconquer_recursive
-  , _fmpz_mod_poly_divrem_divconquer
-  , _fmpz_mod_poly_div_divconquer
-  , fmpz_mod_poly_div_divconquer
-  , fmpz_mod_poly_divrem_divconquer
+  -- , _fmpz_mod_poly_divrem_divconquer_recursive -- deprecated
+  -- , _fmpz_mod_poly_divrem_divconquer -- deprecated
+  -- , _fmpz_mod_poly_div_divconquer -- deprecated
+  -- , fmpz_mod_poly_div_divconquer -- deprecated
+  -- , fmpz_mod_poly_divrem_divconquer -- deprecated
   , _fmpz_mod_poly_div
   , fmpz_mod_poly_div
   , _fmpz_mod_poly_divrem
   , fmpz_mod_poly_divrem
   , fmpz_mod_poly_divrem_f
   , _fmpz_mod_poly_rem
-  , _fmpz_mod_poly_rem_f
-  , fmpz_mod_poly_rem
+  -- , _fmpz_mod_poly_rem_f
+  -- , fmpz_mod_poly_rem
   -- * Divisibility testing
   , _fmpz_mod_poly_divides_classical
   , fmpz_mod_poly_divides_classical
   , _fmpz_mod_poly_divides
   , fmpz_mod_poly_divides
   -- * Power series inversion
-  , _fmpz_mod_poly_inv_series_newton
-  , fmpz_mod_poly_inv_series_newton
-  , fmpz_mod_poly_inv_series_newton_f
+  -- , _fmpz_mod_poly_inv_series_newton
+  -- , fmpz_mod_poly_inv_series_newton
+  -- , fmpz_mod_poly_inv_series_newton_f
   , _fmpz_mod_poly_inv_series
   , fmpz_mod_poly_inv_series
   , fmpz_mod_poly_inv_series_f
@@ -173,8 +173,8 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   -- * Greatest common divisor
   , fmpz_mod_poly_make_monic
   , fmpz_mod_poly_make_monic_f
-  , _fmpz_mod_poly_gcd_euclidean
-  , fmpz_mod_poly_gcd_euclidean
+  -- , _fmpz_mod_poly_gcd_euclidean
+  -- , fmpz_mod_poly_gcd_euclidean
   , _fmpz_mod_poly_gcd
   , fmpz_mod_poly_gcd
   , _fmpz_mod_poly_gcd_euclidean_f
@@ -182,14 +182,14 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , _fmpz_mod_poly_gcd_f
   , fmpz_mod_poly_gcd_f
   , _fmpz_mod_poly_hgcd
-  , _fmpz_mod_poly_gcd_hgcd
-  , fmpz_mod_poly_gcd_hgcd
-  , _fmpz_mod_poly_xgcd_euclidean
+  -- , _fmpz_mod_poly_gcd_hgcd
+  -- , fmpz_mod_poly_gcd_hgcd
+  -- , _fmpz_mod_poly_xgcd_euclidean
   , _fmpz_mod_poly_xgcd_euclidean_f
-  , fmpz_mod_poly_xgcd_euclidean
+  -- , fmpz_mod_poly_xgcd_euclidean
   , fmpz_mod_poly_xgcd_euclidean_f
-  , _fmpz_mod_poly_xgcd_hgcd
-  , fmpz_mod_poly_xgcd_hgcd
+  -- , _fmpz_mod_poly_xgcd_hgcd
+  -- , fmpz_mod_poly_xgcd_hgcd
   , _fmpz_mod_poly_xgcd
   , fmpz_mod_poly_xgcd
   , fmpz_mod_poly_xgcd_f
@@ -237,10 +237,10 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , _fmpz_mod_poly_evaluate_fmpz_vec
   , fmpz_mod_poly_evaluate_fmpz_vec
   -- * Composition
-  , _fmpz_mod_poly_compose_horner
-  , fmpz_mod_poly_compose_horner
-  , _fmpz_mod_poly_compose_divconquer
-  , fmpz_mod_poly_compose_divconquer
+  -- , _fmpz_mod_poly_compose_horner
+  -- , fmpz_mod_poly_compose_horner
+  --, _fmpz_mod_poly_compose_divconquer
+  --, fmpz_mod_poly_compose_divconquer
   , _fmpz_mod_poly_compose
   , fmpz_mod_poly_compose
   -- * Square roots
@@ -703,19 +703,19 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_set_coeff_ui"
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_get_coeff_fmpz"
   fmpz_mod_poly_get_coeff_fmpz :: Ptr CFmpz -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
 
--- | /fmpz_mod_poly_set_coeff_mpz/ /poly/ /n/ /x/ /ctx/ 
--- 
--- Sets the coefficient of \(X^n\) in the polynomial to \(x\), assuming
--- \(n \geq 0\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_set_coeff_mpz"
-  fmpz_mod_poly_set_coeff_mpz :: Ptr CFmpzModPoly -> CLong -> Ptr CMpz -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_set_coeff_mpz/ /poly/ /n/ /x/ /ctx/ 
+-- -- 
+-- -- Sets the coefficient of \(X^n\) in the polynomial to \(x\), assuming
+-- -- \(n \geq 0\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_set_coeff_mpz"
+--   fmpz_mod_poly_set_coeff_mpz :: Ptr CFmpzModPoly -> CLong -> Ptr CMpz -> Ptr CFmpzModCtx -> IO ()
 
--- | /fmpz_mod_poly_get_coeff_mpz/ /x/ /poly/ /n/ /ctx/ 
--- 
--- Sets \(x\) to the coefficient of \(X^n\) in the polynomial, assuming
--- \(n \geq 0\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_get_coeff_mpz"
-  fmpz_mod_poly_get_coeff_mpz :: Ptr CMpz -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_get_coeff_mpz/ /x/ /poly/ /n/ /ctx/ 
+-- -- 
+-- -- Sets \(x\) to the coefficient of \(X^n\) in the polynomial, assuming
+-- -- \(n \geq 0\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_get_coeff_mpz"
+--   fmpz_mod_poly_get_coeff_mpz :: Ptr CMpz -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
 
 -- Shifting --------------------------------------------------------------------
 
@@ -1264,55 +1264,55 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_divrem_newton_n_preinv"
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_divrem_newton_n_preinv"
   fmpz_mod_poly_divrem_newton_n_preinv :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_div_basecase/ /Q/ /R/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
--- 
--- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) but only sets
--- @(Q, lenA - lenB + 1)@.
--- 
--- Requires temporary space @(R, lenA)@. Allows aliasing only between \(A\)
--- and \(R\). Allows zero-padding in \(A\) but not in \(B\). Assumes that
--- the leading coefficient of \(B\) is a unit modulo \(p\).
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_basecase"
-  _fmpz_mod_poly_div_basecase :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_div_basecase/ /Q/ /R/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) but only sets
+-- -- @(Q, lenA - lenB + 1)@.
+-- -- 
+-- -- Requires temporary space @(R, lenA)@. Allows aliasing only between \(A\)
+-- -- and \(R\). Allows zero-padding in \(A\) but not in \(B\). Assumes that
+-- -- the leading coefficient of \(B\) is a unit modulo \(p\).
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_basecase"
+--   _fmpz_mod_poly_div_basecase :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_div_basecase/ /Q/ /A/ /B/ /ctx/ 
--- 
--- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) assuming that
--- the leading term of \(B\) is a unit.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_div_basecase"
-  fmpz_mod_poly_div_basecase :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_div_basecase/ /Q/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) assuming that
+-- -- the leading term of \(B\) is a unit.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_div_basecase"
+--   fmpz_mod_poly_div_basecase :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_div_divconquer_recursive/ /Q/ /W/ /A/ /B/ /lenB/ /invB/ /p/ 
--- 
--- [Computes \(Q\) and \(R\) such that \(A = BQ + R\) with \(\operatorname{len}(R)\) less than]
---     @lenB@, where @A@ is of length @2 * lenB - 1@ and @B@ is of length
---     @lenB@. We require that @Q@ have space for @lenB@ coefficients and
---     that @W@ be temporary space of size @2*lenB@.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_divconquer_recursive"
-  _fmpz_mod_poly_div_divconquer_recursive :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_div_divconquer_recursive/ /Q/ /W/ /A/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- [Computes \(Q\) and \(R\) such that \(A = BQ + R\) with \(\operatorname{len}(R)\) less than]
+-- --     @lenB@, where @A@ is of length @2 * lenB - 1@ and @B@ is of length
+-- --     @lenB@. We require that @Q@ have space for @lenB@ coefficients and
+-- --     that @W@ be temporary space of size @2*lenB@.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_divconquer_recursive"
+--   _fmpz_mod_poly_div_divconquer_recursive :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /_fmpz_mod_poly_div_newton/ /Q/ /A/ /lenA/ /B/ /lenB/ /p/ 
--- 
--- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) but only sets
--- @(Q, lenA - lenB + 1)@.
--- 
--- Assumes that the leading coefficient of \(B\) is a unit modulo \(p\).
--- 
--- Reverses the polynomials, divides the resulting series using Newton
--- iteration, then reverses the result.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_newton"
-  _fmpz_mod_poly_div_newton :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_div_newton/ /Q/ /A/ /lenA/ /B/ /lenB/ /p/ 
+-- -- 
+-- -- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) but only sets
+-- -- @(Q, lenA - lenB + 1)@.
+-- -- 
+-- -- Assumes that the leading coefficient of \(B\) is a unit modulo \(p\).
+-- -- 
+-- -- Reverses the polynomials, divides the resulting series using Newton
+-- -- iteration, then reverses the result.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_newton"
+--   _fmpz_mod_poly_div_newton :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_div_newton/ /Q/ /A/ /B/ /ctx/ 
--- 
--- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) assuming that
--- the leading term of \(B\) is a unit.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_div_newton"
-  fmpz_mod_poly_div_newton :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_div_newton/ /Q/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) with
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\) assuming that
+-- -- the leading term of \(B\) is a unit.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_div_newton"
+--   fmpz_mod_poly_div_newton :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_div_newton_n_preinv/ /Q/ /A/ /lenA/ /B/ /lenB/ /Binv/ /lenBinv/ /mod/ 
 -- 
@@ -1375,66 +1375,66 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_rem_basecase"
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_rem_basecase"
   fmpz_mod_poly_rem_basecase :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_divrem_divconquer_recursive/ /Q/ /BQ/ /W/ /A/ /B/ /lenB/ /invB/ /p/ 
--- 
--- Computes @(Q, lenB)@, @(BQ, 2 lenB - 1)@ such that \(BQ = B \times Q\)
--- and \(A = B Q + R\) where
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\).
--- 
--- Assumes that the leading coefficient of \(B\) is invertible modulo
--- \(p\), and that @invB@ is the inverse.
--- 
--- Assumes \(\operatorname{len}(B) > 0\). Allows zero-padding in
--- @(A, lenA)@. Requires a temporary array @(W, 2 lenB - 1)@. No aliasing
--- of input and output operands is allowed.
--- 
--- This function does not read the bottom \(\operatorname{len}(B) - 1\)
--- coefficients from \(A\), which means that they might not even need to
--- exist in allocated memory.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_divrem_divconquer_recursive"
-  _fmpz_mod_poly_divrem_divconquer_recursive :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_divrem_divconquer_recursive/ /Q/ /BQ/ /W/ /A/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- Computes @(Q, lenB)@, @(BQ, 2 lenB - 1)@ such that \(BQ = B \times Q\)
+-- -- and \(A = B Q + R\) where
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\).
+-- -- 
+-- -- Assumes that the leading coefficient of \(B\) is invertible modulo
+-- -- \(p\), and that @invB@ is the inverse.
+-- -- 
+-- -- Assumes \(\operatorname{len}(B) > 0\). Allows zero-padding in
+-- -- @(A, lenA)@. Requires a temporary array @(W, 2 lenB - 1)@. No aliasing
+-- -- of input and output operands is allowed.
+-- -- 
+-- -- This function does not read the bottom \(\operatorname{len}(B) - 1\)
+-- -- coefficients from \(A\), which means that they might not even need to
+-- -- exist in allocated memory.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_divrem_divconquer_recursive"
+--   _fmpz_mod_poly_divrem_divconquer_recursive :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /_fmpz_mod_poly_divrem_divconquer/ /Q/ /R/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
--- 
--- Computes @(Q, lenA - lenB + 1)@, @(R, lenB - 1)@ such that
--- \(A = B Q + R\) and
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\).
--- 
--- Assumes that the leading coefficient of \(B\) is invertible modulo
--- \(p\), and that @invB@ is the inverse.
--- 
--- Assumes \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\). Allows
--- zero-padding in @(A, lenA)@. No aliasing of input and output operands is
--- allowed.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_divrem_divconquer"
-  _fmpz_mod_poly_divrem_divconquer :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_divrem_divconquer/ /Q/ /R/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- Computes @(Q, lenA - lenB + 1)@, @(R, lenB - 1)@ such that
+-- -- \(A = B Q + R\) and
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\).
+-- -- 
+-- -- Assumes that the leading coefficient of \(B\) is invertible modulo
+-- -- \(p\), and that @invB@ is the inverse.
+-- -- 
+-- -- Assumes \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\). Allows
+-- -- zero-padding in @(A, lenA)@. No aliasing of input and output operands is
+-- -- allowed.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_divrem_divconquer"
+--   _fmpz_mod_poly_divrem_divconquer :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /_fmpz_mod_poly_div_divconquer/ /Q/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
--- 
--- Notionally computes polynomials \(Q\) and \(R\) such that \(A = BQ + R\)
--- with \(\operatorname{len}(R)\) less than @lenB@, where @A@ is of length
--- @lenA@ and @B@ is of length @lenB@, but returns only @Q@. We require
--- that @Q@ have space for @lenA - lenB + 1@ coefficients.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_divconquer"
-  _fmpz_mod_poly_div_divconquer :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_div_divconquer/ /Q/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- Notionally computes polynomials \(Q\) and \(R\) such that \(A = BQ + R\)
+-- -- with \(\operatorname{len}(R)\) less than @lenB@, where @A@ is of length
+-- -- @lenA@ and @B@ is of length @lenB@, but returns only @Q@. We require
+-- -- that @Q@ have space for @lenA - lenB + 1@ coefficients.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_div_divconquer"
+--   _fmpz_mod_poly_div_divconquer :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_div_divconquer/ /Q/ /A/ /B/ /ctx/ 
--- 
--- Notionally computes \(Q\) and \(R\) such that \(A = BQ + R\) with
--- \(\operatorname{len}(R) < \operatorname{len}(B)\), but returns only
--- \(Q\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_div_divconquer"
-  fmpz_mod_poly_div_divconquer :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_div_divconquer/ /Q/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Notionally computes \(Q\) and \(R\) such that \(A = BQ + R\) with
+-- -- \(\operatorname{len}(R) < \operatorname{len}(B)\), but returns only
+-- -- \(Q\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_div_divconquer"
+--   fmpz_mod_poly_div_divconquer :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /fmpz_mod_poly_divrem_divconquer/ /Q/ /R/ /A/ /B/ /ctx/ 
--- 
--- Computes \(Q\), \(R\) such that \(A = B Q + R\) and
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\).
--- 
--- Assumes that \(B\) is non-zero and that the leading coefficient of \(B\)
--- is invertible modulo \(p\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_divrem_divconquer"
-  fmpz_mod_poly_divrem_divconquer :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_divrem_divconquer/ /Q/ /R/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Computes \(Q\), \(R\) such that \(A = B Q + R\) and
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\).
+-- -- 
+-- -- Assumes that \(B\) is non-zero and that the leading coefficient of \(B\)
+-- -- is invertible modulo \(p\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_divrem_divconquer"
+--   fmpz_mod_poly_divrem_divconquer :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_div/ /Q/ /A/ /lenA/ /B/ /lenB/ /p/ 
 -- 
@@ -1511,24 +1511,24 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_divrem_f"
 foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_rem"
   _fmpz_mod_poly_rem :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /_fmpz_mod_poly_rem_f/ /f/ /R/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
--- 
--- If \(f\) returns with the value \(1\) then the function operates as
--- @_fmpz_mod_poly_rem@, otherwise \(f\) will be set to a nontrivial factor
--- of \(p\).
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_rem_f"
-  _fmpz_mod_poly_rem_f :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_rem_f/ /f/ /R/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- If \(f\) returns with the value \(1\) then the function operates as
+-- -- @_fmpz_mod_poly_rem@, otherwise \(f\) will be set to a nontrivial factor
+-- -- of \(p\).
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_rem_f"
+--   _fmpz_mod_poly_rem_f :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_rem/ /R/ /A/ /B/ /ctx/ 
--- 
--- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) and
--- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\), returning only
--- the remainder part.
--- 
--- Assumes that \(B\) is non-zero and that the leading coefficient of \(B\)
--- is invertible modulo \(p\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_rem"
-  fmpz_mod_poly_rem :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_rem/ /R/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Notationally, computes \(Q\), \(R\) such that \(A = B Q + R\) and
+-- -- \(0 \leq \operatorname{len}(R) < \operatorname{len}(B)\), returning only
+-- -- the remainder part.
+-- -- 
+-- -- Assumes that \(B\) is non-zero and that the leading coefficient of \(B\)
+-- -- is invertible modulo \(p\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_rem"
+--   fmpz_mod_poly_rem :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- Divisibility testing --------------------------------------------------------
 
@@ -1566,28 +1566,28 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_divides"
 
 -- Power series inversion ------------------------------------------------------
 
--- | /_fmpz_mod_poly_inv_series_newton/ /Qinv/ /Q/ /n/ /cinv/ /p/ 
--- 
--- Sets @(Qinv, n)@ to the inverse of @(Q, n)@ modulo \(x^n\), where
--- \(n \geq 1\), assuming that the bottom coefficient of \(Q\) is
--- invertible modulo \(p\) and that its inverse is @cinv@.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_inv_series_newton"
-  _fmpz_mod_poly_inv_series_newton :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_inv_series_newton/ /Qinv/ /Q/ /n/ /cinv/ /p/ 
+-- -- 
+-- -- Sets @(Qinv, n)@ to the inverse of @(Q, n)@ modulo \(x^n\), where
+-- -- \(n \geq 1\), assuming that the bottom coefficient of \(Q\) is
+-- -- invertible modulo \(p\) and that its inverse is @cinv@.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_inv_series_newton"
+--   _fmpz_mod_poly_inv_series_newton :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_inv_series_newton/ /Qinv/ /Q/ /n/ /ctx/ 
--- 
--- Sets @Qinv@ to the inverse of @Q@ modulo \(x^n\), where \(n \geq 1\),
--- assuming that the bottom coefficient of \(Q\) is a unit.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_inv_series_newton"
-  fmpz_mod_poly_inv_series_newton :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_inv_series_newton/ /Qinv/ /Q/ /n/ /ctx/ 
+-- -- 
+-- -- Sets @Qinv@ to the inverse of @Q@ modulo \(x^n\), where \(n \geq 1\),
+-- -- assuming that the bottom coefficient of \(Q\) is a unit.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_inv_series_newton"
+--   fmpz_mod_poly_inv_series_newton :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
 
--- | /fmpz_mod_poly_inv_series_newton_f/ /f/ /Qinv/ /Q/ /n/ /ctx/ 
--- 
--- Either sets \(f\) to a nontrivial factor of \(p\) with the value of
--- @Qinv@ undefined, or sets @Qinv@ to the inverse of @Q@ modulo \(x^n\),
--- where \(n \geq 1\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_inv_series_newton_f"
-  fmpz_mod_poly_inv_series_newton_f :: Ptr CFmpz -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_inv_series_newton_f/ /f/ /Qinv/ /Q/ /n/ /ctx/ 
+-- -- 
+-- -- Either sets \(f\) to a nontrivial factor of \(p\) with the value of
+-- -- @Qinv@ undefined, or sets @Qinv@ to the inverse of @Q@ modulo \(x^n\),
+-- -- where \(n \geq 1\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_inv_series_newton_f"
+--   fmpz_mod_poly_inv_series_newton_f :: Ptr CFmpz -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_inv_series/ /Qinv/ /Q/ /n/ /cinv/ /p/ 
 -- 
@@ -1650,32 +1650,32 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_make_monic"
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_make_monic_f"
   fmpz_mod_poly_make_monic_f :: Ptr CFmpz -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_gcd_euclidean/ /G/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
--- 
--- Sets \(G\) to the greatest common divisor of
--- \((A, \operatorname{len}(A))\) and \((B, \operatorname{len}(B))\) and
--- returns its length.
--- 
--- Assumes that \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\)
--- and that the vector \(G\) has space for sufficiently many coefficients.
--- 
--- Assumes that @invB@ is the inverse of the leading coefficients of \(B\)
--- modulo the prime number \(p\).
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_gcd_euclidean"
-  _fmpz_mod_poly_gcd_euclidean :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO CLong
+-- -- | /_fmpz_mod_poly_gcd_euclidean/ /G/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- Sets \(G\) to the greatest common divisor of
+-- -- \((A, \operatorname{len}(A))\) and \((B, \operatorname{len}(B))\) and
+-- -- returns its length.
+-- -- 
+-- -- Assumes that \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\)
+-- -- and that the vector \(G\) has space for sufficiently many coefficients.
+-- -- 
+-- -- Assumes that @invB@ is the inverse of the leading coefficients of \(B\)
+-- -- modulo the prime number \(p\).
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_gcd_euclidean"
+--   _fmpz_mod_poly_gcd_euclidean :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO CLong
 
--- | /fmpz_mod_poly_gcd_euclidean/ /G/ /A/ /B/ /ctx/ 
--- 
--- Sets \(G\) to the greatest common divisor of \(A\) and \(B\).
--- 
--- The algorithm used to compute \(G\) is the classical Euclidean
--- algorithm.
--- 
--- In general, the greatest common divisor is defined in the polynomial
--- ring \((\mathbf{Z}/(p \mathbf{Z}))[X]\) if and only if \(p\) is a prime
--- number. Thus, this function assumes that \(p\) is prime.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_gcd_euclidean"
-  fmpz_mod_poly_gcd_euclidean :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_gcd_euclidean/ /G/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Sets \(G\) to the greatest common divisor of \(A\) and \(B\).
+-- -- 
+-- -- The algorithm used to compute \(G\) is the classical Euclidean
+-- -- algorithm.
+-- -- 
+-- -- In general, the greatest common divisor is defined in the polynomial
+-- -- ring \((\mathbf{Z}/(p \mathbf{Z}))[X]\) if and only if \(p\) is a prime
+-- -- number. Thus, this function assumes that \(p\) is prime.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_gcd_euclidean"
+--   fmpz_mod_poly_gcd_euclidean :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_gcd/ /G/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
 -- 
@@ -1773,49 +1773,49 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_gcd_f"
 foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_hgcd"
   _fmpz_mod_poly_hgcd :: Ptr (Ptr CFmpz) -> Ptr CLong -> Ptr CFmpz -> Ptr CLong -> Ptr CFmpz -> Ptr CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO CLong
 
--- | /_fmpz_mod_poly_gcd_hgcd/ /G/ /A/ /lenA/ /B/ /lenB/ /mod/ 
--- 
--- Computes the monic GCD of \(A\) and \(B\), assuming that
--- \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\).
--- 
--- Assumes that \(G\) has space for \(\operatorname{len}(B)\) coefficients
--- and returns the length of \(G\) on output.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_gcd_hgcd"
-  _fmpz_mod_poly_gcd_hgcd :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO CLong
+-- -- | /_fmpz_mod_poly_gcd_hgcd/ /G/ /A/ /lenA/ /B/ /lenB/ /mod/ 
+-- -- 
+-- -- Computes the monic GCD of \(A\) and \(B\), assuming that
+-- -- \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\).
+-- -- 
+-- -- Assumes that \(G\) has space for \(\operatorname{len}(B)\) coefficients
+-- -- and returns the length of \(G\) on output.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_gcd_hgcd"
+--   _fmpz_mod_poly_gcd_hgcd :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO CLong
 
--- | /fmpz_mod_poly_gcd_hgcd/ /G/ /A/ /B/ /ctx/ 
--- 
--- Computes the monic GCD of \(A\) and \(B\) using the HGCD algorithm.
--- 
--- As a special case, the GCD of two zero polynomials is defined to be the
--- zero polynomial.
--- 
--- The time complexity of the algorithm is \(\mathcal{O}(n \log^2 n)\) ring
--- operations. For further details, see < [ThullYap1990]>.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_gcd_hgcd"
-  fmpz_mod_poly_gcd_hgcd :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_gcd_hgcd/ /G/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Computes the monic GCD of \(A\) and \(B\) using the HGCD algorithm.
+-- -- 
+-- -- As a special case, the GCD of two zero polynomials is defined to be the
+-- -- zero polynomial.
+-- -- 
+-- -- The time complexity of the algorithm is \(\mathcal{O}(n \log^2 n)\) ring
+-- -- operations. For further details, see < [ThullYap1990]>.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_gcd_hgcd"
+--   fmpz_mod_poly_gcd_hgcd :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_xgcd_euclidean/ /G/ /S/ /T/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
--- 
--- Computes the GCD of \(A\) and \(B\) together with cofactors \(S\) and
--- \(T\) such that \(S A + T B = G\). Returns the length of \(G\).
--- 
--- Assumes that \(\operatorname{len}(A) \geq \operatorname{len}(B) \geq 1\)
--- and \((\operatorname{len}(A),\operatorname{len}(B)) \neq (1,1)\).
--- 
--- No attempt is made to make the GCD monic.
--- 
--- Requires that \(G\) have space for \(\operatorname{len}(B)\)
--- coefficients. Writes \(\operatorname{len}(B)-1\) and
--- \(\operatorname{len}(A)-1\) coefficients to \(S\) and \(T\),
--- respectively. Note that, in fact,
--- \(\operatorname{len}(S) \leq \max(\operatorname{len}(B) - \operatorname{len}(G), 1)\)
--- and
--- \(\operatorname{len}(T) \leq \max(\operatorname{len}(A) - \operatorname{len}(G), 1)\).
--- 
--- No aliasing of input and output operands is permitted.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_xgcd_euclidean"
-  _fmpz_mod_poly_xgcd_euclidean :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO CLong
+-- -- | /_fmpz_mod_poly_xgcd_euclidean/ /G/ /S/ /T/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
+-- -- 
+-- -- Computes the GCD of \(A\) and \(B\) together with cofactors \(S\) and
+-- -- \(T\) such that \(S A + T B = G\). Returns the length of \(G\).
+-- -- 
+-- -- Assumes that \(\operatorname{len}(A) \geq \operatorname{len}(B) \geq 1\)
+-- -- and \((\operatorname{len}(A),\operatorname{len}(B)) \neq (1,1)\).
+-- -- 
+-- -- No attempt is made to make the GCD monic.
+-- -- 
+-- -- Requires that \(G\) have space for \(\operatorname{len}(B)\)
+-- -- coefficients. Writes \(\operatorname{len}(B)-1\) and
+-- -- \(\operatorname{len}(A)-1\) coefficients to \(S\) and \(T\),
+-- -- respectively. Note that, in fact,
+-- -- \(\operatorname{len}(S) \leq \max(\operatorname{len}(B) - \operatorname{len}(G), 1)\)
+-- -- and
+-- -- \(\operatorname{len}(T) \leq \max(\operatorname{len}(A) - \operatorname{len}(G), 1)\).
+-- -- 
+-- -- No aliasing of input and output operands is permitted.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_xgcd_euclidean"
+--   _fmpz_mod_poly_xgcd_euclidean :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO CLong
 
 -- | /_fmpz_mod_poly_xgcd_euclidean_f/ /f/ /G/ /S/ /T/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
 -- 
@@ -1825,18 +1825,18 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_xgcd_euclidean"
 foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_xgcd_euclidean_f"
   _fmpz_mod_poly_xgcd_euclidean_f :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO CLong
 
--- | /fmpz_mod_poly_xgcd_euclidean/ /G/ /S/ /T/ /A/ /B/ /ctx/ 
--- 
--- Computes the GCD of \(A\) and \(B\). The GCD of zero polynomials is
--- defined to be zero, whereas the GCD of the zero polynomial and some
--- other polynomial \(P\) is defined to be \(P\). Except in the case where
--- the GCD is zero, the GCD \(G\) is made monic.
--- 
--- Polynomials @S@ and @T@ are computed such that @S*A + T*B = G@. The
--- length of @S@ will be at most @lenB@ and the length of @T@ will be at
--- most @lenA@.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_xgcd_euclidean"
-  fmpz_mod_poly_xgcd_euclidean :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_xgcd_euclidean/ /G/ /S/ /T/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Computes the GCD of \(A\) and \(B\). The GCD of zero polynomials is
+-- -- defined to be zero, whereas the GCD of the zero polynomial and some
+-- -- other polynomial \(P\) is defined to be \(P\). Except in the case where
+-- -- the GCD is zero, the GCD \(G\) is made monic.
+-- -- 
+-- -- Polynomials @S@ and @T@ are computed such that @S*A + T*B = G@. The
+-- -- length of @S@ will be at most @lenB@ and the length of @T@ will be at
+-- -- most @lenA@.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_xgcd_euclidean"
+--   fmpz_mod_poly_xgcd_euclidean :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- | /fmpz_mod_poly_xgcd_euclidean_f/ /f/ /G/ /S/ /T/ /A/ /B/ /ctx/ 
 -- 
@@ -1846,41 +1846,41 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_xgcd_euclidean"
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_xgcd_euclidean_f"
   fmpz_mod_poly_xgcd_euclidean_f :: Ptr CFmpz -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_xgcd_hgcd/ /G/ /S/ /T/ /A/ /lenA/ /B/ /lenB/ /mod/ 
--- 
--- Computes the GCD of \(A\) and \(B\), where
--- \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\), together with
--- cofactors \(S\) and \(T\) such that \(S A + T B = G\). Returns the
--- length of \(G\).
--- 
--- No attempt is made to make the GCD monic.
--- 
--- Requires that \(G\) have space for \(\operatorname{len}(B)\)
--- coefficients. Writes \(\operatorname{len}(B) - 1\) and
--- \(\operatorname{len}(A) - 1\) coefficients to \(S\) and \(T\),
--- respectively. Note that, in fact,
--- \(\operatorname{len}(S) \leq \operatorname{len}(B) - \operatorname{len}(G)\)
--- and
--- \(\operatorname{len}(T) \leq \operatorname{len}(A) - \operatorname{len}(G)\).
--- 
--- Both \(S\) and \(T\) must have space for at least \(2\) coefficients.
--- 
--- No aliasing of input and output operands is permitted.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_xgcd_hgcd"
-  _fmpz_mod_poly_xgcd_hgcd :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO CLong
+-- -- | /_fmpz_mod_poly_xgcd_hgcd/ /G/ /S/ /T/ /A/ /lenA/ /B/ /lenB/ /mod/ 
+-- -- 
+-- -- Computes the GCD of \(A\) and \(B\), where
+-- -- \(\operatorname{len}(A) \geq \operatorname{len}(B) > 0\), together with
+-- -- cofactors \(S\) and \(T\) such that \(S A + T B = G\). Returns the
+-- -- length of \(G\).
+-- -- 
+-- -- No attempt is made to make the GCD monic.
+-- -- 
+-- -- Requires that \(G\) have space for \(\operatorname{len}(B)\)
+-- -- coefficients. Writes \(\operatorname{len}(B) - 1\) and
+-- -- \(\operatorname{len}(A) - 1\) coefficients to \(S\) and \(T\),
+-- -- respectively. Note that, in fact,
+-- -- \(\operatorname{len}(S) \leq \operatorname{len}(B) - \operatorname{len}(G)\)
+-- -- and
+-- -- \(\operatorname{len}(T) \leq \operatorname{len}(A) - \operatorname{len}(G)\).
+-- -- 
+-- -- Both \(S\) and \(T\) must have space for at least \(2\) coefficients.
+-- -- 
+-- -- No aliasing of input and output operands is permitted.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_xgcd_hgcd"
+--   _fmpz_mod_poly_xgcd_hgcd :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO CLong
 
--- | /fmpz_mod_poly_xgcd_hgcd/ /G/ /S/ /T/ /A/ /B/ /ctx/ 
--- 
--- Computes the GCD of \(A\) and \(B\). The GCD of zero polynomials is
--- defined to be zero, whereas the GCD of the zero polynomial and some
--- other polynomial \(P\) is defined to be \(P\). Except in the case where
--- the GCD is zero, the GCD \(G\) is made monic.
--- 
--- Polynomials @S@ and @T@ are computed such that @S*A + T*B = G@. The
--- length of @S@ will be at most @lenB@ and the length of @T@ will be at
--- most @lenA@.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_xgcd_hgcd"
-  fmpz_mod_poly_xgcd_hgcd :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_xgcd_hgcd/ /G/ /S/ /T/ /A/ /B/ /ctx/ 
+-- -- 
+-- -- Computes the GCD of \(A\) and \(B\). The GCD of zero polynomials is
+-- -- defined to be zero, whereas the GCD of the zero polynomial and some
+-- -- other polynomial \(P\) is defined to be \(P\). Except in the case where
+-- -- the GCD is zero, the GCD \(G\) is made monic.
+-- -- 
+-- -- Polynomials @S@ and @T@ are computed such that @S*A + T*B = G@. The
+-- -- length of @S@ will be at most @lenB@ and the length of @T@ will be at
+-- -- most @lenA@.
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_xgcd_hgcd"
+--   fmpz_mod_poly_xgcd_hgcd :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_xgcd/ /G/ /S/ /T/ /A/ /lenA/ /B/ /lenB/ /invB/ /p/ 
 -- 
@@ -2363,57 +2363,57 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_evaluate_fmpz_vec"
 
 -- Composition -----------------------------------------------------------------
 
--- | /_fmpz_mod_poly_compose_horner/ /res/ /poly1/ /len1/ /poly2/ /len2/ /p/ 
--- 
--- Sets @res@ to the composition of @(poly1, len1)@ and @(poly2, len2)@
--- using Horner\'s algorithm.
--- 
--- Assumes that @res@ has space for @(len1-1)*(len2-1) + 1@ coefficients,
--- although in \(\mathbf{Z}_p[X]\) this might not actually be the length of
--- the resulting polynomial when \(p\) is not a prime.
--- 
--- Assumes that @poly1@ and @poly2@ are non-zero polynomials. Does not
--- support aliasing between any of the inputs and the output.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_compose_horner"
-  _fmpz_mod_poly_compose_horner :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_compose_horner/ /res/ /poly1/ /len1/ /poly2/ /len2/ /p/ 
+-- -- 
+-- -- Sets @res@ to the composition of @(poly1, len1)@ and @(poly2, len2)@
+-- -- using Horner\'s algorithm.
+-- -- 
+-- -- Assumes that @res@ has space for @(len1-1)*(len2-1) + 1@ coefficients,
+-- -- although in \(\mathbf{Z}_p[X]\) this might not actually be the length of
+-- -- the resulting polynomial when \(p\) is not a prime.
+-- -- 
+-- -- Assumes that @poly1@ and @poly2@ are non-zero polynomials. Does not
+-- -- support aliasing between any of the inputs and the output.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_compose_horner"
+--   _fmpz_mod_poly_compose_horner :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_compose_horner/ /res/ /poly1/ /poly2/ /ctx/ 
--- 
--- Sets @res@ to the composition of @poly1@ and @poly2@ using Horner\'s
--- algorithm.
--- 
--- To be precise about the order of composition, denoting @res@, @poly1@,
--- and @poly2@ by \(f\), \(g\), and \(h\), respectively, sets
--- \(f(t) = g(h(t))\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_compose_horner"
-  fmpz_mod_poly_compose_horner :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_compose_horner/ /res/ /poly1/ /poly2/ /ctx/ 
+-- -- 
+-- -- Sets @res@ to the composition of @poly1@ and @poly2@ using Horner\'s
+-- -- algorithm.
+-- -- 
+-- -- To be precise about the order of composition, denoting @res@, @poly1@,
+-- -- and @poly2@ by \(f\), \(g\), and \(h\), respectively, sets
+-- -- \(f(t) = g(h(t))\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_compose_horner"
+--   fmpz_mod_poly_compose_horner :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
--- | /_fmpz_mod_poly_compose_divconquer/ /res/ /poly1/ /len1/ /poly2/ /len2/ /p/ 
--- 
--- Sets @res@ to the composition of @(poly1, len1)@ and @(poly2, len2)@
--- using a divide and conquer algorithm which takes out factors of @poly2@
--- raised to \(2^i\) where possible.
--- 
--- Assumes that @res@ has space for @(len1-1)*(len2-1) + 1@ coefficients,
--- although in \(\mathbf{Z}_p[X]\) this might not actually be the length of
--- the resulting polynomial when \(p\) is not a prime.
--- 
--- Assumes that @poly1@ and @poly2@ are non-zero polynomials. Does not
--- support aliasing between any of the inputs and the output.
-foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_compose_divconquer"
-  _fmpz_mod_poly_compose_divconquer :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO ()
+-- -- | /_fmpz_mod_poly_compose_divconquer/ /res/ /poly1/ /len1/ /poly2/ /len2/ /p/ 
+-- -- 
+-- -- Sets @res@ to the composition of @(poly1, len1)@ and @(poly2, len2)@
+-- -- using a divide and conquer algorithm which takes out factors of @poly2@
+-- -- raised to \(2^i\) where possible.
+-- -- 
+-- -- Assumes that @res@ has space for @(len1-1)*(len2-1) + 1@ coefficients,
+-- -- although in \(\mathbf{Z}_p[X]\) this might not actually be the length of
+-- -- the resulting polynomial when \(p\) is not a prime.
+-- -- 
+-- -- Assumes that @poly1@ and @poly2@ are non-zero polynomials. Does not
+-- -- support aliasing between any of the inputs and the output.
+-- foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_compose_divconquer"
+--   _fmpz_mod_poly_compose_divconquer :: Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CFmpz -> CLong -> Ptr CFmpz -> IO ()
 
--- | /fmpz_mod_poly_compose_divconquer/ /res/ /poly1/ /poly2/ /ctx/ 
--- 
--- Sets @res@ to the composition of @poly1@ and @poly2@ using a divide and
--- conquer algorithm which takes out factors of @poly2@ raised to \(2^i\)
--- where possible.
--- 
--- To be precise about the order of composition, denoting @res@, @poly1@,
--- and @poly2@ by \(f\), \(g\), and \(h\), respectively, sets
--- \(f(t) = g(h(t))\).
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_compose_divconquer"
-  fmpz_mod_poly_compose_divconquer :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
+-- -- | /fmpz_mod_poly_compose_divconquer/ /res/ /poly1/ /poly2/ /ctx/ 
+-- -- 
+-- -- Sets @res@ to the composition of @poly1@ and @poly2@ using a divide and
+-- -- conquer algorithm which takes out factors of @poly2@ raised to \(2^i\)
+-- -- where possible.
+-- -- 
+-- -- To be precise about the order of composition, denoting @res@, @poly1@,
+-- -- and @poly2@ by \(f\), \(g\), and \(h\), respectively, sets
+-- -- \(f(t) = g(h(t))\).
+-- foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_compose_divconquer"
+--   fmpz_mod_poly_compose_divconquer :: Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 -- | /_fmpz_mod_poly_compose/ /res/ /poly1/ /len1/ /poly2/ /len2/ /p/ 
 -- 

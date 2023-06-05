@@ -58,8 +58,8 @@ module Data.Number.Flint.Fmpz.Mat.FFI (
   , fmpz_mat_is_empty
   , fmpz_mat_is_square
   , fmpz_mat_is_zero_row
-  , fmpz_mat_col_equal
-  , fmpz_mat_row_equal
+  -- , fmpz_mat_col_equal -- deprecated
+  -- , fmpz_mat_row_equal -- deprecated
   -- * Transpose
   , fmpz_mat_transpose
   -- * Concatenate
@@ -189,7 +189,7 @@ module Data.Number.Flint.Fmpz.Mat.FFI (
   -- * Conversions
   , fmpz_mat_get_d_mat
   , fmpz_mat_get_d_mat_transpose
-  , fmpz_mat_get_mpf_mat
+  -- , fmpz_mat_get_mpf_mat -- deprecated
   -- * Cholesky Decomposition
   , fmpz_mat_chol_d
   -- * LLL
@@ -617,19 +617,19 @@ foreign import ccall "fmpz_mat.h fmpz_mat_is_square"
 foreign import ccall "fmpz_mat.h fmpz_mat_is_zero_row"
   fmpz_mat_is_zero_row :: Ptr CFmpzMat -> CLong -> IO CInt
 
--- | /fmpz_mat_col_equal/ /M/ /m/ /n/ 
--- 
--- Returns \(1\) if columns \(m\) and \(n\) of the matrix \(M\) are equal,
--- otherwise returns \(0\).
-foreign import ccall "fmpz_mat.h fmpz_mat_col_equal"
-  fmpz_mat_col_equal :: Ptr CFmpzMat -> CLong -> CLong -> IO CInt
+-- -- | /fmpz_mat_col_equal/ /M/ /m/ /n/ 
+-- -- 
+-- -- Returns \(1\) if columns \(m\) and \(n\) of the matrix \(M\) are equal,
+-- -- otherwise returns \(0\).
+-- foreign import ccall "fmpz_mat.h fmpz_mat_col_equal"
+--   fmpz_mat_col_equal :: Ptr CFmpzMat -> CLong -> CLong -> IO CInt
 
--- | /fmpz_mat_row_equal/ /M/ /m/ /n/ 
--- 
--- Returns \(1\) if rows \(m\) and \(n\) of the matrix \(M\) are equal,
--- otherwise returns \(0\).
-foreign import ccall "fmpz_mat.h fmpz_mat_row_equal"
-  fmpz_mat_row_equal :: Ptr CFmpzMat -> CLong -> CLong -> IO CInt
+-- -- | /fmpz_mat_row_equal/ /M/ /m/ /n/ 
+-- -- 
+-- -- Returns \(1\) if rows \(m\) and \(n\) of the matrix \(M\) are equal,
+-- -- otherwise returns \(0\).
+-- foreign import ccall "fmpz_mat.h fmpz_mat_row_equal"
+--   fmpz_mat_row_equal :: Ptr CFmpzMat -> CLong -> CLong -> IO CInt
 
 -- Transpose -------------------------------------------------------------------
 
@@ -1751,11 +1751,11 @@ foreign import ccall "fmpz_mat.h fmpz_mat_get_d_mat"
 foreign import ccall "fmpz_mat.h fmpz_mat_get_d_mat_transpose"
   fmpz_mat_get_d_mat_transpose :: Ptr CDMat -> Ptr CFmpzMat -> IO CInt
 
--- | /fmpz_mat_get_mpf_mat/ /B/ /A/ 
--- 
--- Sets the entries of @B@ as mpfs corresponding to the entries of @A@.
-foreign import ccall "fmpz_mat.h fmpz_mat_get_mpf_mat"
-  fmpz_mat_get_mpf_mat :: Ptr CMpfMat -> Ptr CFmpzMat -> IO ()
+-- -- | /fmpz_mat_get_mpf_mat/ /B/ /A/ 
+-- -- 
+-- -- Sets the entries of @B@ as mpfs corresponding to the entries of @A@.
+-- foreign import ccall "fmpz_mat.h fmpz_mat_get_mpf_mat"
+--   fmpz_mat_get_mpf_mat :: Ptr CMpfMat -> Ptr CFmpzMat -> IO ()
 
 -- Cholesky Decomposition ------------------------------------------------------
 

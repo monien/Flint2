@@ -225,8 +225,7 @@ newFqCtxModulus modulus mod_ctx var = do
       withFmpzModCtx mod_ctx $ \mod_ctx ->  
         withCString var $ \var ->
           fq_ctx_init_modulus x modulus mod_ctx var
-  px <- newForeignPtr_ x
-  addForeignPtrFinalizerEnv p_fq_ctx_clear mod_ctx px
+  addForeignPtrFinalizer p_fq_ctx_clear x
   return $ FqCtx x
 
 -- | Create a new `Fq` initialized using `fq_ctx_init_modulus`.

@@ -18,10 +18,10 @@ import FmpzPoly
 import Fmpq
 import FmpqPoly
 
-main = do
+main' = do
   putStrLn "done."
   
-main' = do
+main = do
   x <- newFmpz
   withFmpz x $ \x -> do
     fmpz_set_ui x 7
