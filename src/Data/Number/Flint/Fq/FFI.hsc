@@ -570,9 +570,16 @@ foreign import ccall "fq.h fq_fprint_pretty"
 -- In the current implementation, always returns \(1\). The return code is
 -- part of the function\'s signature to allow for a later implementation to
 -- return the number of characters printed or a non-positive error code.
-foreign import ccall "fq.h fq_print_pretty"
-  fq_print_pretty :: Ptr CFq -> Ptr CFqCtx -> IO CInt
-
+-- foreign import ccall "fq.h fq_print_pretty"
+--   fq_print_pretty :: Ptr CFq -> Ptr CFqCtx -> IO CInt
+fq_print_pretty :: Ptr CFq -> Ptr CFqCtx -> IO CInt
+fq_print_pretty x ctx = do
+  cs <- fq_get_str_pretty x ctx
+  s <- peekCString cs
+  putStr s
+  free cs
+  return 1
+  
 -- | /fq_fprint/ /file/ /op/ /ctx/ 
 -- 
 -- Prints a representation of @op@ to @file@.
@@ -588,9 +595,14 @@ foreign import ccall "fq.h fq_fprint"
 -- 
 -- For further details on the representation used, see
 -- @fmpz_mod_poly_print@.
-foreign import ccall "fq.h fq_print"
-  fq_print :: Ptr CFq -> Ptr CFqCtx -> IO ()
-
+fq_print :: Ptr CFq -> Ptr CFqCtx -> IO CInt
+fq_print x ctx = do
+  cs <- fq_get_str x ctx
+  s <- peekCString cs
+  putStr s
+  free cs
+  return 1
+  
 -- | /fq_get_str/ /op/ /ctx/ 
 -- 
 -- Returns the plain FLINT string representation of the element @op@.
