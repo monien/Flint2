@@ -187,7 +187,7 @@ module Data.Number.Flint.Fmpz.MPoly.FFI (
   , fmpz_mpoly_vec_is_autoreduced
   , fmpz_mpoly_vec_autoreduction
   , fmpz_mpoly_vec_autoreduction_groebner
-  , fmpz_mpoly_select_pop_pair
+  -- , fmpz_mpoly_select_pop_pair
   , fmpz_mpoly_buchberger_naive
   , fmpz_mpoly_buchberger_naive_with_limits
   -- * Special polynomials
@@ -408,8 +408,17 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_fprint_pretty"
 -- | /fmpz_mpoly_print_pretty/ /A/ /x/ /ctx/ 
 -- 
 -- Print a string representing /A/ to @stdout@.
-foreign import ccall "fmpz_mpoly.h fmpz_mpoly_print_pretty"
-  fmpz_mpoly_print_pretty :: Ptr CFmpzMPoly -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CInt
+-- foreign import ccall "fmpz_mpoly.h fmpz_mpoly_print_pretty"
+--   fmpz_mpoly_print_pretty :: Ptr CFmpzMPoly -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CInt
+fmpz_mpoly_print_pretty :: Ptr CFmpzMPoly ->
+                           Ptr (Ptr CChar) ->
+                           Ptr CFmpzMPolyCtx -> IO CInt
+fmpz_mpoly_print_pretty a x ctx = do
+  cs <- fmpz_mpoly_get_str_pretty a x ctx
+  s <- peekCString cs
+  free cs
+  putStr s
+  return 1
 
 -- | /fmpz_mpoly_set_str_pretty/ /A/ /str/ /x/ /ctx/ 
 -- 
@@ -1511,13 +1520,13 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_vec_autoreduction"
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_vec_autoreduction_groebner"
   fmpz_mpoly_vec_autoreduction_groebner :: Ptr CFmpzMPolyVec -> Ptr CFmpzMPolyVec -> Ptr CFmpzMPolyCtx -> IO ()
 
--- | /fmpz_mpoly_select_pop_pair/ /pairs/ /G/ /ctx/ 
--- 
--- Given a vector /pairs/ of indices \((i, j)\) into /G/, selects one pair
--- for elimination in Buchberger\'s algorithm. The pair is removed from
--- /pairs/ and returned.
-foreign import ccall "fmpz_mpoly.h fmpz_mpoly_select_pop_pair"
-  fmpz_mpoly_select_pop_pair :: Ptr CPairs -> Ptr CFmpzMPolyVec -> Ptr CFmpzMPolyCtx -> IO (Ptr CPair)
+-- -- | /fmpz_mpoly_select_pop_pair/ /pairs/ /G/ /ctx/ 
+-- -- 
+-- -- Given a vector /pairs/ of indices \((i, j)\) into /G/, selects one pair
+-- -- for elimination in Buchberger\'s algorithm. The pair is removed from
+-- -- /pairs/ and returned.
+-- foreign import ccall "fmpz_mpoly.h fmpz_mpoly_select_pop_pair"
+--   fmpz_mpoly_select_pop_pair :: Ptr CPairs -> Ptr CFmpzMPolyVec -> Ptr CFmpzMPolyCtx -> IO (Ptr CPair)
 
 -- | /fmpz_mpoly_buchberger_naive/ /G/ /F/ /ctx/ 
 -- 

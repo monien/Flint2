@@ -3,7 +3,10 @@ module Main where
 import System.IO.Unsafe
 
 import Foreign.Marshal
+import Foreign.Marshal.Array
 import Foreign.Storable
+import Foreign.Ptr (nullPtr)
+import Foreign.C.String
 
 import Test.QuickCheck
 import Control.Monad
@@ -22,6 +25,7 @@ main' = do
   putStrLn "done."
   
 main = do
+  testFmpzMPoly
   testFq
   x <- newFmpz
   withFmpz x $ \x -> do
@@ -258,4 +262,24 @@ testFmpqPoly = do
   withFmpqPoly poly $ \poly -> do
     arith_bernoulli_polynomial poly 12
   print poly
+
+testFmpzMPoly = do
+  ctx <- newFmpzMPolyCtx 3 ord_lex
+  poly <- newFmpzMPoly ctx
   
+  withFmpzMPolyCtx ctx $ \ctx -> do
+    withFmpzMPoly poly $ \poly -> do
+      forM_ [0..3] $ \j -> do 
+        fmpz_mpoly_symmetric poly j ctx
+        fmpz_mpoly_print_pretty poly nullPtr ctx
+        endl
+  endl  
+  x <- newArray =<< traverse newCString ["x", "y", "z"]
+  withFmpzMPolyCtx ctx $ \ctx -> do
+    withFmpzMPoly poly $ \poly -> do
+      forM_ [0..3] $ \j -> do 
+        fmpz_mpoly_symmetric poly j ctx
+        fmpz_mpoly_print_pretty poly x ctx
+        endl
+  endl
+      
