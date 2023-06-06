@@ -1,7 +1,9 @@
 module Data.Number.Flint (
   module Data.Number.Flint.Flint
+, module Data.Number.Flint.MPoly
 , module Data.Number.Flint.Fmpz
 , module Data.Number.Flint.Fmpz.Factor
+, module Data.Number.Flint.Fmpz.Arith
 , module Data.Number.Flint.Fmpz.Vec
 , module Data.Number.Flint.Fmpz.Mat
 , module Data.Number.Flint.Fmpz.Poly
@@ -25,8 +27,10 @@ module Data.Number.Flint (
 ) where
 
 import Data.Number.Flint.Flint
+import Data.Number.Flint.MPoly
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Factor
+import Data.Number.Flint.Fmpz.Arith
 import Data.Number.Flint.Fmpz.Vec
 import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpz.Poly

@@ -22,6 +22,7 @@ main' = do
   putStrLn "done."
   
 main = do
+  testFq
   x <- newFmpz
   withFmpz x $ \x -> do
     fmpz_set_ui x 7
@@ -216,17 +217,45 @@ testHilbert = do
           print $ factor b
 
 testPerm = do
-  p <- _perm_init 4
-  q <- _perm_init 4
-  a <- peekArray 4 p
+  let n = 6
+  p <- _perm_init n
+  q <- _perm_init n
+  a <- peekArray (fromIntegral n) p
   print a
-  pokeArray p [3, 0, 1, 2]
-  _perm_print p 4
-  putStr "\n"
-  _perm_compose p p p 4
-  _perm_print q 4
-  putStr "\n"
-  _perm_compose q p p 4
-  _perm_print q 4
-  putStr "\n"
+  pokeArray p [3, 0, 1, 2, 5, 4]
+  _perm_print p n
+  endl
+  _perm_compose q p p n
+  _perm_print q n
+  endl
+  _perm_compose q p p n
+  _perm_compose q q p n
+  _perm_print q n
+  endl
 
+testFq = do
+  let poly = fromList [0, 3, 1] :: FmpzPoly
+  let p = 7 :: Fmpz
+  ctx <- newFqCtx p 4 "a"
+  x <- newFq ctx
+  tmp <- newFq ctx
+  withFqCtx ctx $ \ctx -> do
+    withFq x $ \x -> do
+      withFq tmp $ \tmp -> do 
+        withFmpzPoly poly $ \poly -> fq_set x poly ctx
+        fq_print_pretty x ctx
+        endl
+        endl
+        forM_ [0..4] $ \j -> do 
+          fq_frobenius tmp x j ctx
+          putStr $ show j ++ " "
+          fq_print_pretty tmp ctx
+          endl
+        endl
+
+testFmpqPoly = do
+  poly <- newFmpqPoly
+  withFmpqPoly poly $ \poly -> do
+    arith_bernoulli_polynomial poly 12
+  print poly
+  

@@ -146,10 +146,10 @@ instance Storable CPadic where
   sizeOf _ = #{size padic_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment padic_t}
-  peek ptr = return CPadic
-    `ap` #{peek padic_struct, u} ptr
-    `ap` #{peek padic_struct, v} ptr
-    `ap` #{peek padic_struct, N} ptr
+  peek ptr = CPadic
+    <$> #{peek padic_struct, u} ptr
+    <*> #{peek padic_struct, v} ptr
+    <*> #{peek padic_struct, N} ptr
   poke ptr (CPadic u v n) = do
     #{poke padic_struct, u} ptr u
     #{poke padic_struct, v} ptr v
@@ -208,13 +208,13 @@ instance Storable CPadicCtx where
   sizeOf _ = #{size padic_ctx_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment padic_ctx_t}
-  peek ptr = return CPadicCtx
-    `ap` (return $ castPtr ptr)
-    `ap` #{peek padic_ctx_struct, pinv } ptr
-    `ap` #{peek padic_ctx_struct, pow  } ptr
-    `ap` #{peek padic_ctx_struct, min  } ptr
-    `ap` #{peek padic_ctx_struct, max  } ptr
-    `ap` #{peek padic_ctx_struct, mode } ptr
+  peek ptr = CPadicCtx
+    <$> (return $ castPtr ptr)
+    <*> #{peek padic_ctx_struct, pinv } ptr
+    <*> #{peek padic_ctx_struct, pow  } ptr
+    <*> #{peek padic_ctx_struct, min  } ptr
+    <*> #{peek padic_ctx_struct, max  } ptr
+    <*> #{peek padic_ctx_struct, mode } ptr
   poke = undefined
 
 -- | Create p-adic context with prime \(p\), precomputed powers \(p^{min}\)
@@ -916,7 +916,7 @@ foreign import ccall "padic.h _padic_print"
 -- 
 -- In the current implementation, always returns \(1\).
 padic_print :: Ptr CPadic -> Ptr CPadicCtx -> IO CInt
-padic_print x ctx = printCStr (flip (padic_get_str nullPtr) ctx) x where
+padic_print x ctx = printCStr (flip (padic_get_str nullPtr) ctx) x
 
 -- | /padic_debug/ /op/ 
 -- 

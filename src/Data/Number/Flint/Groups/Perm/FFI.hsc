@@ -107,7 +107,7 @@ foreign import ccall "perm.h _perm_randtest"
 -- Prints the permutation vector of length \(n\) to @stdout@.
 _perm_print :: Ptr CLong -> CLong -> IO CInt
 _perm_print p n = do
-  a <- peekArray 4 p
+  a <- peekArray (fromIntegral n) p
   putStr $ show n ++ " "
   forM_ a $ \x -> putStr $ " " ++ show x
   return 1

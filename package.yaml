@@ -31,6 +31,7 @@ library:
   exposed-modules:
    - Data.Number.Flint
    - Data.Number.Flint.Flint
+   - Data.Number.Flint.MPoly
    - Data.Number.Flint.Fmpz
    - Data.Number.Flint.Fmpz.Arith
    - Data.Number.Flint.Fmpz.Factor
@@ -65,7 +66,8 @@ library:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
    - Data.Number.Flint.Flint.External.Mpfr.FFI 
-   - Data.Number.Flint.Flint.Internal.FFI 
+   - Data.Number.Flint.Flint.Internal.FFI
+   - Data.Number.Flint.MPoly.FFI
    - Data.Number.Flint.Fmpz.FFI
    - Data.Number.Flint.Fmpz.Arith.FFI
    - Data.Number.Flint.Fmpz.Factor.FFI
