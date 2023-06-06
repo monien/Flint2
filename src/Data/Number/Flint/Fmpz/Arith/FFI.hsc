@@ -38,30 +38,30 @@ module Data.Number.Flint.Fmpz.Arith.FFI (
   , arith_bernoulli_number_denom
   , arith_bernoulli_number_size
   , arith_bernoulli_polynomial
-  , _arith_bernoulli_number_zeta
+  --, _arith_bernoulli_number_zeta
   , _arith_bernoulli_number_vec_recursive
-  , _arith_bernoulli_number_vec_zeta
+  --, _arith_bernoulli_number_vec_zeta
   , _arith_bernoulli_number_vec_multi_mod
   -- * Euler numbers and polynomials
   , arith_euler_number
   , arith_euler_number_vec
   , arith_euler_number_size
   , arith_euler_polynomial
-  , _arith_euler_number_zeta
+  --, _arith_euler_number_zeta
   -- * Multiplicative functions
   , arith_divisors
   , arith_ramanujan_tau
   , arith_ramanujan_tau_series
   -- * Cyclotomic polynomials
-  , _arith_cos_minpoly
-  , arith_cos_minpoly
+  -- , _arith_cos_minpoly
+  -- , arith_cos_minpoly
   -- * Landau\'s function
   , arith_landau_function_vec
   -- * Number of partitions
   , arith_number_of_partitions_vec
   , arith_number_of_partitions_nmod_vec
   , arith_hrr_expsum_factored
-  , arith_number_of_partitions_mpfr
+  --, arith_number_of_partitions_mpfr
   , arith_number_of_partitions
   -- * Sums of squares
   , arith_sum_of_squares
@@ -348,23 +348,23 @@ foreign import ccall "arith.h arith_bernoulli_number_size"
 foreign import ccall "arith.h arith_bernoulli_polynomial"
   arith_bernoulli_polynomial :: Ptr CFmpqPoly -> CULong -> IO ()
 
--- | /_arith_bernoulli_number_zeta/ /num/ /den/ /n/ 
--- 
--- Sets @(num, den)@ to the reduced numerator and denominator of the
--- \(n\)-th Bernoulli number.
--- 
--- This function first computes the exact denominator and a bound for the
--- size of the numerator. It then computes an approximation of
--- \(|B_n| = 2n! \zeta(n) / (2 \pi)^n\) as a floating-point number and
--- multiplies by the denominator to to obtain a real number that rounds to
--- the exact numerator. For tiny \(n\), the numerator is looked up from a
--- table to avoid unnecessary overhead.
--- 
--- Warning: this function does not use proven precision bounds, and could
--- return the wrong results for very large \(n\). It is recommended to use
--- the Bernoulli number functions in Arb instead.
-foreign import ccall "arith.h _arith_bernoulli_number_zeta"
-  _arith_bernoulli_number_zeta :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
+-- -- | /_arith_bernoulli_number_zeta/ /num/ /den/ /n/ 
+-- -- 
+-- -- Sets @(num, den)@ to the reduced numerator and denominator of the
+-- -- \(n\)-th Bernoulli number.
+-- -- 
+-- -- This function first computes the exact denominator and a bound for the
+-- -- size of the numerator. It then computes an approximation of
+-- -- \(|B_n| = 2n! \zeta(n) / (2 \pi)^n\) as a floating-point number and
+-- -- multiplies by the denominator to to obtain a real number that rounds to
+-- -- the exact numerator. For tiny \(n\), the numerator is looked up from a
+-- -- table to avoid unnecessary overhead.
+-- -- 
+-- -- Warning: this function does not use proven precision bounds, and could
+-- -- return the wrong results for very large \(n\). It is recommended to use
+-- -- the Bernoulli number functions in Arb instead.
+-- foreign import ccall "arith.h _arith_bernoulli_number_zeta"
+--   _arith_bernoulli_number_zeta :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
 
 -- | /_arith_bernoulli_number_vec_recursive/ /num/ /den/ /n/ 
 -- 
@@ -386,13 +386,13 @@ foreign import ccall "arith.h _arith_bernoulli_number_zeta"
 foreign import ccall "arith.h _arith_bernoulli_number_vec_recursive"
   _arith_bernoulli_number_vec_recursive :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
 
--- | /_arith_bernoulli_number_vec_zeta/ /num/ /den/ /n/ 
--- 
--- Sets the elements of @num@ and @den@ to the reduced numerators and
--- denominators of \(B_0, B_1, B_2, \ldots, B_{n-1}\) inclusive. Uses
--- repeated direct calls to\\ @_arith_bernoulli_number_zeta@.
-foreign import ccall "arith.h _arith_bernoulli_number_vec_zeta"
-  _arith_bernoulli_number_vec_zeta :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
+-- -- | /_arith_bernoulli_number_vec_zeta/ /num/ /den/ /n/ 
+-- -- 
+-- -- Sets the elements of @num@ and @den@ to the reduced numerators and
+-- -- denominators of \(B_0, B_1, B_2, \ldots, B_{n-1}\) inclusive. Uses
+-- -- repeated direct calls to\\ @_arith_bernoulli_number_zeta@.
+-- foreign import ccall "arith.h _arith_bernoulli_number_vec_zeta"
+--   _arith_bernoulli_number_vec_zeta :: Ptr CFmpz -> Ptr CFmpz -> CLong -> IO ()
 
 -- | /_arith_bernoulli_number_vec_multi_mod/ /num/ /den/ /n/ 
 -- 
@@ -469,18 +469,18 @@ foreign import ccall "arith.h arith_euler_number_size"
 foreign import ccall "arith.h arith_euler_polynomial"
   arith_euler_polynomial :: Ptr CFmpqPoly -> CULong -> IO ()
 
--- | /_arith_euler_number_zeta/ /res/ /n/ 
--- 
--- Sets @res@ to the Euler number \(E_n\). For even \(n\), this function
--- uses the relation @|E_n| = \\frac{2^{n+2} n!}{\\pi^{n+1}} L(n+1)@ where
--- \(L(n+1)\) denotes the Dirichlet \(L\)-function with character
--- \(\chi = \{ 0, 1, 0, -1 \}\).
--- 
--- Warning: this function does not use proven precision bounds, and could
--- return the wrong results for very large \(n\). It is recommended to use
--- the Euler number functions in Arb instead.
-foreign import ccall "arith.h _arith_euler_number_zeta"
-  _arith_euler_number_zeta :: Ptr CFmpz -> CULong -> IO ()
+-- -- | /_arith_euler_number_zeta/ /res/ /n/ 
+-- -- 
+-- -- Sets @res@ to the Euler number \(E_n\). For even \(n\), this function
+-- -- uses the relation @|E_n| = \\frac{2^{n+2} n!}{\\pi^{n+1}} L(n+1)@ where
+-- -- \(L(n+1)\) denotes the Dirichlet \(L\)-function with character
+-- -- \(\chi = \{ 0, 1, 0, -1 \}\).
+-- -- 
+-- -- Warning: this function does not use proven precision bounds, and could
+-- -- return the wrong results for very large \(n\). It is recommended to use
+-- -- the Euler number functions in Arb instead.
+-- foreign import ccall "arith.h _arith_euler_number_zeta"
+--   _arith_euler_number_zeta :: Ptr CFmpz -> CULong -> IO ()
 
 -- Multiplicative functions ----------------------------------------------------
 
@@ -531,41 +531,41 @@ foreign import ccall "arith.h arith_ramanujan_tau_series"
 
 -- Cyclotomic polynomials ------------------------------------------------------
 
--- | /_arith_cos_minpoly/ /coeffs/ /d/ /n/ 
--- 
--- For \(n \ge 1\), sets @(coeffs, d+1)@ to the minimal polynomial
--- \(\Psi_n(x)\) of \(\cos(2 \pi / n)\), scaled to have integer
--- coefficients by multiplying by \(2^d\) (2^{d-1} when \(n\) is a power of
--- two).
--- 
--- The polynomial \(\Psi_n(x)\) is described in < [WaktinsZeitlin1993]>. As
--- proved in that paper, the roots of \(\Psi_n(x)\) for \(n \ge 3\) are
--- \(\cos(2 \pi k / n)\) where \(0 \le k < d\) and where
--- \(\gcd(k, n) = 1\).
--- 
--- To calculate \(\Psi_n(x)\), we compute the roots numerically with MPFR
--- and use a balanced product tree to form a polynomial with fixed-point
--- coefficients, i.e. an approximation of \(2^p 2^d \Psi_n(x)\).
--- 
--- To determine the precision \(p\), we note that the coefficients in
--- \(\prod_{i=1}^d (x - \alpha)\) can be bounded by the central coefficient
--- in the binomial expansion of \((x+1)^d\).
--- 
--- When \(n\) is an odd prime, we use a direct formula for the coefficients
--- (<https://mathworld.wolfram.com/TrigonometryAngles.html> ).
-foreign import ccall "arith.h _arith_cos_minpoly"
-  _arith_cos_minpoly :: Ptr CFmpz -> CLong -> CULong -> IO ()
+-- -- | /_arith_cos_minpoly/ /coeffs/ /d/ /n/ 
+-- -- 
+-- -- For \(n \ge 1\), sets @(coeffs, d+1)@ to the minimal polynomial
+-- -- \(\Psi_n(x)\) of \(\cos(2 \pi / n)\), scaled to have integer
+-- -- coefficients by multiplying by \(2^d\) (2^{d-1} when \(n\) is a power of
+-- -- two).
+-- -- 
+-- -- The polynomial \(\Psi_n(x)\) is described in < [WaktinsZeitlin1993]>. As
+-- -- proved in that paper, the roots of \(\Psi_n(x)\) for \(n \ge 3\) are
+-- -- \(\cos(2 \pi k / n)\) where \(0 \le k < d\) and where
+-- -- \(\gcd(k, n) = 1\).
+-- -- 
+-- -- To calculate \(\Psi_n(x)\), we compute the roots numerically with MPFR
+-- -- and use a balanced product tree to form a polynomial with fixed-point
+-- -- coefficients, i.e. an approximation of \(2^p 2^d \Psi_n(x)\).
+-- -- 
+-- -- To determine the precision \(p\), we note that the coefficients in
+-- -- \(\prod_{i=1}^d (x - \alpha)\) can be bounded by the central coefficient
+-- -- in the binomial expansion of \((x+1)^d\).
+-- -- 
+-- -- When \(n\) is an odd prime, we use a direct formula for the coefficients
+-- -- (<https://mathworld.wolfram.com/TrigonometryAngles.html> ).
+-- foreign import ccall "arith.h _arith_cos_minpoly"
+--   _arith_cos_minpoly :: Ptr CFmpz -> CLong -> CULong -> IO ()
 
--- | /arith_cos_minpoly/ /poly/ /n/ 
--- 
--- Sets @poly@ to the minimal polynomial \(\Psi_n(x)\) of
--- \(\cos(2 \pi / n)\), scaled to have integer coefficients. This
--- polynomial has degree 1 if \(n = 1\) or \(n = 2\), and degree
--- \(\phi(n) / 2\) otherwise.
--- 
--- We allow \(n = 0\) and define \(\Psi_0 = 1\).
-foreign import ccall "arith.h arith_cos_minpoly"
-  arith_cos_minpoly :: Ptr CFmpzPoly -> CULong -> IO ()
+-- -- | /arith_cos_minpoly/ /poly/ /n/ 
+-- -- 
+-- -- Sets @poly@ to the minimal polynomial \(\Psi_n(x)\) of
+-- -- \(\cos(2 \pi / n)\), scaled to have integer coefficients. This
+-- -- polynomial has degree 1 if \(n = 1\) or \(n = 2\), and degree
+-- -- \(\phi(n) / 2\) otherwise.
+-- -- 
+-- -- We allow \(n = 0\) and define \(\Psi_0 = 1\).
+-- foreign import ccall "arith.h arith_cos_minpoly"
+--   arith_cos_minpoly :: Ptr CFmpzPoly -> CULong -> IO ()
 
 -- Landau\'s function ----------------------------------------------------------
 
@@ -665,29 +665,29 @@ foreign import ccall "arith.h arith_hrr_expsum_factored"
 -- The remainder estimate at step \(k\) provides an upper bound for the
 -- size of the \(k\)-th term. We add \(\log_2 N\) bits to get low bits in
 -- the terms below \(0.25 / N\) in magnitude.
--- 
--- Using @arith_hrr_expsum_factored@, each \(B_k(n)\) evaluation is broken
--- down to a product of cosines of exact rational multiples of \(\pi\). We
--- transform all angles to \((0, \pi/4)\) for optimal accuracy.
--- 
--- Since the evaluation of each term involves only \(O(\log k)\)
--- multiplications and evaluations of trigonometric functions of small
--- angles, the relative rounding error is at most a few bits. We therefore
--- just add an additional \(\log_2 (C/k)\) bits for the \(U(x)\) when \(x\)
--- is large. The cancellation of terms in \(U(x)\) is of no concern, since
--- Rademacher\'s bound allows us to terminate before \(x\) becomes small.
--- 
--- This analysis should be performed in more detail to give a rigorous
--- error bound, but the precision currently implemented is almost certainly
--- sufficient, not least considering that Rademacher\'s remainder bound
--- significantly overshoots the actual values.
--- 
--- To improve performance, we switch to doubles when the working precision
--- becomes small enough. We also use a separate accumulator variable which
--- gets added to the main sum periodically, in order to avoid costly
--- updates of the full-precision result when \(n\) is large.
-foreign import ccall "arith.h arith_number_of_partitions_mpfr"
-  arith_number_of_partitions_mpfr :: Ptr CMpfr -> CULong -> IO ()
+-- -- 
+-- -- Using @arith_hrr_expsum_factored@, each \(B_k(n)\) evaluation is broken
+-- -- down to a product of cosines of exact rational multiples of \(\pi\). We
+-- -- transform all angles to \((0, \pi/4)\) for optimal accuracy.
+-- -- 
+-- -- Since the evaluation of each term involves only \(O(\log k)\)
+-- -- multiplications and evaluations of trigonometric functions of small
+-- -- angles, the relative rounding error is at most a few bits. We therefore
+-- -- just add an additional \(\log_2 (C/k)\) bits for the \(U(x)\) when \(x\)
+-- -- is large. The cancellation of terms in \(U(x)\) is of no concern, since
+-- -- Rademacher\'s bound allows us to terminate before \(x\) becomes small.
+-- -- 
+-- -- This analysis should be performed in more detail to give a rigorous
+-- -- error bound, but the precision currently implemented is almost certainly
+-- -- sufficient, not least considering that Rademacher\'s remainder bound
+-- -- significantly overshoots the actual values.
+-- -- 
+-- -- To improve performance, we switch to doubles when the working precision
+-- -- becomes small enough. We also use a separate accumulator variable which
+-- -- gets added to the main sum periodically, in order to avoid costly
+-- -- updates of the full-precision result when \(n\) is large.
+-- foreign import ccall "arith.h arith_number_of_partitions_mpfr"
+--   arith_number_of_partitions_mpfr :: Ptr CMpfr -> CULong -> IO ()
 
 -- | /arith_number_of_partitions/ /x/ /n/ 
 -- 
