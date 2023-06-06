@@ -117,6 +117,7 @@ newMPolyCtx nvars ord = do
   addForeignPtrFinalizer p_mpoly_ctx_clear x
   return $ MPolyCtx x
 
+-- | Use a new `MPolyCtx` structure.
 withMPolyCtx (MPolyCtx ctx) f = do
   withForeignPtr ctx $ \pctx -> (MPolyCtx ctx,) <$> f pctx
   

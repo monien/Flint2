@@ -147,13 +147,12 @@ type CFq = CFmpzPoly
 
 -- | Create a new `Fq` with context `ctx`.
 newFq :: FqCtx -> IO Fq
-newFq ctx = do
+newFq ctx@(FqCtx pctx) = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x -> do
     withFqCtx ctx $ \ctx -> do
       fq_init x ctx
-      p_ctx <- newForeignPtr_ ctx
-      addForeignPtrFinalizerEnv p_fq_clear x p_ctx
+      addForeignPtrFinalizerEnv p_fq_clear x pctx
   return $ Fq x
 
 -- | Use `Fq`.

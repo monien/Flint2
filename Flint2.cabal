@@ -37,6 +37,7 @@ library
       Data.Number.Flint.Fmpz.Vec
       Data.Number.Flint.Fmpz.Poly
       Data.Number.Flint.Fmpz.Poly.Factor
+      Data.Number.Flint.Fmpz.MPoly
       Data.Number.Flint.Fmpz.LLL
       Data.Number.Flint.Fmpz.Mod
       Data.Number.Flint.Fmpz.Mod.Poly
@@ -73,6 +74,7 @@ library
       Data.Number.Flint.Fmpz.Vec.FFI
       Data.Number.Flint.Fmpz.Poly.FFI
       Data.Number.Flint.Fmpz.Poly.Factor.FFI
+      Data.Number.Flint.Fmpz.MPoly.FFI
       Data.Number.Flint.Fmpz.LLL.FFI
       Data.Number.Flint.Fmpz.Mod.FFI
       Data.Number.Flint.Fmpz.Mod.Poly.FFI
