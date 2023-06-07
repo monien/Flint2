@@ -39,6 +39,7 @@ library
       Data.Number.Flint.Fmpz.Poly.Factor
       Data.Number.Flint.Fmpz.MPoly
       Data.Number.Flint.Fmpz.MPoly.Factor
+      Data.Number.Flint.Fmpz.MPoly.Q
       Data.Number.Flint.Fmpz.LLL
       Data.Number.Flint.Fmpz.Mod
       Data.Number.Flint.Fmpz.Mod.Poly
@@ -77,6 +78,7 @@ library
       Data.Number.Flint.Fmpz.Poly.Factor.FFI
       Data.Number.Flint.Fmpz.MPoly.FFI
       Data.Number.Flint.Fmpz.MPoly.Factor.FFI
+      Data.Number.Flint.Fmpz.MPoly.Q.FFI
       Data.Number.Flint.Fmpz.LLL.FFI
       Data.Number.Flint.Fmpz.Mod.FFI
       Data.Number.Flint.Fmpz.Mod.Poly.FFI
@@ -135,7 +137,6 @@ executable flint_test
       Fmpz
       FmpzFactor
       FmpzPoly
-      NF
       UFD
       Paths_Flint2
   hs-source-dirs:
@@ -146,6 +147,7 @@ executable flint_test
       Flint2
     , QuickCheck
     , base >=4.7 && <5
+    , mtl
   default-language: Haskell2010
 
 test-suite Flint2-test

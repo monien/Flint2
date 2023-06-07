@@ -23,6 +23,7 @@ executables:
     main: Main.hs
     dependencies: 
     - QuickCheck
+    - mtl
     - Flint2
     extra-libraries: flint, gmp, mpfr
       
@@ -41,6 +42,7 @@ library:
    - Data.Number.Flint.Fmpz.Poly.Factor
    - Data.Number.Flint.Fmpz.MPoly
    - Data.Number.Flint.Fmpz.MPoly.Factor
+   - Data.Number.Flint.Fmpz.MPoly.Q
    - Data.Number.Flint.Fmpz.LLL
    - Data.Number.Flint.Fmpz.Mod
    - Data.Number.Flint.Fmpz.Mod.Poly
@@ -78,7 +80,8 @@ library:
    - Data.Number.Flint.Fmpz.Poly.FFI
    - Data.Number.Flint.Fmpz.Poly.Factor.FFI
    - Data.Number.Flint.Fmpz.MPoly.FFI
-   - Data.Number.Flint.Fmpz.MPoly.Factor.FFI 
+   - Data.Number.Flint.Fmpz.MPoly.Factor.FFI
+   - Data.Number.Flint.Fmpz.MPoly.Q.FFI 
    - Data.Number.Flint.Fmpz.LLL.FFI
    - Data.Number.Flint.Fmpz.Mod.FFI
    - Data.Number.Flint.Fmpz.Mod.Poly.FFI
