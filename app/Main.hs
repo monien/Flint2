@@ -342,3 +342,15 @@ mkGen j ctx = do
     withFmpzMPolyQ r $ \r -> do
       fmpz_mpoly_q_gen r j ctx
   return r
+
+testArb = do
+  let prec = 1024
+  x <- newArb
+  withArb x $ \x -> do
+    arb_const_pi x prec
+    arb_sqrt x x prec
+    arb_printn x prec arb_str_no_radius
+    endl
+    arb_mul x x x prec
+    arb_printn x prec arb_str_no_radius
+    endl

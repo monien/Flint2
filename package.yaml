@@ -66,6 +66,9 @@ library:
    - Data.Number.Flint.Support.D.Mat
    - Data.Number.Flint.Support.Mpf.Mat
    - Data.Number.Flint.ThreadPool
+   - Data.Number.Flint.Arb.Types
+   - Data.Number.Flint.Arb
+   - Data.Number.Flint.Arb.Mag
   other-modules:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
@@ -103,6 +106,9 @@ library:
    - Data.Number.Flint.Support.D.Mat.FFI
    - Data.Number.Flint.Support.Mpf.Mat.FFI
    - Data.Number.Flint.ThreadPool.FFI
+   - Data.Number.Flint.Arb.Types.FFI
+   - Data.Number.Flint.Arb.FFI 
+   - Data.Number.Flint.Arb.Mag.FFI
   c-sources:
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c
@@ -124,6 +130,7 @@ library:
     - csrc/padic_mat/get_str.c
     - csrc/padic_mat/get_str_pretty.c
     - csrc/qadic/get_str_pretty.c
+    - csrc/mag/get_str.c
   build-tools: hsc2hs
   extra-libraries: flint
   
