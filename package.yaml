@@ -110,6 +110,8 @@ library:
     - csrc/fmpz_factor/clear.c
     - csrc/fmpz_factor/fprint.c
     - csrc/fmpz_factor/get_str.c
+    - csrc/fmpz_mpoly_q/fprint.c
+    - csrc/fmpz_mpoly_q/get_str_pretty.c
     - csrc/fmpz_vec/get_str.c
     - csrc/fmpz_mat/get_str.c
     - csrc/fmpz_mat/get_str_pretty.c

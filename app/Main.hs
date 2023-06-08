@@ -2,6 +2,8 @@ module Main where
 
 import System.IO.Unsafe
 
+import Data.Typeable
+
 import Foreign.Marshal
 import Foreign.Marshal.Array
 import Foreign.Storable
@@ -26,7 +28,10 @@ main' = do
   
 main = do
   testFmpzMPoly
+  testFmpzMPolyQ
   testFq
+
+testRest = do
   x <- newFmpz
   withFmpz x $ \x -> do
     fmpz_set_ui x 7
@@ -280,6 +285,60 @@ testFmpzMPoly = do
       forM_ [0..3] $ \j -> do 
         fmpz_mpoly_symmetric poly j ctx
         fmpz_mpoly_print_pretty poly x ctx
-        endl
+        endl 
   endl
-      
+
+
+testFmpzMPolyQ = do
+  ctx <- newFmpzMPolyCtx 7 ord_lex
+  num <- newFmpzMPoly ctx
+  den <- newFmpzMPoly ctx
+  r <- newFmpzMPolyQ ctx
+  print $ typeOf num
+  print $ typeOf den
+  withFmpzMPolyCtx ctx $ \ctx -> do
+    withFmpzMPoly num $ \num -> do
+      withFmpzMPoly den $ \den -> do
+        fmpz_mpoly_symmetric num 1 ctx
+        fmpz_mpoly_symmetric den 2 ctx
+        print $ typeOf num
+        print $ typeOf num
+    withFmpzMPolyQ r $ \r -> do
+      fmpz_mpoly_q_gen r 5 ctx
+      fmpz_mpoly_q_inv r r ctx
+      fmpz_mpoly_q_print_pretty r nullPtr ctx
+      endl
+  endl
+  gens <- forM [0..6] $ \j -> mkGen j ctx
+  tmp <- newFmpzMPolyQ ctx
+  print $ typeOf tmp
+  withFmpzMPolyCtx ctx $ \ctx -> do
+    withFmpzMPolyQ tmp $ \tmp -> do
+      withFmpzMPolyQ r $ \r -> do  
+        forM_ gens $ \g -> do
+          withFmpzMPolyQ g $ \g -> do
+            fmpz_mpoly_q_set r g ctx
+            fmpz_mpoly_q_inv r r ctx
+            fmpz_mpoly_q_add r r g ctx
+            fmpz_mpoly_q_add tmp tmp r ctx
+            fmpz_mpoly_q_print_pretty r nullPtr ctx
+            endl
+        putStrLn $ "\nresult of type \"" ++ show (typeOf tmp) ++ "\":\n"
+        fmpz_mpoly_q_print_pretty tmp nullPtr ctx
+        endl
+    putStrLn "\nnumerator:\n" 
+    withFmpzMPolyQNumerator tmp $ \tmp -> do
+      fmpz_mpoly_print_pretty tmp nullPtr ctx
+      endl
+    putStrLn "denominator:\n"
+    withFmpzMPolyQDenominator tmp $ \tmp -> do
+      fmpz_mpoly_print_pretty tmp nullPtr ctx
+      endl
+  endl
+        
+mkGen j ctx = do
+  r <- newFmpzMPolyQ ctx
+  withFmpzMPolyCtx ctx $ \ctx -> do
+    withFmpzMPolyQ r $ \r -> do
+      fmpz_mpoly_q_gen r j ctx
+  return r
