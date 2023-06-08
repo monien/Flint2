@@ -330,7 +330,7 @@ testFmpzMPolyQ = do
     withFmpzMPolyQNumerator tmp $ \tmp -> do
       fmpz_mpoly_print_pretty tmp nullPtr ctx
       endl
-    putStrLn "denominator:\n"
+    putStrLn "\ndenominator:\n"
     withFmpzMPolyQDenominator tmp $ \tmp -> do
       fmpz_mpoly_print_pretty tmp nullPtr ctx
       endl

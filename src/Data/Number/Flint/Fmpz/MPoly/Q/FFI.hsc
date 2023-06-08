@@ -242,12 +242,16 @@ foreign import ccall "fmpz_mpoly_q.h fmpz_mpoly_q_get_str_pretty"
   
 -- | /fmpz_mpoly_q_print_pretty/ /f/ /x/ /ctx/ 
 -- 
--- Prints /res/ to standard output. If /x/ is not /NULL/, the strings in
+-- Prints /f/ to standard output. If /x/ is not /NULL/, the strings in
 -- /x/ are used as the symbols for the variables.
 fmpz_mpoly_q_print_pretty :: Ptr CFmpzMPolyQ -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CInt
 fmpz_mpoly_q_print_pretty x vars ctx = do
   printCStr (\x -> fmpz_mpoly_q_get_str_pretty x vars ctx) x
 
+-- | /fmpz_mpoly_q_fprint_pretty/ /out/ /f/ /x/ /ctx/ 
+-- 
+-- Prints /f/ to file /out/. If /x/ is not /NULL/, the strings in
+-- /x/ are used as the symbols for the variables.
 foreign import ccall "fmpz_mpoly_q.h fmpz_mpoly_q_fprint_pretty"
   fmpz_mpoly_q_fprint_pretty :: Ptr CFile -> Ptr CFmpzMPolyQ -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CInt
 
