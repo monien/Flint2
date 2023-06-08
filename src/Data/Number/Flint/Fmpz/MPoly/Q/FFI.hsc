@@ -50,6 +50,8 @@ module Data.Number.Flint.Fmpz.MPoly.Q.FFI (
   , fmpz_mpoly_q_one
   , fmpz_mpoly_q_gen
   -- * Input and output
+  , fmpz_mpoly_q_get_str_pretty
+  , fmpz_mpoly_q_fprint_pretty
   , fmpz_mpoly_q_print_pretty
   -- * Random generation
   , fmpz_mpoly_q_randtest
@@ -121,11 +123,13 @@ newFmpzMPolyQ ctx@(FmpzMPolyCtx pctx) = do
 withFmpzMPolyQ (FmpzMPolyQ p) f = do
   withForeignPtr p $ \fp -> (FmpzMPolyQ p,) <$> f fp
 
+-- | Use the numerator of `FmpzMPolyQ`
 withFmpzMPolyQNumerator ::
   FmpzMPolyQ -> (Ptr CFmpzMPoly -> IO t) -> IO (FmpzMPolyQ, t)
 withFmpzMPolyQNumerator (FmpzMPolyQ p) f = do
   withForeignPtr p $ \fp -> (FmpzMPolyQ p,) <$> f (castPtr fp)
 
+-- | Use the denominator of `FmpzMPolyQ`
 withFmpzMPolyQDenominator ::
   FmpzMPolyQ -> (Ptr CFmpzMPoly -> IO t) -> IO (FmpzMPolyQ, t)
 withFmpzMPolyQDenominator (FmpzMPolyQ p) f = do
@@ -229,6 +233,10 @@ foreign import ccall "fmpz_mpoly_q.h fmpz_mpoly_q_gen"
 
 -- Input and output ------------------------------------------------------------
 
+-- | /fmpz_mpoly_q_get_str_pretty/ /f/ /x/ /ctx/ 
+-- 
+-- Returns string representation of /f/. If /x/ is not /NULL/, the strings in
+-- /x/ are used as the symbols for the variables.
 foreign import ccall "fmpz_mpoly_q.h fmpz_mpoly_q_get_str_pretty"
   fmpz_mpoly_q_get_str_pretty :: Ptr CFmpzMPolyQ -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CString
   
@@ -239,7 +247,10 @@ foreign import ccall "fmpz_mpoly_q.h fmpz_mpoly_q_get_str_pretty"
 fmpz_mpoly_q_print_pretty :: Ptr CFmpzMPolyQ -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CInt
 fmpz_mpoly_q_print_pretty x vars ctx = do
   printCStr (\x -> fmpz_mpoly_q_get_str_pretty x vars ctx) x
-  
+
+foreign import ccall "fmpz_mpoly_q.h fmpz_mpoly_q_fprint_pretty"
+  fmpz_mpoly_q_fprint_pretty :: Ptr CFile -> Ptr CFmpzMPolyQ -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CInt
+
 -- Random generation -----------------------------------------------------------
 
 -- | /fmpz_mpoly_q_randtest/ /res/ /state/ /length/ /coeff_bits/ /exp_bound/ /ctx/ 
