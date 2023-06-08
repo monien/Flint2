@@ -64,6 +64,13 @@ main = do
   let x = 7 :: Fmpz 
       y = 6 :: Fmpz
   print $ x*y
+  print $ factor (42 :: Fmpz)
+  
 ```
 
-which again prints 42.
+which prints 
+
+```
+42 
+[(2,1),(3,1),(7,1)]
+```
