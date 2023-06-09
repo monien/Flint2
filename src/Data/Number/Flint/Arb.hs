@@ -4,7 +4,7 @@ copyright   : (c) 2023 Hartmut Monien
 license     : BSD-style (see LICENSE)
 maintainer  : hmonien@uni-bonn.de
 
-An @arb_t@ represents a ball over the real numbers, that is, an interval
+An @Arb@ represents a ball over the real numbers, that is, an interval
 \([m \pm r] \equiv [m-r, m+r]\) where the midpoint \(m\) and the radius
 \(r\) are (extended) real numbers and \(r\) is nonnegative (possibly
 infinite). The result of an (approximate) operation done on @arb_t@
