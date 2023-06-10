@@ -30,6 +30,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb.Types
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.Mag
+, module Data.Number.Flint.Acb
 ) where
 
 import Data.Number.Flint.Flint
@@ -63,4 +64,4 @@ import Data.Number.Flint.Support.Mpf.Mat
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag
-
+import Data.Number.Flint.Acb

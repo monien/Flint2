@@ -30,6 +30,7 @@ main = do
   testFmpzMPoly
   testFmpzMPolyQ
   testFq
+  testArb
 
 testRest = do
   x <- newFmpz
@@ -345,12 +346,20 @@ mkGen j ctx = do
 
 testArb = do
   let prec = 1024
-  x <- newArb
-  withArb x $ \x -> do
-    arb_const_pi x prec
-    arb_sqrt x x prec
-    arb_printn x prec arb_str_no_radius
-    endl
-    arb_mul x x x prec
-    arb_printn x prec arb_str_no_radius
-    endl
+  withNewArb $ \x -> do
+    withNewArb $ \pi -> do
+      arb_const_pi pi prec
+      arb_sqrt x pi prec
+      arb_printn x prec arb_str_no_radius
+      endl
+      arb_mul x x x prec
+      arb_printn x prec arb_str_no_radius
+      endl
+      arb_sub x pi x prec
+      arb_printn x prec arb_str_no_radius
+      endl
+      arb_const_pi x prec
+      arb_print x
+      endl
+      arb_printd x 16
+      endl

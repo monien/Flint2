@@ -12,6 +12,7 @@ module Data.Number.Flint.Arb.FFI (
   -- * Types
     newArb
   , withArb
+  , withNewArb
   -- * Memory management
   , arb_init
   , arb_clear
@@ -399,6 +400,10 @@ newArb = do
 withArb (Arb p) f = do
   withForeignPtr p $ \fp -> (Arb p,) <$> f fp
 
+withNewArb f = do
+  x <- newArb
+  withArb x f
+
 instance Storable CArb where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size arb_t}
@@ -579,6 +584,12 @@ foreign import ccall "arb.h arb_set_str"
 foreign import ccall "arb.h arb_get_str"
   arb_get_str :: Ptr CArb -> CLong -> ArbStrOption -> IO CString
 
+foreign import ccall "arb.h arb_get_strd"
+  arb_get_strd :: Ptr CArb -> CLong -> IO CString
+
+foreign import ccall "arb.h arb_get_str_"
+  arb_get_str_ :: Ptr CArb -> IO CString
+
 -- Assignment of special values ------------------------------------------------
 
 -- | /arb_zero/ /x/ 
@@ -633,32 +644,54 @@ foreign import ccall "arb.h arb_unit_interval"
 
 -- Input and output ------------------------------------------------------------
 
--- The /arb_print.../ functions print to standard output, while
--- /arb_fprint.../ functions print to the stream /file/.
+-- | /arb_print/
 --
-foreign import ccall "arb.h arb_print"
-  arb_print :: Ptr CArb -> IO ()
+-- The /arb_print.../ function prints the internal representation to
+-- standard output.
+--
+arb_print :: Ptr CArb -> IO ()
+arb_print x = do
+  cstr <- arb_get_str_ x
+  str <- peekCString cstr
+  putStr str
+  free cstr
 
 -- | /arb_fprint/ /file/ /x/ 
 -- 
--- Prints the internal representation of /x/.
+-- Prints the internal representation of /x/ to the stream file /file/.
 foreign import ccall "arb.h arb_fprint"
   arb_fprint :: Ptr CFile -> Ptr CArb -> IO ()
 
-foreign import ccall "arb.h arb_printd"
-  arb_printd :: Ptr CArb -> CLong -> IO ()
-
+-- | /arb_printd/ /file/ /x/ /digits/ 
+-- 
+-- Prints /x/ in decimal to standard output. The printed value of the
+-- radius is not adjusted to compensate for the fact that the
+-- binary-to-decimal conversion of both the midpoint and the radius
+-- introduces additional error.
+arb_printd x prec = do
+  cstr <- arb_get_strd x prec
+  str <- peekCString cstr
+  putStr str
+  free cstr
+  
 -- | /arb_fprintd/ /file/ /x/ /digits/ 
 -- 
--- Prints /x/ in decimal. The printed value of the radius is not adjusted
--- to compensate for the fact that the binary-to-decimal conversion of both
--- the midpoint and the radius introduces additional error.
+-- Prints /x/ in decimal to stream file /file/. The printed value of
+-- the radius is not adjusted to compensate for the fact that the
+-- binary-to-decimal conversion of both the midpoint and the radius
+-- introduces additional error.
 foreign import ccall "arb.h arb_fprintd"
   arb_fprintd :: Ptr CFile -> Ptr CArb -> CLong -> IO ()
 
--- foreign import ccall "arb.h arb_printn"
---   arb_printn :: Ptr CArb -> CLong -> ArbStrOption -> IO ()
 
+-- | /arb_printn/ /file/ /x/ /digits/ /flags/ 
+-- 
+-- Prints a nice decimal representation of /x/. By default, the output
+-- shows the midpoint with a guaranteed error of at most one unit in the
+-- last decimal place. In addition, an explicit error bound is printed so
+-- that the displayed decimal interval is guaranteed to enclose /x/. See
+-- @arb_get_str@ for details.
+arb_printn :: Ptr CArb -> CLong -> ArbStrOption -> IO ()
 arb_printn x prec opt = do
   cstr <- arb_get_str x prec opt
   str <- peekCString cstr
@@ -673,7 +706,7 @@ arb_printn x prec opt = do
 -- that the displayed decimal interval is guaranteed to enclose /x/. See
 -- @arb_get_str@ for details.
 foreign import ccall "arb.h arb_fprintn"
-  arb_fprintn :: Ptr CFile -> Ptr CArb -> CLong -> CULong -> IO ()
+  arb_fprintn :: Ptr CFile -> Ptr CArb -> CLong -> ArbStrOption -> IO ()
 
 -- | /arb_dump_str/ /x/ 
 -- 
