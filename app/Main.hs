@@ -7,11 +7,13 @@ import Data.Typeable
 import Foreign.Marshal
 import Foreign.Marshal.Array
 import Foreign.Storable
-import Foreign.Ptr (nullPtr)
+import Foreign.Ptr (nullPtr, castPtr)
 import Foreign.C.String
+import Foreign.Marshal.Array (advancePtr)
 
 import Test.QuickCheck
 import Control.Monad
+import Control.Monad.Reader
 
 import Data.List (permutations)
 
@@ -33,7 +35,8 @@ main = do
   testArb
   testAcb
   testNF
-
+  testFmpzi
+  
 testRest = do
   x <- newFmpz
   withFmpz x $ \x -> do
@@ -410,3 +413,9 @@ testNF = do
         nf_elem_print_pretty x nf a
         endl
 
+testFmpzi = do
+  z <- newFmpzi
+  withFmpzi z $ \z -> do
+    fmpzi_set_si_si z 3 7
+    fmpzi_print z
+  endl

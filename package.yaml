@@ -73,6 +73,7 @@ library:
    - Data.Number.Flint.Acb
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
+   - Data.Number.Flint.NF.Fmpzi
   other-modules:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
@@ -117,6 +118,7 @@ library:
    - Data.Number.Flint.Acb.FFI
    - Data.Number.Flint.NF.FFI
    - Data.Number.Flint.NF.Elem.FFI
+   - Data.Number.Flint.NF.Fmpzi.FFI
   c-sources:
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c
