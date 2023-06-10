@@ -31,6 +31,8 @@ main = do
   testFmpzMPolyQ
   testFq
   testArb
+  testAcb
+  testNF
 
 testRest = do
   x <- newFmpz
@@ -363,3 +365,48 @@ testArb = do
       endl
       arb_printd x 16
       endl
+
+testAcb = do
+  let prec = 1024
+  withNewAcb $ \x -> do
+    acb_set_si_si x 3 7
+    acb_printn x 16 arb_str_no_radius
+    endl
+    acb_sqrt x x prec
+    acb_printn x 16 arb_str_no_radius
+    endl
+    acb_mul x x x prec
+    acb_printn x 16 arb_str_no_radius
+    endl
+    withNewArb $ \a -> do
+      acb_abs a x prec
+      arb_mul a a a prec
+      arb_printn a 16 arb_str_no_radius
+      endl
+    withNewAcb $ \pi -> do
+      withNewAcb $ \w -> do
+        acb_const_pi pi prec
+        forM_ [2..10] $ \n -> do
+          acb_pow_si w pi n prec
+          acb_set_si_si x n 0
+          acb_zeta x x prec
+          acb_div x x w prec
+          acb_inv x x prec
+          acb_printn x 32 arb_str_no_radius
+          endl
+        endl
+        
+testNF = do
+  let poly = fromList [6,-24,42,-46,55,-86,101,-73,38,-20,9,-2,1] :: FmpqPoly
+      z = fromList [0, 1] :: FmpqPoly
+  nf <- newNF poly
+  x <- newNFElem nf
+  withNF nf $ \nf -> do 
+    withNFElem x $ \x -> do
+      withFmpqPoly z $ \z -> do
+        nf_elem_set_fmpq_poly x z nf
+      nf_elem_pow x x 12 nf
+      withCString "a" $ \a -> do
+        nf_elem_print_pretty x nf a
+        endl
+

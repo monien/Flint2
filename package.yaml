@@ -71,6 +71,8 @@ library:
    - Data.Number.Flint.Arb.Mag
    - Data.Number.Flint.Acb.Types
    - Data.Number.Flint.Acb
+   - Data.Number.Flint.NF
+   - Data.Number.Flint.NF.Elem
   other-modules:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
@@ -112,7 +114,9 @@ library:
    - Data.Number.Flint.Arb.FFI 
    - Data.Number.Flint.Arb.Mag.FFI
    - Data.Number.Flint.Acb.Types.FFI
-   - Data.Number.Flint.Acb.FFI 
+   - Data.Number.Flint.Acb.FFI
+   - Data.Number.Flint.NF.FFI
+   - Data.Number.Flint.NF.Elem.FFI
   c-sources:
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c
