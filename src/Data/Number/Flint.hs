@@ -31,6 +31,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.Mag
 , module Data.Number.Flint.Acb
+, module Data.Number.Flint.Acb.Poly
 , module Data.Number.Flint.NF
 , module Data.Number.Flint.NF.Elem
 , module Data.Number.Flint.NF.Fmpzi
@@ -68,6 +69,7 @@ import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag
 import Data.Number.Flint.Acb
+import Data.Number.Flint.Acb.Poly
 import Data.Number.Flint.NF
 import Data.Number.Flint.NF.Elem
 import Data.Number.Flint.NF.Fmpzi

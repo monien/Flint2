@@ -431,3 +431,23 @@ testFmpzi = do
     fmpzi_set_si_si z 3 7
     fmpzi_print z
   endl
+
+testAcbPoly = do
+  let prec = 1024
+      maxIter = 100
+      poly = fromList [7, 0, 5, 1] :: FmpzPoly
+  cpoly <- newAcbPoly
+  withFmpzPoly poly $ \poly -> do
+    withCString "x" $ \x -> fmpz_poly_print_pretty poly x
+    endl
+    withAcbPoly cpoly $ \cpoly -> do
+      acb_poly_set_fmpz_poly cpoly poly prec
+      acb_poly_printd cpoly 16
+      endl
+      degree <- acb_poly_degree cpoly
+      roots <- _acb_vec_init degree
+      n <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
+      print n
+      forM_ [0..n-1] $ \j -> do
+        acb_printd (roots `advancePtr` (fromIntegral j)) 16
+        endl

@@ -73,6 +73,7 @@ library:
    - Data.Number.Flint.Arb.Mag
    - Data.Number.Flint.Acb.Types
    - Data.Number.Flint.Acb
+   - Data.Number.Flint.Acb.Poly
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
    - Data.Number.Flint.NF.Fmpzi
@@ -120,6 +121,7 @@ library:
    - Data.Number.Flint.Arb.Mag.FFI
    - Data.Number.Flint.Acb.Types.FFI
    - Data.Number.Flint.Acb.FFI
+   - Data.Number.Flint.Acb.Poly.FFI
    - Data.Number.Flint.NF.FFI
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI
@@ -150,6 +152,7 @@ library:
     - csrc/acb/get_str.c
     - csrc/acb/get_strd.c
     - csrc/acb/get_strn.c
+    - csrc/acb_poly/get_strd.c
   build-tools: hsc2hs
   extra-libraries: flint
   

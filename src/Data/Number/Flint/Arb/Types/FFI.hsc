@@ -83,3 +83,9 @@ arb_str_no_radius = ArbStrOption #const ARB_STR_NO_RADIUS
 -- indicating the number of digits omitted (useful when computing
 -- values to extremely high precision).
 arb_str_condense  = ArbStrOption #const ARB_STR_CONDENSE
+
+-- arb_poly_t ------------------------------------------------------------------
+
+-- | Data structure containing the CArb pointer
+data ArbPoly = ArbPoly {-# UNPACK #-} !(ForeignPtr CArbPoly) 
+type CArbPoly = CFlint ArbPoly
