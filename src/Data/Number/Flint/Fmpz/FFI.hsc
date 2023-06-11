@@ -298,7 +298,7 @@ import Data.Functor ((<&>))
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.NMod
-import Data.Number.Flint.NMod.Poly.Struct
+import Data.Number.Flint.NMod.Types
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>

@@ -40,7 +40,6 @@ import Foreign.Marshal ( free )
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpq
-import Data.Number.Flint.NMod
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>

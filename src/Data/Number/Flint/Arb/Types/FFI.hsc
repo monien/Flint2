@@ -8,18 +8,20 @@ import Foreign.Storable
 import Foreign.Marshal ( free )
 import Foreign.Marshal.Array ( advancePtr )
 
+import Data.Number.Flint.Flint.Internal
+
 #include <flint/arf.h>
 #include <flint/arb.h>
 
 -- | Data structure containing the CMag pointer
 data Mag = Mag {-# UNPACK #-} !(ForeignPtr CMag)
-data CMag = CMag
+type CMag = CFlint Mag
 
 -- arf_t -----------------------------------------------------------------------
 
 -- | Data structure containing the CArb pointer
 data Arf = Arf {-# UNPACK #-} !(ForeignPtr CArf) 
-data CArf = CArf
+type CArf = CFlint Arf
 
 -- | Arf rounding
 newtype ArfRnd = ArfRnd {_ArfRnd :: CInt}
@@ -52,7 +54,7 @@ arf_prec_exact = ArfRnd #const ARF_PREC_EXACT
 
 -- | Data structure containing the CArb pointer
 data Arb = Arb {-# UNPACK #-} !(ForeignPtr CArb) 
-data CArb = CArb
+type CArb = CFlint Arb
 
 -- | string options
 newtype ArbStrOption = ArbStrOption {_ArbStrOption :: CULong}

@@ -323,8 +323,7 @@ import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpz.Mod
 import Data.Number.Flint.Fmpz.Mod.Mat
-import Data.Number.Flint.NMod
-import Data.Number.Flint.NMod.Poly
+import Data.Number.Flint.NMod.Types
 import Data.Number.Flint.ThreadPool
 
 #include <flint/flint.h>

@@ -295,8 +295,9 @@ import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpq
-import Data.Number.Flint.NMod.Poly
-import Data.Number.Flint.NMod.Poly.Factor
+
+import Data.Number.Flint.NMod.Types
+
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>

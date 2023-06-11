@@ -98,7 +98,7 @@ import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Poly
 import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpq.Mat
-import Data.Number.Flint.NMod.Poly
+import Data.Number.Flint.NMod.Types
 import Data.Number.Flint.NF
 
 #include <flint/nf_elem.h>

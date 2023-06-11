@@ -218,9 +218,7 @@ import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpq
-import Data.Number.Flint.NMod
-import Data.Number.Flint.NMod.Poly.Struct
-import Data.Number.Flint.NMod.Mat.Struct
+import Data.Number.Flint.NMod.Types
 import Data.Number.Flint.Support.D.Mat
 import Data.Number.Flint.Support.Mpf.Mat
 

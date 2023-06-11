@@ -412,7 +412,19 @@ testNF = do
       withCString "a" $ \a -> do
         nf_elem_print_pretty x nf a
         endl
+        r <- nfRep x nf
+        withFmpqMat r $ \r -> do
+          fmpq_mat_print r
 
+nfRep x nf = do
+  (_, n) <- withNewFmpqPoly $ \poly -> do
+    nf_elem_get_fmpq_poly poly x nf
+    fmpq_poly_degree poly
+  a <- newFmpqMat (n+1) (n+1)
+  withFmpqMat a $ \a -> do
+    nf_elem_rep_mat a x nf
+  return a
+    
 testFmpzi = do
   z <- newFmpzi
   withFmpzi z $ \z -> do

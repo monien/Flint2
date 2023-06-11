@@ -1,0 +1,7 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
+
+module Data.Number.Flint.NMod.Types (
+  module Data.Number.Flint.NMod.Types.FFI
+  ) where
+
+import Data.Number.Flint.NMod.Types.FFI

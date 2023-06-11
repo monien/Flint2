@@ -1,5 +1,5 @@
 module Data.Number.Flint.NMod.Poly.Factor (
-  module Data.Number.Flint.NMod.Poly.Factor.Struct
+  module Data.Number.Flint.NMod.Poly.Factor.FFI
   ) where
 
-import Data.Number.Flint.NMod.Poly.Factor.Struct
+import Data.Number.Flint.NMod.Poly.Factor.FFI
