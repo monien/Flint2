@@ -14,6 +14,7 @@ module Data.Number.Flint.Acb.Poly.FFI (
   , CAcbPoly (..)
   , newAcbPoly
   , withAcbPoly
+  , withNewAcbPoly
   -- * Memory management
   , acb_poly_init
   , acb_poly_clear
@@ -322,11 +323,17 @@ newAcbPoly = do
   addForeignPtrFinalizer p_acb_poly_clear p
   return $ AcbPoly p
 
--- | Access to the C pointer in `AcbPoly` structure.
+-- | Use `AcbPoly` in f.
 {-# INLINE withAcbPoly #-}
 withAcbPoly (AcbPoly p) f = do
   withForeignPtr p $ \fp -> f fp >>= return . (AcbPoly p,)
 
+-- | Use new `AcbPoly` ptr in f.
+{-# INLINE withNewAcbPoly #-}
+withNewAcbPoly f = do
+  p <- newAcbPoly
+  withAcbPoly p f
+  
 instance Storable CAcbPoly where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size acb_poly_t}

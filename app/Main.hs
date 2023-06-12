@@ -442,12 +442,18 @@ testAcbPoly = do
     endl
     withAcbPoly cpoly $ \cpoly -> do
       acb_poly_set_fmpz_poly cpoly poly prec
+      putStrLn "complex polynomial."
       acb_poly_printd cpoly 16
       endl
       degree <- acb_poly_degree cpoly
       roots <- _acb_vec_init degree
       n <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
-      print n
+      putStrLn $ "found " ++ show n ++ " roots:"
       forM_ [0..n-1] $ \j -> do
         acb_printd (roots `advancePtr` (fromIntegral j)) 16
+        endl
+      putStrLn "reconstructed polynomial."
+      withNewAcbPoly $ \tmp -> do
+        acb_poly_product_roots tmp roots n prec
+        acb_poly_printd tmp 16
         endl
