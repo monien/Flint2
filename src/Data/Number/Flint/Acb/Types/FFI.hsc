@@ -9,9 +9,10 @@ import Foreign.Marshal ( free )
 import Foreign.Marshal.Array ( advancePtr )
 
 import Data.Number.Flint.Flint.Internal
+import Data.Number.Flint.Arb.Types
 
 #include <flint/acb.h>
 
 -- | Data structure containing the CMag pointer
 data Acb = Acb {-# UNPACK #-} !(ForeignPtr CAcb)
-type CAcb = CFlint Acb
+data CAcb = CAcb Arb Arb

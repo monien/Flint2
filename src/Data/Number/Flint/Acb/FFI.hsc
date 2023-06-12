@@ -310,7 +310,7 @@ instance Storable CAcb where
 withNewAcb f = do
   x <- newAcb
   withAcb x f
-  
+
 -- Memory management -----------------------------------------------------------
 
 -- | /acb_init/ /x/ 

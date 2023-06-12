@@ -436,10 +436,9 @@ testAcbPoly = do
   let prec = 1024
       maxIter = 100
       poly = fromList [7, 0, 5, 1] :: FmpzPoly
+  print poly
   cpoly <- newAcbPoly
   withFmpzPoly poly $ \poly -> do
-    withCString "x" $ \x -> fmpz_poly_print_pretty poly x
-    endl
     withAcbPoly cpoly $ \cpoly -> do
       acb_poly_set_fmpz_poly cpoly poly prec
       putStrLn "complex polynomial."
@@ -457,3 +456,29 @@ testAcbPoly = do
         acb_poly_product_roots tmp roots n prec
         acb_poly_printd tmp 16
         endl
+      _acb_vec_clear roots degree
+
+testAcbHypGeom = do
+  let prec = 1024
+      maxIter = 100
+      poly = hermitePolynomial 7
+  print poly
+  cpoly <- newAcbPoly
+  withFmpzPoly poly $ \poly -> do
+    withAcbPoly cpoly $ \cpoly -> do
+      withNewAcb $ \z -> do
+        acb_poly_set_fmpz_poly cpoly poly prec
+        degree <- acb_poly_degree cpoly
+        roots <- _acb_vec_init degree
+        n <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
+        m <- newAcb
+        withAcb m $ \m -> do
+          acb_set_ui m 7
+          forM_ [0..n-1] $ \j -> do
+            acb_set z (roots `advancePtr` (fromIntegral j))
+            acb_printd z 16
+            endl
+            acb_hypgeom_hermite_h z m z prec
+            acb_printd z 16
+            endl
+            endl
