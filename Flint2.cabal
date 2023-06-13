@@ -170,6 +170,7 @@ executable flint_test
       Fmpz
       FmpzFactor
       FmpzPoly
+      RF
       UFD
       Paths_Flint2
   hs-source-dirs:
