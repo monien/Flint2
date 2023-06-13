@@ -26,7 +26,11 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Padic.Mat
 , module Data.Number.Flint.Qadic
 , module Data.Number.Flint.Support.D.Mat
+, module Data.Number.Flint.Support.D.Vec
 , module Data.Number.Flint.Support.Mpf.Mat
+, module Data.Number.Flint.Support.Mpf.Vec
+, module Data.Number.Flint.Support.Mpfr.Mat
+, module Data.Number.Flint.Support.Mpfr.Vec
 , module Data.Number.Flint.Arb.Types
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.Mag
@@ -65,7 +69,11 @@ import Data.Number.Flint.Padic.Poly
 import Data.Number.Flint.Padic.Mat
 import Data.Number.Flint.Qadic
 import Data.Number.Flint.Support.D.Mat
+import Data.Number.Flint.Support.D.Vec
 import Data.Number.Flint.Support.Mpf.Mat
+import Data.Number.Flint.Support.Mpf.Vec
+import Data.Number.Flint.Support.Mpfr.Mat
+import Data.Number.Flint.Support.Mpfr.Vec
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag

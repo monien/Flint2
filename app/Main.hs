@@ -482,3 +482,9 @@ testAcbHypGeom = do
             acb_printd z 16
             endl
             endl
+
+bernoulliNumber n = unsafePerformIO $ do
+  b <- newFmpq
+  withFmpq b $ \b -> do
+    arith_bernoulli_number b $ (fromIntegral n)
+  return b
