@@ -57,6 +57,7 @@ library
       Data.Number.Flint.NMod.Poly
       Data.Number.Flint.NMod.Poly.Factor
       Data.Number.Flint.Groups.Perm
+      Data.Number.Flint.Groups.DirichletChar
       Data.Number.Flint.Fq
       Data.Number.Flint.Padic
       Data.Number.Flint.Padic.Poly
@@ -110,6 +111,7 @@ library
       Data.Number.Flint.NMod.Poly.FFI
       Data.Number.Flint.NMod.Poly.Factor.FFI
       Data.Number.Flint.Groups.Perm.FFI
+      Data.Number.Flint.Groups.DirichletChar.FFI
       Data.Number.Flint.Fq.FFI
       Data.Number.Flint.Padic.FFI
       Data.Number.Flint.Padic.Poly.FFI
