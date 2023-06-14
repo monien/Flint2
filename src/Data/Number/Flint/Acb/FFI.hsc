@@ -13,6 +13,8 @@ module Data.Number.Flint.Acb.FFI (
     newAcb
   , withAcb
   , withNewAcb
+  , withAcbRe
+  , withAcbIm
   -- * Memory management
   , acb_init
   , acb_clear
@@ -278,6 +280,9 @@ import Foreign.C.Types
 import Foreign.C.String
 import Foreign.Storable
 import Foreign.Marshal.Alloc (free)
+import Foreign.Marshal.Array (advancePtr)
+
+import Data.Typeable
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -290,14 +295,33 @@ import Data.Number.Flint.Acb.Types
 
 -- Types -----------------------------------------------------------------------
 
+-- | Create new `Acb`
 newAcb = do
   x <- mallocForeignPtr
   withForeignPtr x acb_init
   addForeignPtrFinalizer p_acb_clear x
   return $ Acb x
 
+-- | Apply function `f` to `Acb`
 withAcb (Acb p) f = do
   withForeignPtr p $ \fp -> (Acb p,) <$> f fp
+
+-- | Apply function `f` to new `Acb`
+withNewAcb f = do
+  x <- newAcb
+  withAcb x f
+
+-- | Apply function `f` to real part of `Acb`
+withAcbRe :: Acb -> (Ptr CArb -> IO t) -> IO (Acb, t)
+withAcbRe (Acb p) f = do
+   withForeignPtr p $ \fp -> do
+     withForeignPtr p $ \fp -> (Acb p,) <$> f (castPtr fp)
+
+-- | Apply function `f` to imaginary part of `Acb`
+withAcbIm :: Acb -> (Ptr CArb -> IO t) -> IO (Acb, t)
+withAcbIm (Acb p) f = do
+   withForeignPtr p $ \fp -> do
+     withForeignPtr p $ \fp -> (Acb p,) <$> f (castPtr fp `advancePtr` 1)
 
 instance Storable CAcb where
   {-# INLINE sizeOf #-}
@@ -306,10 +330,6 @@ instance Storable CAcb where
   alignment _ = #{alignment acb_t}
   peek = error "CAcb.peek undefined."
   poke = error "CAcb.poke undefined."
-
-withNewAcb f = do
-  x <- newAcb
-  withAcb x f
 
 -- Memory management -----------------------------------------------------------
 

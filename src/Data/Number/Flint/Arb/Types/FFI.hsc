@@ -54,8 +54,16 @@ arf_prec_exact = ArfRnd #const ARF_PREC_EXACT
 
 -- | Data structure containing the CArb pointer
 data Arb = Arb {-# UNPACK #-} !(ForeignPtr CArb) 
-type CArb = CFlint Arb
+data CArb = CArb
 
+instance Storable CArb where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size arb_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment arb_t}
+  peek = error "CArb.peek undefined."
+  poke = error "CArb.poke undefined."
+  
 -- | string options
 newtype ArbStrOption = ArbStrOption {_ArbStrOption :: CULong}
   deriving (Show, Eq)

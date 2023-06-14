@@ -508,9 +508,21 @@ testSeries = do
       acb_poly_sin_series poly x 32 prec
       acb_poly_printd poly 16
       endl
-      withNewAcb $ \result -> do
+      result <- newAcb
+      withAcb result $ \result -> do
         acb_one result
         acb_poly_evaluate_horner result poly result prec
         putStrLn "series evaluation at 1:"
         acb_printd result 16
+        endl
+      withAcbRe result $ \r -> do
+        arb_printd r 16
+        endl
+      withAcbIm result $ \r -> do
+        arb_printd r 16
+        endl
+      withNewArb $ \y -> do
+        arb_one y
+        arb_sin y y prec
+        arb_printd y 16
         endl

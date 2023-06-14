@@ -15,4 +15,4 @@ import Data.Number.Flint.Arb.Types
 
 -- | Data structure containing the CMag pointer
 data Acb = Acb {-# UNPACK #-} !(ForeignPtr CAcb)
-data CAcb = CAcb Arb Arb
+data CAcb = CAcb CArb CArb

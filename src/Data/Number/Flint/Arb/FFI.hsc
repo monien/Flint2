@@ -404,14 +404,6 @@ withNewArb f = do
   x <- newArb
   withArb x f
 
-instance Storable CArb where
-  {-# INLINE sizeOf #-}
-  sizeOf _ = #{size arb_t}
-  {-# INLINE alignment #-}
-  alignment _ = #{alignment arb_t}
-  peek = error "CArb.peek undefined."
-  poke = error "CArb.poke undefined."
-  
 -- Memory management -----------------------------------------------------------
 
 -- | /arb_init/ /x/ 
