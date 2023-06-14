@@ -21,7 +21,7 @@ module Data.Number.Flint.NMod.Mat.FFI (
   , nmod_mat_swap
   , nmod_mat_swap_entrywise
   -- * Basic properties and manipulation
-  , nmod_mat_entry
+  -- , nmod_mat_entry
   , nmod_mat_get_entry
   , nmod_mat_entry_ptr
   , nmod_mat_set_entry
@@ -124,9 +124,10 @@ import Control.Monad
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Ptr ( Ptr, FunPtr, plusPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
+import Foreign.Marshal.Array ( advancePtr)
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.ThreadPool
@@ -203,13 +204,17 @@ foreign import ccall "nmod_mat.h nmod_mat_swap_entrywise"
 
 -- Basic properties and manipulation -------------------------------------------
 
--- | /nmod_mat_entry/ /mat/ /i/ /j/ 
--- 
--- Directly accesses the entry in @mat@ in row \(i\) and column \(j\),
--- indexed from zero. No bounds checking is performed. This macro can be
--- used both for reading and writing coefficients.
-foreign import ccall "nmod_mat.h nmod_mat_entry"
-  nmod_mat_entry :: Ptr CNModMat -> CLong -> CLong -> IO (Ptr CNMod)
+-- -- | /nmod_mat_entry/ /mat/ /i/ /j/ 
+-- -- 
+-- -- Directly accesses the entry in @mat@ in row \(i\) and column \(j\),
+-- -- indexed from zero. No bounds checking is performed. This macro can be
+-- -- used both for reading and writing coefficients.
+-- foreign import ccall "nmod_mat.h nmod_mat_entry"
+--   nmod_mat_entry :: Ptr CNModMat -> CLong -> CLong -> IO (Ptr CNMod)
+  
+-- nmod_mat_entry mat i j = do
+--   ncols <- nmod_mat_nrows mat
+--   return $ (castPtr mat) `advancePtr` (fromIntegral (ncols * i + ))
 
 -- | /nmod_mat_get_entry/ /mat/ /i/ /j/ 
 -- 

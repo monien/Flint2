@@ -27,6 +27,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.NMod.Vec
 -- * Groups and other structures
 , module Data.Number.Flint.Groups.Perm
+, module Data.Number.Flint.Groups.Qfb
+, module Data.Number.Flint.Groups.Dirichlet
 -- * Number fields and algebraic numbers
 , module Data.Number.Flint.NF
 , module Data.Number.Flint.NF.Elem
@@ -83,6 +85,8 @@ import Data.Number.Flint.NMod.Mat
 import Data.Number.Flint.NMod.Vec
 -- Groups and other structures
 import Data.Number.Flint.Groups.Perm
+import Data.Number.Flint.Groups.Qfb
+import Data.Number.Flint.Groups.Dirichlet
 -- Number fields and algebraic structures
 import Data.Number.Flint.NF
 import Data.Number.Flint.NF.Elem

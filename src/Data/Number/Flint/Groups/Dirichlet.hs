@@ -1,5 +1,5 @@
 {- |
-module      : Data.Number.Flint.DirichletChar
+module      : Data.Number.Flint.Dirichlet
 copyright   :  (c) 2023 Hartmut Monien
 license     :  BSD-style (see LICENSE)
 maintainer  : hmonien@uni-bonn.de
@@ -37,9 +37,9 @@ logarithms.
 
 -}
 
-module Data.Number.Flint.Groups.DirichletChar (
-  module Data.Number.Flint.Groups.DirichletChar.FFI,
+module Data.Number.Flint.Groups.Dirichlet (
+  module Data.Number.Flint.Groups.Dirichlet.FFI,
 ) where
 
-import Data.Number.Flint.Groups.DirichletChar.FFI
+import Data.Number.Flint.Groups.Dirichlet.FFI
 

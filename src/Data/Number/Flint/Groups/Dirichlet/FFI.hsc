@@ -8,7 +8,7 @@
   , ScopedTypeVariables
   #-}
 
-module Data.Number.Flint.Groups.DirichletChar.FFI (
+module Data.Number.Flint.Groups.Dirichlet.FFI (
   -- * Dirichlet characters
   -- * Multiplicative group modulo /q/
     DirichletGroup (..)

@@ -15,7 +15,6 @@ module Data.Number.Flint.Support.Mpfr.Mat.FFI (
   , mpfr_mat_init
   , mpfr_mat_clear
   -- * Basic manipulation
-  , mpfr_mat_entry
   , mpfr_mat_swap
   , mpfr_mat_swap_entrywise
   , mpfr_mat_set
@@ -33,6 +32,7 @@ module Data.Number.Flint.Support.Mpfr.Mat.FFI (
 import Foreign.C.Types
 import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.Marshal.Array
 import Foreign.Storable
 
 import Data.Number.Flint.Flint
@@ -88,15 +88,6 @@ foreign import ccall "mpfr_mat.h &mpfr_mat_clear"
 
 -- Basic manipulation ----------------------------------------------------------
 
--- | /mpfr_mat_entry/ /mat/ /i/ /j/ 
--- 
--- Return a reference to the entry at row \(i\) and column \(j\) of the
--- given matrix. The values \(i\) and \(j\) must be within the bounds for
--- the matrix. The reference can be used to either return or set the given
--- entry.
-foreign import ccall "mpfr_mat.h mpfr_mat_entry"
-  mpfr_mat_entry :: Ptr CMpfrMat -> CLong -> CLong -> IO (Ptr (Ptr CMpfr))
-
 -- | /mpfr_mat_swap/ /mat1/ /mat2/ 
 -- 
 -- Efficiently swap matrices @mat1@ and @mat2@.
@@ -107,7 +98,7 @@ foreign import ccall "mpfr_mat.h mpfr_mat_swap"
 -- 
 -- Swaps two matrices by swapping the individual entries rather than
 -- swapping the contents of the structs.
-foreign import ccall "mpfr_mat.h mpfr_mat_swap_entrywise"
+foreign import ccall "mpfr_mat.h mpfr_mat_swap_entrywise_"
   mpfr_mat_swap_entrywise :: Ptr CMpfrMat -> Ptr CMpfrMat -> IO ()
 
 -- | /mpfr_mat_set/ /mat1/ /mat2/ 

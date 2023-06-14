@@ -36,6 +36,7 @@ main = do
   testAcb
   testNF
   testFmpzi
+  testNModMat
   
 testRest = do
   x <- newFmpz
@@ -114,6 +115,12 @@ testRest = do
   
 endl = putStrLn ""
 
+testNModMat = do
+  a <- newNModMat 3 3 7
+  withNModMat a $ \a -> do
+    d <- nmod_mat_det a
+    print d
+    
 testPadic = do
   let p = 7 :: Fmpz
   withNewPadicCtx p 0 128 padic_series $ \ctx -> do

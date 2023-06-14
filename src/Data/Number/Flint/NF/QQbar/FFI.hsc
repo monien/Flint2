@@ -390,8 +390,8 @@ foreign import ccall "qqbar.h qqbar_get_str"
 foreign import ccall "qqbar.h qqbar_get_strn"
   qqbar_get_strn :: Ptr CQQbar -> CLong -> IO CString
 
-foreign import ccall "qqbar.h qqbar_get_strd"
-  qqbar_get_strd :: Ptr CQQbar -> CLong -> IO CString
+foreign import ccall "qqbar.h qqbar_get_strnd"
+  qqbar_get_strnd :: Ptr CQQbar -> CLong -> IO CString
  
 -- | /qqbar_print/ /x/ 
 -- 
