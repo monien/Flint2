@@ -495,3 +495,22 @@ bernoulliNumber n = unsafePerformIO $ do
   withFmpq b $ \b -> do
     arith_bernoulli_number b $ (fromIntegral n)
   return b
+
+testSeries = do
+  let prec = 1024
+  withNewAcbPoly $ \x -> do
+    withNewAcbPoly $ \poly -> do
+      acb_poly_one x
+      acb_poly_shift_left x x 1
+      acb_poly_printd x 16
+      endl
+      putStrLn "sin series"
+      acb_poly_sin_series poly x 32 prec
+      acb_poly_printd poly 16
+      endl
+      withNewAcb $ \result -> do
+        acb_one result
+        acb_poly_evaluate_horner result poly result prec
+        putStrLn "series evaluation at 1:"
+        acb_printd result 16
+        endl
