@@ -83,6 +83,7 @@ library:
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
    - Data.Number.Flint.NF.Fmpzi
+   - Data.Number.Flint.NF.QQbar
   other-modules:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
@@ -137,6 +138,7 @@ library:
    - Data.Number.Flint.NF.FFI
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI
+   - Data.Number.Flint.NF.QQbar.FFI
   c-sources:
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c
@@ -153,6 +155,10 @@ library:
     - csrc/fmpq_mat/get_str.c
     - csrc/fmpq_mat/fprint.c
     - csrc/fmpq_vec/get_str.c
+    - csrc/qqbar/fprint.c
+    - csrc/qqbar/fprintn.c
+    - csrc/qqbar/get_str.c
+    - csrc/qqbar/get_strn.c
     - csrc/padic_poly/get_str.c
     - csrc/padic_poly/get_str_pretty.c
     - csrc/padic_mat/get_str.c
