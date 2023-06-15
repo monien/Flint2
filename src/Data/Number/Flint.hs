@@ -4,11 +4,56 @@ copyright   :  (c) 2019 Hartmut Monien
 license     :  BSD-style (see LICENSE)
 maintainer  :  hmonien@uni-bonn.de
 
+= What is FLINT ?
+
+FLINT is a C library for doing number theory, freely available under the GNU LGPL.
+
+Some domains handled by FLINT are \(\mathbb{Z}\), \(\mathbb{Q}\), \(\mathbb{F}_q\), \(\overline{\mathbb{Q}}\), \(\mathbb{C}\) and \(Q[x,y,z]\).
+At its core, FLINT provides arithmetic
+in standard rings such as the integers, rationals, algebraic, real,
+complex and p-adic numbers, finite fields, and number fields. It also
+provides polynomials (univariate and multivariate), power series, and
+matrices.
+
+FLINT covers a wide range of functionality: primality testing, integer factorisation, multivariate polynomial GCD and factorisation, FFTs, multimodular reconstruction, special functions, exact and approximate linear algebra, LLL, finite field embeddings, and more.
+
+= Mature & widely used
+
+FLINT is the work of dozens of contributors, spanning 15+ years of development. The upcoming FLINT 3.0 release comprises 8,000 documented functions, 3,500 test programs, and 900,000 lines of code.
+
+FLINT runs on most common platforms, including Linux, macOS and Windows on typical hardware configurations. Several computer algebra systems rely on FLINT as a back-end library, including SageMath, Oscar, Singular, Macaulay2, Maple and Mathematica. Wrappers are also available for various programming languages, including Python and Julia.
+
+= At the research frontier
+
+FLINT has been used for many large scale research computations (for example: A Trillion Triangles) and has been cited in hundreds of publications. FLINT's authors themselves have published more than 20 papers describing new algorithms first implemented within or on top of FLINT.
+
+= Efficient
+
+FLINT is designed for all operand sizes, from single-word to multi-gigabyte. It implements many low-level optimisations and chooses automatically between basecase, intermediate, asymptotically fast and special-purpose algorithms depending on the size and structure of the problem. Many algorithms are fully parallel (multithreaded) and some key functions use SIMD acceleration.
+
+= Handles real numbers
+
 <<docs/out.png>> 
 
-A thin Haskell wrapper for the @flintlib@. This library 
-is intendend as a foundation library. Examples can be found in ... . 
--}
+FLINT has advanced support for real and complex numbers, implemented using ball arithmetic. It covers a variety of numerical functionality (polynomial arithmetic, transcendental functions, numerical integration, linear algebra, etc.) with arbitrary precision and with rigorous error bounds. FLINT also provides an exact (symbolic) model of real and complex numbers with the ability to decide equalities.
+
+= Developer-friendly
+
+FLINT has a developer-friendly GMP-like C API which makes it easy to write performant and type-safe code with fine-grained control over in-place mutations, memory allocation, precision, conversions between representations, and algorithm parameters. FLINT also provides well-documented access to most of its internals. Finally, the FLINT project is developed openly in collaboration with the community, and welcomes contributions (feature requests, bug reports, patches, testing, documentation, general feedback) from anyone.
+
+Note: this functionality is new in FLINT 3.0 and is due to merging the spin-off projects Arb, Antic and Calcium which were previously maintained as standalone libraries.
+
+= Now this functionality is also available in Haskell!
+
+The modules in `Data.Number.Flint` provide a access to most of the
+functionality in @flintlib@. Many of the data structures have been
+translated to Haskell.  Typically an object of type __x_t__ in flint
+will be called __X__ and can be created with a function name __newX__
+and a applied to a flint function with a __withX__ function. E.g. the
+integers in flint with the type `fmpz_t` will be created in the IO
+monad using `newFmpz` and used with the `withFmpz` function.
+
+ -}
 
 module Data.Number.Flint (
   module Data.Number.Flint.Flint
@@ -50,7 +95,9 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb.Types
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.Mag
+, module Data.Number.Flint.Arb.Mat
 , module Data.Number.Flint.Acb
+, module Data.Number.Flint.Acb.Mat
 , module Data.Number.Flint.Acb.Poly
 , module Data.Number.Flint.Acb.HypGeom
 -- * Finite Fields
@@ -115,8 +162,10 @@ import Data.Number.Flint.Qadic
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag
+import Data.Number.Flint.Arb.Mat
 import Data.Number.Flint.Acb
 import Data.Number.Flint.Acb.Poly
+import Data.Number.Flint.Acb.Mat
 import Data.Number.Flint.Acb.HypGeom
 -- Floating-point support code
 import Data.Number.Flint.Support.D.Mat

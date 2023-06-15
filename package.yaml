@@ -79,10 +79,13 @@ library:
    - Data.Number.Flint.Arb.Types
    - Data.Number.Flint.Arb
    - Data.Number.Flint.Arb.Mag
+   - Data.Number.Flint.Arb.Mat 
    - Data.Number.Flint.Acb.Types
    - Data.Number.Flint.Acb
    - Data.Number.Flint.Acb.Poly
+   - Data.Number.Flint.Acb.Mat
    - Data.Number.Flint.Acb.HypGeom
+   - Data.Number.Flint.Acb.Modular
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
    - Data.Number.Flint.NF.Fmpzi
@@ -135,10 +138,13 @@ library:
    - Data.Number.Flint.Arb.Types.FFI
    - Data.Number.Flint.Arb.FFI 
    - Data.Number.Flint.Arb.Mag.FFI
+   - Data.Number.Flint.Arb.Mat.FFI
    - Data.Number.Flint.Acb.Types.FFI
    - Data.Number.Flint.Acb.FFI
    - Data.Number.Flint.Acb.Poly.FFI
+   - Data.Number.Flint.Acb.Mat.FFI
    - Data.Number.Flint.Acb.HypGeom.FFI
+   - Data.Number.Flint.Acb.Modular.FFI
    - Data.Number.Flint.NF.FFI
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI
