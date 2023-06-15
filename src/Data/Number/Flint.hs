@@ -1,3 +1,15 @@
+{- |
+module      :  Data.Number.Flint
+copyright   :  (c) 2019 Hartmut Monien 
+license     :  BSD-style (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+
+<<docs/out.png>> 
+
+A thin Haskell wrapper for the @flintlib@. This library 
+is intendend as a foundation library. Examples can be found in ... . 
+-}
+
 module Data.Number.Flint (
   module Data.Number.Flint.Flint
 , module Data.Number.Flint.MPoly

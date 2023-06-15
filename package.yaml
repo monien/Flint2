@@ -12,6 +12,8 @@ extra-source-files:
 - README.md
 - ChangeLog.md
 
+extra-doc-files:  docs/*.png
+
 description:  Please see the README on GitHub at <https://github.com/monien/Flint2#readme>
 
 dependencies:
