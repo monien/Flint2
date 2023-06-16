@@ -134,7 +134,7 @@ module Data.Number.Flint.Arb.Mat.FFI (
   , _arb_mat_diag_prod
   , arb_mat_diag_prod
   -- * Sparsity structure
-  , arb_mat_entrywise_is_zero
+  --, arb_mat_entrywise_is_zero
   , arb_mat_entrywise_not_is_zero
   , arb_mat_count_is_zero
   , arb_mat_count_not_is_zero
@@ -1028,15 +1028,15 @@ foreign import ccall "arb_mat.h arb_mat_diag_prod"
 
 -- Sparsity structure ----------------------------------------------------------
 
--- | /arb_mat_entrywise_is_zero/ /dest/ /src/ 
--- 
--- Sets each entry of /dest/ to indicate whether the corresponding entry of
--- /src/ is certainly zero. If the entry of /src/ at row \(i\) and column
--- \(j\) is zero according to @arb_is_zero@ then the entry of /dest/ at
--- that row and column is set to one, otherwise that entry of /dest/ is set
--- to zero.
-foreign import ccall "arb_mat.h arb_mat_entrywise_is_zero"
-  arb_mat_entrywise_is_zero :: Ptr CFmpzMat -> Ptr CArbMat -> IO ()
+-- -- | /arb_mat_entrywise_is_zero/ /dest/ /src/ 
+-- -- 
+-- -- Sets each entry of /dest/ to indicate whether the corresponding entry of
+-- -- /src/ is certainly zero. If the entry of /src/ at row \(i\) and column
+-- -- \(j\) is zero according to @arb_is_zero@ then the entry of /dest/ at
+-- -- that row and column is set to one, otherwise that entry of /dest/ is set
+-- -- to zero.
+-- foreign import ccall "arb_mat.h arb_mat_entrywise_is_zero"
+--   arb_mat_entrywise_is_zero :: Ptr CFmpzMat -> Ptr CArbMat -> IO ()
 
 -- | /arb_mat_entrywise_not_is_zero/ /dest/ /src/ 
 -- 

@@ -17,7 +17,7 @@ module Data.Number.Flint.Acb.Mat.FFI (
   , acb_mat_clear
   , acb_mat_allocated_bytes
   , acb_mat_window_init
-  , acb_mat_window_clear
+  --, acb_mat_window_clear
   -- * Conversions
   , acb_mat_set
   , acb_mat_set_fmpz_mat
@@ -228,11 +228,11 @@ foreign import ccall "acb_mat.h acb_mat_allocated_bytes"
 foreign import ccall "acb_mat.h acb_mat_window_init"
   acb_mat_window_init :: Ptr CAcbMat -> Ptr CAcbMat -> CLong -> CLong -> CLong -> CLong -> IO ()
 
--- | /acb_mat_window_clear/ /window/ 
--- 
--- Frees the window matrix.
-foreign import ccall "acb_mat.h acb_mat_window_clear"
-  acb_mat_window_clear :: Ptr CAcbMat -> IO ()
+-- -- | /acb_mat_window_clear/ /window/ 
+-- -- 
+-- -- Frees the window matrix.
+-- foreign import ccall "acb_mat.h acb_mat_window_clear"
+--   acb_mat_window_clear :: Ptr CAcbMat -> IO ()
 
 -- Conversions -----------------------------------------------------------------
 

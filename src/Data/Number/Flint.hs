@@ -1,3 +1,5 @@
+{-# OPTIONS_HADDOCK prune, ignore-exports #-}
+
 {- |
 module      :  Data.Number.Flint
 copyright   :  (c) 2019 Hartmut Monien 
@@ -6,7 +8,7 @@ maintainer  :  hmonien@uni-bonn.de
 
 = What is FLINT ?
 
-FLINT is a C library for doing number theory, freely available under the GNU LGPL.
+FLINT is a C library for doing number theory, freely available under the GNU LGPL at [https://flintlib.org](https://flintlib.org)
 
 Some domains handled by FLINT are \(\mathbb{Z}\), \(\mathbb{Q}\), \(\mathbb{F}_q\), \(\overline{\mathbb{Q}}\), \(\mathbb{C}\) and \(Q[x,y,z]\).
 At its core, FLINT provides arithmetic
@@ -60,7 +62,9 @@ module Data.Number.Flint (
 , module Data.Number.Flint.MPoly
 -- * Integers
 , module Data.Number.Flint.Fmpz
+-- ** Factorization of integers
 , module Data.Number.Flint.Fmpz.Factor
+-- ** Arithmtic and special functions for integers
 , module Data.Number.Flint.Fmpz.Arith
 , module Data.Number.Flint.Fmpz.Vec
 , module Data.Number.Flint.Fmpz.Mat
