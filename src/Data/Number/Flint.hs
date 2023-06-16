@@ -105,6 +105,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Mat
 , module Data.Number.Flint.Acb.HypGeom
 , module Data.Number.Flint.Acb.Modular
+-- ** Partitions
+, module Data.Number.Flint.Partitions
 -- * Finite Fields
 , module Data.Number.Flint.Fq
 -- * p-adic Numbers
@@ -173,6 +175,8 @@ import Data.Number.Flint.Acb.Poly
 import Data.Number.Flint.Acb.Mat
 import Data.Number.Flint.Acb.Modular
 import Data.Number.Flint.Acb.HypGeom
+-- Partitions
+import Data.Number.Flint.Partitions
 -- Floating-point support code
 import Data.Number.Flint.Support.D.Mat
 import Data.Number.Flint.Support.D.Vec

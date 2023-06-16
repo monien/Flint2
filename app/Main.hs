@@ -532,4 +532,9 @@ testAcbModular = do
   x <- newPSL2Z
   withPSL2Z x psl2z_print
   endl
-  
+
+numberOfPartitions n = do
+  result <- newFmpz
+  withFmpz result $ \result -> do
+    partitions_fmpz_ui result n
+  return result

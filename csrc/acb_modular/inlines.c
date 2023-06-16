@@ -68,4 +68,13 @@ psl2z_equal_(const psl2z_t f, const psl2z_t g)
         && fmpz_equal(&f->d, &g->d);
 }
 
-
+int
+psl2z_is_one_(const psl2z_t f)
+{
+  return
+    fmpz_is_one(&f->a)
+    && fmpz_is_zero(&f->b)
+    && fmpz_is_zero(&f->c)
+    && fmpz_is_one(&f->d);
+}
+    

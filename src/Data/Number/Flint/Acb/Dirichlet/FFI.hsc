@@ -1,8 +1,21 @@
+{-# language
+    CApiFFI
+  , FlexibleInstances
+  , ForeignFunctionInterface
+  , MultiParamTypeClasses
+  , TupleSections
+  , TypeFamilies
+  , ScopedTypeVariables
+  #-}
+
 module Data.Number.Flint.Acb.Dirichlet.FFI (
   -- * Dirichlet L-functions, Riemann zeta and related functions
   -- * Roots of unity
      DirichletRoots (..)
   , CDirichletRoots (..)
+  , newDirichletRoots
+  , withDirichletRoots
+  , withNewDirichletRoots
   , acb_dirichlet_roots_init
   , acb_dirichlet_roots_clear
   , acb_dirichlet_root
@@ -29,6 +42,9 @@ module Data.Number.Flint.Acb.Dirichlet.FFI (
   -- * Hurwitz zeta function precomputation
   ,  DirichletHurwitzPrecomp (..)
   , CDirichletHurwitzPrecomp (..)
+  , newDirichletHurwitzPrecomp
+  , withDirichletHurwitzPrecomp
+  , withNewDirichletHurwitzPrecomp
   , acb_dirichlet_hurwitz_precomp_init
   , acb_dirichlet_hurwitz_precomp_init_num
   , acb_dirichlet_hurwitz_precomp_clear
@@ -121,6 +137,7 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
+import Foreign.Storable
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -131,12 +148,36 @@ import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Acb.Types
 import Data.Number.Flint.Acb.Poly
 
+#include <flint/acb_dirichlet.h>
+
 -- dirichlet_roots_t -----------------------------------------------------------
 
 data DirichletRoots =
   DirichletRoots {-# UNPACK #-} !(ForeignPtr  CDirichletRoots)
 type CDirichletRoots = CFlint DirichletRoots
 
+instance Storable CDirichletRoots where
+  sizeOf    _ = #{size      acb_dirichlet_roots_t}
+  alignment _ = #{alignment acb_dirichlet_roots_t}
+  peek = undefined
+  poke = undefined
+
+-- | Create new `DirichletRoots` /n/ /num/ /prec/
+newDirichletRoots n num prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> acb_dirichlet_roots_init x n num prec
+  addForeignPtrFinalizer p_acb_dirichlet_roots_clear x
+  return $ DirichletRoots x
+
+-- | Use `DirichletRoots`
+withDirichletRoots (DirichletRoots x) f = do
+  withForeignPtr x $ \xp -> (DirichletRoots x,) <$> f xp
+
+-- | Use new `DirichletRoots`
+withNewDirichletRoots n num prec f = do
+  x <- newDirichletRoots n num prec
+  withDirichletRoots x f
+  
 -- acb_dirichlet_powers_t ------------------------------------------------------
 
 data AcbDirichletPowers =
@@ -169,6 +210,9 @@ foreign import ccall "acb_dirichlet.h acb_dirichlet_roots_init"
 -- Clears the structure.
 foreign import ccall "acb_dirichlet.h acb_dirichlet_roots_clear"
   acb_dirichlet_roots_clear :: Ptr CDirichletRoots -> IO ()
+
+foreign import ccall "acb_dirichlet.h &acb_dirichlet_roots_clear"
+  p_acb_dirichlet_roots_clear :: FunPtr (Ptr CDirichletRoots -> IO ())
 
 -- | /acb_dirichlet_root/ /res/ /roots/ /k/ /prec/ 
 -- 
@@ -358,7 +402,32 @@ foreign import ccall "acb_dirichlet.h acb_dirichlet_hurwitz"
 
 data DirichletHurwitzPrecomp = DirichletHurwitzPrecomp {-# UNPACK #-} !(ForeignPtr  CDirichletHurwitzPrecomp)
 type  CDirichletHurwitzPrecomp = CFlint DirichletHurwitzPrecomp
- 
+
+instance Storable CDirichletHurwitzPrecomp where
+  sizeOf _    = #{size      acb_dirichlet_hurwitz_precomp_t}
+  alignment _ = #{alignment acb_dirichlet_hurwitz_precomp_t}
+  peek = undefined
+  poke = undefined
+
+-- | Create new `DirichletHurwitzPrecomp`
+newDirichletHurwitzPrecomp s deflate a k n prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    acb_dirichlet_hurwitz_precomp_init x s deflate a k n prec
+  addForeignPtrFinalizer p_acb_dirichlet_hurwitz_precomp_clear x
+  return $ DirichletHurwitzPrecomp x
+
+-- | Use `f` on `DirichletHurwitzPrecomp`
+withDirichletHurwitzPrecomp (DirichletHurwitzPrecomp x) f = do
+  withForeignPtr x $ \xp -> (DirichletHurwitzPrecomp x,) <$> f xp
+
+-- | Use `f` on new `DirichletHurwitzPrecomp`
+withNewDirichletHurwitzPrecomp s deflate a k n prec f = do
+  x <- newDirichletHurwitzPrecomp s deflate a k n prec
+  withDirichletHurwitzPrecomp x f
+
+--------------------------------------------------------------------------------
+
 -- | /acb_dirichlet_hurwitz_precomp_init/ /pre/ /s/ /deflate/ /A/ /K/ /N/ /prec/ 
 -- 
 -- Precomputes a grid of Taylor polynomials for fast evaluation of
@@ -397,6 +466,9 @@ foreign import ccall "acb_dirichlet.h acb_dirichlet_hurwitz_precomp_init_num"
 -- Clears the precomputed data.
 foreign import ccall "acb_dirichlet.h acb_dirichlet_hurwitz_precomp_clear"
   acb_dirichlet_hurwitz_precomp_clear :: Ptr CDirichletHurwitzPrecomp -> IO ()
+
+foreign import ccall "acb_dirichlet.h &acb_dirichlet_hurwitz_precomp_clear"
+  p_acb_dirichlet_hurwitz_precomp_clear :: FunPtr (Ptr CDirichletHurwitzPrecomp -> IO ())
 
 -- | /acb_dirichlet_hurwitz_precomp_choose_param/ /A/ /K/ /N/ /s/ /num_eval/ /prec/ 
 -- 
