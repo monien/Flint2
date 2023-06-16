@@ -13,7 +13,7 @@ The implementation provided here uses ball arithmetic throughout to
 guarantee a correct error bound for the numerical approximation 
 of \(p(n)\). Optionally, hardware double arithmetic can be used for
 low-precision terms. This gives a significant speedup for 
-small (e.g.\(n < 10^6\)).
+small (e.g.\(n < 10^6\) ).
 -}
 module Data.Number.Flint.Partitions (
     module Data.Number.Flint.Partitions.FFI

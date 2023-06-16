@@ -538,3 +538,18 @@ numberOfPartitions n = do
   withFmpz result $ \result -> do
     partitions_fmpz_ui result n
   return result
+
+nextBernoulli = do
+  x <- newBernoulliRev 20
+  n <- newFmpz
+  d <- newFmpz
+  replicateM_ 10 $ do
+    withBernoulliRev x $ \x -> do
+      withFmpz n $ \n -> do
+        withFmpz d $ \d -> do
+          bernoulli_rev_next n d x
+          fmpz_print n
+          putStr " "
+          fmpz_print d
+          endl
+

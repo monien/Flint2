@@ -107,6 +107,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Modular
 -- ** Partitions
 , module Data.Number.Flint.Partitions
+-- ** Bernoulli numbers
+, module Data.Number.Flint.Bernoulli
 -- * Finite Fields
 , module Data.Number.Flint.Fq
 -- * p-adic Numbers
@@ -177,6 +179,8 @@ import Data.Number.Flint.Acb.Modular
 import Data.Number.Flint.Acb.HypGeom
 -- Partitions
 import Data.Number.Flint.Partitions
+-- Bernoulli numbers
+import Data.Number.Flint.Bernoulli
 -- Floating-point support code
 import Data.Number.Flint.Support.D.Mat
 import Data.Number.Flint.Support.D.Vec
