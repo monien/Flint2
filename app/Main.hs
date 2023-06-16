@@ -25,18 +25,18 @@ import FmpzPoly
 import Fmpq
 import FmpqPoly
 
-main' = do
-  putStrLn "done."
-  
 main = do
   testFmpzMPoly
   testFmpzMPolyQ
   testFq
   testArb
   testAcb
+  testAcbModular
   testNF
   testFmpzi
   testNModMat
+  testAcbModular
+  
   
 testRest = do
   x <- newFmpz
@@ -422,6 +422,7 @@ testNF = do
         r <- nfRep x nf
         withFmpqMat r $ \r -> do
           fmpq_mat_print r
+  endl
 
 nfRep x nf = do
   (_, n) <- withNewFmpqPoly $ \poly -> do
@@ -526,3 +527,9 @@ testSeries = do
         arb_sin y y prec
         arb_printd y 16
         endl
+
+testAcbModular = do
+  x <- newPSL2Z
+  withPSL2Z x psl2z_print
+  endl
+  

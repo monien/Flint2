@@ -277,13 +277,20 @@ foreign import ccall "acb_mat.h acb_mat_randtest_eig"
 
 -- Input and output ------------------------------------------------------------
 
+foreign import ccall "acb_mat acb_mat_get_strd"
+  acb_mat_get_strd :: Ptr CAcbMat -> CLong -> IO CString
+  
 -- | /acb_mat_printd/ /mat/ /digits/ 
 -- 
 -- Prints each entry in the matrix with the specified number of decimal
 -- digits.
-foreign import ccall "acb_mat.h acb_mat_printd"
-  acb_mat_printd :: Ptr CAcbMat -> CLong -> IO ()
-
+acb_mat_printd :: Ptr CAcbMat -> CLong -> IO ()
+acb_mat_printd mat digits = do
+  cs <- acb_mat_get_strd mat digits
+  s <- peekCString cs
+  free cs
+  putStr s
+  
 -- | /acb_mat_fprintd/ /file/ /mat/ /digits/ 
 -- 
 -- Prints each entry in the matrix with the specified number of decimal

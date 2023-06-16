@@ -128,48 +128,55 @@ withNewPSL2Z f = do
 -- | /psl2z_init/ /g/ 
 -- 
 -- Initializes /g/ and set it to the identity element.
-foreign import ccall "acb_modular.h psl2z_init"
+foreign import ccall "acb_modular.h psl2z_init_"
   psl2z_init :: Ptr CPSL2Z -> IO ()
-
+ 
 -- | /psl2z_clear/ /g/ 
 -- 
 -- Clears /g/.
-foreign import ccall "acb_modular.h psl2z_clear"
+foreign import ccall "acb_modular.h psl2z_clear_"
   psl2z_clear :: Ptr CPSL2Z -> IO ()
 
-foreign import ccall "acb_modular.h &psl2z_clear"
+foreign import ccall "acb_modular.h &psl2z_clear_"
   p_psl2z_clear :: FunPtr (Ptr CPSL2Z -> IO ())
 
 -- | /psl2z_swap/ /f/ /g/ 
 -- 
 -- Swaps /f/ and /g/ efficiently.
-foreign import ccall "acb_modular.h psl2z_swap"
+foreign import ccall "acb_modular.h psl2z_swap_"
   psl2z_swap :: Ptr CPSL2Z -> Ptr CPSL2Z -> IO ()
 
 -- | /psl2z_set/ /f/ /g/ 
 -- 
 -- Sets /f/ to a copy of /g/.
-foreign import ccall "acb_modular.h psl2z_set"
+foreign import ccall "acb_modular.h psl2z_set_"
   psl2z_set :: Ptr CPSL2Z -> Ptr CPSL2Z -> IO ()
 
 -- | /psl2z_one/ /g/ 
 -- 
 -- Sets /g/ to the identity element.
-foreign import ccall "acb_modular.h psl2z_one"
+foreign import ccall "acb_modular.h psl2z_one_"
   psl2z_one :: Ptr CPSL2Z -> IO ()
 
 -- | /psl2z_is_one/ /g/ 
 -- 
 -- Returns nonzero iff /g/ is the identity element.
-foreign import ccall "acb_modular.h psl2z_is_one"
+foreign import ccall "acb_modular.h psl2z_is_one_"
   psl2z_is_one :: Ptr CPSL2Z -> IO CInt
 
+foreign import ccall "acb_modular.h"
+  psl2z_get_str :: Ptr CPSL2Z -> IO CString
+  
 -- | /psl2z_print/ /g/ 
 -- 
 -- Prints /g/ to standard output.
-foreign import ccall "acb_modular.h psl2z_print"
-  psl2z_print :: Ptr CPSL2Z -> IO ()
-
+psl2z_print :: Ptr CPSL2Z -> IO ()
+psl2z_print x = do
+  cs <- psl2z_get_str x
+  s <- peekCString cs
+  free cs
+  putStr s
+  
 -- | /psl2z_fprint/ /file/ /g/ 
 -- 
 -- Prints /g/ to the stream /file/.
@@ -179,7 +186,7 @@ foreign import ccall "acb_modular.h psl2z_fprint"
 -- | /psl2z_equal/ /f/ /g/ 
 -- 
 -- Returns nonzero iff /f/ and /g/ are equal.
-foreign import ccall "acb_modular.h psl2z_equal"
+foreign import ccall "acb_modular.h psl2z_equal_"
   psl2z_equal :: Ptr CPSL2Z -> Ptr CPSL2Z -> IO CInt
 
 -- | /psl2z_mul/ /h/ /f/ /g/ 

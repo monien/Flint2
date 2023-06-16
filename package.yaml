@@ -85,7 +85,9 @@ library:
    - Data.Number.Flint.Acb.Poly
    - Data.Number.Flint.Acb.Mat
    - Data.Number.Flint.Acb.HypGeom
+   - Data.Number.Flint.Acb.Elliptic 
    - Data.Number.Flint.Acb.Modular
+   - Data.Number.Flint.Acb.Dirichlet
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
    - Data.Number.Flint.NF.Fmpzi
@@ -144,7 +146,9 @@ library:
    - Data.Number.Flint.Acb.Poly.FFI
    - Data.Number.Flint.Acb.Mat.FFI
    - Data.Number.Flint.Acb.HypGeom.FFI
+   - Data.Number.Flint.Acb.Elliptic.FFI
    - Data.Number.Flint.Acb.Modular.FFI
+   - Data.Number.Flint.Acb.Dirichlet.FFI
    - Data.Number.Flint.NF.FFI
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI
@@ -179,10 +183,14 @@ library:
     - csrc/mag/get_str.c
     - csrc/arb/get_strd.c
     - csrc/arb/get_str_.c
+    - csrc/arb_mat/get_strd.c
     - csrc/acb/get_str.c
     - csrc/acb/get_strd.c
     - csrc/acb/get_strn.c
     - csrc/acb_poly/get_strd.c
+    - csrc/acb_mat/get_strd.c
+    - csrc/acb_modular/inlines.c
+    - csrc/acb_modular/get_str.c
     - csrc/mpfr_mat/swap_entrywise.c
   build-tools: hsc2hs
   extra-libraries: flint
