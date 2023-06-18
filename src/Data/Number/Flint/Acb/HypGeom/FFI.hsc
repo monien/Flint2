@@ -12,11 +12,20 @@ module Data.Number.Flint.Acb.HypGeom.FFI (
   -- * Hypergeometric functions of complex variables
   -- * Rising factorials
     acb_hypgeom_rising_ui_forward
+  , acb_hypgeom_rising_ui_bs
+  , acb_hypgeom_rising_ui_rs
+  , acb_hypgeom_rising_ui_rec
+  , acb_hypgeom_rising_ui
+  , acb_hypgeom_rising
   , acb_hypgeom_rising_ui_jet_powsum
+  , acb_hypgeom_rising_ui_jet_bs
+  , acb_hypgeom_rising_ui_jet_rs
+  , acb_hypgeom_rising_ui_jet
   , acb_hypgeom_log_rising_ui
   , acb_hypgeom_log_rising_ui_jet
   -- * Gamma function
   , acb_hypgeom_gamma_stirling_sum_horner
+  , acb_hypgeom_gamma_stirling_sum_improved
   , acb_hypgeom_gamma_stirling
   , acb_hypgeom_gamma_taylor
   , acb_hypgeom_gamma
@@ -186,7 +195,22 @@ import Data.Number.Flint.Acb.Poly
 -- Rising factorials -----------------------------------------------------------
 
 -- | /acb_hypgeom_rising_ui_forward/ /res/ /x/ /n/ /prec/ 
--- 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_forward"
+  acb_hypgeom_rising_ui_forward :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui_bs/ /res/ /x/ /n/ /prec/ 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_bs"
+  acb_hypgeom_rising_ui_bs :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui_rs/ /res/ /x/ /n/ /m/ /prec/ 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_rs"
+  acb_hypgeom_rising_ui_rs :: Ptr CAcb -> Ptr CAcb -> CULong -> CULong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui_rec/ /res/ /x/ /n/ /prec/ 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_rec"
+  acb_hypgeom_rising_ui_rec :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui/ /res/ /x/ /n/ /prec/ 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui"
+  acb_hypgeom_rising_ui :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> IO ()
+-- | /acb_hypgeom_rising/ /res/ /x/ /n/ /prec/ 
+--
 -- Computes the rising factorial \((x)_n\).
 -- 
 -- The /forward/ version uses the forward recurrence. The /bs/ version uses
@@ -197,11 +221,20 @@ import Data.Number.Flint.Acb.Poly
 -- computation of the gamma function). The default versions (/rising_ui/
 -- and /rising_ui/) choose an algorithm automatically and may additionally
 -- fall back on the gamma function.
-foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_forward"
-  acb_hypgeom_rising_ui_forward :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> IO ()
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising"
+  acb_hypgeom_rising :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_rising_ui_jet_powsum/ /res/ /x/ /n/ /len/ /prec/ 
--- 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_jet_powsum"
+  acb_hypgeom_rising_ui_jet_powsum :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui_jet_bs/ /res/ /x/ /n/ /len/ /prec/ 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_jet_bs"
+  acb_hypgeom_rising_ui_jet_bs :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui_jet_rs/ /res/ /x/ /n/ /m/ /len/ /prec/ 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_jet_rs"
+  acb_hypgeom_rising_ui_jet_rs :: Ptr CAcb -> Ptr CAcb -> CULong -> CULong -> CLong -> CLong -> IO ()
+-- | /acb_hypgeom_rising_ui_jet/ /res/ /x/ /n/ /len/ /prec/ 
+--
 -- Computes the jet of the rising factorial \((x)_n\), truncated to length
 -- /len/. In other words, constructs the polynomial
 -- \((X + x)_n \in \mathbb{R}[X]\), truncated if
@@ -213,11 +246,11 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_forward"
 -- splitting. The /rs/ version uses rectangular splitting. It takes an
 -- extra tuning parameter /m/ which can be set to zero to choose
 -- automatically. The default version chooses an algorithm automatically.
-foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_jet_powsum"
-  acb_hypgeom_rising_ui_jet_powsum :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> CLong -> IO ()
+foreign import ccall "acb_hypgeom.h acb_hypgeom_rising_ui_jet"
+  acb_hypgeom_rising_ui_jet :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_log_rising_ui/ /res/ /x/ /n/ /prec/ 
--- 
+--
 -- Computes the log-rising factorial
 -- \(\log \, (x)_n = \sum_{k=0}^{n-1} \log(x+k)\).
 -- 
@@ -230,7 +263,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_log_rising_ui"
   acb_hypgeom_log_rising_ui :: Ptr CAcb -> Ptr CAcb -> CULong -> CLong -> IO ()
 
 -- | /acb_hypgeom_log_rising_ui_jet/ /res/ /x/ /n/ /len/ /prec/ 
--- 
+--
 -- Computes the jet of the log-rising factorial \(\log \, (x)_n\),
 -- truncated to length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_log_rising_ui_jet"
@@ -239,7 +272,10 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_log_rising_ui_jet"
 -- Gamma function --------------------------------------------------------------
 
 -- | /acb_hypgeom_gamma_stirling_sum_horner/ /s/ /z/ /N/ /prec/ 
--- 
+foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_stirling_sum_horner"
+  acb_hypgeom_gamma_stirling_sum_horner :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
+-- | /acb_hypgeom_gamma_stirling_sum_improved/ /s/ /z/ /N/ /K/ /prec/ 
+--
 -- Sets /res/ to the final sum in the Stirling series for the gamma
 -- function truncated before the term with index /N/, i.e. computes
 -- \(\sum_{n=1}^{N-1} B_{2n} / (2n(2n-1) z^{2n-1})\). The /horner/ version
@@ -247,11 +283,11 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_log_rising_ui_jet"
 -- version uses rectangular splitting for the low-index terms and reexpands
 -- the high-index terms as hypergeometric polynomials, using a splitting
 -- parameter /K/ (which can be set to 0 to use a default value).
-foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_stirling_sum_horner"
-  acb_hypgeom_gamma_stirling_sum_horner :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
+foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_stirling_sum_improved"
+  acb_hypgeom_gamma_stirling_sum_improved :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_gamma_stirling/ /res/ /x/ /reciprocal/ /prec/ 
--- 
+--
 -- Sets /res/ to the gamma function of /x/ computed using the Stirling
 -- series together with argument reduction. If /reciprocal/ is set, the
 -- reciprocal gamma function is computed instead.
@@ -259,7 +295,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_stirling"
   acb_hypgeom_gamma_stirling :: Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_gamma_taylor/ /res/ /x/ /reciprocal/ /prec/ 
--- 
+--
 -- Attempts to compute the gamma function of /x/ using Taylor series
 -- together with argument reduction. This is only supported if /x/ and
 -- /prec/ are both small enough. If successful, returns 1; otherwise, does
@@ -269,21 +305,21 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_taylor"
   acb_hypgeom_gamma_taylor :: Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO CInt
 
 -- | /acb_hypgeom_gamma/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to the gamma function of /x/ computed using a default
 -- algorithm choice.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma"
   acb_hypgeom_gamma :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_rgamma/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to the reciprocal gamma function of /x/ computed using a
 -- default algorithm choice.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_rgamma"
   acb_hypgeom_rgamma :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_lgamma/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to the principal branch of the log-gamma function of /x/
 -- computed using a default algorithm choice.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_lgamma"
@@ -306,7 +342,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_lgamma"
 -- remove a 1 from the \(a_i\) parameters if there is one.
 --
 -- | /acb_hypgeom_pfq_bound_factor/ /C/ /a/ /p/ /b/ /q/ /z/ /n/ 
--- 
+--
 -- Computes a factor /C/ such that
 -- \(\left|\sum_{k=n}^{\infty} T(k)\right| \le C |T(n)|\). See
 -- @algorithms_hypergeometric_convergent@. As currently implemented, the
@@ -316,7 +352,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_bound_factor"
   acb_hypgeom_pfq_bound_factor :: Ptr CMag -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CULong -> IO ()
 
 -- | /acb_hypgeom_pfq_choose_n/ /a/ /p/ /b/ /q/ /z/ /prec/ 
--- 
+--
 -- Heuristically attempts to choose a number of terms /n/ to sum of a
 -- hypergeometric series at a working precision of /prec/ bits.
 -- 
@@ -333,20 +369,28 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_bound_factor"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_choose_n"
   acb_hypgeom_pfq_choose_n :: Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> IO CLong
 
+-- | /acb_hypgeom_pfq_sum_forward/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_forward"
   acb_hypgeom_pfq_sum_forward :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_sum_rs/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_rs"
   acb_hypgeom_pfq_sum_rs :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_sum_bs/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_bs"
   acb_hypgeom_pfq_sum_bs :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_sum_fme/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_fme"
   acb_hypgeom_pfq_sum_fme :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_pfq_sum/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /n/ /prec/ 
--- 
+--
 -- Computes \(s = \sum_{k=0}^{n-1} T(k)\) and \(t = T(n)\). Does not allow
 -- aliasing between input and output variables. We require \(n \ge 0\).
 -- 
@@ -364,21 +408,22 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_fme"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum"
   acb_hypgeom_pfq_sum :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_sum_bs_invz/ /s/ /t/ /a/ /p/ /b/ /q/ /w/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_bs_invz"
   acb_hypgeom_pfq_sum_bs_invz :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_pfq_sum_invz/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /w/ /n/ /prec/ 
--- 
+--
 -- Like @acb_hypgeom_pfq_sum@, but taking advantage of \(w = 1/z\) possibly
 -- having few bits.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_invz"
   acb_hypgeom_pfq_sum_invz :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_pfq_direct/ /res/ /a/ /p/ /b/ /q/ /z/ /n/ /prec/ 
--- 
+--
 -- Computes
 -- 
--- \[`\]
 -- \[{}_pf_{q}(z)
 --     = \sum_{k=0}^{\infty} T(k)
 --     = \sum_{k=0}^{n-1} T(k) + \varepsilon\]
@@ -391,17 +436,23 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_sum_invz"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_direct"
   acb_hypgeom_pfq_direct :: Ptr CAcb -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_series_sum_forward/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /regularized/ /n/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_series_sum_forward"
   acb_hypgeom_pfq_series_sum_forward :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_series_sum_bs/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /regularized/ /n/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_series_sum_bs"
   acb_hypgeom_pfq_series_sum_bs :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_pfq_series_sum_rs/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /regularized/ /n/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_series_sum_rs"
   acb_hypgeom_pfq_series_sum_rs :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_pfq_series_sum/ /s/ /t/ /a/ /p/ /b/ /q/ /z/ /regularized/ /n/ /len/ /prec/ 
--- 
+--
 -- Computes \(s = \sum_{k=0}^{n-1} T(k)\) and \(t = T(n)\) given parameters
 -- and argument that are power series. Does not allow aliasing between
 -- input and output variables. We require \(n \ge 0\) and that /len/ is
@@ -417,7 +468,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_series_sum"
   acb_hypgeom_pfq_series_sum :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr (Ptr CAcbPoly) -> CLong -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_pfq_series_direct/ /res/ /a/ /p/ /b/ /q/ /z/ /regularized/ /n/ /len/ /prec/ 
--- 
+--
 -- Computes \({}_pf_{q}(z)\) directly using the defining series, given
 -- parameters and argument that are power series. The result is a power
 -- series of length /len/. We require that /len/ is positive.
@@ -438,7 +489,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq_series_direct"
 -- @algorithms_hypergeometric_asymptotic_confluent@.
 --
 -- | /acb_hypgeom_u_asymp/ /res/ /a/ /b/ /z/ /n/ /prec/ 
--- 
+--
 -- Sets /res/ to \(U^{*}(a,b,z)\) computed using /n/ terms of the
 -- asymptotic series, with a rigorous bound for the error included in the
 -- output. We require \(n \ge 0\).
@@ -446,7 +497,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_u_asymp"
   acb_hypgeom_u_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_u_use_asymp/ /z/ /prec/ 
--- 
+--
 -- Heuristically determines whether the asymptotic series can be used to
 -- evaluate \(U(a,b,z)\) to /prec/ accurate bits (assuming that /a/ and /b/
 -- are small).
@@ -456,7 +507,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_u_use_asymp"
 -- Generalized hypergeometric function -----------------------------------------
 
 -- | /acb_hypgeom_pfq/ /res/ /a/ /p/ /b/ /q/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Computes the generalized hypergeometric function \({}_pF_{q}(z)\), or
 -- the regularized version if /regularized/ is set.
 -- 
@@ -475,7 +526,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_pfq"
 -- Confluent hypergeometric functions ------------------------------------------
 
 -- | /acb_hypgeom_u_1f1_series/ /res/ /a/ /b/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes \(U(a,b,z)\) as a power series truncated to length /len/, given
 -- \(a, b, z \in \mathbb{C}[[x]]\). If \(b[0] \in \mathbb{Z}\), it computes
 -- one extra derivative and removes the singularity (it is then assumed
@@ -485,7 +536,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_u_1f1_series"
   acb_hypgeom_u_1f1_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_u_1f1/ /res/ /a/ /b/ /z/ /prec/ 
--- 
+--
 -- Computes \(U(a,b,z)\) as a sum of two convergent hypergeometric series.
 -- If \(b \in \mathbb{Z}\), it computes the limit value via
 -- @acb_hypgeom_u_1f1_series@. As currently implemented, the output is
@@ -494,7 +545,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_u_1f1"
   acb_hypgeom_u_1f1 :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_u/ /res/ /a/ /b/ /z/ /prec/ 
--- 
+--
 -- Computes \(U(a,b,z)\) using an automatic algorithm choice. The function
 -- @acb_hypgeom_u_asymp@ is used if \(a\) or \(a-b+1\) is a nonpositive
 -- integer (in which case the asymptotic series terminates), or if /z/ is
@@ -502,14 +553,18 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_u_1f1"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_u"
   acb_hypgeom_u :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_m_asymp/ /res/ /a/ /b/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_m_asymp"
   acb_hypgeom_m_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_m_1f1/ /res/ /a/ /b/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_m_1f1"
   acb_hypgeom_m_1f1 :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_m/ /res/ /a/ /b/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Computes the confluent hypergeometric function
 -- \(M(a,b,z) = {}_1F_1(a,b,z)\), or
 -- \(\mathbf{M}(a,b,z) = \frac{1}{\Gamma(b)} {}_1F_1(a,b,z)\) if
@@ -518,19 +573,23 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_m"
   acb_hypgeom_m :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_1f1/ /res/ /a/ /b/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Alias for @acb_hypgeom_m@.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_1f1"
   acb_hypgeom_1f1 :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_0f1_asymp/ /res/ /a/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_0f1_asymp"
   acb_hypgeom_0f1_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_0f1_direct/ /res/ /a/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_0f1_direct"
   acb_hypgeom_0f1_direct :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_0f1/ /res/ /a/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Computes the confluent hypergeometric function \({}_0F_1(a,z)\), or
 -- \(\frac{1}{\Gamma(a)} {}_0F_1(a,z)\) if /regularized/ is set, using
 -- asymptotic expansions, direct summation, or an automatic algorithm
@@ -550,7 +609,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_0f1"
 -- Error functions and Fresnel integrals ---------------------------------------
 
 -- | /acb_hypgeom_erf_propagated_error/ /re/ /im/ /z/ 
--- 
+--
 -- Sets /re/ and /im/ to upper bounds for the error in the real and
 -- imaginary part resulting from approximating the error function of /z/ by
 -- the error function evaluated at the midpoint of /z/. Uses the first
@@ -558,14 +617,18 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_0f1"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_propagated_error"
   acb_hypgeom_erf_propagated_error :: Ptr CMag -> Ptr CMag -> Ptr CAcb -> IO ()
 
+-- | /acb_hypgeom_erf_1f1a/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_1f1a"
   acb_hypgeom_erf_1f1a :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_erf_1f1b/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_1f1b"
   acb_hypgeom_erf_1f1b :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_erf_asymp/ /res/ /z/ /complementary/ /prec/ /prec2/ 
--- 
+--
 -- Computes the error function respectively using
 -- 
 -- \[`\]
@@ -586,7 +649,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_asymp"
   acb_hypgeom_erf_asymp :: Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_erf/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the error function using an automatic algorithm choice. If /z/
 -- is too small to use the asymptotic expansion, a working precision
 -- sufficient to circumvent cancellation in the hypergeometric series is
@@ -595,54 +658,60 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_asymp"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erf"
   acb_hypgeom_erf :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_erf_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_erf_series"
   _acb_hypgeom_erf_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_erf_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the error function of the power series /z/, truncated to length
 -- /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_series"
   acb_hypgeom_erf_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_erfc/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the complementary error function
 -- \(\operatorname{erfc}(z) = 1 - \operatorname{erf}(z)\). This function
 -- avoids catastrophic cancellation for large positive /z/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erfc"
   acb_hypgeom_erfc :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_erfc_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_erfc_series"
   _acb_hypgeom_erfc_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_erfc_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the complementary error function of the power series /z/,
 -- truncated to length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erfc_series"
   acb_hypgeom_erfc_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_erfi/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the imaginary error function
 -- \(\operatorname{erfi}(z) = -i\operatorname{erf}(iz)\). This is a trivial
 -- wrapper of @acb_hypgeom_erf@.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erfi"
   acb_hypgeom_erfi :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_erfi_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_erfi_series"
   _acb_hypgeom_erfi_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_erfi_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the imaginary error function of the power series /z/, truncated
 -- to length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_erfi_series"
   acb_hypgeom_erfi_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_fresnel/ /res1/ /res2/ /z/ /normalized/ /prec/ 
--- 
+--
 -- Sets /res1/ to the Fresnel sine integral \(S(z)\) and /res2/ to the
 -- Fresnel cosine integral \(C(z)\). Optionally, just a single function can
 -- be computed by passing /NULL/ as the other output variable. The
@@ -653,11 +722,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_erfi_series"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_fresnel"
   acb_hypgeom_fresnel :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /_acb_hypgeom_fresnel_series/ /res1/ /res2/ /z/ /zlen/ /normalized/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_fresnel_series"
   _acb_hypgeom_fresnel_series :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_fresnel_series/ /res1/ /res2/ /z/ /normalized/ /len/ /prec/ 
--- 
+--
 -- Sets /res1/ to the Fresnel sine integral and /res2/ to the Fresnel
 -- cosine integral of the power series /z/, truncated to length /len/.
 -- Optionally, just a single function can be computed by passing /NULL/ as
@@ -668,7 +739,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_fresnel_series"
 -- Bessel functions ------------------------------------------------------------
 
 -- | /acb_hypgeom_bessel_j_asymp/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the Bessel function of the first kind via
 -- @acb_hypgeom_u_asymp@. For all complex \(\nu, z\), we have
 -- 
@@ -694,7 +765,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_j_asymp"
   acb_hypgeom_bessel_j_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_j_0f1/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the Bessel function of the first kind from
 -- 
 -- \[`\]
@@ -704,14 +775,14 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_j_0f1"
   acb_hypgeom_bessel_j_0f1 :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_j/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the Bessel function of the first kind \(J_{\nu}(z)\) using an
 -- automatic algorithm choice.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_j"
   acb_hypgeom_bessel_j :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_y/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the Bessel function of the second kind \(Y_{\nu}(z)\) from the
 -- formula
 -- 
@@ -730,7 +801,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_y"
   acb_hypgeom_bessel_y :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_jy/ /res1/ /res2/ /nu/ /z/ /prec/ 
--- 
+--
 -- Sets /res1/ to \(J_{\nu}(z)\) and /res2/ to \(Y_{\nu}(z)\), computed
 -- simultaneously. From these values, the user can easily construct the
 -- Bessel functions of the third kind (Hankel functions)
@@ -740,17 +811,23 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_jy"
 
 -- Modified Bessel functions ---------------------------------------------------
 
+-- | /acb_hypgeom_bessel_i_asymp/ /res/ /nu/ /z/ /scaled/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_i_asymp"
   acb_hypgeom_bessel_i_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_bessel_i_0f1/ /res/ /nu/ /z/ /scaled/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_i_0f1"
   acb_hypgeom_bessel_i_0f1 :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_bessel_i/ /res/ /nu/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_i"
   acb_hypgeom_bessel_i :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_i_scaled/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the modified Bessel function of the first kind
 -- \(I_{\nu}(z) = z^{\nu} (iz)^{-\nu} J_{\nu}(iz)\) respectively using
 -- asymptotic series (see @acb_hypgeom_bessel_j_asymp@), the convergent
@@ -769,7 +846,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_i_scaled"
   acb_hypgeom_bessel_i_scaled :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_k_asymp/ /res/ /nu/ /z/ /scaled/ /prec/ 
--- 
+--
 -- Computes the modified Bessel function of the second kind via via
 -- @acb_hypgeom_u_asymp@. For all \(\nu\) and all \(z \ne 0\), we have
 -- 
@@ -782,7 +859,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_k_asymp"
   acb_hypgeom_bessel_k_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_k_0f1_series/ /res/ /nu/ /z/ /scaled/ /len/ /prec/ 
--- 
+--
 -- Computes the modified Bessel function of the second kind \(K_{\nu}(z)\)
 -- as a power series truncated to length /len/, given
 -- \(\nu, z \in \mathbb{C}[[x]]\). Uses the formula
@@ -806,7 +883,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_k_0f1_series"
   acb_hypgeom_bessel_k_0f1_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_k_0f1/ /res/ /nu/ /z/ /scaled/ /prec/ 
--- 
+--
 -- Computes the modified Bessel function of the second kind from
 -- 
 -- \[`\]
@@ -830,14 +907,14 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_k_0f1"
   acb_hypgeom_bessel_k_0f1 :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_k/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the modified Bessel function of the second kind \(K_{\nu}(z)\)
 -- using an automatic algorithm choice.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_k"
   acb_hypgeom_bessel_k :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_bessel_k_scaled/ /res/ /nu/ /z/ /prec/ 
--- 
+--
 -- Computes the function \(e^{z} K_{\nu}(z)\).
 foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_k_scaled"
   acb_hypgeom_bessel_k_scaled :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
@@ -865,14 +942,14 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_bessel_k_scaled"
 -- evaluation.
 --
 -- | /acb_hypgeom_airy_direct/ /ai/ /ai_prime/ /bi/ /bi_prime/ /z/ /n/ /prec/ 
--- 
+--
 -- Computes the Airy functions using direct series expansions truncated at
 -- /n/ terms. Error bounds are included in the output.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_airy_direct"
   acb_hypgeom_airy_direct :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_airy_asymp/ /ai/ /ai_prime/ /bi/ /bi_prime/ /z/ /n/ /prec/ 
--- 
+--
 -- Computes the Airy functions using asymptotic expansions truncated at /n/
 -- terms. Error bounds are included in the output. For details about how
 -- the error bounds are computed, see
@@ -881,7 +958,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_airy_asymp"
   acb_hypgeom_airy_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_airy_bound/ /ai/ /ai_prime/ /bi/ /bi_prime/ /z/ 
--- 
+--
 -- Computes bounds for the Airy functions using first-order asymptotic
 -- expansions together with error bounds. This function uses some shortcuts
 -- to make it slightly faster than calling @acb_hypgeom_airy_asymp@ with
@@ -890,7 +967,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_airy_bound"
   acb_hypgeom_airy_bound :: Ptr CMag -> Ptr CMag -> Ptr CMag -> Ptr CMag -> Ptr CAcb -> IO ()
 
 -- | /acb_hypgeom_airy/ /ai/ /ai_prime/ /bi/ /bi_prime/ /z/ /prec/ 
--- 
+--
 -- Computes Airy functions using an automatic algorithm choice.
 -- 
 -- We use @acb_hypgeom_airy_asymp@ whenever this gives full accuracy and
@@ -908,7 +985,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_airy"
   acb_hypgeom_airy :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_airy_jet/ /ai/ /bi/ /z/ /len/ /prec/ 
--- 
+--
 -- Writes to /ai/ and /bi/ the respective Taylor expansions of the Airy
 -- functions at the point /z/, truncated to length /len/. Either of the
 -- outputs can be /NULL/ to avoid computing that function. The variable /z/
@@ -920,11 +997,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_airy"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_airy_jet"
   acb_hypgeom_airy_jet :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /_acb_hypgeom_airy_series/ /ai/ /ai_prime/ /bi/ /bi_prime/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_airy_series"
   _acb_hypgeom_airy_series :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_airy_series/ /ai/ /ai_prime/ /bi/ /bi_prime/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the Airy functions evaluated at the power series /z/, truncated
 -- to length /len/. As with the other Airy methods, any of the outputs can
 -- be /NULL/.
@@ -961,25 +1040,27 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_airy_series"
 -- cancellation in parts of the complex plane.
 --
 -- | /acb_hypgeom_coulomb/ /F/ /G/ /Hpos/ /Hneg/ /l/ /eta/ /z/ /prec/ 
--- 
+--
 -- Writes to /F/, /G/, /Hpos/, /Hneg/ the values of the respective Coulomb
 -- wave functions. Any of the outputs can be /NULL/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_coulomb"
   acb_hypgeom_coulomb :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_coulomb_jet/ /F/ /G/ /Hpos/ /Hneg/ /l/ /eta/ /z/ /len/ /prec/ 
--- 
+--
 -- Writes to /F/, /G/, /Hpos/, /Hneg/ the respective Taylor expansions of
 -- the Coulomb wave functions at the point /z/, truncated to length /len/.
 -- Any of the outputs can be /NULL/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_coulomb_jet"
   acb_hypgeom_coulomb_jet :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> IO ()
 
+-- | /_acb_hypgeom_coulomb_series/ /F/ /G/ /Hpos/ /Hneg/ /l/ /eta/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_coulomb_series"
   _acb_hypgeom_coulomb_series :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_coulomb_series/ /F/ /G/ /Hpos/ /Hneg/ /l/ /eta/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the Coulomb wave functions evaluated at the power series /z/,
 -- truncated to length /len/. Any of the outputs can be /NULL/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_coulomb_series"
@@ -987,20 +1068,28 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_coulomb_series"
 
 -- Incomplete gamma and beta functions -----------------------------------------
 
+-- | /acb_hypgeom_gamma_upper_asymp/ /res/ /s/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_asymp"
   acb_hypgeom_gamma_upper_asymp :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_gamma_upper_1f1a/ /res/ /s/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_1f1a"
   acb_hypgeom_gamma_upper_1f1a :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_gamma_upper_1f1b/ /res/ /s/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_1f1b"
   acb_hypgeom_gamma_upper_1f1b :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_gamma_upper_singular/ /res/ /s/ /z/ /regularized/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_singular"
   acb_hypgeom_gamma_upper_singular :: Ptr CAcb -> CLong -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_gamma_upper/ /res/ /s/ /z/ /regularized/ /prec/ 
--- 
+--
 -- If /regularized/ is 0, computes the upper incomplete gamma function
 -- \(\Gamma(s,z)\).
 -- 
@@ -1036,11 +1125,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_singular"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper"
   acb_hypgeom_gamma_upper :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /_acb_hypgeom_gamma_upper_series/ /res/ /s/ /z/ /zlen/ /regularized/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_gamma_upper_series"
   _acb_hypgeom_gamma_upper_series :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_gamma_upper_series/ /res/ /s/ /z/ /regularized/ /n/ /prec/ 
--- 
+--
 -- Sets /res/ to an upper incomplete gamma function where /s/ is a constant
 -- and /z/ is a power series, truncated to length /n/. The /regularized/
 -- argument has the same interpretation as in @acb_hypgeom_gamma_upper@.
@@ -1048,7 +1139,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_series"
   acb_hypgeom_gamma_upper_series :: Ptr CAcbPoly -> Ptr CAcb -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_gamma_lower/ /res/ /s/ /z/ /regularized/ /prec/ 
--- 
+--
 -- If /regularized/ is 0, computes the lower incomplete gamma function
 -- \(\gamma(s,z) = \frac{z^s}{s} {}_1F_1(s, s+1, -z)\).
 -- 
@@ -1060,11 +1151,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_upper_series"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_lower"
   acb_hypgeom_gamma_lower :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /_acb_hypgeom_gamma_lower_series/ /res/ /s/ /z/ /zlen/ /regularized/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_gamma_lower_series"
   _acb_hypgeom_gamma_lower_series :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_gamma_lower_series/ /res/ /s/ /z/ /regularized/ /n/ /prec/ 
--- 
+--
 -- Sets /res/ to an lower incomplete gamma function where /s/ is a constant
 -- and /z/ is a power series, truncated to length /n/. The /regularized/
 -- argument has the same interpretation as in @acb_hypgeom_gamma_lower@.
@@ -1072,7 +1165,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_lower_series"
   acb_hypgeom_gamma_lower_series :: Ptr CAcbPoly -> Ptr CAcb -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_beta_lower/ /res/ /a/ /b/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Computes the (lower) incomplete beta function, defined by
 -- \(B(a,b;z) = \int_0^z t^{a-1} (1-t)^{b-1}\), optionally the regularized
 -- incomplete beta function \(I(a,b;z) = B(a,b;z) / B(a,b;1)\).
@@ -1092,11 +1185,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gamma_lower_series"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_beta_lower"
   acb_hypgeom_beta_lower :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /_acb_hypgeom_beta_lower_series/ /res/ /a/ /b/ /z/ /zlen/ /regularized/ /n/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_beta_lower_series"
   _acb_hypgeom_beta_lower_series :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_beta_lower_series/ /res/ /a/ /b/ /z/ /regularized/ /n/ /prec/ 
--- 
+--
 -- Sets /res/ to the lower incomplete beta function \(B(a,b;z)\)
 -- (optionally the regularized version \(I(a,b;z)\)) where /a/ and /b/ are
 -- constants and /z/ is a power series, truncating the result to length
@@ -1110,20 +1205,24 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_beta_lower_series"
 -- The branch cut conventions of the following functions match Mathematica.
 --
 -- | /acb_hypgeom_expint/ /res/ /s/ /z/ /prec/ 
--- 
+--
 -- Computes the generalized exponential integral \(E_s(z)\). This is a
 -- trivial wrapper of @acb_hypgeom_gamma_upper@.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_expint"
   acb_hypgeom_expint :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_ei_asymp/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ei_asymp"
   acb_hypgeom_ei_asymp :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_ei_2f2/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ei_2f2"
   acb_hypgeom_ei_2f2 :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_ei/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the exponential integral \(\operatorname{Ei}(z)\), respectively
 -- using
 -- 
@@ -1139,24 +1238,30 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_ei_2f2"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ei"
   acb_hypgeom_ei :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_ei_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_ei_series"
   _acb_hypgeom_ei_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_ei_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the exponential integral of the power series /z/, truncated to
 -- length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ei_series"
   acb_hypgeom_ei_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_si_asymp/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_si_asymp"
   acb_hypgeom_si_asymp :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_si_1f2/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_si_1f2"
   acb_hypgeom_si_1f2 :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_si/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the sine integral \(\operatorname{Si}(z)\), respectively using
 -- 
 -- \[`\]
@@ -1171,24 +1276,30 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_si_1f2"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_si"
   acb_hypgeom_si :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_si_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_si_series"
   _acb_hypgeom_si_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_si_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the sine integral of the power series /z/, truncated to length
 -- /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_si_series"
   acb_hypgeom_si_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_ci_asymp/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ci_asymp"
   acb_hypgeom_ci_asymp :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_ci_2f3/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ci_2f3"
   acb_hypgeom_ci_2f3 :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_ci/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the cosine integral \(\operatorname{Ci}(z)\), respectively
 -- using
 -- 
@@ -1206,42 +1317,50 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_ci_2f3"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ci"
   acb_hypgeom_ci :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_ci_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_ci_series"
   _acb_hypgeom_ci_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_ci_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the cosine integral of the power series /z/, truncated to
 -- length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_ci_series"
   acb_hypgeom_ci_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_shi/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the hyperbolic sine integral
 -- \(\operatorname{Shi}(z) = -i \operatorname{Si}(iz)\). This is a trivial
 -- wrapper of @acb_hypgeom_si@.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_shi"
   acb_hypgeom_shi :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_shi_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_shi_series"
   _acb_hypgeom_shi_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_shi_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the hyperbolic sine integral of the power series /z/, truncated
 -- to length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_shi_series"
   acb_hypgeom_shi_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
+-- | /acb_hypgeom_chi_asymp/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_chi_asymp"
   acb_hypgeom_chi_asymp :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /acb_hypgeom_chi_2f3/ /res/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_chi_2f3"
   acb_hypgeom_chi_2f3 :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_chi/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the hyperbolic cosine integral \(\operatorname{Chi}(z)\),
 -- respectively using
 -- 
@@ -1259,18 +1378,20 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_chi_2f3"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_chi"
   acb_hypgeom_chi :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
+-- | /_acb_hypgeom_chi_series/ /res/ /z/ /zlen/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_chi_series"
   _acb_hypgeom_chi_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_chi_series/ /res/ /z/ /len/ /prec/ 
--- 
+--
 -- Computes the hyperbolic cosine integral of the power series /z/,
 -- truncated to length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_chi_series"
   acb_hypgeom_chi_series :: Ptr CAcbPoly -> Ptr CAcbPoly -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_li/ /res/ /z/ /offset/ /prec/ 
--- 
+--
 -- If /offset/ is zero, computes the logarithmic integral
 -- \(\operatorname{li}(z) = \operatorname{Ei}(\log(z))\).
 -- 
@@ -1279,11 +1400,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_chi_series"
 foreign import ccall "acb_hypgeom.h acb_hypgeom_li"
   acb_hypgeom_li :: Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /_acb_hypgeom_li_series/ /res/ /z/ /zlen/ /offset/ /len/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h _acb_hypgeom_li_series"
   _acb_hypgeom_li_series :: Ptr CAcb -> Ptr CAcb -> CLong -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_li_series/ /res/ /z/ /offset/ /len/ /prec/ 
--- 
+--
 -- Computes the logarithmic integral (optionally the offset version) of the
 -- power series /z/, truncated to length /len/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_li_series"
@@ -1301,7 +1424,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_li_series"
 -- flag /regularized/ is set.
 --
 -- | /acb_hypgeom_2f1_continuation/ /res0/ /res1/ /a/ /b/ /c/ /z0/ /z1/ /f0/ /f1/ /prec/ 
--- 
+--
 -- Given \(F(z_0), F'(z_0)\) in /f0/, /f1/, sets /res0/ and /res1/ to
 -- \(F(z_1), F'(z_1)\) by integrating the hypergeometric differential
 -- equation along a straight-line path. The evaluation points should be
@@ -1310,23 +1433,25 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_continuation"
   acb_hypgeom_2f1_continuation :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_2f1_series_direct/ /res/ /a/ /b/ /c/ /z/ /regularized/ /len/ /prec/ 
--- 
+--
 -- Computes \(F(z)\) of the given power series truncated to length /len/,
 -- using direct summation of the hypergeometric series.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_series_direct"
   acb_hypgeom_2f1_series_direct :: Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr CAcbPoly -> Ptr CAcbPoly -> CInt -> CLong -> CLong -> IO ()
 
 -- | /acb_hypgeom_2f1_direct/ /res/ /a/ /b/ /c/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Computes \(F(z)\) using direct summation of the hypergeometric series.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_direct"
   acb_hypgeom_2f1_direct :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
+-- | /acb_hypgeom_2f1_transform/ /res/ /a/ /b/ /c/ /z/ /flags/ /which/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_transform"
   acb_hypgeom_2f1_transform :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_2f1_transform_limit/ /res/ /a/ /b/ /c/ /z/ /regularized/ /which/ /prec/ 
--- 
+--
 -- Computes \(F(z)\) using an argument transformation determined by the
 -- flag /which/. Legal values are 1 for \(z/(z-1)\), 2 for \(1/z\), 3 for
 -- \(1/(1-z)\), 4 for \(1-z\), and 5 for \(1-1/z\).
@@ -1341,14 +1466,14 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_transform_limit"
   acb_hypgeom_2f1_transform_limit :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_2f1_corner/ /res/ /a/ /b/ /c/ /z/ /regularized/ /prec/ 
--- 
+--
 -- Computes \(F(z)\) near the corner cases \(\exp(\pm \pi i \sqrt{3})\) by
 -- analytic continuation.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_corner"
   acb_hypgeom_2f1_corner :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_2f1_choose/ /z/ 
--- 
+--
 -- Chooses a method to compute the function based on the location of /z/ in
 -- the complex plane. If the return value is 0, direct summation should be
 -- used. If the return value is 1 to 5, the transformation with this index
@@ -1358,7 +1483,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1_choose"
   acb_hypgeom_2f1_choose :: Ptr CAcb -> IO CInt
 
 -- | /acb_hypgeom_2f1/ /res/ /a/ /b/ /c/ /z/ /flags/ /prec/ 
--- 
+--
 -- Computes \(F(z)\) or \(\operatorname{\mathbf{F}}(z)\) using an automatic
 -- algorithm choice.
 -- 
@@ -1390,11 +1515,13 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_2f1"
 
 -- Orthogonal polynomials and functions ----------------------------------------
 
+-- | /acb_hypgeom_chebyshev_t/ /res/ /n/ /z/ /prec/ 
+--
 foreign import ccall "acb_hypgeom.h acb_hypgeom_chebyshev_t"
   acb_hypgeom_chebyshev_t :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_chebyshev_u/ /res/ /n/ /z/ /prec/ 
--- 
+--
 -- Computes the Chebyshev polynomial (or Chebyshev function) of first or
 -- second kind
 -- 
@@ -1412,7 +1539,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_chebyshev_u"
   acb_hypgeom_chebyshev_u :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_jacobi_p/ /res/ /n/ /a/ /b/ /z/ /prec/ 
--- 
+--
 -- Computes the Jacobi polynomial (or Jacobi function)
 -- 
 -- \[`\]
@@ -1426,7 +1553,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_jacobi_p"
   acb_hypgeom_jacobi_p :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_gegenbauer_c/ /res/ /n/ /m/ /z/ /prec/ 
--- 
+--
 -- Computes the Gegenbauer polynomial (or Gegenbauer function)
 -- 
 -- \[`\]
@@ -1440,7 +1567,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_gegenbauer_c"
   acb_hypgeom_gegenbauer_c :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_laguerre_l/ /res/ /n/ /m/ /z/ /prec/ 
--- 
+--
 -- Computes the Laguerre polynomial (or Laguerre function)
 -- 
 -- \[`\]
@@ -1461,7 +1588,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_laguerre_l"
   acb_hypgeom_laguerre_l :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_hermite_h/ /res/ /n/ /z/ /prec/ 
--- 
+--
 -- Computes the Hermite polynomial (or Hermite function)
 -- 
 -- \[`\]
@@ -1473,7 +1600,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_hermite_h"
   acb_hypgeom_hermite_h :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_legendre_p/ /res/ /n/ /m/ /z/ /type/ /prec/ 
--- 
+--
 -- Sets /res/ to the associated Legendre function of the first kind
 -- evaluated for degree /n/, order /m/, and argument /z/. When /m/ is zero,
 -- this reduces to the Legendre polynomial \(P_n(z)\).
@@ -1497,7 +1624,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_legendre_p"
   acb_hypgeom_legendre_p :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_legendre_q/ /res/ /n/ /m/ /z/ /type/ /prec/ 
--- 
+--
 -- Sets /res/ to the associated Legendre function of the second kind
 -- evaluated for degree /n/, order /m/, and argument /z/. When /m/ is zero,
 -- this reduces to the Legendre function \(Q_n(z)\).
@@ -1528,14 +1655,14 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_legendre_q"
   acb_hypgeom_legendre_q :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_legendre_p_uiui_rec/ /res/ /n/ /m/ /z/ /prec/ 
--- 
+--
 -- For nonnegative integer /n/ and /m/, uses recurrence relations to
 -- evaluate \((1-z^2)^{-m/2} P_n^m(z)\) which is a polynomial in /z/.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_legendre_p_uiui_rec"
   acb_hypgeom_legendre_p_uiui_rec :: Ptr CAcb -> CULong -> CULong -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_spherical_y/ /res/ /n/ /m/ /theta/ /phi/ /prec/ 
--- 
+--
 -- Computes the spherical harmonic of degree /n/, order /m/, latitude angle
 -- /theta/, and longitude angle /phi/, normalized such that
 -- 
@@ -1557,14 +1684,14 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_spherical_y"
 
 
 -- | /acb_hypgeom_dilog_zero_taylor/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the dilogarithm for /z/ close to 0 using the hypergeometric
 -- series (effective only when \(|z| \ll 1\)).
 foreign import ccall "acb_hypgeom.h acb_hypgeom_dilog_zero_taylor"
   acb_hypgeom_dilog_zero_taylor :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_dilog_zero/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the dilogarithm for /z/ close to 0, using the bit-burst
 -- algorithm instead of the hypergeometric series directly at very high
 -- precision.
@@ -1572,7 +1699,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_dilog_zero"
   acb_hypgeom_dilog_zero :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_dilog_transform/ /res/ /z/ /algorithm/ /prec/ 
--- 
+--
 -- Computes the dilogarithm by applying one of the transformations \(1/z\),
 -- \(1-z\), \(z/(z-1)\), \(1/(1-z)\), indexed by /algorithm/ from 1 to 4,
 -- and calling @acb_hypgeom_dilog_zero@ with the reduced variable.
@@ -1584,7 +1711,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_dilog_transform"
   acb_hypgeom_dilog_transform :: Ptr CAcb -> Ptr CAcb -> CInt -> CLong -> IO ()
 
 -- | /acb_hypgeom_dilog_continuation/ /res/ /a/ /z/ /prec/ 
--- 
+--
 -- Computes \(\operatorname{Li}_2(z) - \operatorname{Li}_2(a)\) using
 -- Taylor expansion at /a/. Binary splitting is used. Both /a/ and /z/
 -- should be well isolated from the points 0 and 1, except that /a/ may be
@@ -1595,7 +1722,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_dilog_continuation"
   acb_hypgeom_dilog_continuation :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_dilog_bitburst/ /res/ /z0/ /z/ /prec/ 
--- 
+--
 -- Sets /z0/ to a point with short bit expansion close to /z/ and sets
 -- /res/ to \(\operatorname{Li}_2(z) - \operatorname{Li}_2(z_0)\), computed
 -- using the bit-burst algorithm.
@@ -1603,7 +1730,7 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_dilog_bitburst"
   acb_hypgeom_dilog_bitburst :: Ptr CAcb -> Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
 
 -- | /acb_hypgeom_dilog/ /res/ /z/ /prec/ 
--- 
+--
 -- Computes the dilogarithm using a default algorithm choice.
 foreign import ccall "acb_hypgeom.h acb_hypgeom_dilog"
   acb_hypgeom_dilog :: Ptr CAcb -> Ptr CAcb -> CLong -> IO ()
