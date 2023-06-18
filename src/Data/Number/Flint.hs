@@ -99,6 +99,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb.Types
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.Mag
+, module Data.Number.Flint.Arb.Arf
 , module Data.Number.Flint.Arb.Mat
 , module Data.Number.Flint.Arb.Hypgeom
 , module Data.Number.Flint.Acb
@@ -172,6 +173,7 @@ import Data.Number.Flint.Qadic
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag
+import Data.Number.Flint.Arb.Arf
 import Data.Number.Flint.Arb.Mat
 import Data.Number.Flint.Arb.Hypgeom
 import Data.Number.Flint.Acb

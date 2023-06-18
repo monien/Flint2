@@ -79,6 +79,7 @@ library:
    - Data.Number.Flint.Arb.Types
    - Data.Number.Flint.Arb
    - Data.Number.Flint.Arb.Mag
+   - Data.Number.Flint.Arb.Arf
    - Data.Number.Flint.Arb.Mat
    - Data.Number.Flint.Arb.Hypgeom
    - Data.Number.Flint.Acb.Types
@@ -141,8 +142,9 @@ library:
    - Data.Number.Flint.Support.Mpfr.Vec.FFI
    - Data.Number.Flint.ThreadPool.FFI
    - Data.Number.Flint.Arb.Types.FFI
-   - Data.Number.Flint.Arb.FFI 
+   - Data.Number.Flint.Arb.FFI
    - Data.Number.Flint.Arb.Mag.FFI
+   - Data.Number.Flint.Arb.Arf.FFI 
    - Data.Number.Flint.Arb.Mat.FFI
    - Data.Number.Flint.Arb.Hypgeom.FFI
    - Data.Number.Flint.Acb.Types.FFI
