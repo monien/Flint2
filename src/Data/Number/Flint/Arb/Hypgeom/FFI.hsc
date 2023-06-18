@@ -133,7 +133,7 @@ module Data.Number.Flint.Arb.Hypgeom.FFI (
   , arb_hypgeom_legendre_p_ui_zero
   , arb_hypgeom_legendre_p_ui_one
   , arb_hypgeom_legendre_p_ui_asymp
-  , arb_hypgeom_legendre_p_rec
+  --, arb_hypgeom_legendre_p_rec
   , arb_hypgeom_legendre_p_ui
   , arb_hypgeom_legendre_p_ui_root
   -- * Dilogarithm
@@ -959,9 +959,9 @@ foreign import ccall "arb_hypgeom.h arb_hypgeom_legendre_p_ui_one"
 -- | /arb_hypgeom_legendre_p_ui_asymp/ /res/ /res_prime/ /n/ /x/ /K/ /prec/ 
 foreign import ccall "arb_hypgeom.h arb_hypgeom_legendre_p_ui_asymp"
   arb_hypgeom_legendre_p_ui_asymp :: Ptr CArb -> Ptr CArb -> CULong -> Ptr CArb -> CLong -> CLong -> IO ()
--- | /arb_hypgeom_legendre_p_rec/ /res/ /res_prime/ /n/ /x/ /prec/ 
-foreign import ccall "arb_hypgeom.h arb_hypgeom_legendre_p_rec"
-  arb_hypgeom_legendre_p_rec :: Ptr CArb -> Ptr CArb -> CULong -> Ptr CArb -> CLong -> IO ()
+-- -- | /arb_hypgeom_legendre_p_rec/ /res/ /res_prime/ /n/ /x/ /prec/ 
+-- foreign import ccall "arb_hypgeom.h arb_hypgeom_legendre_p_rec"
+--   arb_hypgeom_legendre_p_rec :: Ptr CArb -> Ptr CArb -> CULong -> Ptr CArb -> CLong -> IO ()
 -- | /arb_hypgeom_legendre_p_ui/ /res/ /res_prime/ /n/ /x/ /prec/ 
 --
 -- Evaluates the ordinary Legendre polynomial \(P_n(x)\). If /res_prime/ is

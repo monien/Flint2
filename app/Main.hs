@@ -9,6 +9,7 @@ import Foreign.Marshal.Array
 import Foreign.Storable
 import Foreign.Ptr (nullPtr, castPtr)
 import Foreign.C.String
+import Foreign.C.Types
 import Foreign.Marshal.Array (advancePtr)
 
 import Test.QuickCheck
@@ -26,6 +27,9 @@ import Fmpq
 import FmpqPoly
 
 main = do
+  testArbHypgeom
+  
+main' = do
   testFmpzMPoly
   testFmpzMPolyQ
   testFq
@@ -36,7 +40,6 @@ main = do
   testFmpzi
   testNModMat
   testAcbModular
-  
   
 testRest = do
   x <- newFmpz
@@ -553,3 +556,45 @@ nextBernoulli = do
           fmpz_print d
           endl
 
+testArbHypgeom = do
+  fileName <- newCString "flint_test.out"
+  mode <- newCString "w"
+  cr <- newCString "\n"
+  space <- newCString " "
+  out <- fopen fileName mode
+  let prec = 1024
+  withNewArb $ \x -> do
+    arb_set_si x (-10)
+    withNewArb $ \dx -> do
+      arb_set_d dx 0.01
+      withNewArb $ \ai -> do
+        withNewArb $ \ai' -> do
+          withNewArb $ \bi -> do
+            withNewArb $ \bi' -> do
+              replicateM_ 2000 $ do
+                arb_hypgeom_airy ai ai' bi bi' x prec
+                -- arb_printn x 16 arb_str_no_radius
+                -- putStr " "
+                -- arb_printn ai 16 arb_str_no_radius
+                -- putStr " "
+                -- arb_printn ai' 16 arb_str_no_radius
+                -- endl
+                arb_fprintn out x 16 arb_str_no_radius
+                fputs space out
+                arb_fprintn out ai 16 arb_str_no_radius
+                fputs space out
+                arb_fprintn out ai' 16 arb_str_no_radius
+                fputs cr out
+                arb_add x x dx prec
+  fclose out
+
+-- c file ----------------------------------------------------------------------
+
+foreign import ccall "stdio.h fopen"
+  fopen :: CString -> CString -> IO (Ptr CFile)
+
+foreign import ccall "stdio.h fclose"
+  fclose :: Ptr CFile -> IO CInt
+
+foreign import ccall "stdio.h fputs"
+  fputs :: CString -> Ptr CFile -> IO CInt
