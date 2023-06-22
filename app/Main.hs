@@ -598,3 +598,34 @@ foreign import ccall "stdio.h fclose"
 
 foreign import ccall "stdio.h fputs"
   fputs :: CString -> Ptr CFile -> IO CInt
+
+--------------------------------------------------------------------------------
+
+testFqPolyFactor = do
+  let poly = fromList [1,0,2,2,0,1,1,0,2,2,0,1] :: FmpzPoly
+      p = 3 :: Fmpz
+  fctx <- newFqCtx p 1 "a"
+  foly <- newFqPoly fctx
+  f <- newFqPolyFactor fctx
+  mtx <- newFmpzModCtx p
+  moly <- newFmpzModPoly mtx
+  withFqCtx fctx $ \ctx -> do
+    withFqPoly foly $ \foly -> do 
+      withFmpzModCtx mtx $ \mtx -> do
+        withFmpzPoly poly $ \poly -> do
+          withFmpzModPoly moly $ \moly -> do
+            fmpz_mod_poly_set_fmpz_poly moly poly mtx
+            -- fmpz_mod_poly_print moly mtx
+            -- endl
+            -- withCString "x" $ \x -> do
+            --   fmpz_mod_poly_print_pretty moly x mtx
+            --   endl
+            fq_poly_set_fmpz_mod_poly foly moly ctx
+      withCString "x" $ \x -> do
+        fq_poly_print_pretty foly x ctx
+        endl
+      withNewFqPolyFactor fctx $ \f -> do
+        withNewFq fctx $ \prefactor -> do
+          fq_poly_factor f prefactor foly ctx
+          withCString "x" $ \x -> do
+            fq_poly_factor_print_pretty f x ctx

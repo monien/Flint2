@@ -335,12 +335,12 @@ import Data.Number.Flint.ThreadPool
 data FmpzModPoly = FmpzModPoly {-# UNPACK #-} !(ForeignPtr CFmpzModPoly)
 data CFmpzModPoly = CFmpzModPoly (Ptr CFmpz) CLong CLong
 
-newFmpzModPoly n = do
+newFmpzModPoly ctx@(FmpzModCtx mtx) = do
   x <- mallocForeignPtr
-  withForeignPtr x $ \x ->
-    withFmpzModCtx n $ \n -> do
-      fmpz_mod_poly_init x n
-      addForeignPtrFinalizerEnv p_fmpz_mod_poly_clear n =<< newForeignPtr_ x
+  withForeignPtr x $ \x -> do
+    withFmpzModCtx ctx $ \ctx -> do
+      fmpz_mod_poly_init x ctx
+    addForeignPtrFinalizerEnv p_fmpz_mod_poly_clear x mtx
   return $ FmpzModPoly x
 
 {-# INLINE withFmpzModPoly #-}
@@ -402,7 +402,7 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_clear"
   fmpz_mod_poly_clear :: Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ()
 
 foreign import ccall "fmpz_mod_poly.h &fmpz_mod_poly_clear"
-  p_fmpz_mod_poly_clear :: FunPtr (Ptr CFmpzModCtx -> Ptr CFmpzModPoly -> IO ())
+  p_fmpz_mod_poly_clear :: FunPtr (Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO ())
 
 -- | /fmpz_mod_poly_realloc/ /poly/ /alloc/ /ctx/ 
 -- 
@@ -2808,6 +2808,12 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_radix"
 
 -- Input and output ------------------------------------------------------------
 
+foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_get_str"
+  fmpz_mod_poly_get_str :: Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO CString
+
+foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_get_str_pretty"
+  fmpz_mod_poly_get_str_pretty :: Ptr CFmpzModPoly -> CString -> Ptr CFmpzModCtx -> IO CString
+
 -- The printing options supported by this module are very similar to what
 -- can be found in the two related modules @fmpz_poly@ and @nmod_poly@.
 -- Consider, for example, the polynomial \(f(x) = 5x^3 + 2x + 1\) in
@@ -2850,8 +2856,8 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_fprint_pretty"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_print"
-  fmpz_mod_poly_print :: Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO CInt
+fmpz_mod_poly_print :: Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO CInt
+fmpz_mod_poly_print poly ctx = printCStr (flip fmpz_mod_poly_get_str ctx) poly
 
 -- | /fmpz_mod_poly_print_pretty/ /poly/ /x/ /ctx/ 
 -- 
@@ -2860,8 +2866,9 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_print"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_print_pretty"
-  fmpz_mod_poly_print_pretty :: Ptr CFmpzModPoly -> CString -> Ptr CFmpzModCtx -> IO CInt
+fmpz_mod_poly_print_pretty :: Ptr CFmpzModPoly -> CString -> Ptr CFmpzModCtx -> IO CInt
+fmpz_mod_poly_print_pretty poly x ctx = 
+  printCStr (\poly -> fmpz_mod_poly_get_str_pretty poly x ctx) poly
 
 -- Inflation and deflation -----------------------------------------------------
 
