@@ -27,7 +27,8 @@ import Fmpq
 import FmpqPoly
 
 main = do
-  testArbHypgeom
+  testFqPolyFactor
+  testFmpzModPolyFactor
   
 main' = do
   testFmpzMPoly
@@ -629,3 +630,18 @@ testFqPolyFactor = do
           fq_poly_factor f prefactor foly ctx
           withCString "x" $ \x -> do
             fq_poly_factor_print_pretty f x ctx
+
+testFmpzModPolyFactor = do
+  let poly = fromList [1,0,2,2,0,1,1,0,2,2,0,1] :: FmpzPoly
+      p = 3 :: Fmpz
+  mtx <- newFmpzModCtx p
+  moly <- newFmpzModPoly mtx
+  fac <- newFmpzModPolyFactor mtx
+  withFmpzModCtx mtx $ \mtx -> do
+    withFmpzPoly poly $ \poly -> do
+      withFmpzModPoly moly $ \moly -> do
+        withFmpzModPolyFactor fac $ \fac -> do
+          fmpz_mod_poly_set_fmpz_poly moly poly mtx
+          fmpz_mod_poly_factor fac moly mtx
+          withCString "x" $ \x -> do
+            fmpz_mod_poly_factor_print_pretty fac x mtx

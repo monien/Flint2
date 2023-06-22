@@ -48,7 +48,9 @@ library:
    - Data.Number.Flint.Fmpz.LLL
    - Data.Number.Flint.Fmpz.Mod
    - Data.Number.Flint.Fmpz.Mod.Poly
+   - Data.Number.Flint.Fmpz.Mod.Poly.Factor
    - Data.Number.Flint.Fmpz.Mod.Mat
+   - Data.Number.Flint.Fmpz.Mod.Vec
    - Data.Number.Flint.Fmpq
    - Data.Number.Flint.Fmpq.Mat 
    - Data.Number.Flint.Fmpq.Vec
@@ -121,7 +123,9 @@ library:
    - Data.Number.Flint.Fmpz.LLL.FFI
    - Data.Number.Flint.Fmpz.Mod.FFI
    - Data.Number.Flint.Fmpz.Mod.Poly.FFI
+   - Data.Number.Flint.Fmpz.Mod.Poly.Factor.FFI
    - Data.Number.Flint.Fmpz.Mod.Mat.FFI
+   - Data.Number.Flint.Fmpz.Mod.Vec.FFI
    - Data.Number.Flint.Fmpq.FFI
    - Data.Number.Flint.Fmpq.Mat.FFI
    - Data.Number.Flint.Fmpq.Vec.FFI
@@ -185,6 +189,10 @@ library:
     - csrc/fmpz_vec/get_str.c
     - csrc/fmpz_mat/get_str.c
     - csrc/fmpz_mat/get_str_pretty.c
+    - csrc/fmpz_mod_poly_factor/fprint.c
+    - csrc/fmpz_mod_poly_factor/fprint_pretty.c
+    - csrc/fmpz_mod_poly_factor/get_str.c
+    - csrc/fmpz_mod_poly_factor/get_str_pretty.c
     - csrc/fmpq/get_fmpz_frac.c
     - csrc/fmpq_mat/get_str.c
     - csrc/fmpq_mat/fprint.c
