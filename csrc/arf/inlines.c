@@ -1,3 +1,7 @@
+#include <flint/flint.h>
+#include <flint/mag.h>
+#include <flint/arf.h>
+#include <mpfr.h>
 
 int
 arf_rounds_down_(arf_rnd_t rnd, int sgnbit)
@@ -406,6 +410,15 @@ arf_set_ui_2exp_si_(arf_t x, ulong man, slong exp)
 }
 
 void
+arf_mul_(arf_t z, arf_t x, arf_t y, slong prec, arf_rnd_t rnd) {
+  if( rnd == ARF_RND_DOWN ) {
+    arf_mul_rnd_down(z, x, y, prec);
+  } else {
+    arf_mul_rnd_any(z, x, y, prec, rnd);
+  }
+}
+
+void
 arf_mul_2exp_si_(arf_t y, const arf_t x, slong e)
 {
     arf_set(y, x);
@@ -642,14 +655,14 @@ arf_set_mag_(arf_t y, const mag_t x)
 }
 
 void
-mag_init_set_arf(mag_t y, const arf_t x)
+mag_init_set_arf_(mag_t y, const arf_t x)
 {
     mag_init(y);
     arf_get_mag(y, x);
 }
 
 void
-mag_fast_init_set_arf(mag_t y, const arf_t x)
+mag_fast_init_set_arf_(mag_t y, const arf_t x)
 {
     if (ARF_IS_SPECIAL(x))   /* x == 0 */
     {

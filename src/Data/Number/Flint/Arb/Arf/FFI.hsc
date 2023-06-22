@@ -957,7 +957,7 @@ foreign import ccall "arf.h arf_mul_2exp_fmpz"
 
 -- | /arf_mul/ /res/ /x/ /y/ /prec/ /rnd/ 
 --
-foreign import ccall "arf.h arf_mul"
+foreign import ccall "arf.h arf_mul_"
   arf_mul :: Ptr CArf -> Ptr CArf -> Ptr CArf -> CLong -> ArfRnd -> IO CInt
 
 -- | /arf_mul_ui/ /res/ /x/ /y/ /prec/ /rnd/ 

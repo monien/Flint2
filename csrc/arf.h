@@ -1,3 +1,9 @@
+#ifndef ARF_H_
+#define ARF_H_
+
+#include <arf.h>
+#include <mag.h>
+
 int arf_rounds_down_(arf_rnd_t rnd, int sgnbit);
 int arf_rounds_up_(arf_rnd_t rnd, int sgnbit);
 mpfr_rnd_t arf_rnd_to_mpfr_(arf_rnd_t rnd);
@@ -41,6 +47,7 @@ void arf_abs_(arf_t y, const arf_t x);
 slong arf_bits_(const arf_t x);
 void arf_bot_(fmpz_t e, const arf_t x);
 void arf_set_si_2exp_si_(arf_t x, slong man, slong exp);
+void arf_mul_(arf_t z, arf_t x, arf_t y, slong prec, arf_rnd_t rnd);
 void arf_set_ui_2exp_si_(arf_t x, ulong man, slong exp);
 void arf_mul_2exp_si_(arf_t y, const arf_t x, slong e);
 void arf_mul_2exp_fmpz_(arf_t y, const arf_t x, const fmpz_t e);
@@ -70,3 +77,5 @@ void arf_mag_add_ulp_(mag_t z, const mag_t x, const arf_t y, slong prec);
 void arf_mag_set_ulp_(mag_t z, const arf_t y, slong prec);
 int arf_set_fmpq_(arf_t y, const fmpq_t x, slong prec, arf_rnd_t rnd);
 slong arf_allocated_bytes_(const arf_t x);
+
+#endif // ARF_H_

@@ -89,6 +89,7 @@ library
       Data.Number.Flint.Acb.Dirichlet
       Data.Number.Flint.Bernoulli
       Data.Number.Flint.Partitions
+      Data.Number.Flint.Hypgeom
       Data.Number.Flint.NF
       Data.Number.Flint.NF.Elem
       Data.Number.Flint.NF.Fmpzi
@@ -154,6 +155,7 @@ library
       Data.Number.Flint.Acb.Dirichlet.FFI
       Data.Number.Flint.Bernoulli.FFI
       Data.Number.Flint.Partitions.FFI
+      Data.Number.Flint.Hypgeom.FFI
       Data.Number.Flint.NF.FFI
       Data.Number.Flint.NF.Elem.FFI
       Data.Number.Flint.NF.Fmpzi.FFI
@@ -187,6 +189,7 @@ library
       csrc/padic_mat/get_str.c
       csrc/padic_mat/get_str_pretty.c
       csrc/qadic/get_str_pretty.c
+      csrc/arf/inlines.c
       csrc/mag/get_str.c
       csrc/arb/get_strd.c
       csrc/arb/get_str_.c
