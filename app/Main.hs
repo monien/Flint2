@@ -259,8 +259,8 @@ testPerm = do
   endl
 
 testFq = do
-  let poly = fromList [0, 3, 1] :: FmpzPoly
   let p = 7 :: Fmpz
+      poly = fromList [0, 3, 1] :: FmpzPoly
   ctx <- newFqCtx p 4 "a"
   x <- newFq ctx
   tmp <- newFq ctx

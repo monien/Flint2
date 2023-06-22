@@ -113,6 +113,10 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Bernoulli
 -- * Finite Fields
 , module Data.Number.Flint.Fq
+, module Data.Number.Flint.Fq.Poly
+, module Data.Number.Flint.Fq.Poly.Factor
+, module Data.Number.Flint.Fq.Vec
+, module Data.Number.Flint.Fq.Mat
 -- * p-adic Numbers
 , module Data.Number.Flint.Padic
 , module Data.Number.Flint.Padic.Poly
@@ -164,6 +168,10 @@ import Data.Number.Flint.NF.Fmpzi
 import Data.Number.Flint.NF.QQbar
 -- Finite fields
 import Data.Number.Flint.Fq
+import Data.Number.Flint.Fq.Poly
+import Data.Number.Flint.Fq.Poly.Factor
+import Data.Number.Flint.Fq.Mat
+import Data.Number.Flint.Fq.Vec
 -- p-adic numbers
 import Data.Number.Flint.Padic
 import Data.Number.Flint.Padic.Poly

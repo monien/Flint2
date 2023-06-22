@@ -64,7 +64,12 @@ library:
    - Data.Number.Flint.Groups.Perm
    - Data.Number.Flint.Groups.Qfb
    - Data.Number.Flint.Groups.Dirichlet
+   - Data.Number.Flint.Fq.Types
    - Data.Number.Flint.Fq
+   - Data.Number.Flint.Fq.Poly
+   - Data.Number.Flint.Fq.Poly.Factor
+   - Data.Number.Flint.Fq.Mat
+   - Data.Number.Flint.Fq.Vec
    - Data.Number.Flint.Padic
    - Data.Number.Flint.Padic.Poly
    - Data.Number.Flint.Padic.Mat
@@ -131,6 +136,11 @@ library:
    - Data.Number.Flint.Groups.Qfb.FFI
    - Data.Number.Flint.Groups.Dirichlet.FFI
    - Data.Number.Flint.Fq.FFI
+   - Data.Number.Flint.Fq.Poly.FFI 
+   - Data.Number.Flint.Fq.Poly.Factor.FFI 
+   - Data.Number.Flint.Fq.Types.FFI
+   - Data.Number.Flint.Fq.Mat.FFI
+   - Data.Number.Flint.Fq.Vec.FFI 
    - Data.Number.Flint.Padic.FFI
    - Data.Number.Flint.Padic.Poly.FFI
    - Data.Number.Flint.Padic.Mat.FFI
@@ -185,6 +195,8 @@ library:
     - csrc/qqbar/fprintn.c
     - csrc/qqbar/get_str.c
     - csrc/qqbar/get_strn.c
+    - csrc/fq_mat/get_str.c
+    - csrc/fq_mat/get_str_pretty.c
     - csrc/padic_poly/get_str.c
     - csrc/padic_poly/get_str_pretty.c
     - csrc/padic_mat/get_str.c

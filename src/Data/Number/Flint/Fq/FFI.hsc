@@ -8,7 +8,7 @@
   #-}
 
 module Data.Number.Flint.Fq.FFI (
-  -- ** Finite fields
+  -- * Finite fields
   -- ** Finite field element
   --
   -- | The type `Fq` represents an element of the finite field \(\mathbb F_q\).
