@@ -197,6 +197,7 @@ import Data.Number.Flint.Fmpq
 
 import Data.Number.Flint.Arb.Types
 
+#define ARF_INLINES_C
 #include <flint/arf.h>
 
 -- arf_t -----------------------------------------------------------------------

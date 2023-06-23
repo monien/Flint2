@@ -74,6 +74,7 @@ library
       Data.Number.Flint.Padic.Poly
       Data.Number.Flint.Padic.Mat
       Data.Number.Flint.Qadic
+      Data.Number.Flint.Support.ULong.Extras
       Data.Number.Flint.Support.D.Extras
       Data.Number.Flint.Support.D.Interval
       Data.Number.Flint.Support.D.Mat
@@ -150,6 +151,7 @@ library
       Data.Number.Flint.Padic.Poly.FFI
       Data.Number.Flint.Padic.Mat.FFI
       Data.Number.Flint.Qadic.FFI
+      Data.Number.Flint.Support.ULong.Extras.FFI
       Data.Number.Flint.Support.D.Extras.FFI
       Data.Number.Flint.Support.D.Interval.FFI
       Data.Number.Flint.Support.D.Mat.FFI
@@ -231,7 +233,7 @@ library
       csrc/acb_modular/get_str.c
       csrc/mpfr_mat/swap_entrywise.c
   extra-libraries:
-      flint
+      flint, gmp
   build-tools:
       hsc2hs
   build-depends:

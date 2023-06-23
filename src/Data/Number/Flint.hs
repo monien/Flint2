@@ -125,6 +125,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Padic.Mat
 , module Data.Number.Flint.Qadic
 -- * Floating-point support code
+, module Data.Number.Flint.Support.ULong.Extras
 , module Data.Number.Flint.Support.D.Extras
 , module Data.Number.Flint.Support.D.Interval
 , module Data.Number.Flint.Support.D.Mat
@@ -201,6 +202,7 @@ import Data.Number.Flint.Partitions
 -- Bernoulli numbers
 import Data.Number.Flint.Bernoulli
 -- Floating-point support code
+import Data.Number.Flint.Support.ULong.Extras
 import Data.Number.Flint.Support.D.Extras
 import Data.Number.Flint.Support.D.Interval
 import Data.Number.Flint.Support.D.Mat

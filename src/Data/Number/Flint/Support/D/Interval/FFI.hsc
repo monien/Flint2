@@ -7,8 +7,8 @@ module Data.Number.Flint.Support.D.Interval.FFI (
   , arb_get_di
   , arb_set_di
   , di_print
-  -- , d_randtest2
-  -- , di_randtest
+  , di_randtest2
+  , di_randtest
   -- -- * Arithmetic
   -- , di_neg
   -- -- * Fast arithmetic
@@ -42,6 +42,7 @@ import Data.Number.Flint.Flint
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb.Arf
+import Data.Number.Flint.Support.D.Extras
 
 #include <flint/double_interval.h>
 
@@ -111,18 +112,24 @@ di_print (CDi a b) = do
   putStr $ printf "[%.17g, %.17g]" (realToFrac a :: Double)
                                    (realToFrac b :: Double)
   
--- -- | /d_randtest2/ /state/ 
--- --
--- -- Returns a random non-NaN @double@ with any exponent. The value can be
--- -- infinite or subnormal.
--- foreign import ccall "double_interval.h d_randtest2"
---   d_randtest2 :: Ptr CFRandState -> IO CDouble
-
+-- | /d_randtest2/ /state/ 
+--
+-- Returns a random non-NaN @double@ with any exponent. The value can be
+-- infinite or subnormal.
+di_randtest2 :: Ptr CFRandState -> IO CDouble
+di_randtest2 state = do
+  x <- d_randtest state
+  return x
 -- -- | /di_randtest/ /state/ 
 -- --
 -- -- Returns an interval with random endpoints.
 -- foreign import ccall "double_interval.h di_randtest"
---   di_randtest :: Ptr CFRandState -> IO CDi
+di_randtest :: Ptr CFRandState -> IO CDi
+di_randtest state = do
+  a <- d_randtest state
+  b <- d_randtest state
+  return $ if a > b then CDi b a else CDi a b
+    
 
 -- -- Arithmetic ------------------------------------------------------------------
 
