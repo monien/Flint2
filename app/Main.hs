@@ -15,7 +15,7 @@ import Foreign.Marshal.Array (advancePtr)
 import Test.QuickCheck
 import Control.Monad
 import Control.Monad.Reader
-
+import Text.Printf
 import Data.List (permutations)
 
 import Data.Number.Flint
@@ -652,8 +652,21 @@ testDi = do
   let prec = 16
   withNewArb $ \x -> do
     arb_const_euler x prec
-    arb_printn x 16 arb_str_no_radius
+    arb_printn x 32 arb_str_no_radius
     endl
     di_print =<< arb_get_di x
     endl
+    withNewArf $ \t -> do
+      arb_get_lbound_arf t x 53
+      arf_printd t 17
+      endl
+      a <- arf_get_d t arf_rnd_floor
+      print a
+      printf "%.17g\n" (realToFrac a :: Double)
+      arb_get_ubound_arf t x 53
+      arf_printd t 17
+      endl
+      b <- arf_get_d t arf_rnd_ceil
+      print b
+      printf "%.17g\n" (realToFrac b :: Double)
   endl
