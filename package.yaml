@@ -68,6 +68,7 @@ library:
    - Data.Number.Flint.Groups.Dirichlet
    - Data.Number.Flint.Fq.Types
    - Data.Number.Flint.Fq
+   - Data.Number.Flint.Fq.Embed
    - Data.Number.Flint.Fq.Poly
    - Data.Number.Flint.Fq.Poly.Factor
    - Data.Number.Flint.Fq.Mat
@@ -76,6 +77,8 @@ library:
    - Data.Number.Flint.Padic.Poly
    - Data.Number.Flint.Padic.Mat
    - Data.Number.Flint.Qadic
+   - Data.Number.Flint.Support.D.Extras
+   - Data.Number.Flint.Support.D.Interval
    - Data.Number.Flint.Support.D.Mat
    - Data.Number.Flint.Support.D.Vec
    - Data.Number.Flint.Support.Mpf.Mat
@@ -140,6 +143,7 @@ library:
    - Data.Number.Flint.Groups.Qfb.FFI
    - Data.Number.Flint.Groups.Dirichlet.FFI
    - Data.Number.Flint.Fq.FFI
+   - Data.Number.Flint.Fq.Embed.FFI
    - Data.Number.Flint.Fq.Poly.FFI 
    - Data.Number.Flint.Fq.Poly.Factor.FFI 
    - Data.Number.Flint.Fq.Types.FFI
@@ -149,6 +153,9 @@ library:
    - Data.Number.Flint.Padic.Poly.FFI
    - Data.Number.Flint.Padic.Mat.FFI
    - Data.Number.Flint.Qadic.FFI
+   # Floating-point support code 
+   - Data.Number.Flint.Support.D.Extras.FFI
+   - Data.Number.Flint.Support.D.Interval.FFI
    - Data.Number.Flint.Support.D.Mat.FFI
    - Data.Number.Flint.Support.D.Vec.FFI
    - Data.Number.Flint.Support.Mpf.Mat.FFI
@@ -210,6 +217,8 @@ library:
     - csrc/padic_mat/get_str.c
     - csrc/padic_mat/get_str_pretty.c
     - csrc/qadic/get_str_pretty.c
+    - csrc/double_interval/fprint.c
+    - csrc/double_interval/get_str.c
     - csrc/arf/inlines.c
     - csrc/mag/get_str.c
     - csrc/arb/get_strd.c

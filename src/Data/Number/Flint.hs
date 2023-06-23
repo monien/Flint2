@@ -114,6 +114,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Bernoulli
 -- * Finite Fields
 , module Data.Number.Flint.Fq
+, module Data.Number.Flint.Fq.Embed
 , module Data.Number.Flint.Fq.Poly
 , module Data.Number.Flint.Fq.Poly.Factor
 , module Data.Number.Flint.Fq.Vec
@@ -124,6 +125,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Padic.Mat
 , module Data.Number.Flint.Qadic
 -- * Floating-point support code
+, module Data.Number.Flint.Support.D.Extras
+, module Data.Number.Flint.Support.D.Interval
 , module Data.Number.Flint.Support.D.Mat
 , module Data.Number.Flint.Support.D.Vec
 , module Data.Number.Flint.Support.Mpf.Mat
@@ -171,6 +174,7 @@ import Data.Number.Flint.NF.Fmpzi
 import Data.Number.Flint.NF.QQbar
 -- Finite fields
 import Data.Number.Flint.Fq
+import Data.Number.Flint.Fq.Embed
 import Data.Number.Flint.Fq.Poly
 import Data.Number.Flint.Fq.Poly.Factor
 import Data.Number.Flint.Fq.Mat
@@ -197,6 +201,8 @@ import Data.Number.Flint.Partitions
 -- Bernoulli numbers
 import Data.Number.Flint.Bernoulli
 -- Floating-point support code
+import Data.Number.Flint.Support.D.Extras
+import Data.Number.Flint.Support.D.Interval
 import Data.Number.Flint.Support.D.Mat
 import Data.Number.Flint.Support.D.Vec
 import Data.Number.Flint.Support.Mpf.Mat

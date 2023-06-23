@@ -1,5 +1,5 @@
-#ifndef PADIC_MAT_H_
-#define PADIC_MAT_H_
+#ifndef CSRC_PADIC_MAT_H_
+#define CSRC_PADIC_MAT_H_
 
 #include <stdio.h>
 
