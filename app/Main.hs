@@ -649,15 +649,11 @@ testFmpzModPolyFactor = do
 
 
 testDi = do
-  let prec = 1024
+  let prec = 16
   withNewArb $ \x -> do
     arb_const_euler x prec
     arb_printn x 16 arb_str_no_radius
     endl
     di_print =<< arb_get_di x
-    -- p <- arb_get_di x
-    -- print p
-    -- di_print' p
-    -- endl
-
-    
+    endl
+  endl

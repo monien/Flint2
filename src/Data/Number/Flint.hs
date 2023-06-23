@@ -52,7 +52,7 @@ functionality in @flintlib@. Many of the data structures have been
 translated to Haskell.  Typically an object of type __x_t__ in flint
 will be called __X__ and can be created with a function name __newX__
 and a applied to a flint function with a __withX__ function. E.g. the
-integers in flint with the type `fmpz_t` will be created in the IO
+integers in flint with the type `Fmpz` will be created in the IO
 monad using `newFmpz` and used with the `withFmpz` function.
 
  -}

@@ -27,7 +27,24 @@ type CArf = CFlint Arf
 newtype ArfRnd = ArfRnd {_ArfRnd :: CInt}
   deriving (Show, Eq)
 
-arf_rnd_near   = ArfRnd #const ARF_RND_NEAR
+-- | Specifies that the result of an operation should be rounded to
+-- the nearest representable number in the direction towards zero.
+arf_rnd_up    = ArfRnd #const ARF_RND_UP
+-- | Specifies that the result of an operation should be rounded to
+-- the nearest representable number in the direction away from zero.
+arf_rnd_down  = ArfRnd #const ARF_RND_DOWN
+-- | Specifies that the result of an operation should be rounded to
+-- the nearest representable number in the direction towards minus
+-- infinity.
+arf_rnd_floor = ArfRnd #const ARF_RND_FLOOR
+-- | Specifies that the result of an operation should be rounded to
+-- the nearest representable number in the direction towards plus
+-- infinity.
+arf_rnd_ceil  = ArfRnd #const ARF_RND_CEIL
+-- | Specifies that the result of an operation should be rounded to
+-- the nearest representable number, rounding to even if there is a
+-- tie between two values.
+arf_rnd_near  = ArfRnd #const ARF_RND_NEAR
 -- | If passed as the precision parameter to a function, indicates
 -- that no rounding is to be performed. __Warning__: use of this value
 -- is unsafe in general. It must only be passed as input under the
