@@ -119,6 +119,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fq.Poly.Factor
 , module Data.Number.Flint.Fq.Vec
 , module Data.Number.Flint.Fq.Mat
+-- ** Zech
+, module Data.Number.Flint.Fq.Zech
 -- * p-adic Numbers
 , module Data.Number.Flint.Padic
 , module Data.Number.Flint.Padic.Poly
@@ -180,6 +182,8 @@ import Data.Number.Flint.Fq.Poly
 import Data.Number.Flint.Fq.Poly.Factor
 import Data.Number.Flint.Fq.Mat
 import Data.Number.Flint.Fq.Vec
+-- Zech
+import Data.Number.Flint.Fq.Zech
 -- p-adic numbers
 import Data.Number.Flint.Padic
 import Data.Number.Flint.Padic.Poly

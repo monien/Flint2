@@ -67,16 +67,26 @@ library:
    - Data.Number.Flint.Groups.Qfb
    - Data.Number.Flint.Groups.Dirichlet
    - Data.Number.Flint.Fq.Types
+   # Fq
    - Data.Number.Flint.Fq
    - Data.Number.Flint.Fq.Embed
    - Data.Number.Flint.Fq.Poly
    - Data.Number.Flint.Fq.Poly.Factor
    - Data.Number.Flint.Fq.Mat
    - Data.Number.Flint.Fq.Vec
+   # Fq NMod
+   - Data.Number.Flint.Fq.NMod
+   - Data.Number.Flint.Fq.NMod.Types
+   - Data.Number.Flint.Fq.NMod.Poly
+   - Data.Number.Flint.Fq.NMod.Mat
+   # Fq Zech
+   - Data.Number.Flint.Fq.Zech
+   # Padic
    - Data.Number.Flint.Padic
    - Data.Number.Flint.Padic.Poly
    - Data.Number.Flint.Padic.Mat
    - Data.Number.Flint.Qadic
+   # Support
    - Data.Number.Flint.Support.ULong.Extras 
    - Data.Number.Flint.Support.D.Extras
    - Data.Number.Flint.Support.D.Interval
@@ -87,6 +97,7 @@ library:
    - Data.Number.Flint.Support.Mpfr.Mat
    - Data.Number.Flint.Support.Mpfr.Vec   
    - Data.Number.Flint.ThreadPool
+   # Arb
    - Data.Number.Flint.Arb.Types
    - Data.Number.Flint.Arb
    - Data.Number.Flint.Arb.Mag
@@ -94,6 +105,7 @@ library:
    - Data.Number.Flint.Arb.Mat
    - Data.Number.Flint.Arb.Hypgeom
    - Data.Number.Flint.Acb.Types
+   # Acb
    - Data.Number.Flint.Acb
    - Data.Number.Flint.Acb.Poly
    - Data.Number.Flint.Acb.Mat
@@ -143,13 +155,22 @@ library:
    - Data.Number.Flint.Groups.Perm.FFI
    - Data.Number.Flint.Groups.Qfb.FFI
    - Data.Number.Flint.Groups.Dirichlet.FFI
+   # Fq
    - Data.Number.Flint.Fq.FFI
+   - Data.Number.Flint.Fq.Types.FFI
    - Data.Number.Flint.Fq.Embed.FFI
    - Data.Number.Flint.Fq.Poly.FFI 
    - Data.Number.Flint.Fq.Poly.Factor.FFI 
-   - Data.Number.Flint.Fq.Types.FFI
    - Data.Number.Flint.Fq.Mat.FFI
-   - Data.Number.Flint.Fq.Vec.FFI 
+   - Data.Number.Flint.Fq.Vec.FFI
+   # Fq NMod
+   - Data.Number.Flint.Fq.NMod.FFI
+   - Data.Number.Flint.Fq.NMod.Types.FFI
+   - Data.Number.Flint.Fq.NMod.Poly.FFI
+   - Data.Number.Flint.Fq.NMod.Mat.FFI
+   # Fq Zech
+   - Data.Number.Flint.Fq.Zech.FFI
+   # Padic
    - Data.Number.Flint.Padic.FFI
    - Data.Number.Flint.Padic.Poly.FFI
    - Data.Number.Flint.Padic.Mat.FFI
