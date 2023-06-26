@@ -254,7 +254,7 @@ instance Storable CFqZechPoly where
   peek = undefined
   poke = undefined
 
-newFqZechPoly x ctx@(FqZechCtx ftx) = do
+newFqZechPoly ctx@(FqZechCtx ftx) = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x -> do
     withFqZechCtx ctx $ \ctx -> do

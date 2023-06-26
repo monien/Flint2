@@ -262,13 +262,21 @@ foreign import ccall "fq_zech_mat.h fq_zech_mat_concat_horizontal"
 
 -- Printing --------------------------------------------------------------------
 
+foreign import ccall "fq_zech_mat.h fq_zech_mat_get_str_pretty"
+  fq_zech_mat_get_str_pretty :: Ptr CFqZechMat -> Ptr CFqZechCtx -> IO CString
+
+foreign import ccall "fq_zech_mat.h fq_zech_mat_get_str"
+  fq_zech_mat_get_str :: Ptr CFqZechMat -> Ptr CFqZechCtx -> IO CString
+ 
 -- | /fq_zech_mat_print_pretty/ /mat/ /ctx/ 
 --
 -- Pretty-prints @mat@ to @stdout@. A header is printed followed by the
 -- rows enclosed in brackets.
-foreign import ccall "fq_zech_mat.h fq_zech_mat_print_pretty"
-  fq_zech_mat_print_pretty :: Ptr CFqZechMat -> Ptr CFqZechCtx -> IO ()
-
+fq_zech_mat_print_pretty :: Ptr CFqZechMat -> Ptr CFqZechCtx -> IO ()
+fq_zech_mat_print_pretty mat ctx = do
+  printCStr (\mat -> fq_zech_mat_get_str_pretty mat ctx) mat
+  return ()
+  
 -- | /fq_zech_mat_fprint_pretty/ /file/ /mat/ /ctx/ 
 --
 -- Pretty-prints @mat@ to @file@. A header is printed followed by the rows
@@ -283,9 +291,11 @@ foreign import ccall "fq_zech_mat.h fq_zech_mat_fprint_pretty"
 --
 -- Prints @mat@ to @stdout@. A header is printed followed by the rows
 -- enclosed in brackets.
-foreign import ccall "fq_zech_mat.h fq_zech_mat_print"
-  fq_zech_mat_print :: Ptr CFqZechMat -> Ptr CFqZechCtx -> IO ()
-
+fq_zech_mat_print :: Ptr CFqZechMat -> Ptr CFqZechCtx -> IO ()
+fq_zech_mat_print mat ctx = do
+  printCStr (\mat -> fq_zech_mat_get_str mat ctx) mat
+  return ()
+  
 -- | /fq_zech_mat_fprint/ /file/ /mat/ /ctx/ 
 --
 -- Prints @mat@ to @file@. A header is printed followed by the rows

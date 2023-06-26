@@ -247,6 +247,9 @@ library:
     - csrc/qqbar/get_strn.c
     - csrc/fq_mat/get_str.c
     - csrc/fq_mat/get_str_pretty.c
+    - csrc/fq_zech/ctx_get_str.c
+    - csrc/fq_zech_mat/get_str.c
+    - csrc/fq_zech_mat/get_str_pretty.c
     - csrc/padic_poly/get_str.c
     - csrc/padic_poly/get_str_pretty.c
     - csrc/padic_mat/get_str.c

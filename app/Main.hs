@@ -633,19 +633,15 @@ testFqPolyFactor = do
             fq_poly_factor_print_pretty f x ctx
 
 testFmpzModPolyFactor = do
-  let poly = fromList [1,0,2,2,0,1,1,0,2,2,0,1] :: FmpzPoly
-      p = 3 :: Fmpz
-  mtx <- newFmpzModCtx p
-  moly <- newFmpzModPoly mtx
+  mtx <- newFmpzModCtx 3
+  moly <- exFmpzModPoly mtx
   fac <- newFmpzModPolyFactor mtx
   withFmpzModCtx mtx $ \mtx -> do
-    withFmpzPoly poly $ \poly -> do
-      withFmpzModPoly moly $ \moly -> do
-        withFmpzModPolyFactor fac $ \fac -> do
-          fmpz_mod_poly_set_fmpz_poly moly poly mtx
-          fmpz_mod_poly_factor fac moly mtx
-          withCString "x" $ \x -> do
-            fmpz_mod_poly_factor_print_pretty fac x mtx
+    withFmpzModPoly moly $ \moly -> do
+      withFmpzModPolyFactor fac $ \fac -> do
+        fmpz_mod_poly_factor fac moly mtx
+        withCString "x" $ \x -> do
+          fmpz_mod_poly_factor_print_pretty fac x mtx
 
 
 testDi = do
@@ -656,27 +652,44 @@ testDi = do
     endl
     di_print =<< arb_get_di x
     endl
-    withNewArf $ \t -> do
-      arb_get_lbound_arf t x 53
-      arf_printd t 17
-      endl
-      a <- arf_get_d t arf_rnd_floor
-      print a
-      printf "%.17g\n" (realToFrac a :: Double)
-      arb_get_ubound_arf t x 53
-      arf_printd t 17
-      endl
-      b <- arf_get_d t arf_rnd_ceil
-      print b
-      printf "%.17g\n" (realToFrac b :: Double)
-  endl
+
 
 testFqZech = do
-  ctx <- newFqZechCtx 7 4 "a"
+  mtx <- newFmpzModCtx 3
+  ctx <- newFqZechCtx 3 1 "a"
   x <- newFqZech ctx
-  withFqZechCtx ctx $ \ctx -> do
-    fq_zech_ctx_print ctx
-    endl
+  a <- newFqZechMat 3 3 ctx
+  poly <- newFqZechPoly ctx
+  fac <- newFqZechPolyFactor ctx
+  moly <- exFmpzModPoly mtx
+  withFqZechCtx ctx $ \ftx -> do
+    fq_zech_ctx_print ftx
     withFqZech x $ \x -> do
-      fq_zech_print x ctx
+      fq_zech_print x ftx
       endl
+    cs <- fq_zech_ctx_get_str ftx
+    s <- peekCString cs
+    free cs
+    print s
+    withFqZechMat a $ \a -> do
+      fq_zech_mat_print        a ftx
+      endl
+      fq_zech_mat_print_pretty a ftx
+      endl
+    withFqZechPoly poly $ \poly -> do
+      withFmpzModPoly moly $ \moly -> do
+        fq_zech_poly_set_fmpz_mod_poly poly moly ftx
+        fq_zech_poly_print poly ftx
+        endl
+        is_square_free <- fq_zech_poly_is_squarefree poly ftx
+        putStrLn $ "polynomial is square free: " ++ (show is_square_free)
+          
+
+exFmpzModPoly mtx = do
+  let poly = fromList [1,0,2,2,0,1,1,0,2,2,0,1] :: FmpzPoly
+  moly <- newFmpzModPoly mtx
+  withFmpzModCtx mtx $ \mtx -> do
+    withFmpzPoly poly $ \poly -> do
+      withFmpzModPoly moly $ \moly -> do
+        fmpz_mod_poly_set_fmpz_poly moly poly mtx
+  return moly

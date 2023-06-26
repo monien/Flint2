@@ -41,6 +41,7 @@ module Data.Number.Flint.Fq.Zech.FFI (
   --, fq_zech_ctx_prime
   , fq_zech_ctx_order
   , fq_zech_ctx_order_ui
+  , fq_zech_ctx_get_str
   , fq_zech_ctx_fprint
   , fq_zech_ctx_print
   , fq_zech_ctx_randtest
@@ -373,6 +374,9 @@ foreign import ccall "fq_zech.h fq_zech_ctx_order"
 foreign import ccall "fq_zech.h fq_zech_ctx_order_ui"
   fq_zech_ctx_order_ui :: Ptr CFqZechCtx -> IO CMpLimb
 
+foreign import ccall "fq_zech.h fq_zech_ctx_get_str"
+  fq_zech_ctx_get_str :: Ptr CFqZechCtx -> IO CString
+
 -- | /fq_zech_ctx_fprint/ /file/ /ctx/ 
 --
 -- Prints the context information to {tt{file}}. Returns 1 for a success
@@ -383,9 +387,11 @@ foreign import ccall "fq_zech.h fq_zech_ctx_fprint"
 -- | /fq_zech_ctx_print/ /ctx/ 
 --
 -- Prints the context information to {tt{stdout}}.
-foreign import ccall "fq_zech.h fq_zech_ctx_print"
-  fq_zech_ctx_print :: Ptr CFqZechCtx -> IO ()
-
+fq_zech_ctx_print :: Ptr CFqZechCtx -> IO ()
+fq_zech_ctx_print ctx = do
+  printCStr fq_zech_ctx_get_str ctx
+  return ()
+  
 -- | /fq_zech_ctx_randtest/ /ctx/ 
 --
 -- Initializes @ctx@ to a random finite field. Assumes that
