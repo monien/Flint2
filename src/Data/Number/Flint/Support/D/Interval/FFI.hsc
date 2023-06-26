@@ -9,11 +9,11 @@ module Data.Number.Flint.Support.D.Interval.FFI (
   , di_print
   , di_randtest2
   , di_randtest
-  -- -- * Arithmetic
-  -- , di_neg
-  -- -- * Fast arithmetic
-  -- , di_fast_add
-  -- , di_fast_sub
+  -- * Arithmetic
+  , di_neg
+  -- * Fast arithmetic
+  , di_fast_add
+  , di_fast_sub
   -- , di_fast_mul
   -- , di_fast_div
   -- , di_fast_sqr
@@ -45,6 +45,9 @@ import Data.Number.Flint.Arb.Arf
 import Data.Number.Flint.Support.D.Extras
 
 #include <flint/double_interval.h>
+#include <flint/double_extras.h>
+
+d_inf = 1/0 :: CDouble 
 
 -- di_t ------------------------------------------------------------------------
 
@@ -75,6 +78,18 @@ di_interval a b =
     else error $ printf "di_interval endpoints %g, %g not ordered.\n"
                         (realToFrac a :: Double)
                         (realToFrac b :: Double)
+
+_di_below x =
+  if x <= 1e300 then
+    x - (1e-300 + if x < 0 then -x else x) * 4.440892098500626e-16
+  else
+    if x /= x then -d_inf else 1e300
+
+_di_above x =
+  if x >= -1e300 then
+    x + (1e-300 + if x < 0 then -x else x) * 4.440892098500626e-16
+  else
+    if x /= x then d_inf else -1e300
     
 -- | /arb_get_di/ /x/ 
 --
@@ -120,10 +135,10 @@ di_randtest2 :: Ptr CFRandState -> IO CDouble
 di_randtest2 state = do
   x <- d_randtest state
   return x
--- -- | /di_randtest/ /state/ 
--- --
--- -- Returns an interval with random endpoints.
--- foreign import ccall "double_interval.h di_randtest"
+  
+-- | /di_randtest/ /state/ 
+--
+-- Returns an interval with random endpoints.
 di_randtest :: Ptr CFRandState -> IO CDi
 di_randtest state = do
   a <- d_randtest state
@@ -131,30 +146,45 @@ di_randtest state = do
   return $ if a > b then CDi b a else CDi a b
     
 
--- -- Arithmetic ------------------------------------------------------------------
+-- Arithmetic ------------------------------------------------------------------
 
--- -- | /di_neg/ /x/ 
--- --
--- -- Returns the exact negation of /x/.
--- foreign import ccall "double_interval.h di_neg"
---   di_neg :: CDi -> IO CDi
+-- | /di_neg/ /x/ 
+--
+-- Returns the exact negation of /x/.
+di_neg :: CDi -> CDi
+di_neg (CDi a b) = CDi (-b) a
 
--- -- Fast arithmetic -------------------------------------------------------------
+-- Fast arithmetic -------------------------------------------------------------
 
--- -- The following methods perform fast but sloppy interval arithmetic: we
--- -- manipulate the endpoints with default rounding and then add or subtract
--- -- generic perturbations regardless of whether the operations were exact.
--- -- It is currently assumed that the CPU rounding mode is to nearest.
--- --
--- -- | /di_fast_add/ /x/ /y/ 
--- foreign import ccall "double_interval.h di_fast_add"
---   di_fast_add :: CDi -> CDi -> IO CDi
--- -- | /di_fast_sub/ /x/ /y/ 
--- foreign import ccall "double_interval.h di_fast_sub"
---   di_fast_sub :: CDi -> CDi -> IO CDi
+-- The following methods perform fast but sloppy interval arithmetic: we
+-- manipulate the endpoints with default rounding and then add or subtract
+-- generic perturbations regardless of whether the operations were exact.
+-- It is currently assumed that the CPU rounding mode is to nearest.
+--
+-- | /di_fast_add/ /x/ /y/ 
+di_fast_add :: CDi -> CDi -> CDi
+di_fast_add (CDi a b) (CDi a' b') = CDi (_di_below (a+a')) (_di_above (b+b'))
+  
+-- | /di_fast_sub/ /x/ /y/ 
+di_fast_sub :: CDi -> CDi -> CDi
+di_fast_sub (CDi a b) (CDi a' b') = CDi (_di_below (a-b')) (_di_above (b-a'))
+
 -- -- | /di_fast_mul/ /x/ /y/ 
--- foreign import ccall "double_interval.h di_fast_mul"
---   di_fast_mul :: CDi -> CDi -> IO CDi
+-- di_fast_mul :: CDi -> CDi -> CDi
+-- di_fast_sub (CDi a b) (CDi a' b') = res where
+-- CDi u v 
+--   | a > 0 && a' > 0 = CDi (a*a') (b*b')
+--   | a > 0 && b' < 0 = CDi (b*a') (a*b')
+--   | b < 0 && a' > 0 = CDi (a*b') (b*a')
+--   | b < 0 && b' < 0 = CDi (b*b') (a*a')
+--   | otherwise = if a > 0 && a' > 0 then
+--                   CDi (a*a', b*b')
+--                 else
+--                   if a /= a || b /= b || c /= c || d /= d then
+--                     CDi (-d_inf) d_inf
+--                   else
+--                     CDi min (min a b) (min c d)
+  
 -- -- | /di_fast_div/ /x/ /y/ 
 -- --
 -- -- Returns the sum, difference, product or quotient of /x/ and /y/.
@@ -201,4 +231,3 @@ di_randtest state = do
 -- -- Returns an upper bound for the radius of /x/.
 -- foreign import ccall "double_interval.h di_fast_ubound_radius"
 --   di_fast_ubound_radius :: CDi -> IO CDouble
-

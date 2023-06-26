@@ -38,7 +38,7 @@ module Data.Number.Flint.Fq.Zech.FFI (
   , fq_zech_ctx_clear
   , fq_zech_ctx_modulus
   , fq_zech_ctx_degree
-  , fq_zech_ctx_prime
+  --, fq_zech_ctx_prime
   , fq_zech_ctx_order
   , fq_zech_ctx_order_ui
   , fq_zech_ctx_fprint
@@ -49,9 +49,9 @@ module Data.Number.Flint.Fq.Zech.FFI (
   , fq_zech_init
   , fq_zech_init2
   , fq_zech_clear
-  , _fq_zech_sparse_reduce
-  , _fq_zech_dense_reduce
-  , _fq_zech_reduce
+  --, _fq_zech_sparse_reduce
+  --, _fq_zech_dense_reduce
+  --, _fq_zech_reduce
   , fq_zech_reduce
   -- * Basic arithmetic
   , fq_zech_add
@@ -64,10 +64,10 @@ module Data.Number.Flint.Fq.Zech.FFI (
   , fq_zech_mul_ui
   , fq_zech_sqr
   , fq_zech_div
-  , _fq_zech_inv
+  --, _fq_zech_inv
   , fq_zech_inv
   , fq_zech_gcdinv
-  , _fq_zech_pow
+  --, _fq_zech_pow
   , fq_zech_pow
   , fq_zech_pow_ui
   -- * Roots
@@ -84,7 +84,7 @@ module Data.Number.Flint.Fq.Zech.FFI (
   -- * Randomisation
   , fq_zech_randtest
   , fq_zech_randtest_not_zero
-  , fq_zech_randtest_dense
+  --, fq_zech_randtest_dense
   , fq_zech_rand
   , fq_zech_rand_not_zero
   -- * Assignments and conversions
@@ -114,7 +114,7 @@ module Data.Number.Flint.Fq.Zech.FFI (
   , fq_zech_norm
   , fq_zech_frobenius
   , fq_zech_multiplicative_order
-  , fq_zech_is_primitive
+  -- , fq_zech_is_primitive
   -- * Bit packing
   , fq_zech_bit_pack
   , fq_zech_bit_unpack
@@ -355,11 +355,11 @@ foreign import ccall "fq_zech.h fq_zech_ctx_modulus"
 foreign import ccall "fq_zech.h fq_zech_ctx_degree"
   fq_zech_ctx_degree :: Ptr CFqZechCtx -> IO CLong
 
--- | /fq_zech_ctx_prime/ /ctx/ 
---
--- Returns a pointer to the prime \(p\) in the context.
-foreign import ccall "fq_zech.h fq_zech_ctx_prime"
-  fq_zech_ctx_prime :: Ptr CFqZechCtx -> IO (Ptr CFmpz)
+-- -- | /fq_zech_ctx_prime/ /ctx/ 
+-- --
+-- -- Returns a pointer to the prime \(p\) in the context.
+-- foreign import ccall "fq_zech.h fq_zech_ctx_prime"
+--   fq_zech_ctx_prime :: Ptr CFqZechCtx -> IO (Ptr CFmpz)
 
 -- | /fq_zech_ctx_order/ /f/ /ctx/ 
 --
@@ -424,27 +424,27 @@ foreign import ccall "fq_zech.h fq_zech_clear"
 foreign import ccall "fq_zech.h &fq_zech_clear"
   p_fq_zech_clear :: FunPtr (Ptr CFqZech -> Ptr CFqZechCtx -> IO ())
 
--- | /_fq_zech_sparse_reduce/ /R/ /lenR/ /ctx/ 
---
--- Reduces @(R, lenR)@ modulo the polynomial \(f\) given by the modulus of
--- @ctx@.
-foreign import ccall "fq_zech.h _fq_zech_sparse_reduce"
-  _fq_zech_sparse_reduce :: Ptr CMp -> CLong -> Ptr CFqZechCtx -> IO ()
+-- -- | /_fq_zech_sparse_reduce/ /R/ /lenR/ /ctx/ 
+-- --
+-- -- Reduces @(R, lenR)@ modulo the polynomial \(f\) given by the modulus of
+-- -- @ctx@.
+-- foreign import ccall "fq_zech.h _fq_zech_sparse_reduce"
+--   _fq_zech_sparse_reduce :: Ptr CMp -> CLong -> Ptr CFqZechCtx -> IO ()
 
--- | /_fq_zech_dense_reduce/ /R/ /lenR/ /ctx/ 
---
--- Reduces @(R, lenR)@ modulo the polynomial \(f\) given by the modulus of
--- @ctx@ using Newton division.
-foreign import ccall "fq_zech.h _fq_zech_dense_reduce"
-  _fq_zech_dense_reduce :: Ptr CMp -> CLong -> Ptr CFqZechCtx -> IO ()
+-- -- | /_fq_zech_dense_reduce/ /R/ /lenR/ /ctx/ 
+-- --
+-- -- Reduces @(R, lenR)@ modulo the polynomial \(f\) given by the modulus of
+-- -- @ctx@ using Newton division.
+-- foreign import ccall "fq_zech.h _fq_zech_dense_reduce"
+--   _fq_zech_dense_reduce :: Ptr CMp -> CLong -> Ptr CFqZechCtx -> IO ()
 
--- | /_fq_zech_reduce/ /r/ /lenR/ /ctx/ 
---
--- Reduces @(R, lenR)@ modulo the polynomial \(f\) given by the modulus of
--- @ctx@. Does either sparse or dense reduction based on
--- @ctx->sparse_modulus@.
-foreign import ccall "fq_zech.h _fq_zech_reduce"
-  _fq_zech_reduce :: Ptr CMp -> CLong -> Ptr CFqZechCtx -> IO ()
+-- -- | /_fq_zech_reduce/ /r/ /lenR/ /ctx/ 
+-- --
+-- -- Reduces @(R, lenR)@ modulo the polynomial \(f\) given by the modulus of
+-- -- @ctx@. Does either sparse or dense reduction based on
+-- -- @ctx->sparse_modulus@.
+-- foreign import ccall "fq_zech.h _fq_zech_reduce"
+--   _fq_zech_reduce :: Ptr CMp -> CLong -> Ptr CFqZechCtx -> IO ()
 
 -- | /fq_zech_reduce/ /rop/ /ctx/ 
 --
@@ -521,11 +521,11 @@ foreign import ccall "fq_zech.h fq_zech_sqr"
 foreign import ccall "fq_zech.h fq_zech_div"
   fq_zech_div :: Ptr CFqZech -> Ptr CFqZech -> Ptr CFqZech -> Ptr CFqZechCtx -> IO ()
 
--- | /_fq_zech_inv/ /rop/ /op/ /len/ /ctx/ 
---
--- Sets @(rop, d)@ to the inverse of the non-zero element @(op, len)@.
-foreign import ccall "fq_zech.h _fq_zech_inv"
-  _fq_zech_inv :: Ptr (Ptr CMp) -> Ptr (Ptr CMp) -> CLong -> Ptr CFqZechCtx -> IO ()
+-- -- | /_fq_zech_inv/ /rop/ /op/ /len/ /ctx/ 
+-- --
+-- -- Sets @(rop, d)@ to the inverse of the non-zero element @(op, len)@.
+-- foreign import ccall "fq_zech.h _fq_zech_inv"
+--   _fq_zech_inv :: Ptr (Ptr CMp) -> Ptr (Ptr CMp) -> CLong -> Ptr CFqZechCtx -> IO ()
 
 -- | /fq_zech_inv/ /rop/ /op/ /ctx/ 
 --
@@ -541,20 +541,20 @@ foreign import ccall "fq_zech.h fq_zech_inv"
 foreign import ccall "fq_zech.h fq_zech_gcdinv"
   fq_zech_gcdinv :: Ptr CFqZech -> Ptr CFqZech -> Ptr CFqZech -> Ptr CFqZechCtx -> IO ()
 
--- | /_fq_zech_pow/ /rop/ /op/ /len/ /e/ /ctx/ 
---
--- Sets @(rop, 2*d-1)@ to @(op,len)@ raised to the power \(e\), reduced
--- modulo \(f(X)\), the modulus of @ctx@.
--- 
--- Assumes that \(e \geq 0\) and that @len@ is positive and at most \(d\).
--- 
--- Although we require that @rop@ provides space for \(2d - 1\)
--- coefficients, the output will be reduced modulo \(f(X)\), which is a
--- polynomial of degree \(d\).
--- 
--- Does not support aliasing.
-foreign import ccall "fq_zech.h _fq_zech_pow"
-  _fq_zech_pow :: Ptr (Ptr CMp) -> Ptr (Ptr CMp) -> CLong -> Ptr CFmpz -> Ptr CFqZechCtx -> IO ()
+-- -- | /_fq_zech_pow/ /rop/ /op/ /len/ /e/ /ctx/ 
+-- --
+-- -- Sets @(rop, 2*d-1)@ to @(op,len)@ raised to the power \(e\), reduced
+-- -- modulo \(f(X)\), the modulus of @ctx@.
+-- -- 
+-- -- Assumes that \(e \geq 0\) and that @len@ is positive and at most \(d\).
+-- -- 
+-- -- Although we require that @rop@ provides space for \(2d - 1\)
+-- -- coefficients, the output will be reduced modulo \(f(X)\), which is a
+-- -- polynomial of degree \(d\).
+-- -- 
+-- -- Does not support aliasing.
+-- foreign import ccall "fq_zech.h _fq_zech_pow"
+--   _fq_zech_pow :: Ptr (Ptr CMp) -> Ptr (Ptr CMp) -> CLong -> Ptr CFmpz -> Ptr CFqZechCtx -> IO ()
 
 -- | /fq_zech_pow/ /rop/ /op/ /e/ /ctx/ 
 --
@@ -660,12 +660,12 @@ foreign import ccall "fq_zech.h fq_zech_randtest"
 foreign import ccall "fq_zech.h fq_zech_randtest_not_zero"
   fq_zech_randtest_not_zero :: Ptr CFqZech -> Ptr CFRandState -> Ptr CFqZechCtx -> IO ()
 
--- | /fq_zech_randtest_dense/ /rop/ /state/ /ctx/ 
---
--- Generates a random element of \(\mathbf{F}_q\) which has an underlying
--- polynomial with dense coefficients.
-foreign import ccall "fq_zech.h fq_zech_randtest_dense"
-  fq_zech_randtest_dense :: Ptr CFqZech -> Ptr CFRandState -> Ptr CFqZechCtx -> IO ()
+-- -- | /fq_zech_randtest_dense/ /rop/ /state/ /ctx/ 
+-- --
+-- -- Generates a random element of \(\mathbf{F}_q\) which has an underlying
+-- -- polynomial with dense coefficients.
+-- foreign import ccall "fq_zech.h fq_zech_randtest_dense"
+--   fq_zech_randtest_dense :: Ptr CFqZech -> Ptr CFRandState -> Ptr CFqZechCtx -> IO ()
 
 -- | /fq_zech_rand/ /rop/ /state/ /ctx/ 
 --
@@ -869,12 +869,12 @@ foreign import ccall "fq_zech.h fq_zech_frobenius"
 foreign import ccall "fq_zech.h fq_zech_multiplicative_order"
   fq_zech_multiplicative_order :: Ptr CFmpz -> Ptr CFqZech -> Ptr CFqZechCtx -> IO CInt
 
--- | /fq_zech_is_primitive/ /op/ /ctx/ 
---
--- Returns whether @op@ is primitive, i.e., whether it is a generator of
--- the multiplicative group of @ctx@.
-foreign import ccall "fq_zech.h fq_zech_is_primitive"
-  fq_zech_is_primitive :: Ptr CFqZech -> Ptr CFqZechCtx -> IO CInt
+-- -- | /fq_zech_is_primitive/ /op/ /ctx/ 
+-- --
+-- -- Returns whether @op@ is primitive, i.e., whether it is a generator of
+-- -- the multiplicative group of @ctx@.
+-- foreign import ccall "fq_zech.h fq_zech_is_primitive"
+--   fq_zech_is_primitive :: Ptr CFqZech -> Ptr CFqZechCtx -> IO CInt
 
 -- Bit packing -----------------------------------------------------------------
 

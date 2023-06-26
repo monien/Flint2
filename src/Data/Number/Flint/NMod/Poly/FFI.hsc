@@ -223,8 +223,8 @@ module Data.Number.Flint.NMod.Poly.FFI (
   -- * Composition
   , _nmod_poly_compose_horner
   , nmod_poly_compose_horner
-  , _nmod_poly_compose_divconquer
-  , nmod_poly_compose_divconquer
+  --, _nmod_poly_compose_divconquer
+  --, nmod_poly_compose_divconquer
   , _nmod_poly_compose
   , nmod_poly_compose
   -- * Taylor shift
@@ -2041,23 +2041,23 @@ foreign import ccall "nmod_poly.h _nmod_poly_compose_horner"
 foreign import ccall "nmod_poly.h nmod_poly_compose_horner"
   nmod_poly_compose_horner :: Ptr CNModPoly -> Ptr CNModPoly -> Ptr CNModPoly -> IO ()
 
--- | /_nmod_poly_compose_divconquer/ /res/ /poly1/ /len1/ /poly2/ /len2/ /mod/ 
--- 
--- Composes @poly1@ of length @len1@ with @poly2@ of length @len2@ and sets
--- @res@ to the result, i.e.evaluates @poly1@ at @poly2@. The algorithm
--- used is the divide and conquer algorithm. We require that @res@ have
--- space for @(len1 - 1)*(len2 - 1) + 1@ coefficients. It is assumed that
--- @len1 > 0@ and @len2 > 0@.
-foreign import ccall "nmod_poly.h _nmod_poly_compose_divconquer"
-  _nmod_poly_compose_divconquer :: Ptr CMp -> Ptr CMp -> CLong -> Ptr CMp -> CLong -> Ptr CNMod -> IO ()
+-- -- | /_nmod_poly_compose_divconquer/ /res/ /poly1/ /len1/ /poly2/ /len2/ /mod/ 
+-- -- 
+-- -- Composes @poly1@ of length @len1@ with @poly2@ of length @len2@ and sets
+-- -- @res@ to the result, i.e.evaluates @poly1@ at @poly2@. The algorithm
+-- -- used is the divide and conquer algorithm. We require that @res@ have
+-- -- space for @(len1 - 1)*(len2 - 1) + 1@ coefficients. It is assumed that
+-- -- @len1 > 0@ and @len2 > 0@.
+-- foreign import ccall "nmod_poly.h _nmod_poly_compose_divconquer"
+--   _nmod_poly_compose_divconquer :: Ptr CMp -> Ptr CMp -> CLong -> Ptr CMp -> CLong -> Ptr CNMod -> IO ()
 
--- | /nmod_poly_compose_divconquer/ /res/ /poly1/ /poly2/ 
--- 
--- Composes @poly1@ with @poly2@ and sets @res@ to the result,
--- i.e.evaluates @poly1@ at @poly2@. The algorithm used is the divide and
--- conquer algorithm.
-foreign import ccall "nmod_poly.h nmod_poly_compose_divconquer"
-  nmod_poly_compose_divconquer :: Ptr CNModPoly -> Ptr CNModPoly -> Ptr CNModPoly -> IO ()
+-- -- | /nmod_poly_compose_divconquer/ /res/ /poly1/ /poly2/ 
+-- -- 
+-- -- Composes @poly1@ with @poly2@ and sets @res@ to the result,
+-- -- i.e.evaluates @poly1@ at @poly2@. The algorithm used is the divide and
+-- -- conquer algorithm.
+-- foreign import ccall "nmod_poly.h nmod_poly_compose_divconquer"
+--   nmod_poly_compose_divconquer :: Ptr CNModPoly -> Ptr CNModPoly -> Ptr CNModPoly -> IO ()
 
 -- | /_nmod_poly_compose/ /res/ /poly1/ /len1/ /poly2/ /len2/ /mod/ 
 -- 

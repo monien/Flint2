@@ -28,7 +28,7 @@ module Data.Number.Flint.Fq.NMod.FFI (
   , fq_nmod_ctx_clear
   , fq_nmod_ctx_modulus
   , fq_nmod_ctx_degree
-  , fq_nmod_ctx_prime
+  -- , fq_nmod_ctx_prime
   , fq_nmod_ctx_order
   , fq_nmod_ctx_fprint
   , fq_nmod_ctx_print
@@ -116,16 +116,17 @@ import Foreign.C.String
 import Foreign.C.Types
 import qualified Foreign.Concurrent
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Ptr ( Ptr, FunPtr, plusPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
-import Data.Number.Flint.NMod.Mat
-import Data.Number.Flint.NMod.Poly
+import Data.Number.Flint.NMod
+import Data.Number.Flint.NMod.Types
 
 #include <flint/flint.h>
+
 #include <flint/fq_nmod.h>
 
 -- fq_nmod_t -------------------------------------------------------------------
@@ -156,14 +157,24 @@ withFqNMod (FqNMod x) f = do
 -- fq_nmod_ctx_t ---------------------------------------------------------------
 
 data FqNModCtx = FqNModCtx {-# UNPACK #-} !(ForeignPtr CFqNModCtx)
-type CFqNModCtx = CFlint FqNModCtx
+data CFqNModCtx = CFqNModCtx (Ptr CFmpz) (Ptr CNMod) CInt CInt (Ptr CMpLimb) (Ptr CLong) (Ptr CLong) (Ptr CNModPoly) (Ptr CNModPoly) CString 
 
 instance Storable CFqNModCtx where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size fq_nmod_ctx_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fq_nmod_ctx_t}
-  peek = undefined
+  peek ptr = CFqNModCtx
+    <$> (return $ castPtr ptr)
+    <*> #{peek fq_nmod_ctx_struct, mod           } ptr
+    <*> #{peek fq_nmod_ctx_struct, sparse_modulus} ptr
+    <*> #{peek fq_nmod_ctx_struct, is_conway     } ptr
+    <*> #{peek fq_nmod_ctx_struct, a             } ptr
+    <*> #{peek fq_nmod_ctx_struct, j             } ptr
+    <*> #{peek fq_nmod_ctx_struct, len           } ptr
+    <*> #{peek fq_nmod_ctx_struct, modulus       } ptr
+    <*> #{peek fq_nmod_ctx_struct, inv           } ptr
+    <*> #{peek fq_nmod_ctx_struct, var           } ptr
   poke = undefined
 
 newFqNModCtx p d var = do
@@ -278,9 +289,12 @@ foreign import ccall "fq_nmod.h fq_nmod_ctx_degree"
 -- | /fq_nmod_ctx_prime/ /ctx/ 
 --
 -- Returns a pointer to the prime \(p\) in the context.
-foreign import ccall "fq_nmod.h fq_nmod_ctx_prime"
-  fq_nmod_ctx_prime :: Ptr CFqNModCtx -> IO (Ptr CFmpz)
-
+-- foreign import ccall "fq_nmod.h fq_nmod_ctx_prime"
+fq_nmod_ctx_prime :: Ptr CFqNModCtx -> IO (Ptr CFmpz)
+fq_nmod_ctx_prime ctx = do
+  CFqNModCtx p _ _ _ _ _ _ _ _ _ <- peek ctx
+  return p
+  
 -- | /fq_nmod_ctx_order/ /f/ /ctx/ 
 --
 -- Sets \(f\) to be the size of the finite field.
