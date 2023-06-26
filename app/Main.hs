@@ -670,3 +670,13 @@ testDi = do
       print b
       printf "%.17g\n" (realToFrac b :: Double)
   endl
+
+testFqZech = do
+  ctx <- newFqZechCtx 7 4 "a"
+  x <- newFqZech ctx
+  withFqZechCtx ctx $ \ctx -> do
+    fq_zech_ctx_print ctx
+    endl
+    withFqZech x $ \x -> do
+      fq_zech_print x ctx
+      endl

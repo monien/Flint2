@@ -75,6 +75,12 @@ library
       Data.Number.Flint.Fq.NMod.Poly
       Data.Number.Flint.Fq.NMod.Mat
       Data.Number.Flint.Fq.Zech
+      Data.Number.Flint.Fq.Zech.Types
+      Data.Number.Flint.Fq.Zech.Embed
+      Data.Number.Flint.Fq.Zech.Poly
+      Data.Number.Flint.Fq.Zech.Poly.Factor
+      Data.Number.Flint.Fq.Zech.Vec
+      Data.Number.Flint.Fq.Zech.Mat
       Data.Number.Flint.Padic
       Data.Number.Flint.Padic.Poly
       Data.Number.Flint.Padic.Mat
@@ -157,6 +163,12 @@ library
       Data.Number.Flint.Fq.NMod.Poly.FFI
       Data.Number.Flint.Fq.NMod.Mat.FFI
       Data.Number.Flint.Fq.Zech.FFI
+      Data.Number.Flint.Fq.Zech.Embed.FFI
+      Data.Number.Flint.Fq.Zech.Types.FFI
+      Data.Number.Flint.Fq.Zech.Poly.FFI
+      Data.Number.Flint.Fq.Zech.Poly.Factor.FFI
+      Data.Number.Flint.Fq.Zech.Vec.FFI
+      Data.Number.Flint.Fq.Zech.Mat.FFI
       Data.Number.Flint.Padic.FFI
       Data.Number.Flint.Padic.Poly.FFI
       Data.Number.Flint.Padic.Mat.FFI

@@ -618,8 +618,9 @@ foreign import ccall "fq_zech.h fq_zech_fprint_pretty"
 -- In the current implementation, always returns \(1\). The return code is
 -- part of the function\'s signature to allow for a later implementation to
 -- return the number of characters printed or a non-positive error code.
-foreign import ccall "fq_zech.h fq_zech_print_pretty"
-  fq_zech_print_pretty :: Ptr CFqZech -> Ptr CFqZechCtx -> IO CInt
+fq_zech_print_pretty :: Ptr CFqZech -> Ptr CFqZechCtx -> IO CInt
+fq_zech_print_pretty op ctx = do
+  printCStr (\op -> fq_zech_get_str_pretty op ctx) op
 
 -- | /fq_zech_fprint/ /file/ /op/ /ctx/ 
 --
@@ -630,8 +631,10 @@ foreign import ccall "fq_zech.h fq_zech_fprint"
 -- | /fq_zech_print/ /op/ /ctx/ 
 --
 -- Prints a representation of @op@ to @stdout@.
-foreign import ccall "fq_zech.h fq_zech_print"
-  fq_zech_print :: Ptr CFqZech -> Ptr CFqZechCtx -> IO ()
+fq_zech_print :: Ptr CFqZech -> Ptr CFqZechCtx -> IO ()
+fq_zech_print op ctx = do
+  printCStr (\op -> fq_zech_get_str op ctx) op
+  return ()
 
 -- | /fq_zech_get_str/ /op/ /ctx/ 
 --

@@ -27,6 +27,8 @@ module Data.Number.Flint.Arb.Mag.FFI (
   , mag_is_zero
   , mag_is_inf
   , mag_is_finite
+  , mag_d_log_lower_bound
+  , mag_d_log_upper_bound
   -- * Assignment and conversions
   , mag_init_set
   , mag_set
@@ -258,6 +260,12 @@ foreign import ccall "mag.h mag_is_inf"
 -- value, this function is exactly the logical negation of @mag_is_inf@).
 foreign import ccall "mag.h mag_is_finite"
   mag_is_finite :: Ptr CMag -> IO CInt
+
+foreign import ccall "mag.h mag_d_log_lower_bound"
+  mag_d_log_lower_bound :: CDouble -> CDouble
+
+foreign import ccall "mag.h mag_d_log_upper_bound"
+  mag_d_log_upper_bound :: CDouble -> CDouble
 
 -- Assignment and conversions --------------------------------------------------
 

@@ -121,6 +121,11 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fq.Mat
 -- ** Zech
 , module Data.Number.Flint.Fq.Zech
+, module Data.Number.Flint.Fq.Zech.Embed
+, module Data.Number.Flint.Fq.Zech.Poly
+, module Data.Number.Flint.Fq.Zech.Poly.Factor
+, module Data.Number.Flint.Fq.Zech.Vec
+, module Data.Number.Flint.Fq.Zech.Mat
 -- * p-adic Numbers
 , module Data.Number.Flint.Padic
 , module Data.Number.Flint.Padic.Poly
@@ -184,6 +189,11 @@ import Data.Number.Flint.Fq.Mat
 import Data.Number.Flint.Fq.Vec
 -- Zech
 import Data.Number.Flint.Fq.Zech
+import Data.Number.Flint.Fq.Zech.Embed
+import Data.Number.Flint.Fq.Zech.Poly
+import Data.Number.Flint.Fq.Zech.Poly.Factor
+import Data.Number.Flint.Fq.Zech.Vec
+import Data.Number.Flint.Fq.Zech.Mat
 -- p-adic numbers
 import Data.Number.Flint.Padic
 import Data.Number.Flint.Padic.Poly

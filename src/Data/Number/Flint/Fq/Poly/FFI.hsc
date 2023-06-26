@@ -1991,4 +1991,3 @@ foreign import ccall "fq_poly.h fq_poly_deflate"
 -- constant polynomial.
 foreign import ccall "fq_poly.h fq_poly_deflation"
   fq_poly_deflation :: Ptr CFqPoly -> Ptr CFqCtx -> IO CULong
-
