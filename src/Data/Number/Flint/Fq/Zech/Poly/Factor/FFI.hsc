@@ -89,7 +89,11 @@ instance Storable CFqZechPolyFactor where
   sizeOf _ = #{size fq_zech_poly_factor_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fq_zech_poly_factor_t}
-  peek = undefined
+  peek ptr = CFqZechPolyFactor
+    <$> #{peek fq_zech_poly_factor_struct, poly } ptr
+    <*> #{peek fq_zech_poly_factor_struct, exp  } ptr
+    <*> #{peek fq_zech_poly_factor_struct, num  } ptr
+    <*> #{peek fq_zech_poly_factor_struct, alloc} ptr
   poke = undefined
 
 newFqZechPolyFactor ctx@(FqZechCtx ftx) = do
@@ -146,11 +150,11 @@ foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_fit_length"
 foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_set"
   fq_zech_poly_factor_set :: Ptr CFqZechPolyFactor -> Ptr CFqZechPolyFactor -> Ptr CFqZechCtx -> IO ()
 
--- | /fq_zech_poly_factor_print_pretty/ /fac/ /ctx/ 
+-- | /fq_zech_poly_factor_print_pretty/ /fac/ /var/ /ctx/ 
 --
 -- Pretty-prints the entries of @fac@ to standard output.
 foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_print_pretty"
-  fq_zech_poly_factor_print_pretty :: Ptr CFqZechPolyFactor -> Ptr CFqZechCtx -> IO ()
+  fq_zech_poly_factor_print_pretty :: Ptr CFqZechPolyFactor -> CString -> Ptr CFqZechCtx -> IO ()
 
 -- | /fq_zech_poly_factor_print/ /fac/ /ctx/ 
 --

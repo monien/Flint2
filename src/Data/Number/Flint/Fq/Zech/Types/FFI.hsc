@@ -1,6 +1,8 @@
 module Data.Number.Flint.Fq.Zech.Types.FFI where
 
+import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.C.Types
 
 import Data.Number.Flint.Flint
 
@@ -17,4 +19,4 @@ type CFqZechMat = CFlint FqZechMat
 -- fq_zech_poly_factor_t -------------------------------------------------------
 
 data FqZechPolyFactor = FqZechPolyFactor {-# UNPACK #-} !(ForeignPtr CFqZechPolyFactor)
-type CFqZechPolyFactor = CFlint FqZechPolyFactor
+data CFqZechPolyFactor = CFqZechPolyFactor (Ptr CFqZechPoly) (Ptr CLong) CLong CLong 

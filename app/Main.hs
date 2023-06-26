@@ -26,7 +26,9 @@ import FmpzPoly
 import Fmpq
 import FmpqPoly
 
-main = do
+main = testFqZechRandom
+
+main'' = do
   testDi
   testFqPolyFactor
   testFmpzModPolyFactor
@@ -657,10 +659,9 @@ testDi = do
 testFqZech = do
   mtx <- newFmpzModCtx 3
   ctx <- newFqZechCtx 3 1 "a"
-  x <- newFqZech ctx
   a <- newFqZechMat 3 3 ctx
   poly <- newFqZechPoly ctx
-  fac <- newFqZechPolyFactor ctx
+  x <- newFqZech ctx
   moly <- exFmpzModPoly mtx
   withFqZechCtx ctx $ \ftx -> do
     fq_zech_ctx_print ftx
@@ -683,7 +684,33 @@ testFqZech = do
         endl
         is_square_free <- fq_zech_poly_is_squarefree poly ftx
         putStrLn $ "polynomial is square free: " ++ (show is_square_free)
-          
+
+testFqZechRandom = do
+ r <- newFRandState
+ ctx <- newFqZechCtx 7 4 "a"
+ fac <- newFqZechPolyFactor ctx
+ pre <- newFqZech ctx
+ poly <- newFqZechPoly ctx
+ withFRandState r $ \r -> do
+   withFqZechCtx ctx $ \ftx -> do
+     withFqZechPoly poly $ \poly -> do
+       replicateM_ 10 $ do
+         fq_zech_poly_randtest poly r 12 ftx
+         fq_zech_poly_make_monic poly poly ftx
+         is_square_free <- fq_zech_poly_is_squarefree poly ftx
+         when (is_square_free == 1) $ do
+           withCString "x" $ \var -> do
+             fq_zech_poly_print_pretty poly var ftx
+             endl
+           withFqZechPolyFactor fac $ \fac -> do
+             withFqZech pre $ \pre -> do
+               fq_zech_poly_factor fac pre poly ftx
+               CFqZechPolyFactor _ _ num alloc <- peek fac
+               putStrLn $ "num = " ++ show num
+               withCString "x" $ \var -> do 
+                 fq_zech_poly_factor_print_pretty fac var ftx
+                 endl
+           return ()
 
 exFmpzModPoly mtx = do
   let poly = fromList [1,0,2,2,0,1,1,0,2,2,0,1] :: FmpzPoly
