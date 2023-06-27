@@ -710,6 +710,9 @@ testFqZechRandom = do
                withCString "x" $ \var -> do 
                  fq_zech_poly_factor_print_pretty fac var ftx
                  endl
+                 endl
+                 fq_zech_poly_factor_print fac ftx
+                 endl
            return ()
 
 exFmpzModPoly mtx = do

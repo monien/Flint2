@@ -54,11 +54,14 @@ module Data.Number.Flint.Fq.Zech.Poly.Factor.FFI (
 -- Factorisation of univariate polynomials over finite fields (Zech
 -- logarithm representation)
 
+import Control.Monad
+
 import Foreign.C.String
 import Foreign.C.Types
 import qualified Foreign.Concurrent
 import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Marshal.Array ( advancePtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
@@ -77,6 +80,7 @@ import Data.Number.Flint.Fq.NMod
 import Data.Number.Flint.Fq.NMod.Mat
 
 import Data.Number.Flint.Fq.Zech
+import Data.Number.Flint.Fq.Zech.Poly
 import Data.Number.Flint.Fq.Zech.Types
 
 #include <flint/flint.h>
@@ -159,9 +163,17 @@ foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_print_pretty"
 -- | /fq_zech_poly_factor_print/ /fac/ /ctx/ 
 --
 -- Prints the entries of @fac@ to standard output.
-foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_print"
-  fq_zech_poly_factor_print :: Ptr CFqZechPolyFactor -> Ptr CFqZechCtx -> IO ()
-
+-- foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_print"
+fq_zech_poly_factor_print :: Ptr CFqZechPolyFactor -> Ptr CFqZechCtx -> IO ()
+fq_zech_poly_factor_print fac ctx = do
+  CFqZechPolyFactor poly exp num alloc <- peek fac
+  forM_ [0 .. fromIntegral num - 1] $ \j -> do
+    fq_zech_poly_print (poly `advancePtr` j) ctx
+    putStr " ^ "
+    e <- peek (exp `advancePtr` j)
+    putStr $ show e
+    putStr "\n"
+ 
 -- | /fq_zech_poly_factor_insert/ /fac/ /poly/ /exp/ /ctx/ 
 --
 -- Inserts the factor @poly@ with multiplicity @exp@ into the factorisation
