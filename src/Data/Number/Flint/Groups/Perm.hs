@@ -1,5 +1,5 @@
 {- | 
-   module      : Data.Number.Flint.MPoly
+   module      : Data.Number.Flint.Perm
    copyright   :  (c) 2019 Hartmut Monien
    license     :  BSD-style (see LICENSE)
    maintainer  : hmonien@uni-bonn.de  

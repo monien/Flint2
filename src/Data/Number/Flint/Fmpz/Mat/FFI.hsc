@@ -201,7 +201,7 @@ module Data.Number.Flint.Fmpz.Mat.FFI (
   , fmpz_mat_lll_storjohann
 ) where
 
--- matrices over the integers --------------------------------------------------
+-- Matrices over the integers --------------------------------------------------
 
 import System.IO.Unsafe
 

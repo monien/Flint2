@@ -34,7 +34,10 @@ library:
   exposed-modules:
    - Data.Number.Flint
    - Data.Number.Flint.Flint
+   - Data.Number.Flint.Flint.External
+   - Data.Number.Flint.Flint.Internal
    - Data.Number.Flint.MPoly
+   # Fmpz
    - Data.Number.Flint.Fmpz
    - Data.Number.Flint.Fmpz.Arith
    - Data.Number.Flint.Fmpz.Factor
@@ -51,21 +54,24 @@ library:
    - Data.Number.Flint.Fmpz.Mod.Poly.Factor
    - Data.Number.Flint.Fmpz.Mod.Mat
    - Data.Number.Flint.Fmpz.Mod.Vec
+   # Fmpq
    - Data.Number.Flint.Fmpq
    - Data.Number.Flint.Fmpq.Mat 
    - Data.Number.Flint.Fmpq.Vec
    - Data.Number.Flint.Fmpq.Poly
-   - Data.Number.Flint.Flint.External
-   - Data.Number.Flint.Flint.Internal
+   # NMod
    - Data.Number.Flint.NMod
    - Data.Number.Flint.NMod.Types
    - Data.Number.Flint.NMod.Mat
    - Data.Number.Flint.NMod.Vec
    - Data.Number.Flint.NMod.Poly
    - Data.Number.Flint.NMod.Poly.Factor
+   # Groups
    - Data.Number.Flint.Groups.Perm
    - Data.Number.Flint.Groups.Qfb
    - Data.Number.Flint.Groups.Dirichlet
+   - Data.Number.Flint.Groups.DLog
+   - Data.Number.Flint.Groups.Bool.Mat
    # APRCL
    - Data.Number.Flint.APRCL
    # FFT 
@@ -139,6 +145,7 @@ library:
    - Data.Number.Flint.Flint.External.Mpfr.FFI 
    - Data.Number.Flint.Flint.Internal.FFI
    - Data.Number.Flint.MPoly.FFI
+   # Fmpz
    - Data.Number.Flint.Fmpz.FFI
    - Data.Number.Flint.Fmpz.Arith.FFI
    - Data.Number.Flint.Fmpz.Factor.FFI
@@ -155,19 +162,24 @@ library:
    - Data.Number.Flint.Fmpz.Mod.Poly.Factor.FFI
    - Data.Number.Flint.Fmpz.Mod.Mat.FFI
    - Data.Number.Flint.Fmpz.Mod.Vec.FFI
+   # Fmpq
    - Data.Number.Flint.Fmpq.FFI
    - Data.Number.Flint.Fmpq.Mat.FFI
    - Data.Number.Flint.Fmpq.Vec.FFI
    - Data.Number.Flint.Fmpq.Poly.FFI
+   # NMod
    - Data.Number.Flint.NMod.FFI 
    - Data.Number.Flint.NMod.Types.FFI
    - Data.Number.Flint.NMod.Mat.FFI
    - Data.Number.Flint.NMod.Vec.FFI
    - Data.Number.Flint.NMod.Poly.FFI
    - Data.Number.Flint.NMod.Poly.Factor.FFI
+   # Groups
    - Data.Number.Flint.Groups.Perm.FFI
    - Data.Number.Flint.Groups.Qfb.FFI
    - Data.Number.Flint.Groups.Dirichlet.FFI
+   - Data.Number.Flint.Groups.DLog.FFI
+   - Data.Number.Flint.Groups.Bool.Mat.FFI
    # APRCL
    - Data.Number.Flint.APRCL.FFI
    # FFT
@@ -211,13 +223,16 @@ library:
    - Data.Number.Flint.Support.Mpf.Vec.FFI
    - Data.Number.Flint.Support.Mpfr.Mat.FFI
    - Data.Number.Flint.Support.Mpfr.Vec.FFI
+   # ThreadPool
    - Data.Number.Flint.ThreadPool.FFI
+   # Arb
    - Data.Number.Flint.Arb.Types.FFI
    - Data.Number.Flint.Arb.FFI
    - Data.Number.Flint.Arb.Mag.FFI
    - Data.Number.Flint.Arb.Arf.FFI 
    - Data.Number.Flint.Arb.Mat.FFI
    - Data.Number.Flint.Arb.Hypgeom.FFI
+   # Acb
    - Data.Number.Flint.Acb.Types.FFI
    - Data.Number.Flint.Acb.FFI
    - Data.Number.Flint.Acb.Poly.FFI
@@ -226,9 +241,11 @@ library:
    - Data.Number.Flint.Acb.Elliptic.FFI
    - Data.Number.Flint.Acb.Modular.FFI
    - Data.Number.Flint.Acb.Dirichlet.FFI
+   # Other 
    - Data.Number.Flint.Bernoulli.FFI 
    - Data.Number.Flint.Partitions.FFI
    - Data.Number.Flint.Hypgeom.FFI
+   # NF
    - Data.Number.Flint.NF.FFI
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI

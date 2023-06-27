@@ -31,6 +31,8 @@ library
   exposed-modules:
       Data.Number.Flint
       Data.Number.Flint.Flint
+      Data.Number.Flint.Flint.External
+      Data.Number.Flint.Flint.Internal
       Data.Number.Flint.MPoly
       Data.Number.Flint.Fmpz
       Data.Number.Flint.Fmpz.Arith
@@ -52,8 +54,6 @@ library
       Data.Number.Flint.Fmpq.Mat
       Data.Number.Flint.Fmpq.Vec
       Data.Number.Flint.Fmpq.Poly
-      Data.Number.Flint.Flint.External
-      Data.Number.Flint.Flint.Internal
       Data.Number.Flint.NMod
       Data.Number.Flint.NMod.Types
       Data.Number.Flint.NMod.Mat
@@ -63,6 +63,8 @@ library
       Data.Number.Flint.Groups.Perm
       Data.Number.Flint.Groups.Qfb
       Data.Number.Flint.Groups.Dirichlet
+      Data.Number.Flint.Groups.DLog
+      Data.Number.Flint.Groups.Bool.Mat
       Data.Number.Flint.APRCL
       Data.Number.Flint.FFT
       Data.Number.Flint.Qs
@@ -154,6 +156,8 @@ library
       Data.Number.Flint.Groups.Perm.FFI
       Data.Number.Flint.Groups.Qfb.FFI
       Data.Number.Flint.Groups.Dirichlet.FFI
+      Data.Number.Flint.Groups.DLog.FFI
+      Data.Number.Flint.Groups.Bool.Mat.FFI
       Data.Number.Flint.APRCL.FFI
       Data.Number.Flint.FFT.FFI
       Data.Number.Flint.Qs.FFI
