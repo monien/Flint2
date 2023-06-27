@@ -63,6 +63,8 @@ library
       Data.Number.Flint.Groups.Perm
       Data.Number.Flint.Groups.Qfb
       Data.Number.Flint.Groups.Dirichlet
+      Data.Number.Flint.APRCL
+      Data.Number.Flint.FFT
       Data.Number.Flint.Qs
       Data.Number.Flint.Fq
       Data.Number.Flint.Fq.Types
@@ -152,6 +154,8 @@ library
       Data.Number.Flint.Groups.Perm.FFI
       Data.Number.Flint.Groups.Qfb.FFI
       Data.Number.Flint.Groups.Dirichlet.FFI
+      Data.Number.Flint.APRCL.FFI
+      Data.Number.Flint.FFT.FFI
       Data.Number.Flint.Qs.FFI
       Data.Number.Flint.Fq.FFI
       Data.Number.Flint.Fq.Types.FFI
@@ -224,6 +228,8 @@ library
       csrc/fmpz_mod_poly_factor/fprint_pretty.c
       csrc/fmpz_mod_poly_factor/get_str.c
       csrc/fmpz_mod_poly_factor/get_str_pretty.c
+      csrc/aprcl/fprint.c
+      csrc/aprcl/get_str.c
       csrc/fmpq/get_fmpz_frac.c
       csrc/fmpq_mat/get_str.c
       csrc/fmpq_mat/fprint.c

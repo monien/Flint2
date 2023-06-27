@@ -66,6 +66,11 @@ library:
    - Data.Number.Flint.Groups.Perm
    - Data.Number.Flint.Groups.Qfb
    - Data.Number.Flint.Groups.Dirichlet
+   # APRCL
+   - Data.Number.Flint.APRCL
+   # FFT 
+   - Data.Number.Flint.FFT
+   # - Data.Number.Flint.FFT.Small
    # Qs
    - Data.Number.Flint.Qs
    # Fq
@@ -163,6 +168,11 @@ library:
    - Data.Number.Flint.Groups.Perm.FFI
    - Data.Number.Flint.Groups.Qfb.FFI
    - Data.Number.Flint.Groups.Dirichlet.FFI
+   # APRCL
+   - Data.Number.Flint.APRCL.FFI
+   # FFT
+   - Data.Number.Flint.FFT.FFI
+   # - Data.Number.Flint.FFT.Small.FFI
    # Qs
    - Data.Number.Flint.Qs.FFI
    # Fq
@@ -224,6 +234,7 @@ library:
    - Data.Number.Flint.NF.Fmpzi.FFI
    - Data.Number.Flint.NF.QQbar.FFI
   c-sources:
+    # Fmpz
     - csrc/fmpz/init.c
     - csrc/fmpz/clear.c
     - csrc/fmpz_factor/init.c
@@ -239,6 +250,10 @@ library:
     - csrc/fmpz_mod_poly_factor/fprint_pretty.c
     - csrc/fmpz_mod_poly_factor/get_str.c
     - csrc/fmpz_mod_poly_factor/get_str_pretty.c
+    # APRCL
+    - csrc/aprcl/fprint.c
+    - csrc/aprcl/get_str.c
+    # Fmpq
     - csrc/fmpq/get_fmpz_frac.c
     - csrc/fmpq_mat/get_str.c
     - csrc/fmpq_mat/fprint.c

@@ -15,8 +15,16 @@
 
 module Data.Number.Flint.Support.ULong.Extras.FFI (
   -- * Arithmetic and number-theoretic functions for single-word integers
+    NPrimes (..)
+  , CNPrimes (..)
+  , newNPrimes
+  , withNPrimes
+  , NFactor (..)
+  , CNFactor (..)
+  , newNFactor
+  , withNFactor
   -- * Random functions
-    n_randlimb
+  , n_randlimb
   , n_randbits
   , n_randtest_bits
   , n_randint

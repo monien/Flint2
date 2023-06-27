@@ -78,6 +78,11 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpz.Mod.Poly
 , module Data.Number.Flint.Fmpz.Mod.Poly.Factor
 , module Data.Number.Flint.Fmpz.Mod.Mat
+-- * APRCL primality testing
+, module Data.Number.Flint.APRCL
+-- * FFT
+, module Data.Number.Flint.FFT
+--, module Data.Number.Flint.FFT.Small
 -- * Quadratic sieve
 , module Data.Number.Flint.Qs
 -- * Rational numbers
@@ -164,6 +169,11 @@ import Data.Number.Flint.Fmpz.Mod.Poly
 import Data.Number.Flint.Fmpz.Mod.Poly.Factor
 import Data.Number.Flint.Fmpz.Mod.Mat
 import Data.Number.Flint.Fmpz.Mod.Vec
+-- APRCL primality testing
+import Data.Number.Flint.APRCL
+-- FFT
+import Data.Number.Flint.FFT
+-- import Data.Number.Flint.FFT.Small
 -- Quadratic sieve
 import Data.Number.Flint.Qs
 -- Rational numbers
