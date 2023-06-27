@@ -157,13 +157,18 @@ foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_set"
 -- | /fq_zech_poly_factor_print_pretty/ /fac/ /var/ /ctx/ 
 --
 -- Pretty-prints the entries of @fac@ to standard output.
-foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_print_pretty"
-  fq_zech_poly_factor_print_pretty :: Ptr CFqZechPolyFactor -> CString -> Ptr CFqZechCtx -> IO ()
-
+fq_zech_poly_factor_print_pretty :: Ptr CFqZechPolyFactor -> CString -> Ptr CFqZechCtx -> IO ()
+fq_zech_poly_factor_print_pretty fac var ctx = do
+  CFqZechPolyFactor poly exp num alloc <- peek fac
+  forM_ [0 .. fromIntegral num - 1] $ \j -> do
+    fq_zech_poly_print_pretty (poly `advancePtr` j) var ctx
+    putStr " ^ "
+    e <- peek (exp `advancePtr` j)
+    putStrLn $ show e 
+    
 -- | /fq_zech_poly_factor_print/ /fac/ /ctx/ 
 --
 -- Prints the entries of @fac@ to standard output.
--- foreign import ccall "fq_zech_poly_factor.h fq_zech_poly_factor_print"
 fq_zech_poly_factor_print :: Ptr CFqZechPolyFactor -> Ptr CFqZechCtx -> IO ()
 fq_zech_poly_factor_print fac ctx = do
   CFqZechPolyFactor poly exp num alloc <- peek fac
@@ -171,8 +176,7 @@ fq_zech_poly_factor_print fac ctx = do
     fq_zech_poly_print (poly `advancePtr` j) ctx
     putStr " ^ "
     e <- peek (exp `advancePtr` j)
-    putStr $ show e
-    putStr "\n"
+    putStrLn $ show e
  
 -- | /fq_zech_poly_factor_insert/ /fac/ /poly/ /exp/ /ctx/ 
 --

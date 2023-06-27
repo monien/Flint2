@@ -66,9 +66,11 @@ library:
    - Data.Number.Flint.Groups.Perm
    - Data.Number.Flint.Groups.Qfb
    - Data.Number.Flint.Groups.Dirichlet
-   - Data.Number.Flint.Fq.Types
+   # Qs
+   - Data.Number.Flint.Qs
    # Fq
    - Data.Number.Flint.Fq
+   - Data.Number.Flint.Fq.Types 
    - Data.Number.Flint.Fq.Embed
    - Data.Number.Flint.Fq.Poly
    - Data.Number.Flint.Fq.Poly.Factor
@@ -161,6 +163,8 @@ library:
    - Data.Number.Flint.Groups.Perm.FFI
    - Data.Number.Flint.Groups.Qfb.FFI
    - Data.Number.Flint.Groups.Dirichlet.FFI
+   # Qs
+   - Data.Number.Flint.Qs.FFI
    # Fq
    - Data.Number.Flint.Fq.FFI
    - Data.Number.Flint.Fq.Types.FFI

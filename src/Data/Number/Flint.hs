@@ -78,6 +78,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpz.Mod.Poly
 , module Data.Number.Flint.Fmpz.Mod.Poly.Factor
 , module Data.Number.Flint.Fmpz.Mod.Mat
+-- * Quadratic sieve
+, module Data.Number.Flint.Qs
 -- * Rational numbers
 , module Data.Number.Flint.Fmpq
 , module Data.Number.Flint.Fmpq.Mat
@@ -162,6 +164,8 @@ import Data.Number.Flint.Fmpz.Mod.Poly
 import Data.Number.Flint.Fmpz.Mod.Poly.Factor
 import Data.Number.Flint.Fmpz.Mod.Mat
 import Data.Number.Flint.Fmpz.Mod.Vec
+-- Quadratic sieve
+import Data.Number.Flint.Qs
 -- Rational numbers
 import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Mat
