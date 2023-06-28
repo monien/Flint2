@@ -100,7 +100,7 @@ newFmpzPolyQ = do
   addForeignPtrFinalizer p_fmpz_poly_q_clear x
   return $ FmpzPolyQ x
 
-withFmpzPolyQ x f = do
+withFmpzPolyQ (FmpzPolyQ x) f = do
   withForeignPtr x $ \xp -> do
     return (FmpzPolyQ x, f xp)
 

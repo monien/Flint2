@@ -752,3 +752,15 @@ testBoolMat = do
       bool_mat_set_entry a j (j+2) 1
     bool_mat_print a
     endl
+
+testFmpzPolyQ = do
+  r <- newFmpzPolyQ
+  withFmpzPolyQ r $ \r -> do
+    withCString "(x+1)/(x^2+11)" $ \s -> do
+      fmpz_poly_q_set_str r s
+      withCString "x" $ \x -> do
+        fmpz_poly_q_print_pretty r x
+        endl
+
+ 
+    
