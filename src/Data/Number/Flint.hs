@@ -70,6 +70,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fmpz.Mat
 , module Data.Number.Flint.Fmpz.Poly
 , module Data.Number.Flint.Fmpz.Poly.Factor
+, module Data.Number.Flint.Fmpz.Poly.Q
 , module Data.Number.Flint.Fmpz.MPoly
 , module Data.Number.Flint.Fmpz.MPoly.Factor
 , module Data.Number.Flint.Fmpz.MPoly.Q
@@ -162,6 +163,7 @@ import Data.Number.Flint.Fmpz.Vec
 import Data.Number.Flint.Fmpz.Mat
 import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpz.Poly.Factor
+import Data.Number.Flint.Fmpz.Poly.Q
 import Data.Number.Flint.Fmpz.MPoly
 import Data.Number.Flint.Fmpz.MPoly.Factor
 import Data.Number.Flint.Fmpz.MPoly.Q
