@@ -26,7 +26,11 @@ import FmpzPoly
 import Fmpq
 import FmpqPoly
 
-main = testFqZechRandom
+main = do
+  testBoolMat
+  
+main'''' = do
+  testFqZechRandom
 
 main'' = do
   testDi
@@ -44,6 +48,19 @@ main' = do
   testFmpzi
   testNModMat
   testAcbModular
+
+testFmpq = do
+  let x = 2 :: Fmpq
+      y = 7 :: Fmpq
+      z = x / y
+  print z
+  withFmpqNum z $ fmpz_print
+  endl
+  withFmpqDen z $ fmpz_print
+  endl
+  withFmpqDen z $ \x -> fmpz_set_ui x 13
+  print z
+  
   
 testRest = do
   x <- newFmpz
@@ -219,8 +236,9 @@ testFmpqMat = do
   withFmpqMat mat $ \mat -> do
     fmpq_mat_hilbert_matrix mat
     p <- fmpq_mat_entry mat 1 2
-    -- fmpq_set_ui p 2 5
-    -- fmpq_mat_print mat
+    print p
+    fmpq_set_ui p 7 13
+    fmpq_mat_print mat
     endl
     withNewFmpq $ \d -> do
       fmpq_mat_det d mat
@@ -723,3 +741,14 @@ exFmpzModPoly mtx = do
       withFmpzModPoly moly $ \moly -> do
         fmpz_mod_poly_set_fmpz_poly moly poly mtx
   return moly
+
+testBoolMat = do
+  a <- newBoolMat 3 5
+  withBoolMat a $ \a -> do
+    bool_mat_print a
+    endl
+    forM_ [0..2] $ \j -> do
+      bool_mat_set_entry a j j 1
+      bool_mat_set_entry a j (j+2) 1
+    bool_mat_print a
+    endl

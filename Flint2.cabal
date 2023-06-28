@@ -238,6 +238,7 @@ library
       csrc/fmpq_mat/get_str.c
       csrc/fmpq_mat/fprint.c
       csrc/fmpq_vec/get_str.c
+      csrc/bool_mat/get_str.c
       csrc/qfb/get_str.c
       csrc/qfb/fprint.c
       csrc/qqbar/fprint.c

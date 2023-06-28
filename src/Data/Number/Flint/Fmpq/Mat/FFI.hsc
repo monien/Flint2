@@ -123,6 +123,7 @@ import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
+import Foreign.Marshal.Array ( advancePtr )
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -144,8 +145,12 @@ instance Storable CFmpqMat where
   sizeOf _ = #{size fmpq_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpq_mat_t}
-  peek = undefined
-  poke = undefined
+  peek ptr = CFmpqMat
+    <$> #{peek fmpq_mat_struct, entries} ptr
+    <*> #{peek fmpq_mat_struct, r      } ptr
+    <*> #{peek fmpq_mat_struct, c      } ptr
+    <*> #{peek fmpq_mat_struct, rows   } ptr
+  poke = error "CFmpqMat.poke: Not defined."
 
 newFmpqMat rows cols = do
   x <- mallocForeignPtr
@@ -208,8 +213,10 @@ foreign import ccall "fmpq_mat.h fmpq_mat_swap_entrywise"
 -- can be passed as an input or output variable to any @fmpq@ function for
 -- direct manipulation of the matrix element. No bounds checking is
 -- performed.
-foreign import ccall "fmpq_mat.h fmpq_mat_entry"
-  fmpq_mat_entry :: Ptr CFmpqMat -> CLong -> CLong -> IO (Ptr CFmpq)
+fmpq_mat_entry :: Ptr CFmpqMat -> CLong -> CLong -> IO (Ptr CFmpq)
+fmpq_mat_entry mat i j = do
+  CFmpqMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
 
 -- | /fmpq_mat_entry_num/ /mat/ /i/ /j/ 
 -- 

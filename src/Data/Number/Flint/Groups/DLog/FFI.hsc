@@ -260,8 +260,21 @@ foreign import ccall "dlog.h dlog_table"
 
 -- Baby-step giant-step table --------------------------------------------------
 
+data CAPow = CAPow CULong CULong
+
 data DLogBSGS = DLogBSGS {-# UNPACK #-} !(ForeignPtr CDLogBSGS)
-type CDLogBSGS = CFlint DLogBSGS
+data CDLogBSGS = CDLogBSGS (Ptr CNMod) CULong CULong CULong (Ptr CAPow)
+
+instance Storable CDLogBSGS where
+  sizeOf    _ = #{size      dlog_bsgs_t}
+  alignment _ = #{alignment dlog_bsgs_t}
+  peek ptr = CDLogBSGS
+    <$> #{peek dlog_bsgs_struct, mod  } ptr
+    <*> #{peek dlog_bsgs_struct, m    } ptr
+    <*> #{peek dlog_bsgs_struct, am   } ptr
+    <*> #{peek dlog_bsgs_struct, g    } ptr
+    <*> #{peek dlog_bsgs_struct, table} ptr
+  poke = undefined
 
 -- | /dlog_bsgs_init/ /t/ /a/ /mod/ /n/ /m/ 
 --
@@ -277,8 +290,10 @@ foreign import ccall "dlog.h dlog_bsgs_init"
 -- Clears /t/.
 -- foreign import ccall "dlog.h dlog_bsgs_clear"
 dlog_bsgs_clear :: Ptr CDLogBSGS -> IO ()
-dlog_bsgs_clear x = error "not implemented."
-
+dlog_bsgs_clear x = do
+  CDLogBSGS mod m am g table <- peek x
+  flint_free $ castPtr table
+  
 -- | /dlog_bsgs/ /t/ /b/ 
 --
 -- Return \(\log(b,a)\) using the precomputed data /t/.
@@ -287,9 +302,24 @@ foreign import ccall "dlog.h dlog_bsgs"
 
 -- Prime-power modulus decomposition -------------------------------------------
 
-data DLogModpe = DLogModpe {-# UNPACK #-} !(ForeignPtr CDLogModpe)
-type CDLogModpe = CFlint DLogModpe
+data CDLog1Modpe = CDLog1Modpe CULong CULong
 
+data DLogModpe = DLogModpe {-# UNPACK #-} !(ForeignPtr CDLogModpe)
+data CDLogModpe = CDLogModpe CULong CULong CULong CULong (Ptr CNMod) (Ptr CDLogPrecomp) (Ptr CDLog1Modpe)
+
+instance Storable CDLogModpe where
+  sizeOf    _ = #{size      dlog_modpe_t}
+  alignment _ = #{alignment dlog_modpe_t}
+  peek ptr = CDLogModpe
+    <$> #{peek dlog_modpe_struct, p    } ptr
+    <*> #{peek dlog_modpe_struct, e    } ptr
+    <*> #{peek dlog_modpe_struct, pe1  } ptr
+    <*> #{peek dlog_modpe_struct, inva } ptr
+    <*> #{peek dlog_modpe_struct, pe   } ptr
+    <*> #{peek dlog_modpe_struct, modp } ptr
+    <*> #{peek dlog_modpe_struct, modpe} ptr
+  poke = undefined
+  
 -- | /dlog_modpe_init/ /t/ /a/ /p/ /e/ /pe/ /num/ 
 --
 foreign import ccall "dlog.h dlog_modpe_init"
@@ -300,7 +330,10 @@ foreign import ccall "dlog.h dlog_modpe_init"
 -- Clears /t/.
 -- foreign import ccall "dlog.h dlog_modpe_clear"
 dlog_modpe_clear :: Ptr CDLogModpe -> IO ()
-dlog_modpe_clear x = error "not implmented."
+dlog_modpe_clear x = do
+  CDLogModpe _ _ _ _ _ modp modpe <- peek x
+  dlog_precomp_clear modp
+  flint_free $ castPtr modp
 
 -- | /dlog_modpe/ /t/ /b/ 
 --

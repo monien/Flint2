@@ -14,9 +14,9 @@ module Data.Number.Flint.Groups.Bool.Mat.FFI (
   , newBoolMat
   , withBoolMat
   , withNewBoolMat
-  -- *
-  -- , bool_mat_get_entry
-  -- , bool_mat_set_entry
+  -- * entries
+  , bool_mat_get_entry
+  , bool_mat_set_entry
   -- * Memory management
   , bool_mat_init
   , bool_mat_clear
@@ -107,7 +107,11 @@ instance Storable CBoolMat where
   sizeOf _ = #{size bool_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment bool_mat_t}
-  peek = error "CBoolMat.peek: Not defined."
+  peek ptr = CBoolMat
+    <$> #{peek bool_mat_struct, entries} ptr
+    <*> #{peek bool_mat_struct, r      } ptr
+    <*> #{peek bool_mat_struct, c      } ptr
+    <*> #{peek bool_mat_struct, rows   } ptr 
   poke = error "CBoolMat.poke: Not defined."
  
 newBoolMat rows cols = do
@@ -134,15 +138,17 @@ withNewBoolMat rows cols f = do
 bool_mat_get_entry :: Ptr CBoolMat -> CLong -> CLong -> IO CInt
 bool_mat_get_entry mat i j = do
   CBoolMat p r c _ <- peek mat
-  result <- peek (p `advancePtr` (fromIntegral (i*r + j)))
+  result <- peek (p `advancePtr` (fromIntegral (i*c + j)))
   return result
   
--- -- | /bool_mat_set_entry/ /mat/ /i/ /j/ /x/ 
--- --
--- -- Sets the entry of matrix /mat/ at row /i/ and column /j/ to /x/.
--- foreign import ccall "bool_mat.h bool_mat_set_entry"
---   bool_mat_set_entry :: Ptr CBoolMat -> CLong -> CLong -> CInt -> IO ()
-
+-- | /bool_mat_set_entry/ /mat/ /i/ /j/ /x/ 
+--
+-- Sets the entry of matrix /mat/ at row /i/ and column /j/ to /x/.
+bool_mat_set_entry :: Ptr CBoolMat -> CLong -> CLong -> CInt -> IO ()
+bool_mat_set_entry mat i j x = do 
+  CBoolMat p r c _ <- peek mat
+  poke (p `advancePtr` (fromIntegral (i*c + j))) x
+  
 -- Memory management -----------------------------------------------------------
 
 -- | /bool_mat_init/ /mat/ /r/ /c/ 
@@ -189,11 +195,16 @@ foreign import ccall "bool_mat.h bool_mat_set"
 
 -- Input and output ------------------------------------------------------------
 
+foreign import ccall "bool_mat.h bool_mat_get_str"
+  bool_mat_get_str :: Ptr CBoolMat -> IO CString
+  
 -- | /bool_mat_print/ /mat/ 
 --
 -- Prints each entry in the matrix.
-foreign import ccall "bool_mat.h bool_mat_print"
-  bool_mat_print :: Ptr CBoolMat -> IO ()
+bool_mat_print :: Ptr CBoolMat -> IO ()
+bool_mat_print mat = do
+  printCStr bool_mat_get_str mat
+  return ()
 
 -- | /bool_mat_fprint/ /file/ /mat/ 
 --

@@ -213,6 +213,7 @@ import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, nullPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
+import Foreign.Marshal.Array ( advancePtr )
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -238,7 +239,11 @@ instance Storable CFmpzMat where
   sizeOf _ = #{size fmpz_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpz_mat_t}
-  peek = error "CFmpzMat.peek: Not defined."
+  peek ptr = CFmpzMat
+    <$> #{peek fmpz_mat_struct, entries} ptr
+    <*> #{peek fmpz_mat_struct, r      } ptr
+    <*> #{peek fmpz_mat_struct, c      } ptr
+    <*> #{peek fmpz_mat_struct, rows   } ptr
   poke = error "CFmpzMat.poke: Not defined."
  
 newFmpzMat rows cols = do
@@ -312,9 +317,11 @@ foreign import ccall "fmpz_mat.h fmpz_mat_swap_entrywise"
 -- Both \(i\) and \(j\) must not exceed the dimensions of the matrix.
 -- 
 -- This function is implemented as a macro.
-foreign import ccall "fmpz_mat.h fmpz_mat_entry"
-  fmpz_mat_entry :: Ptr CFmpzMat -> CLong -> CLong -> IO (Ptr CFmpz)
-
+fmpz_mat_entry :: Ptr CFmpzMat -> CLong -> CLong -> IO (Ptr CFmpz)
+fmpz_mat_entry mat i j = do
+  CFmpzMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
+  
 -- | /fmpz_mat_zero/ /mat/ 
 -- 
 -- Sets all entries of @mat@ to 0.

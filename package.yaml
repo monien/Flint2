@@ -275,6 +275,8 @@ library:
     - csrc/fmpq_mat/get_str.c
     - csrc/fmpq_mat/fprint.c
     - csrc/fmpq_vec/get_str.c
+    # Groups
+    - csrc/bool_mat/get_str.c
     - csrc/qfb/get_str.c
     - csrc/qfb/fprint.c
     - csrc/qqbar/fprint.c
@@ -293,11 +295,13 @@ library:
     - csrc/qadic/get_str_pretty.c
     - csrc/double_interval/fprint.c
     - csrc/double_interval/get_str.c
+    # arb
     - csrc/arf/inlines.c
     - csrc/mag/get_str.c
     - csrc/arb/get_strd.c
     - csrc/arb/get_str_.c
     - csrc/arb_mat/get_strd.c
+    # acb
     - csrc/acb/get_str.c
     - csrc/acb/get_strd.c
     - csrc/acb/get_strn.c

@@ -11,6 +11,8 @@ module Data.Number.Flint.Fmpq.FFI (
   , CFmpq (..)
   , newFmpq
   , withFmpq
+  , withFmpqNum
+  , withFmpqDen
   , withNewFmpq
   -- * Memory management
   , fmpq_init
@@ -147,6 +149,7 @@ import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
+import Foreign.Marshal.Array ( advancePtr )
 
 import Data.Functor ((<&>))
 
@@ -167,7 +170,9 @@ instance Storable CFmpq where
   sizeOf _ = #{size fmpq_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpq_t}
-  peek = error "CFmpz.peek: Not defined"
+  peek ptr = CFmpq
+    <$> #{peek fmpq, num} ptr
+    <*> #{peek fmpq, den} ptr
   poke = error "CFmpz.poke: Not defined"
 
 -- Fmpq ------------------------------------------------------------------------
@@ -186,7 +191,15 @@ withFmpq (Fmpq x) f = withForeignPtr x $ \xp -> f xp <&> (Fmpq x,)
 -- | Use new `Fmpq` structure.
 {-# INLINE withNewFmpq #-}
 withNewFmpq f = newFmpq >>= flip withFmpq f
-  
+
+withFmpqNum x f = do
+  withFmpq x $ \x -> do 
+    f $ castPtr x
+
+withFmpqDen x f = do
+  withFmpq x $ \x -> do 
+    f $ flip advancePtr 1 $ castPtr x
+
 -- Memory management -----------------------------------------------------------
 
 -- | /fmpq_init/ /x/ 
