@@ -49,6 +49,17 @@ main' = do
   testNModMat
   testAcbModular
 
+testArbFmpzPoly = do
+  let poly = fromList [3, 2, 1] :: FmpzPoly
+      prec = 1024
+  roots <- _acb_vec_init 2
+  withFmpzPoly poly $ \poly -> do
+    arb_fmpz_poly_complex_roots roots poly 0 prec
+  forM_ [0..1] $ \j -> do
+    acb_printn (roots `advancePtr` j) 16 arb_str_no_radius
+    endl
+  _acb_vec_clear roots 2
+  
 testFmpzPolyMat = do
   let poly = fromList [3, 2, 1] :: FmpzPoly
   a <- newFmpzPolyMat 3 5
