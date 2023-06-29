@@ -103,8 +103,7 @@ newFmpzPolyQ = do
   return $ FmpzPolyQ x
 
 withFmpzPolyQ (FmpzPolyQ x) f = do
-  withForeignPtr x $ \xp -> do
-    return (FmpzPolyQ x, f xp)
+  withForeignPtr x $ \xp -> (FmpzPolyQ x,) <$> f xp
 
 withFmpzPolyQNum :: FmpzPolyQ -> (Ptr CFmpzPolyQ -> t) -> IO (FmpzPolyQ, t)
 withFmpzPolyQNum (FmpzPolyQ x) f = do
@@ -407,6 +406,7 @@ foreign import ccall "fmpz_poly_q.h fmpz_poly_q_get_str_pretty"
 -- Prints the representation of the rational function @op@ to @stdout@.
 fmpz_poly_q_print :: Ptr CFmpzPolyQ -> IO CInt
 fmpz_poly_q_print op = printCStr fmpz_poly_q_get_str op
+  
 
 -- | /fmpz_poly_q_print_pretty/ /op/ /x/ 
 --

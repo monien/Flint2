@@ -754,14 +754,22 @@ testBoolMat = do
     endl
 
 testFmpzPolyQ = do
-  state <- newFRandState
   r <- newFmpzPolyQ
-  withFRandState state $ \state -> do
-    withFmpzPolyQ r $ \r -> do
-      fmpz_poly_q_randtest_not_zero r state 5 256 5 256
+  -- state <- newFRandState
+  -- withFRandState state $ \state -> do
+  --   withFmpzPolyQ r $ \r -> do
+  --     replicateM_ 10 $ do
+  --       fmpz_poly_q_randtest_not_zero r state 5 256 5 256
+  --       withCString "x" $ \x -> do 
+  --         fmpz_poly_q_print_pretty r x
+  --         endl
+  withFmpzPolyQ r $ \r -> do
+    withCString "2  7 1/3  11 0 1" $ \s -> 
+      fmpz_poly_q_set_str r s
+    withCString "x" $ \x -> do 
+      fmpz_poly_q_print_pretty r x
+      endl
       fmpz_poly_q_print r
-  putStrLn "done."
-      
-
+      endl
  
     
