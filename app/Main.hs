@@ -756,26 +756,10 @@ testBoolMat = do
 testFmpzPolyQ = do
   state <- newFRandState
   r <- newFmpzPolyQ
-  poly <- newFmpzPoly
   withFRandState state $ \state -> do
     withFmpzPolyQ r $ \r -> do
-      fmpz_poly_q_randtest_not_zero r state 12 256 12 256
+      fmpz_poly_q_randtest_not_zero r state 5 256 5 256
       fmpz_poly_q_print r
-      cs <- fmpz_poly_q_get_str r
-      s <- peekCString cs
-      free cs
-      print s
-      withCString "x" $ \x -> do
-        fmpz_poly_q_print_pretty r x
-        endl
-      CFmpzPolyQ u v <- peek r
-      fmpz_poly_print u
-      endl
-      fmpz_poly_print v
-      endl
-      withFmpzPoly poly $ \poly -> do
-        fmpz_poly_set poly v
-  print poly
   putStrLn "done."
       
 

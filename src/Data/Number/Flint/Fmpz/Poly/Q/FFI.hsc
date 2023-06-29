@@ -84,7 +84,7 @@ import Data.Number.Flint.Fmpq.Poly
 -- fmpz_poly_q_t ---------------------------------------------------------------
 
 data FmpzPolyQ = FmpzPolyQ {-# UNPACK #-} !(ForeignPtr CFmpzPolyQ)
-data CFmpzPolyQ = CFmpzPolyQ (Ptr CFmpzPoly) (Ptr CFmpzPoly)
+data CFmpzPolyQ = CFmpzPolyQ CFmpzPoly CFmpzPoly
 
 instance Storable CFmpzPolyQ where
   sizeOf _ = #{size fmpz_poly_q_t}
@@ -92,7 +92,9 @@ instance Storable CFmpzPolyQ where
   peek ptr = CFmpzPolyQ
     <$> #{peek fmpz_poly_q_struct, num} ptr
     <*> #{peek fmpz_poly_q_struct, den} ptr
-  poke = undefined
+  poke ptr (CFmpzPolyQ num den) = do
+    #{poke fmpz_poly_q_struct, num} ptr num
+    #{poke fmpz_poly_q_struct, den} ptr den
 
 newFmpzPolyQ = do
   x <- mallocForeignPtr
