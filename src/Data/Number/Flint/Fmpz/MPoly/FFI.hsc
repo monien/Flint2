@@ -413,12 +413,8 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_fprint_pretty"
 fmpz_mpoly_print_pretty :: Ptr CFmpzMPoly ->
                            Ptr (Ptr CChar) ->
                            Ptr CFmpzMPolyCtx -> IO CInt
-fmpz_mpoly_print_pretty a x ctx = do
-  cs <- fmpz_mpoly_get_str_pretty a x ctx
-  s <- peekCString cs
-  free cs
-  putStr s
-  return 1
+fmpz_mpoly_print_pretty a x ctx =
+  printCStr (\a -> fmpz_mpoly_get_str_pretty a x ctx) a
 
 -- | /fmpz_mpoly_set_str_pretty/ /A/ /str/ /x/ /ctx/ 
 -- 

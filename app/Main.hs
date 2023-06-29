@@ -49,6 +49,18 @@ main' = do
   testNModMat
   testAcbModular
 
+testFmpzPolyMat = do
+  let poly = fromList [3, 2, 1] :: FmpzPoly
+  a <- newFmpzPolyMat 3 5
+  withFmpzPolyMat a $ \a -> do
+    withCString "x" $ \x -> do 
+      fmpz_poly_mat_print a x
+    p <- fmpz_poly_mat_entry a 2 2
+    withFmpzPoly poly $ \poly -> do
+      fmpz_poly_set p poly
+    withCString "x" $ \x -> do 
+      fmpz_poly_mat_print a x
+
 testFmpq = do
   let x = 2 :: Fmpq
       y = 7 :: Fmpq

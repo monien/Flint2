@@ -41,6 +41,7 @@ library
       Data.Number.Flint.Fmpz.Vec
       Data.Number.Flint.Fmpz.Poly
       Data.Number.Flint.Fmpz.Poly.Factor
+      Data.Number.Flint.Fmpz.Poly.Mat
       Data.Number.Flint.Fmpz.Poly.Q
       Data.Number.Flint.Fmpz.MPoly
       Data.Number.Flint.Fmpz.MPoly.Factor
@@ -55,6 +56,8 @@ library
       Data.Number.Flint.Fmpq.Mat
       Data.Number.Flint.Fmpq.Vec
       Data.Number.Flint.Fmpq.Poly
+      Data.Number.Flint.Fmpq.MPoly
+      Data.Number.Flint.Fmpq.MPoly.Factor
       Data.Number.Flint.NMod
       Data.Number.Flint.NMod.Types
       Data.Number.Flint.NMod.Mat
@@ -105,6 +108,7 @@ library
       Data.Number.Flint.Arb
       Data.Number.Flint.Arb.Mag
       Data.Number.Flint.Arb.Arf
+      Data.Number.Flint.Arb.Poly
       Data.Number.Flint.Arb.Mat
       Data.Number.Flint.Arb.Hypgeom
       Data.Number.Flint.Acb.Types
@@ -135,6 +139,7 @@ library
       Data.Number.Flint.Fmpz.Vec.FFI
       Data.Number.Flint.Fmpz.Poly.FFI
       Data.Number.Flint.Fmpz.Poly.Factor.FFI
+      Data.Number.Flint.Fmpz.Poly.Mat.FFI
       Data.Number.Flint.Fmpz.Poly.Q.FFI
       Data.Number.Flint.Fmpz.MPoly.FFI
       Data.Number.Flint.Fmpz.MPoly.Factor.FFI
@@ -149,6 +154,8 @@ library
       Data.Number.Flint.Fmpq.Mat.FFI
       Data.Number.Flint.Fmpq.Vec.FFI
       Data.Number.Flint.Fmpq.Poly.FFI
+      Data.Number.Flint.Fmpq.MPoly.FFI
+      Data.Number.Flint.Fmpq.MPoly.Factor.FFI
       Data.Number.Flint.NMod.FFI
       Data.Number.Flint.NMod.Types.FFI
       Data.Number.Flint.NMod.Mat.FFI
@@ -199,6 +206,7 @@ library
       Data.Number.Flint.Arb.FFI
       Data.Number.Flint.Arb.Mag.FFI
       Data.Number.Flint.Arb.Arf.FFI
+      Data.Number.Flint.Arb.Poly.FFI
       Data.Number.Flint.Arb.Mat.FFI
       Data.Number.Flint.Arb.Hypgeom.FFI
       Data.Number.Flint.Acb.Types.FFI
@@ -224,6 +232,8 @@ library
       csrc/fmpz_factor/init.c
       csrc/fmpz_factor/clear.c
       csrc/fmpz_factor/fprint.c
+      csrc/fmpz_poly_mat/fprint.c
+      csrc/fmpz_poly_mat/get_str.c
       csrc/fmpz_factor/get_str.c
       csrc/fmpz_mpoly_q/fprint.c
       csrc/fmpz_mpoly_q/get_str_pretty.c
@@ -264,6 +274,7 @@ library
       csrc/arb/get_strd.c
       csrc/arb/get_str_.c
       csrc/arb_mat/get_strd.c
+      csrc/arb_poly/get_strd.c
       csrc/acb/get_str.c
       csrc/acb/get_strd.c
       csrc/acb/get_strn.c
