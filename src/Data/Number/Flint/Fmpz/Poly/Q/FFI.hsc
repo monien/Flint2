@@ -362,6 +362,9 @@ foreign import ccall "fmpz_poly_q.h fmpz_poly_q_evaluate_fmpq"
 
 -- Input and output ------------------------------------------------------------
 
+-- | /fmpz_poly_q_set_str/ /rop/ /s/
+--
+-- Sets @rop@ to the rational function given by the string @s@.
 -- The following three methods enable users to construct elements of type
 -- @fmpz_poly_q_t@ from strings or to obtain string representations of such
 -- elements. The format used is based on the FLINT format for integer
@@ -382,10 +385,6 @@ foreign import ccall "fmpz_poly_q.h fmpz_poly_q_evaluate_fmpq"
 -- Note that currently these functions are not optimised for performance
 -- and are intended to be used only for debugging purposes or one-off input
 -- and output, rather than as a low-level parser.
---
--- | /fmpz_poly_q_set_str/ /rop/ /s/ 
---
--- Sets @rop@ to the rational function given by the string @s@.
 foreign import ccall "fmpz_poly_q.h fmpz_poly_q_set_str"
   fmpz_poly_q_set_str :: Ptr CFmpzPolyQ -> CString -> IO CInt
 
