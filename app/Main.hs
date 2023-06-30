@@ -49,6 +49,20 @@ main' = do
   testNModMat
   testAcbModular
 
+testNModPoly = do
+  let n = 7
+  poly <- newNModPoly n
+  x <- newNModPoly n
+  withNModPoly poly $ \poly -> do
+    withNModPoly x $ \x -> do
+      nmod_poly_set_coeff_ui x 0 (fromIntegral $ pred n)
+      nmod_poly_set_coeff_ui x 1 1
+      withCString "x" $ \var -> nmod_poly_print_pretty x var
+      endl
+      nmod_poly_pow poly x 12
+      withCString "x" $ \var -> nmod_poly_print_pretty poly var
+      endl
+      
 testArbFmpzPoly = do
   let poly = fromList [3, 2, 1] :: FmpzPoly
       prec = 1024

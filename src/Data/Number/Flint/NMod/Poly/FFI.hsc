@@ -735,8 +735,8 @@ foreign import ccall "nmod_poly.h nmod_poly_set_str"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "nmod_poly.h nmod_poly_print"
-  nmod_poly_print :: Ptr CNModPoly -> IO CInt
+nmod_poly_print :: Ptr CNModPoly -> IO CInt
+nmod_poly_print a = printCStr nmod_poly_get_str a
 
 -- | /nmod_poly_print_pretty/ /a/ /x/ 
 -- 
@@ -747,9 +747,9 @@ foreign import ccall "nmod_poly.h nmod_poly_print"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "nmod_poly.h nmod_poly_print_pretty"
-  nmod_poly_print_pretty :: Ptr CNModPoly -> CString -> IO CInt
-
+nmod_poly_print_pretty :: Ptr CNModPoly -> CString -> IO CInt
+nmod_poly_print_pretty a x = printCStr (flip nmod_poly_get_str_pretty x) a
+  
 -- | /nmod_poly_fread/ /f/ /poly/ 
 -- 
 -- Reads @poly@ from the file stream @f@. If this is a file that has just
