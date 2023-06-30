@@ -1,4 +1,4 @@
-module UFD where
+module Data.Number.Flint.UFD where
 
 class (Num a) => UFD a where
   factor :: a -> [(a, Int)]

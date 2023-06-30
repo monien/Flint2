@@ -1,6 +1,6 @@
 {-# language TypeFamilies #-}
-module FmpqPoly (
-    FmpqPoly (..)
+module Data.Number.Flint.Fmpq.Poly.Instances (
+  FmpqPoly (..)
 ) where
 
 import GHC.Exts
@@ -10,9 +10,8 @@ import Foreign.C.String
 import Foreign.Marshal.Alloc
 
 import Data.Ratio hiding (numerator, denominator)
-import Data.Number.Flint 
-
-import Fmpq
+import Data.Number.Flint.Fmpq
+import Data.Number.Flint.Fmpq.Poly
 
 instance IsList FmpqPoly where
   type Item FmpqPoly = Fmpq

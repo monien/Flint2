@@ -34,12 +34,15 @@ library
       Data.Number.Flint.Flint.External
       Data.Number.Flint.Flint.Internal
       Data.Number.Flint.MPoly
+      Data.Number.Flint.UFD
       Data.Number.Flint.Fmpz
+      Data.Number.Flint.Fmpz.Instances
       Data.Number.Flint.Fmpz.Arith
       Data.Number.Flint.Fmpz.Factor
       Data.Number.Flint.Fmpz.Mat
       Data.Number.Flint.Fmpz.Vec
       Data.Number.Flint.Fmpz.Poly
+      Data.Number.Flint.Fmpz.Poly.Instances
       Data.Number.Flint.Fmpz.Poly.Factor
       Data.Number.Flint.Fmpz.Poly.Mat
       Data.Number.Flint.Fmpz.Poly.Q
@@ -55,9 +58,11 @@ library
       Data.Number.Flint.Fmpz.Mod.Mat
       Data.Number.Flint.Fmpz.Mod.Vec
       Data.Number.Flint.Fmpq
+      Data.Number.Flint.Fmpq.Instances
       Data.Number.Flint.Fmpq.Mat
       Data.Number.Flint.Fmpq.Vec
       Data.Number.Flint.Fmpq.Poly
+      Data.Number.Flint.Fmpq.Poly.Instances
       Data.Number.Flint.Fmpq.MPoly
       Data.Number.Flint.Fmpq.MPoly.Factor
       Data.Number.Flint.NMod.Types
@@ -306,19 +311,14 @@ library
   build-tools:
       hsc2hs
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
   default-language: Haskell2010
 
 executable flint_test
   main-is: Main.hs
   other-modules:
-      Fmpq
-      FmpqPoly
-      Fmpz
-      FmpzFactor
-      FmpzPoly
       RF
-      UFD
       Paths_Flint2
   hs-source-dirs:
       app

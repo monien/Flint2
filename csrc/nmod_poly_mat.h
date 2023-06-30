@@ -10,7 +10,7 @@
 char*
 nmod_poly_mat_get_str(const nmod_poly_mat_t mat, const char * x);
 
-char*
+void
 nmod_poly_mat_fprint(FILE * file, const nmod_poly_mat_t mat, const char * x);
 
 #endif // NMOD_POLY_MAT_H_

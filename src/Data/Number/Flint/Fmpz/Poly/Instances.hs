@@ -1,6 +1,5 @@
 {-# language TypeFamilies #-}
-
-module FmpzPoly (
+module Data.Number.Flint.Fmpz.Poly.Instances (
     FmpzPoly (..)
   , module GHC.Exts
   , hermitePolynomial
@@ -14,15 +13,18 @@ import GHC.Exts
 import System.IO.Unsafe
 import Control.Monad
 
+import Foreign.Ptr
 import Foreign.C.String
 import Foreign.Storable
 import Foreign.Marshal.Alloc (free)
 import Foreign.Marshal.Array (advancePtr)
 
-import Data.Number.Flint
+import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Instances
+import Data.Number.Flint.Fmpz.Poly
+import Data.Number.Flint.Fmpz.Poly.Factor
 
-import Fmpz
-import UFD
+import Data.Number.Flint.UFD
 
 instance Show FmpzPoly where
   show p = snd $ unsafePerformIO $ do

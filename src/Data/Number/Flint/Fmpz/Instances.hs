@@ -1,4 +1,4 @@
-module Fmpz (
+module Data.Number.Flint.Fmpz.Instances (
   Fmpz (..)
 , UFD (..)
 ) where
@@ -17,8 +17,9 @@ import Foreign.ForeignPtr
 import Foreign.Marshal.Alloc
 import Foreign.Marshal.Array (advancePtr)
 
-import Data.Number.Flint
-import UFD
+import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Factor
+import Data.Number.Flint.UFD
 
 instance Show Fmpz where
   show x = snd $ unsafePerformIO $ do

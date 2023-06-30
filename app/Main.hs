@@ -4,6 +4,7 @@ import System.IO.Unsafe
 
 import Data.Typeable
 
+import Foreign.Ptr
 import Foreign.Marshal
 import Foreign.Marshal.Array
 import Foreign.Storable
@@ -13,18 +14,13 @@ import Foreign.C.Types
 import Foreign.Marshal.Array (advancePtr)
 
 import Test.QuickCheck
+import GHC.Exts
 import Control.Monad
 import Control.Monad.Reader
 import Text.Printf
 import Data.List (permutations)
 
 import Data.Number.Flint
-
-import Fmpz
-import FmpzFactor
-import FmpzPoly
-import Fmpq
-import FmpqPoly
 
 main = do
   testFmpzPolyQ 

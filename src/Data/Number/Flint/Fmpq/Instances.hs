@@ -1,7 +1,5 @@
-module Fmpq (
-  numerator
-, denominator
-, harmonicSum
+module Data.Number.Flint.Fmpq.Instances (
+  Fmpq (..)
 ) where
 
 import System.IO.Unsafe
@@ -16,9 +14,9 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Marshal.Alloc
 
-import Data.Number.Flint
-
-import Fmpz
+import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Instances
+import Data.Number.Flint.Fmpq
 
 instance Show Fmpq where
   show x = snd $ unsafePerformIO $ do
@@ -93,43 +91,3 @@ lift2 f x y = fst $ unsafePerformIO $
       withFmpq y $ \y ->
         f result x y
 
-harmonicSum k = fst $ unsafePerformIO $ do
-  h <- newFmpq
-  withFmpq h $ \h -> do
-    fmpq_harmonic_ui h (fromIntegral k)
-    
--- bernoulli k = fst $ unsafePerformIO $ do
---   withNewFmpq $ flip arith_bernoulli_number (fromIntegral k)
-  
--- fraction x = unsafePerformIO $ do
---   n <- newFmpz
---   d <- newFmpz
---   withFmpq x $ \x ->
---     withFmpz n $ \n ->
---       withFmpz d $ \d -> 
---         fmpq_get_fmpz_frac n d x
---   return (n, d)
-
--- checkBernoulli n = do
---   let k = 2*n
---       b = bernoulli k
---   print b
---   forM_ [2..k+1] $ \p -> do
---     a <- n_is_prime p
---     when (a == 1 && k `mod` (p-1) == 0) $ do
---       let x :: Fmpq;
---           x = recip $ fromIntegral p 
---       withFmpq x $ \x -> 
---         withFmpq b $ \b -> 
---           fmpq_add b b x
---       return ()
---   print b
-
--- bernoulliDenominator k = do
---   let d = 1 :: Fmpz
---   forM_ [2..k+1] $ \p -> do
---     a <- n_is_prime p
---     when (a == 1 && k `mod` (p-1) == 0) $ do
---       withFmpz d $ \d -> fmpz_mul_ui d d p
---       return ()
---   return d
