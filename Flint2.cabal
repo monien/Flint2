@@ -121,6 +121,7 @@ library
       Data.Number.Flint.Acb.Elliptic
       Data.Number.Flint.Acb.Modular
       Data.Number.Flint.Acb.Dirichlet
+      Data.Number.Flint.Acb.DFT
       Data.Number.Flint.Bernoulli
       Data.Number.Flint.Partitions
       Data.Number.Flint.Hypgeom
@@ -221,6 +222,7 @@ library
       Data.Number.Flint.Acb.Elliptic.FFI
       Data.Number.Flint.Acb.Modular.FFI
       Data.Number.Flint.Acb.Dirichlet.FFI
+      Data.Number.Flint.Acb.DFT.FFI
       Data.Number.Flint.Bernoulli.FFI
       Data.Number.Flint.Partitions.FFI
       Data.Number.Flint.Hypgeom.FFI

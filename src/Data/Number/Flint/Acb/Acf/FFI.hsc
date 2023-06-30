@@ -115,6 +115,7 @@ foreign import ccall "acf.h acf_allocated_bytes"
 -- | /acf_real_ptr/ /z/ 
 foreign import ccall "acf.h acf_real_ptr"
   acf_real_ptr :: Ptr CAcf -> IO (Ptr CArf)
+  
 -- | /acf_imag_ptr/ /z/ 
 --
 -- Returns a pointer to the real or imaginary part of /z/.

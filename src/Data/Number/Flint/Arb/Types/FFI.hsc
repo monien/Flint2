@@ -23,6 +23,8 @@ type CMag = CFlint Mag
 data Arf = Arf {-# UNPACK #-} !(ForeignPtr CArf) 
 type CArf = CFlint Arf
 
+-- >>> Arf depends on a c-union which cannot be converted to a Haskell type
+
 -- | Arf rounding
 newtype ArfRnd = ArfRnd {_ArfRnd :: CInt}
   deriving (Show, Eq)

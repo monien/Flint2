@@ -125,6 +125,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Mat
 , module Data.Number.Flint.Acb.HypGeom
 , module Data.Number.Flint.Acb.Modular
+, module Data.Number.Flint.Acb.DFT
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -245,6 +246,7 @@ import Data.Number.Flint.Acb.Poly
 import Data.Number.Flint.Acb.Mat
 import Data.Number.Flint.Acb.Modular
 import Data.Number.Flint.Acb.HypGeom
+import Data.Number.Flint.Acb.DFT
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers
