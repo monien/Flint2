@@ -195,7 +195,7 @@ module Data.Number.Flint.Fmpz.MPoly.FFI (
   , fmpz_mpoly_symmetric
 ) where
 
--- multivariate polynomials over the integers ----------------------------------
+-- Multivariate polynomials over the integers ----------------------------------
 
 import Control.Monad
 

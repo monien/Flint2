@@ -55,10 +55,9 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
-import Data.Number.Flint
+import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.NMod
-import Data.Number.Flint.NMod.Poly
 import Data.Number.Flint.NMod.Types
 import Data.Number.Flint.ThreadPool
 

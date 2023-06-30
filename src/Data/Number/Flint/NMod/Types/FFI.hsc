@@ -64,3 +64,21 @@ instance Storable CNModMat where
   alignment _ = #{alignment nmod_mat_t}
   peek = undefined
   poke = undefined
+
+-- nmod_poly_mat_t -------------------------------------------------------------
+
+data NModPolyMat = NModPolyMat {-# UNPACK #-} !(ForeignPtr CNModPolyMat)
+data CNModPolyMat = CNModPolyMat (Ptr CNModPoly) CLong CLong (Ptr (Ptr CNModPoly)) (Ptr CNMod)
+
+instance Storable CNModPolyMat where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size nmod_poly_mat_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment nmod_poly_mat_t}
+  peek ptr = CNModPolyMat
+    <$> #{peek nmod_poly_mat_struct, entries} ptr
+    <*> #{peek nmod_poly_mat_struct, r      } ptr
+    <*> #{peek nmod_poly_mat_struct, c      } ptr
+    <*> #{peek nmod_poly_mat_struct, rows   } ptr
+    <*> #{peek nmod_poly_mat_struct, modulus} ptr
+  poke = error "CNModPolyMat.poke: Not defined."

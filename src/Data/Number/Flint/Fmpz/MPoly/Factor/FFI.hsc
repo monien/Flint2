@@ -137,7 +137,7 @@ foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_get_base"
 foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_get_exp_si"
   fmpz_mpoly_factor_get_exp_si :: Ptr CFmpzMPolyFactor -> CLong -> Ptr CFmpzMPolyCtx -> IO CLong
 
--- | /fmpz_mpoly_factor_sort/ /f/ /ctx/ 
+-- | /fmpz_mpoly_factor_sort/ /f/ /ctx/
 -- 
 -- Sort the product of /f/ first by exponent and then by base.
 foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_sort"

@@ -68,10 +68,13 @@ library:
    # NMod
    - Data.Number.Flint.NMod.Types 
    - Data.Number.Flint.NMod
+   - Data.Number.Flint.NMod.Poly 
+   - Data.Number.Flint.NMod.Poly.Factor
+   - Data.Number.Flint.NMod.Poly.Mat
+   - Data.Number.Flint.NMod.MPoly
+   - Data.Number.Flint.NMod.MPoly.Factor
    - Data.Number.Flint.NMod.Mat
    - Data.Number.Flint.NMod.Vec
-   - Data.Number.Flint.NMod.Poly
-   - Data.Number.Flint.NMod.Poly.Factor
    # Groups
    - Data.Number.Flint.Groups.Perm
    - Data.Number.Flint.Groups.Qfb
@@ -184,12 +187,15 @@ library:
    - Data.Number.Flint.Fmpq.MPoly.FFI
    - Data.Number.Flint.Fmpq.MPoly.Factor.FFI
    # NMod
+   - Data.Number.Flint.NMod.Types.FFI 
    - Data.Number.Flint.NMod.FFI 
-   - Data.Number.Flint.NMod.Types.FFI
+   - Data.Number.Flint.NMod.Poly.FFI 
+   - Data.Number.Flint.NMod.Poly.Factor.FFI 
+   - Data.Number.Flint.NMod.Poly.Mat.FFI
+   - Data.Number.Flint.NMod.MPoly.FFI
+   - Data.Number.Flint.NMod.MPoly.Factor.FFI
    - Data.Number.Flint.NMod.Mat.FFI
    - Data.Number.Flint.NMod.Vec.FFI
-   - Data.Number.Flint.NMod.Poly.FFI
-   - Data.Number.Flint.NMod.Poly.Factor.FFI
    # Groups
    - Data.Number.Flint.Groups.Perm.FFI
    - Data.Number.Flint.Groups.Qfb.FFI
@@ -289,6 +295,9 @@ library:
     - csrc/fmpz_mod_poly_factor/fprint_pretty.c
     - csrc/fmpz_mod_poly_factor/get_str.c
     - csrc/fmpz_mod_poly_factor/get_str_pretty.c
+    # NMod
+    - csrc/nmod_poly_mat/fprint.c
+    - csrc/nmod_poly_mat/get_str.c
     # APRCL
     - csrc/aprcl/fprint.c
     - csrc/aprcl/get_str.c

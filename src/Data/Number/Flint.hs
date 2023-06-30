@@ -99,6 +99,11 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Qs
 -- * Integers mod n
 , module Data.Number.Flint.NMod
+, module Data.Number.Flint.NMod.Poly
+, module Data.Number.Flint.NMod.Poly.Factor
+, module Data.Number.Flint.NMod.Poly.Mat
+, module Data.Number.Flint.NMod.MPoly
+, module Data.Number.Flint.NMod.MPoly.Factor
 , module Data.Number.Flint.NMod.Mat
 , module Data.Number.Flint.NMod.Vec
 -- * Groups and other structures
@@ -203,6 +208,11 @@ import Data.Number.Flint.FFT
 import Data.Number.Flint.Qs
 -- Integers mod n
 import Data.Number.Flint.NMod
+import Data.Number.Flint.NMod.Poly
+import Data.Number.Flint.NMod.Poly.Factor
+import Data.Number.Flint.NMod.Poly.Mat
+import Data.Number.Flint.NMod.MPoly
+import Data.Number.Flint.NMod.MPoly.Factor
 import Data.Number.Flint.NMod.Mat
 import Data.Number.Flint.NMod.Vec
 -- Groups and other structures
