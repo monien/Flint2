@@ -246,29 +246,29 @@ withFmpzMPoly (FmpzMPoly p) f = do
 
 -- fmpz_mpoly_univar_t ---------------------------------------------------------
 
-data FmpzMPolyUniVar = FmpzMPolyUniVar {-# UNPACK #-} !(ForeignPtr CFmpzMPolyUniVar)
-data CFmpzMPolyUniVar = CFmpzMPolyUniVar 
+data FmpzMPolyUnivar = FmpzMPolyUnivar {-# UNPACK #-} !(ForeignPtr CFmpzMPolyUnivar)
+data CFmpzMPolyUnivar = CFmpzMPolyUnivar 
 
-instance Storable CFmpzMPolyUniVar where
+instance Storable CFmpzMPolyUnivar where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size fmpz_mpoly_univar_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpz_mpoly_univar_t}
-  peek = error "CFmpzMPolyUniVar.peek: Not defined"
-  poke = error "CFmpzMPolyUniVar.poke: Not defined"
+  peek = error "CFmpzMPolyUnivar.peek: Not defined"
+  poke = error "CFmpzMPolyUnivar.poke: Not defined"
 
--- | Create a new `FmpzMPolyUniVar`
-newFmpzMPolyUniVar ctx@(FmpzMPolyCtx pctx) = do
+-- | Create a new `FmpzMPolyUnivar`
+newFmpzMPolyUnivar ctx@(FmpzMPolyCtx pctx) = do
   p <- mallocForeignPtr
   withForeignPtr p $ \p ->
     withFmpzMPolyCtx ctx $ \ctx -> do 
       fmpz_mpoly_univar_init p ctx
       addForeignPtrFinalizerEnv p_fmpz_mpoly_univar_clear p pctx
-  return $ FmpzMPolyUniVar p
+  return $ FmpzMPolyUnivar p
 
-{-# INLINE withFmpzMPolyUniVar #-}
-withFmpzMPolyUniVar (FmpzMPolyUniVar p) f = do
-  withForeignPtr p $ \fp -> (FmpzMPolyUniVar p,) <$> f fp
+{-# INLINE withFmpzMPolyUnivar #-}
+withFmpzMPolyUnivar (FmpzMPolyUnivar p) f = do
+  withForeignPtr p $ \fp -> (FmpzMPolyUnivar p,) <$> f fp
   
 -- fmpz_mpoly_ctx_t ------------------------------------------------------------
 
@@ -1133,22 +1133,22 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_is_square"
 -- 
 -- Initialize /A/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_init"
-  fmpz_mpoly_univar_init :: Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_univar_init :: Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyCtx -> IO ()
 
 -- | /fmpz_mpoly_univar_clear/ /A/ /ctx/ 
 -- 
 -- Clear /A/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_clear"
-  fmpz_mpoly_univar_clear :: Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_univar_clear :: Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyCtx -> IO ()
 
 foreign import ccall "fmpz_mpoly.h &fmpz_mpoly_univar_clear"
-  p_fmpz_mpoly_univar_clear :: FunPtr (Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyCtx -> IO ())
+  p_fmpz_mpoly_univar_clear :: FunPtr (Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyCtx -> IO ())
 
 -- | /fmpz_mpoly_univar_swap/ /A/ /B/ /ctx/ 
 -- 
 -- Swap /A/ and /B/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_swap"
-  fmpz_mpoly_univar_swap :: Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_univar_swap :: Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyCtx -> IO ()
 
 -- | /fmpz_mpoly_to_univar/ /A/ /B/ /var/ /ctx/ 
 -- 
@@ -1156,7 +1156,7 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_swap"
 -- /var/. The coefficients of /A/ will still belong to the content /ctx/
 -- but will not depend on the variable of index /var/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_to_univar"
-  fmpz_mpoly_to_univar :: Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPoly -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_to_univar :: Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPoly -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
 
 -- | /fmpz_mpoly_from_univar/ /A/ /B/ /var/ /ctx/ 
 -- 
@@ -1164,33 +1164,33 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_to_univar"
 -- /var/. This function is undefined if the coefficients of /B/ depend on
 -- the variable of index /var/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_from_univar"
-  fmpz_mpoly_from_univar :: Ptr CFmpzMPoly -> Ptr CFmpzMPolyUniVar -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_from_univar :: Ptr CFmpzMPoly -> Ptr CFmpzMPolyUnivar -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
 
 -- | /fmpz_mpoly_univar_degree_fits_si/ /A/ /ctx/ 
 -- 
 -- Return \(1\) if the degree of /A/ with respect to the main variable fits
 -- an @slong@. Otherwise, return \(0\).
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_degree_fits_si"
-  fmpz_mpoly_univar_degree_fits_si :: Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyCtx -> IO CInt
+  fmpz_mpoly_univar_degree_fits_si :: Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyCtx -> IO CInt
 
 -- | /fmpz_mpoly_univar_length/ /A/ /ctx/ 
 -- 
 -- Return the number of terms in /A/ with respect to the main variable.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_length"
-  fmpz_mpoly_univar_length :: Ptr CFmpzMPolyUniVar -> Ptr CFmpzMPolyCtx -> IO CLong
+  fmpz_mpoly_univar_length :: Ptr CFmpzMPolyUnivar -> Ptr CFmpzMPolyCtx -> IO CLong
 
 -- | /fmpz_mpoly_univar_get_term_exp_si/ /A/ /i/ /ctx/ 
 -- 
 -- Return the exponent of the term of index /i/ of /A/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_get_term_exp_si"
-  fmpz_mpoly_univar_get_term_exp_si :: Ptr CFmpzMPolyUniVar -> CLong -> Ptr CFmpzMPolyCtx -> IO CLong
+  fmpz_mpoly_univar_get_term_exp_si :: Ptr CFmpzMPolyUnivar -> CLong -> Ptr CFmpzMPolyCtx -> IO CLong
 
 -- | /fmpz_mpoly_univar_get_term_coeff/ /c/ /A/ /i/ /ctx/ 
 -- 
 -- Set (resp. swap) /c/ to (resp. with) the coefficient of the term of
 -- index /i/ of /A/.
 foreign import ccall "fmpz_mpoly.h fmpz_mpoly_univar_get_term_coeff"
-  fmpz_mpoly_univar_get_term_coeff :: Ptr CFmpzMPoly -> Ptr CFmpzMPolyUniVar -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_univar_get_term_coeff :: Ptr CFmpzMPoly -> Ptr CFmpzMPolyUnivar -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
 
 -- Internal Functions ----------------------------------------------------------
 

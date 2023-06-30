@@ -306,7 +306,7 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , fmpz_mod_mat_minpoly
 ) where 
 
--- polynomials over integers mod n ---------------------------------------------
+-- Polynomials over integers mod n ---------------------------------------------
 
 import Control.Monad
 
