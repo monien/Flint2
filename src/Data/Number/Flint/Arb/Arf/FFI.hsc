@@ -9,10 +9,7 @@
 
 module Data.Number.Flint.Arb.Arf.FFI (
   -- * Arbitrary-precision floating-point numbers
-  -- * Types
-   Arf (..)
-  , CArf (..)
-  , newArf
+    newArf
   , withArf
   , withNewArf
   -- * Memory management

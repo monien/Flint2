@@ -64,8 +64,8 @@ library:
    - Data.Number.Flint.Fmpq.MPoly
    - Data.Number.Flint.Fmpq.MPoly.Factor
    # NMod
+   - Data.Number.Flint.NMod.Types 
    - Data.Number.Flint.NMod
-   - Data.Number.Flint.NMod.Types
    - Data.Number.Flint.NMod.Mat
    - Data.Number.Flint.NMod.Vec
    - Data.Number.Flint.NMod.Poly
@@ -84,21 +84,21 @@ library:
    # Qs
    - Data.Number.Flint.Qs
    # Fq
-   - Data.Number.Flint.Fq
    - Data.Number.Flint.Fq.Types 
+   - Data.Number.Flint.Fq
    - Data.Number.Flint.Fq.Embed
    - Data.Number.Flint.Fq.Poly
    - Data.Number.Flint.Fq.Poly.Factor
    - Data.Number.Flint.Fq.Mat
    - Data.Number.Flint.Fq.Vec
    # Fq NMod
+   - Data.Number.Flint.Fq.NMod.Types 
    - Data.Number.Flint.Fq.NMod
-   - Data.Number.Flint.Fq.NMod.Types
    - Data.Number.Flint.Fq.NMod.Poly
    - Data.Number.Flint.Fq.NMod.Mat
    # Fq Zech
+   - Data.Number.Flint.Fq.Zech.Types 
    - Data.Number.Flint.Fq.Zech
-   - Data.Number.Flint.Fq.Zech.Types
    - Data.Number.Flint.Fq.Zech.Embed 
    - Data.Number.Flint.Fq.Zech.Poly
    - Data.Number.Flint.Fq.Zech.Poly.Factor
@@ -129,9 +129,10 @@ library:
    - Data.Number.Flint.Arb.Fmpz.Poly
    - Data.Number.Flint.Arb.Mat
    - Data.Number.Flint.Arb.Hypgeom
-   - Data.Number.Flint.Acb.Types
    # Acb
+   - Data.Number.Flint.Acb.Types
    - Data.Number.Flint.Acb
+   - Data.Number.Flint.Acb.Acf
    - Data.Number.Flint.Acb.Poly
    - Data.Number.Flint.Acb.Mat
    - Data.Number.Flint.Acb.HypGeom
@@ -247,6 +248,7 @@ library:
    # Acb
    - Data.Number.Flint.Acb.Types.FFI
    - Data.Number.Flint.Acb.FFI
+   - Data.Number.Flint.Acb.Acf.FFI
    - Data.Number.Flint.Acb.Poly.FFI
    - Data.Number.Flint.Acb.Mat.FFI
    - Data.Number.Flint.Acb.HypGeom.FFI

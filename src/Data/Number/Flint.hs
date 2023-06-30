@@ -118,7 +118,9 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb.Fmpz.Poly
 , module Data.Number.Flint.Arb.Mat
 , module Data.Number.Flint.Arb.Hypgeom
+, module Data.Number.Flint.Acb.Types
 , module Data.Number.Flint.Acb
+, module Data.Number.Flint.Acb.Acf
 , module Data.Number.Flint.Acb.Poly
 , module Data.Number.Flint.Acb.Mat
 , module Data.Number.Flint.Acb.HypGeom
@@ -236,7 +238,9 @@ import Data.Number.Flint.Arb.Poly
 import Data.Number.Flint.Arb.Fmpz.Poly
 import Data.Number.Flint.Arb.Mat
 import Data.Number.Flint.Arb.Hypgeom
+import Data.Number.Flint.Acb.Types
 import Data.Number.Flint.Acb
+import Data.Number.Flint.Acb.Acf
 import Data.Number.Flint.Acb.Poly
 import Data.Number.Flint.Acb.Mat
 import Data.Number.Flint.Acb.Modular

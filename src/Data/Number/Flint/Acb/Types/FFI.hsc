@@ -16,3 +16,9 @@ import Data.Number.Flint.Arb.Types
 -- | Data structure containing the CMag pointer
 data Acb = Acb {-# UNPACK #-} !(ForeignPtr CAcb)
 data CAcb = CAcb CArb CArb
+
+-- | An Acf structure consists of a pair of arf_struct:s. An acf_t is
+-- defined as an array of length one of type acf_struct, permitting an
+-- acf_t to be passed by reference.
+data Acf = Acf {-# UNPACK #-} !(ForeignPtr CAcf)
+data CAcf = CAcf CArf CArf
