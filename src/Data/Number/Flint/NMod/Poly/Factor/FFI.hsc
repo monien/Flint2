@@ -22,6 +22,11 @@ module Data.Number.Flint.NMod.Poly.Factor.FFI (
   , nmod_poly_factor_fit_length
   , nmod_poly_factor_set
   , nmod_poly_factor_print
+  , nmod_poly_factor_print_pretty
+  , nmod_poly_factor_fprint
+  , nmod_poly_factor_fprint_pretty
+  , nmod_poly_factor_get_str
+  , nmod_poly_factor_get_str_pretty
   , nmod_poly_factor_insert
   , nmod_poly_factor_concat
   , nmod_poly_factor_pow
@@ -123,11 +128,43 @@ foreign import ccall "nmod_poly_factor.h nmod_poly_factor_fit_length"
 foreign import ccall "nmod_poly_factor.h nmod_poly_factor_set"
   nmod_poly_factor_set :: Ptr CNModPolyFactor -> Ptr CNModPolyFactor -> IO ()
 
+-- Input and output ------------------------------------------------------------
+
+foreign import ccall "nmod_poly_factor.h nmod_poly_factor_get_str"
+  nmod_poly_factor_get_str :: Ptr CNModPolyFactor -> IO CString
+
+foreign import ccall "nmod_poly_factor.h nmod_poly_factor_get_str_pretty"
+  nmod_poly_factor_get_str_pretty :: Ptr CNModPolyFactor -> CString -> IO CString
+
+-- | /nmod_poly_factor_fprint/ /fac/ 
+-- 
+-- Prints the entries of @fac@ to stream.
+foreign import ccall "nmod_poly_factor.h nmod_poly_factor_fprint"
+  nmod_poly_factor_fprint :: Ptr CFile -> Ptr CNModPolyFactor -> IO ()
+
+-- | /nmod_poly_factor_fprint_pretty/ /fac/ /x/
+-- 
+-- Prints the entries of @fac@ to stream.
+foreign import ccall "nmod_poly_factor.h nmod_poly_factor_fprint_pretty"
+  nmod_poly_factor_fprint_pretty :: Ptr CFile -> Ptr CNModPolyFactor -> CString -> IO ()
+
 -- | /nmod_poly_factor_print/ /fac/ 
 -- 
 -- Prints the entries of @fac@ to standard output.
-foreign import ccall "nmod_poly_factor.h nmod_poly_factor_print"
-  nmod_poly_factor_print :: Ptr CNModPolyFactor -> IO ()
+nmod_poly_factor_print :: Ptr CNModPolyFactor -> IO ()
+nmod_poly_factor_print fac = do
+  printCStr nmod_poly_factor_get_str fac
+  return ()
+
+-- | /nmod_poly_factor_fprint_pretty/ /fac/ /x/
+-- 
+-- Prints the entries of @fac@ to standard outpu.
+nmod_poly_factor_print_pretty :: Ptr CNModPolyFactor -> CString -> IO ()
+nmod_poly_factor_print_pretty fac x = do
+  printCStr (\fac -> nmod_poly_factor_get_str_pretty fac x) fac
+  return ()
+  
+--------------------------------------------------------------------------------
 
 -- | /nmod_poly_factor_insert/ /fac/ /poly/ /exp/ 
 -- 

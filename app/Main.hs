@@ -58,7 +58,11 @@ testNModPoly = do
       nmod_poly_pow poly x 12
       withCString "x" $ \var -> nmod_poly_print_pretty poly var
       endl
-      
+      withNewNModPolyFactor $ \fac -> do
+        c <- nmod_poly_factor fac poly
+        withCString "x" $ \var -> do
+          nmod_poly_factor_print_pretty fac var
+            
 testArbFmpzPoly = do
   let poly = fromList [3, 2, 1] :: FmpzPoly
       prec = 1024
