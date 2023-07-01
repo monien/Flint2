@@ -337,6 +337,7 @@ library:
     - csrc/double_interval/fprint.c
     - csrc/double_interval/get_str.c
     # arb
+    - csrc/arb/midref.c
     - csrc/arf/inlines.c
     - csrc/mag/get_str.c
     - csrc/arb/get_strd.c

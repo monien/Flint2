@@ -214,14 +214,6 @@ withNewArf f = do
   x <- newArf
   withArf x $ \x -> f x
   
-instance Storable CArf where
-  {-# INLINE sizeOf #-}
-  sizeOf _ = #{size arf_t}
-  {-# INLINE alignment #-}
-  alignment _ = #{alignment arf_t}
-  peek = error "CArf.peek: Not defined"
-  poke = error "CArf.poke: Not defined"
-
 -- Memory management -----------------------------------------------------------
 
 -- | /arf_init/ /x/ 

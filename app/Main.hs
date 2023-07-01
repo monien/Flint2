@@ -1,3 +1,5 @@
+{-# language DataKinds #-}
+
 module Main where
 
 import System.IO.Unsafe
@@ -22,28 +24,57 @@ import Data.List (permutations)
 
 import Data.Number.Flint
 
-main = do
-  testFmpzPolyQ 
-  
-main'''' = do
-  testFqZechRandom
+main = testRF
 
-main'' = do
-  testDi
-  testFqPolyFactor
-  testFmpzModPolyFactor
+pa = do
+  let prec = 1024
+      x = pi :: RF 1024
+      RF a = x
+  man <- newFmpz
+  exp <- newFmpz 
+  withArb a $ \a -> do
+    arf <- arb_midref a
+    arf_printd arf 16
+    endl
+    withFmpz man $ \man -> do
+      withFmpz exp $ \exp -> do
+        arf_get_fmpz_2exp man exp arf
+  return (man, exp)
+    
+pf (RF x) = unsafePerformIO $ do
+  let prec = 1024
+  n <- newFmpz
+  r <- newArb
+  withArb x $ \x -> do
+    withArb r $ \r -> do
+      withFmpz n $ \n -> do
+        withNewArb $ \tmp -> do
+          arb_floor tmp x prec
+          arb_get_unique_fmpz n tmp
+          arb_sub r x tmp prec
+  return $ (n, RF r :: RF 1024)
   
-main' = do
-  testFmpzMPoly
-  testFmpzMPolyQ
-  testFq
-  testArb
-  testAcb
-  testAcbModular
-  testNF
-  testFmpzi
-  testNModMat
-  testAcbModular
+testRFRational = do
+  let x = pi :: RF 1024
+      RF a = x
+  withArb a $ \a -> do
+    withNewFmpz $ \mid -> do
+      withNewFmpz $ \rad -> do
+        withNewFmpz $ \exp -> do
+          arb_get_fmpz_mid_rad_10exp mid rad exp a 1024
+          fmpz_print mid
+          endl
+          withNewFmpq $ \r -> do
+            fmpq_set_fmpz_frac r mid rad
+            arb_set_fmpq a r 1024
+        
+testRF = do
+  let dx = recip 1000 :: RF 1024
+      x = map (*dx) $ map fromInteger [0..20000]
+      y = map (besselj 0) x
+      showd = show . toDouble
+  writeFile "bessel.out" $ unlines
+                         $ zipWith (\x y -> showd x ++ " " ++ showd y) x y
 
 testNModPoly = do
   let n = 7

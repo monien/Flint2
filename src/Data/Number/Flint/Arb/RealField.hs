@@ -7,10 +7,12 @@
   #-}
 
 module Data.Number.Flint.Arb.RealField (
-  RF(..),
-  RF'(..),
-  Special (..),
-  ) where
+  RF(..)
+, RF'(..)
+, Special (..)
+, fromDouble
+, toDouble
+) where
 
 import GHC.TypeLits
 import Data.Proxy
@@ -26,8 +28,14 @@ import Foreign.Ptr ( Ptr, FunPtr )
 import Foreign.Storable
 import Foreign.Marshal (free)
 
+import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Arb
+import Data.Number.Flint.Arb.Arf
+import Data.Number.Flint.Arb.Mag
 import Data.Number.Flint.Arb.Types
+import Data.Number.Flint.Arb.Hypgeom
+import Data.Number.Flint.Support.D.Interval
 
 newtype RF (n :: Nat) = RF Arb
 
@@ -88,19 +96,46 @@ instance forall n. KnownNat n => RealFloat (RF n) where
   floatRadix _ = 2
   floatDigits _ = fromIntegral $ natVal (Proxy :: Proxy n)
   floatRange = error "floatRange: not defined"
-  decodeFloat = error "decodeFloat: not defined"
-  encodeFloat = error "encodeFloat: not defined"
+  decodeFloat (RF x) = unsafePerformIO $ do
+    man <- newFmpz
+    exp <- newFmpz 
+    withArb x $ \a -> do
+      arf <- arb_midref a
+      withFmpz man $ \man -> do
+        withFmpz exp $ \exp -> do
+          arf_get_fmpz_2exp man exp arf
+    return (toInteger man, fromIntegral exp)
+  encodeFloat man exp = unsafePerformIO $ do
+    let prec = fromInteger $ natVal (Proxy :: Proxy n)
+        m = fromIntegral man :: Fmpz
+        e = fromIntegral exp :: Fmpz
+    res <- newArb
+    withArb res $ \res -> do 
+      withFmpz m $ \m -> do
+        withFmpz e $ \e -> do
+          withNewArf $ \ arf -> do
+            arf_set_round_fmpz_2exp arf m e prec arf_rnd_near
+            arb_set_arf res arf
+    return $ RF res
   isDenormalized = error "isDenormalized: not defined"
   isNegativeZero = error "isNegativeZero: not defined"
   isIEEE _ = False
   atan2 = lift2 arb_atan2
 
 instance forall n. KnownNat n => Real (RF n) where
-  toRational = error "toRational: not defined"
-  
+  toRational x = m % (2 ^ (-e)) where (m, e) = decodeFloat x
+
 instance forall n. KnownNat n => RealFrac (RF n) where
-  properFraction = error "properFraction: not defined."
-  
+  properFraction x
+    = case (decodeFloat x) of { (m,n) ->
+      if n >= 0 then
+          (fromInteger m * 2 ^ n, 0.0)
+      else
+          case (quotRem m (2^(negate n))) of { (w,r) ->
+          (fromInteger w, encodeFloat r n)
+          }
+      }
+
 instance forall n. KnownNat n => Floating (RF n) where
   pi = liftConstant arb_const_pi
   exp = liftF1 arb_exp
@@ -127,19 +162,19 @@ instance forall n. KnownNat n => Show (RF n) where
       arb_get_str p (fromIntegral digits) arb_str_no_radius
     str <- peekCString cstr
     return str
-
+    
 ------------------------------------------------------------------------
 
 instance forall n. KnownNat n => Special (RF n) where
   gamma = liftF1 arb_gamma
   digamma = liftF1 arb_digamma
   lgamma = undefined
-  zeta = undefined
-  erf = undefined
+  zeta = liftF1 arb_zeta
+  erf = liftF1 arb_hypgeom_erf
   ai = undefined
   bi = undefined
-  besselj = undefined
-  bessely = undefined
+  besselj = lift2 arb_hypgeom_bessel_j
+  bessely = lift2 arb_hypgeom_bessel_y
   besseli = undefined
   besselk = undefined
   modj = undefined
@@ -172,11 +207,20 @@ instance forall n. KnownNat n => RF' (RF n) where
   polylog = lift2 arb_polylog
   midPoint = lift1 arb_get_mid_arb
 
--- toDouble :: forall n. KnownNat n => RF n -> Double
--- toDouble (RF x) = snd $ unsafePerformIO $ 
---   withArb x $ \x -> do
---     d <- arf_get_d (arb_midref x) arf_rnd_down
---     return $ realToFrac d
+fromDouble ::  forall n. KnownNat n => Double -> RF n
+fromDouble x = unsafePerformIO $ do
+  res <- newArb
+  withArb res $ \res -> arb_set_d res (realToFrac x)
+  return $ RF res
+  
+toDouble :: forall n. KnownNat n => RF n -> Double
+toDouble (RF x) = realToFrac $ snd $ snd $ snd $ unsafePerformIO $ do
+  withArb x $ \x -> do
+    withNewArb $ \y -> do
+      arb_get_mid_arb y x
+      withNewMag $ \m -> do
+        arb_get_mag m y
+        mag_get_d m
     
 -- lifting -------------------------------------------------------------
 
@@ -233,8 +277,8 @@ class Special a where
   erf :: a -> a
   ai :: a -> a
   bi :: a -> a
-  besselj :: a -> a
-  bessely :: a -> a
+  besselj :: a -> a -> a
+  bessely :: a -> a -> a
   besseli :: a -> a
   besselk :: a -> a
   modj :: a -> a

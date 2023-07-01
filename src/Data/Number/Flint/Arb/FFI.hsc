@@ -17,6 +17,7 @@ module Data.Number.Flint.Arb.FFI (
   -- * Memory management
   , arb_init
   , arb_clear
+  , arb_midref
   , _arb_vec_init
   , _arb_vec_clear
   , arb_swap
@@ -423,6 +424,9 @@ foreign import ccall "arb.h arb_clear"
 foreign import ccall "arb.h &arb_clear"
   p_arb_clear :: FunPtr (Ptr CArb -> IO ())
 
+foreign import ccall "arb.h arb_midref_"
+  arb_midref :: Ptr CArb -> IO (Ptr CArf)
+  
 -- | /_arb_vec_init/ /n/ 
 -- 
 -- Returns a pointer to an array of /n/ initialized @arb_struct@ entries.

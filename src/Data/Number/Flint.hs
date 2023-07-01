@@ -122,6 +122,7 @@ module Data.Number.Flint (
 -- * Real and complex numbers
 , module Data.Number.Flint.Arb.Types
 , module Data.Number.Flint.Arb
+, module Data.Number.Flint.Arb.RealField
 , module Data.Number.Flint.Arb.Mag
 , module Data.Number.Flint.Arb.Arf
 , module Data.Number.Flint.Arb.Poly
@@ -288,5 +289,3 @@ import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly.Instances
 import Data.Number.Flint.Fmpq.Instances
 import Data.Number.Flint.Fmpq.Poly.Instances
-
-import Data.Number.Flint.Arb.RealField

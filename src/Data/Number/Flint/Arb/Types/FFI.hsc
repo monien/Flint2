@@ -9,19 +9,36 @@ import Foreign.Marshal ( free )
 import Foreign.Marshal.Array ( advancePtr )
 
 import Data.Number.Flint.Flint.Internal
+import Data.Number.Flint.Flint.External
+import Data.Number.Flint.Fmpz
 
 #include <flint/arf.h>
+#include <flint/mag.h>
 #include <flint/arb.h>
 
 -- | Data structure containing the CMag pointer
 data Mag = Mag {-# UNPACK #-} !(ForeignPtr CMag)
-type CMag = CFlint Mag
+data CMag = CMag CFmpz CMpLimb
+
+instance Storable CMag where
+  sizeOf _ = #{size mag_t}
+  alignment _ = #{alignment mag_t}
+  peek ptr = CMag
+    <$> #{peek mag_struct, exp} ptr
+    <*> #{peek mag_struct, man} ptr
+  poke = undefined
 
 -- arf_t -----------------------------------------------------------------------
 
 -- | Data structure containing the CArb pointer
 data Arf = Arf {-# UNPACK #-} !(ForeignPtr CArf) 
-type CArf = CFlint Arf
+data CArf = CArf
+
+instance Storable CArf where
+  sizeOf    _ = #{size      arf_t}
+  alignment _ = #{alignment arf_t}
+  peek = error "CArf.peek undefined."
+  poke = error "CArf.poke undefined."
 
 -- >>> Arf depends on a c-union which cannot be converted to a Haskell type
 
@@ -73,14 +90,17 @@ arf_prec_exact = ArfRnd #const ARF_PREC_EXACT
 
 -- | Data structure containing the CArb pointer
 data Arb = Arb {-# UNPACK #-} !(ForeignPtr CArb) 
-data CArb = CArb
+data CArb = CArb CMag CArf
 
 instance Storable CArb where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size arb_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment arb_t}
-  peek = error "CArb.peek undefined."
+  -- peek = error "CArb.peek undefined."
+  peek ptr = CArb
+    <$> #{peek arb_struct, mid} ptr
+    <*> #{peek arb_struct, rad} ptr
   poke = error "CArb.poke undefined."
   
 -- | string options

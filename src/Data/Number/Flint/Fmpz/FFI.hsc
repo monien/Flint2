@@ -294,6 +294,7 @@ import Foreign.Ptr ( Ptr, FunPtr, plusPtr, nullPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
+import Data.Int ( Int64 )
 import Data.Functor ((<&>))
 
 import Data.Number.Flint.Flint
@@ -308,15 +309,7 @@ import Data.Number.Flint.NMod.Types
 
 -- | Integer (opaque pointer)
 data Fmpz = Fmpz {-# UNPACK #-} !(ForeignPtr CFmpz)
-type CFmpz = CFlint Fmpz
-
-instance Storable CFmpz where
-  {-# INLINE sizeOf #-}
-  sizeOf _ = #{size fmpz_t}
-  {-# INLINE alignment #-}
-  alignment _ = #{alignment fmpz_t}
-  peek = error "CFmpz.peek: Not defined"
-  poke = error "CFmpz.poke: Not defined"
+type CFmpz = #type fmpz
   
 -- fmpz_preinv_t --------------------------------------------------
 

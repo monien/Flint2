@@ -15,18 +15,20 @@ module Data.Number.Flint.NMod.Poly.Factor.FFI (
   , newNModPolyFactor
   , withNModPolyFactor
   , withNewNModPolyFactor
-  -- * Factorisation
+  -- * Memory management
   , nmod_poly_factor_init
   , nmod_poly_factor_clear
   , nmod_poly_factor_realloc
   , nmod_poly_factor_fit_length
   , nmod_poly_factor_set
+  -- * Output
   , nmod_poly_factor_print
   , nmod_poly_factor_print_pretty
   , nmod_poly_factor_fprint
   , nmod_poly_factor_fprint_pretty
   , nmod_poly_factor_get_str
   , nmod_poly_factor_get_str_pretty
+  -- * Basic manipulations
   , nmod_poly_factor_insert
   , nmod_poly_factor_concat
   , nmod_poly_factor_pow
@@ -36,6 +38,7 @@ module Data.Number.Flint.NMod.Poly.Factor.FFI (
   , nmod_poly_is_irreducible_rabin
   , _nmod_poly_is_squarefree
   , nmod_poly_is_squarefree
+  -- * Factorizations
   , nmod_poly_factor_squarefree
   , nmod_poly_factor_equal_deg_prob
   , nmod_poly_factor_equal_deg
@@ -130,9 +133,15 @@ foreign import ccall "nmod_poly_factor.h nmod_poly_factor_set"
 
 -- Input and output ------------------------------------------------------------
 
+-- | /nmod_poly_factor_get_str/ /fac/
+-- 
+-- Returns string representation of the entries of @fac@.
 foreign import ccall "nmod_poly_factor.h nmod_poly_factor_get_str"
   nmod_poly_factor_get_str :: Ptr CNModPolyFactor -> IO CString
 
+-- | /nmod_poly_factor_get_str_pretty/ /fac/ /x/
+-- 
+-- Returns string representation of the entries of @fac@ as polynomials.
 foreign import ccall "nmod_poly_factor.h nmod_poly_factor_get_str_pretty"
   nmod_poly_factor_get_str_pretty :: Ptr CNModPolyFactor -> CString -> IO CString
 
@@ -144,7 +153,7 @@ foreign import ccall "nmod_poly_factor.h nmod_poly_factor_fprint"
 
 -- | /nmod_poly_factor_fprint_pretty/ /fac/ /x/
 -- 
--- Prints the entries of @fac@ to stream.
+-- Prints the entries of @fac@ to stream a polynomials.
 foreign import ccall "nmod_poly_factor.h nmod_poly_factor_fprint_pretty"
   nmod_poly_factor_fprint_pretty :: Ptr CFile -> Ptr CNModPolyFactor -> CString -> IO ()
 
@@ -156,9 +165,9 @@ nmod_poly_factor_print fac = do
   printCStr nmod_poly_factor_get_str fac
   return ()
 
--- | /nmod_poly_factor_fprint_pretty/ /fac/ /x/
+-- | /nmod_poly_factor_print_pretty/ /fac/ /x/
 -- 
--- Prints the entries of @fac@ to standard outpu.
+-- Prints the entries of @fac@ to standard output as polynomials.
 nmod_poly_factor_print_pretty :: Ptr CNModPolyFactor -> CString -> IO ()
 nmod_poly_factor_print_pretty fac x = do
   printCStr (\fac -> nmod_poly_factor_get_str_pretty fac x) fac

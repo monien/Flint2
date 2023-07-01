@@ -11,7 +11,8 @@ module Data.Number.Flint.Arb.Mag.FFI (
     Mag (..)
   , CMag (..)
   , newMag
-  , withMag 
+  , withMag
+  , withNewMag
   -- * Memory management
   , mag_init
   , mag_clear
@@ -165,14 +166,10 @@ newMag = do
 withMag (Mag p) f = do
   withForeignPtr p $ \fp -> (Mag p,) <$> f fp
 
-instance Storable CMag where
-  {-# INLINE sizeOf #-}
-  sizeOf _ = #{size mag_t}
-  {-# INLINE alignment #-}
-  alignment _ = #{alignment mag_t}
-  peek = error "CMag.peek undefined."
-  poke = error "CMag.poke undefined."
-  
+withNewMag f = do
+  x <- newMag
+  withMag x f
+    
 -- Memory management -----------------------------------------------------------
 
 -- | /mag_init/ /x/ 
