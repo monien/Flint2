@@ -139,6 +139,7 @@ library:
    - Data.Number.Flint.Arb.Fmpz.Poly
    - Data.Number.Flint.Arb.Mat
    - Data.Number.Flint.Arb.Hypgeom
+   - Data.Number.Flint.Arb.RealField
    # Acb
    - Data.Number.Flint.Acb.Types
    - Data.Number.Flint.Acb

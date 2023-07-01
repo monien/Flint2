@@ -248,6 +248,7 @@ import Data.Number.Flint.Padic.Poly
 import Data.Number.Flint.Padic.Mat
 import Data.Number.Flint.Qadic
 -- Real and complex numbers
+-- Arb
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag
@@ -256,6 +257,8 @@ import Data.Number.Flint.Arb.Poly
 import Data.Number.Flint.Arb.Fmpz.Poly
 import Data.Number.Flint.Arb.Mat
 import Data.Number.Flint.Arb.Hypgeom
+import Data.Number.Flint.Arb.RealField
+-- Acb
 import Data.Number.Flint.Acb.Types
 import Data.Number.Flint.Acb
 import Data.Number.Flint.Acb.Acf
@@ -280,7 +283,10 @@ import Data.Number.Flint.Support.Mpfr.Mat
 import Data.Number.Flint.Support.Mpfr.Vec
 
 import Data.Number.Flint.UFD
+
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly.Instances
 import Data.Number.Flint.Fmpq.Instances
 import Data.Number.Flint.Fmpq.Poly.Instances
+
+import Data.Number.Flint.Arb.RealField

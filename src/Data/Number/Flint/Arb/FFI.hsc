@@ -9,7 +9,9 @@
 
 module Data.Number.Flint.Arb.FFI (
   -- * Real numbers
-    newArb
+    Arb (..)
+  , CArb (..)
+  , newArb
   , withArb
   , withNewArb
   -- * Memory management

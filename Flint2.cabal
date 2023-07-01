@@ -122,6 +122,7 @@ library
       Data.Number.Flint.Arb.Fmpz.Poly
       Data.Number.Flint.Arb.Mat
       Data.Number.Flint.Arb.Hypgeom
+      Data.Number.Flint.Arb.RealField
       Data.Number.Flint.Acb.Types
       Data.Number.Flint.Acb
       Data.Number.Flint.Acb.Acf
@@ -318,7 +319,6 @@ library
 executable flint_test
   main-is: Main.hs
   other-modules:
-      RF
       Paths_Flint2
   hs-source-dirs:
       app
