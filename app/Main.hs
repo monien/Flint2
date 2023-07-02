@@ -24,54 +24,12 @@ import Data.List (permutations)
 
 import Data.Number.Flint
 
-main = testRF
-
-pa = do
-  let prec = 1024
-      x = pi :: RF 1024
-      RF a = x
-  man <- newFmpz
-  exp <- newFmpz 
-  withArb a $ \a -> do
-    arf <- arb_midref a
-    arf_printd arf 16
-    endl
-    withFmpz man $ \man -> do
-      withFmpz exp $ \exp -> do
-        arf_get_fmpz_2exp man exp arf
-  return (man, exp)
-    
-pf (RF x) = unsafePerformIO $ do
-  let prec = 1024
-  n <- newFmpz
-  r <- newArb
-  withArb x $ \x -> do
-    withArb r $ \r -> do
-      withFmpz n $ \n -> do
-        withNewArb $ \tmp -> do
-          arb_floor tmp x prec
-          arb_get_unique_fmpz n tmp
-          arb_sub r x tmp prec
-  return $ (n, RF r :: RF 1024)
-  
-testRFRational = do
-  let x = pi :: RF 1024
-      RF a = x
-  withArb a $ \a -> do
-    withNewFmpz $ \mid -> do
-      withNewFmpz $ \rad -> do
-        withNewFmpz $ \exp -> do
-          arb_get_fmpz_mid_rad_10exp mid rad exp a 1024
-          fmpz_print mid
-          endl
-          withNewFmpq $ \r -> do
-            fmpq_set_fmpz_frac r mid rad
-            arb_set_fmpq a r 1024
-        
+main = testArbFmpzPoly
+       
 testRF = do
   let dx = recip 1000 :: RF 1024
       x = map (*dx) $ map fromInteger [0..20000]
-      y = map (besselj 0) x
+      y = map (besselJ 0) x
       showd = show . toDouble
   writeFile "bessel.out" $ unlines
                          $ zipWith (\x y -> showd x ++ " " ++ showd y) x y
@@ -79,20 +37,13 @@ testRF = do
 testNModPoly = do
   let n = 7
   poly <- newNModPoly n
-  x <- newNModPoly n
   withNModPoly poly $ \poly -> do
-    withNModPoly x $ \x -> do
-      nmod_poly_set_coeff_ui x 0 (fromIntegral $ pred n)
-      nmod_poly_set_coeff_ui x 1 1
-      withCString "x" $ \var -> nmod_poly_print_pretty x var
-      endl
-      nmod_poly_pow poly x 12
-      withCString "x" $ \var -> nmod_poly_print_pretty poly var
-      endl
-      withNewNModPolyFactor $ \fac -> do
-        c <- nmod_poly_factor fac poly
-        withCString "x" $ \var -> do
-          nmod_poly_factor_print_pretty fac var
+    nmod_poly_set_coeff_ui poly 0 (fromIntegral $ pred n)
+    nmod_poly_set_coeff_ui poly 1 1
+  print poly
+  let p12 = poly^12
+  print p12
+  print $ factor p12
             
 testArbFmpzPoly = do
   let poly = fromList [3, 2, 1] :: FmpzPoly

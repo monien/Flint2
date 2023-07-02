@@ -62,6 +62,9 @@ instance Storable CNMod where
     <*> #{peek nmod_t, norm} ptr
   poke = error "CNMod.poke: Not defined"
 
+instance Show CNMod where
+  show (CNMod n ninv norm) = show n
+
 -- NmodDiscreteLogPohligHellman ------------------------------------------------
 
 data NModDiscreteLogPohligHellman =

@@ -255,24 +255,26 @@ import Data.Number.Flint.Fq.Mat
 -- fq_poly_t -------------------------------------------------------------------
 
 data FqPoly = FqPoly {-# UNPACK #-} !(ForeignPtr CFqPoly)
-data CFqPoly = CFqPoly {
-  -- | pointer to the coefficients of the polynomial
-  coeffs :: Ptr CFq,
-  -- | number of allocated coefficients
-  alloc :: CLong,
-  -- | number of coefficients
-  num :: CLong
-  }
+data CFqPoly = CFqPoly (Ptr CFq) CLong CLong
+
+-- data CFqPoly = CFqPoly {
+--   -- | pointer to the coefficients of the polynomial
+--   coeffs :: Ptr CFq,
+--   -- | number of allocated coefficients
+--   alloc :: CLong,
+--   -- | number of coefficients
+--   num :: CLong
+--   }
 
 instance Storable CFqPoly where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size fq_poly_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fq_poly_t}
-  peek ptr = return CFqPoly
-    `ap` #{peek fq_poly_struct, coeffs} ptr
-    `ap` #{peek fq_poly_struct, alloc } ptr
-    `ap` #{peek fq_poly_struct, length} ptr
+  peek ptr = CFqPoly
+    <$> #{peek fq_poly_struct, coeffs} ptr
+    <*> #{peek fq_poly_struct, alloc } ptr
+    <*> #{peek fq_poly_struct, length} ptr
   poke = undefined
      
 -- | Create a new `FqPoly` structure with context `ctx`.

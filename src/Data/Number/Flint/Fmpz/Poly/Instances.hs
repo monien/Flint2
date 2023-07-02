@@ -42,8 +42,7 @@ instance Num FmpzPoly where
   abs = undefined
   signum = undefined
   fromInteger x = unsafePerformIO $ do
-    let tmp :: Fmpz
-        tmp = fromInteger x
+    let tmp = fromInteger x :: Fmpz
     result <- newFmpzPoly
     withFmpzPoly result $ \result -> 
       withFmpz tmp $ \tmp -> do

@@ -68,6 +68,7 @@ library
       Data.Number.Flint.NMod.Types
       Data.Number.Flint.NMod
       Data.Number.Flint.NMod.Poly
+      Data.Number.Flint.NMod.Poly.Instances
       Data.Number.Flint.NMod.Poly.Factor
       Data.Number.Flint.NMod.Poly.Mat
       Data.Number.Flint.NMod.MPoly
@@ -285,6 +286,7 @@ library
       csrc/qqbar/fprintn.c
       csrc/qqbar/get_str.c
       csrc/qqbar/get_strn.c
+      csrc/dlog/inlines.c
       csrc/fq_mat/get_str.c
       csrc/fq_mat/get_str_pretty.c
       csrc/fq_zech/ctx_get_str.c

@@ -123,7 +123,9 @@ instance forall n. KnownNat n => RealFloat (RF n) where
   atan2 = lift2 arb_atan2
 
 instance forall n. KnownNat n => Real (RF n) where
-  toRational x = m % (2 ^ (-e)) where (m, e) = decodeFloat x
+  toRational x =
+    case decodeFloat x of
+      (m, n) -> if n >= 0 then (m*2^n)%1 else m % (2^n)
 
 instance forall n. KnownNat n => RealFrac (RF n) where
   properFraction x
@@ -168,15 +170,39 @@ instance forall n. KnownNat n => Show (RF n) where
 instance forall n. KnownNat n => Special (RF n) where
   gamma = liftF1 arb_gamma
   digamma = liftF1 arb_digamma
-  lgamma = undefined
+  lgamma = liftF1 arb_hypgeom_lgamma
   zeta = liftF1 arb_zeta
   erf = liftF1 arb_hypgeom_erf
-  ai = undefined
-  bi = undefined
-  besselj = lift2 arb_hypgeom_bessel_j
-  bessely = lift2 arb_hypgeom_bessel_y
-  besseli = undefined
-  besselk = undefined
+  airy (RF x) = unsafePerformIO $ do
+    let prec = fromInteger $ natVal (Proxy :: Proxy n)
+    ai <- newArb
+    ai' <- newArb
+    bi <- newArb
+    bi' <- newArb
+    withArb x $ \x -> 
+      withArb ai $ \ai -> 
+        withArb ai' $ \ai' ->
+          withArb bi $ \bi ->
+            withArb bi' $ \bi' ->
+              arb_hypgeom_airy ai ai' bi bi' x prec
+    return $ (RF ai, RF ai', RF bi, RF bi')
+  airyZeros k = unsafePerformIO $ do
+    let prec = fromInteger $ natVal (Proxy :: Proxy n)
+    ai <- newArb
+    ai' <- newArb
+    bi <- newArb
+    bi' <- newArb
+    withFmpz k $ \k -> 
+      withArb ai $ \ai -> 
+        withArb ai' $ \ai' ->
+          withArb bi $ \bi ->
+            withArb bi' $ \bi' ->
+              arb_hypgeom_airy_zero ai ai' bi bi' k prec
+    return $ (RF ai, RF ai', RF bi, RF bi')
+  besselJ = lift2 arb_hypgeom_bessel_j
+  besselY = lift2 arb_hypgeom_bessel_y
+  besselI = lift2 arb_hypgeom_bessel_i
+  besselK = lift2 arb_hypgeom_bessel_k
   modj = undefined
   modjq = undefined
   modeta = undefined
@@ -275,12 +301,12 @@ class Special a where
   lgamma :: a -> a
   zeta :: a -> a
   erf :: a -> a
-  ai :: a -> a
-  bi :: a -> a
-  besselj :: a -> a -> a
-  bessely :: a -> a -> a
-  besseli :: a -> a
-  besselk :: a -> a
+  airy :: a -> (a, a, a, a)
+  airyZeros :: Fmpz -> (a, a, a, a)
+  besselJ :: a -> a -> a
+  besselY :: a -> a -> a
+  besselI :: a -> a -> a
+  besselK :: a -> a -> a
   modj :: a -> a
   modjq :: a -> a
   modeta :: a -> a

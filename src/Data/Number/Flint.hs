@@ -289,3 +289,5 @@ import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly.Instances
 import Data.Number.Flint.Fmpq.Instances
 import Data.Number.Flint.Fmpq.Poly.Instances
+
+import Data.Number.Flint.NMod.Poly.Instances

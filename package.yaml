@@ -73,7 +73,8 @@ library:
    # NMod
    - Data.Number.Flint.NMod.Types 
    - Data.Number.Flint.NMod
-   - Data.Number.Flint.NMod.Poly 
+   - Data.Number.Flint.NMod.Poly
+   - Data.Number.Flint.NMod.Poly.Instances
    - Data.Number.Flint.NMod.Poly.Factor
    - Data.Number.Flint.NMod.Poly.Mat
    - Data.Number.Flint.NMod.MPoly
@@ -195,7 +196,7 @@ library:
    # NMod
    - Data.Number.Flint.NMod.Types.FFI 
    - Data.Number.Flint.NMod.FFI 
-   - Data.Number.Flint.NMod.Poly.FFI 
+   - Data.Number.Flint.NMod.Poly.FFI
    - Data.Number.Flint.NMod.Poly.Factor.FFI 
    - Data.Number.Flint.NMod.Poly.Mat.FFI
    - Data.Number.Flint.NMod.MPoly.FFI
@@ -324,16 +325,20 @@ library:
     - csrc/qqbar/fprintn.c
     - csrc/qqbar/get_str.c
     - csrc/qqbar/get_strn.c
+    - csrc/dlog/inlines.c
+    # Fq
     - csrc/fq_mat/get_str.c
     - csrc/fq_mat/get_str_pretty.c
     - csrc/fq_zech/ctx_get_str.c
     - csrc/fq_zech_mat/get_str.c
     - csrc/fq_zech_mat/get_str_pretty.c
+    # Padic
     - csrc/padic_poly/get_str.c
     - csrc/padic_poly/get_str_pretty.c
     - csrc/padic_mat/get_str.c
     - csrc/padic_mat/get_str_pretty.c
     - csrc/qadic/get_str_pretty.c
+    # Support
     - csrc/double_interval/fprint.c
     - csrc/double_interval/get_str.c
     # arb
