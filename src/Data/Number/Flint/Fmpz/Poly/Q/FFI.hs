@@ -1,3 +1,4 @@
+{-# LINE 1 "FFI.hsc" #-}
 {-# language
     CApiFFI
   , FlexibleInstances
@@ -79,7 +80,7 @@ import Data.Number.Flint.Fmpz.Poly
 import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Poly
 
-#include <flint/fmpz_types.h>
+
 
 -- fmpz_poly_q_t ---------------------------------------------------------------
 
@@ -87,14 +88,20 @@ data FmpzPolyQ = FmpzPolyQ {-# UNPACK #-} !(ForeignPtr CFmpzPolyQ)
 data CFmpzPolyQ = CFmpzPolyQ (Ptr CFmpzPoly) (Ptr CFmpzPoly)
 
 instance Storable CFmpzPolyQ where
-  sizeOf    _ = #{size fmpz_poly_q_t}
-  alignment _ = #{size fmpz_poly_q_t}
+  sizeOf    _ = (16)
+{-# LINE 91 "FFI.hsc" #-}
+  alignment _ = (16)
+{-# LINE 92 "FFI.hsc" #-}
   peek ptr = CFmpzPolyQ
-    <$> #{peek fmpz_poly_q_struct, num} ptr
-    <*> #{peek fmpz_poly_q_struct, den} ptr
+    <$> (\hsc_ptr -> peekByteOff hsc_ptr 0) ptr
+{-# LINE 94 "FFI.hsc" #-}
+    <*> (\hsc_ptr -> peekByteOff hsc_ptr 8) ptr
+{-# LINE 95 "FFI.hsc" #-}
   poke ptr (CFmpzPolyQ num den) = do
-    #{poke fmpz_poly_q_struct, num} ptr num
-    #{poke fmpz_poly_q_struct, den} ptr den
+    (\hsc_ptr -> pokeByteOff hsc_ptr 0) ptr num
+{-# LINE 97 "FFI.hsc" #-}
+    (\hsc_ptr -> pokeByteOff hsc_ptr 8) ptr den
+{-# LINE 98 "FFI.hsc" #-}
 
 newFmpzPolyQ = do
   x <- mallocForeignPtr
@@ -417,5 +424,5 @@ fmpz_poly_q_print op = printCStr fmpz_poly_q_get_str op
 -- @stdout@.
 fmpz_poly_q_print_pretty :: Ptr CFmpzPolyQ -> CString -> IO CInt
 fmpz_poly_q_print_pretty op x = 
-  printCStr (`fmpz_poly_q_get_str_pretty` x) op
+  printCStr (\op -> fmpz_poly_q_get_str_pretty op x) op
 

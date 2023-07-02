@@ -9,6 +9,24 @@ This module implements operations on integers.
 
 == Basic usage 
 
+__Warning__: Instances like `Show` and `Num` are only
+avaible for some types without context.
+
+@
+import Data.Number.Flint
+
+main = do 
+  let x = 7 :: Fmpz
+  print $ x*x
+@
+
+Running main yields:
+
+>>> main 
+49
+
+== Using the @Flint@ library directly
+
 @
 import Data.Number.Flint
 
@@ -24,6 +42,8 @@ Running main yields:
 
 >>> main 
 49
+
+
 -}
 
 module Data.Number.Flint.Fmpz (

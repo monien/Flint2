@@ -46,6 +46,7 @@ library
       Data.Number.Flint.Fmpz.Poly.Factor
       Data.Number.Flint.Fmpz.Poly.Mat
       Data.Number.Flint.Fmpz.Poly.Q
+      Data.Number.Flint.Fmpz.Poly.Q.Instances
       Data.Number.Flint.Fmpz.MPoly
       Data.Number.Flint.Fmpz.MPoly.Factor
       Data.Number.Flint.Fmpz.MPoly.Q

@@ -125,7 +125,7 @@ instance forall n. KnownNat n => RealFloat (RF n) where
 instance forall n. KnownNat n => Real (RF n) where
   toRational x =
     case decodeFloat x of
-      (m, n) -> if n >= 0 then (m*2^n)%1 else m % (2^n)
+      (m, n) -> if n >= 0 then (m*2^n)%1 else m % (2^(-n))
 
 instance forall n. KnownNat n => RealFrac (RF n) where
   properFraction x

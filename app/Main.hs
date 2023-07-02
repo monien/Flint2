@@ -21,11 +21,27 @@ import Control.Monad
 import Control.Monad.Reader
 import Text.Printf
 import Data.List (permutations)
+import Data.Ratio (numerator, denominator)
 
 import Data.Number.Flint
 
 main = testArbFmpzPoly
-       
+
+testCF = do
+  let n = 64
+      x = pi :: RF 1024
+      r = toRational x
+      u = numerator r
+      v = denominator r
+      p = fromInteger u :: Fmpq
+      q = fromInteger v :: Fmpq
+      w = p / q
+  c <- _fmpz_vec_init n
+  withFmpq w $ \w -> do
+    withNewFmpq $ \rem -> do
+      fmpq_get_cfrac c rem w n
+  printCVec fmpz_print c n
+    
 testRF = do
   let dx = recip 1000 :: RF 1024
       x = map (*dx) $ map fromInteger [0..20000]
@@ -774,21 +790,16 @@ testBoolMat = do
 
 testFmpzPolyQ = do
   r <- newFmpzPolyQ
-  -- state <- newFRandState
-  -- withFRandState state $ \state -> do
-  --   withFmpzPolyQ r $ \r -> do
-  --     replicateM_ 10 $ do
-  --       fmpz_poly_q_randtest_not_zero r state 5 256 5 256
-  --       withCString "x" $ \x -> do 
-  --         fmpz_poly_q_print_pretty r x
-  --         endl
   withFmpzPolyQ r $ \r -> do
     withCString "2  7 1/3  11 0 1" $ \s -> 
       fmpz_poly_q_set_str r s
-    withCString "x" $ \x -> do 
-      fmpz_poly_q_print_pretty r x
-      endl
-      fmpz_poly_q_print r
-      endl
+  print r
+  withFmpzPolyQNum r $ \n -> do
+    fmpz_poly_print n
+    endl
+  withFmpzPolyQDen r $ \n -> do
+    fmpz_poly_print n
+    endl
+
  
     
