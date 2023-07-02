@@ -8,7 +8,7 @@
   , TypeFamilies
   #-}
 
-module Data.Number.Flint.Acb.HypGeom.FFI (
+module Data.Number.Flint.Acb.Hypgeom.FFI (
   -- * Hypergeometric functions of complex variables
   -- * Rising factorials
     acb_hypgeom_rising_ui_forward

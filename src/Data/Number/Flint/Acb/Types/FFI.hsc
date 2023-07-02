@@ -13,7 +13,7 @@ import Data.Number.Flint.Arb.Types
 
 #include <flint/acb.h>
 
--- | Data structure containing the CMag pointer
+-- | An CArb consists of a pair of Arb:s. 
 data Acb = Acb {-# UNPACK #-} !(ForeignPtr CAcb)
 data CAcb = CAcb CArb CArb
 

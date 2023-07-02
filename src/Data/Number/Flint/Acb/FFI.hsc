@@ -10,7 +10,9 @@
 module Data.Number.Flint.Acb.FFI (
   -- * Complex numbers
   -- * Types
-    newAcb
+    Acb (..)
+  , CAcb (..)
+  , newAcb
   , withAcb
   , withNewAcb
   , withAcbRe
@@ -47,6 +49,9 @@ module Data.Number.Flint.Acb.FFI (
   , acb_add_error_arb
   , acb_get_mid
   -- * Input and output
+  , acb_get_str
+  , acb_get_strd
+  , acb_get_strn
   , acb_print
   , acb_fprint
   , acb_printd
@@ -324,12 +329,13 @@ withAcbIm (Acb p) f = do
      withForeignPtr p $ \fp -> (Acb p,) <$> f (castPtr fp `advancePtr` 1)
 
 instance Storable CAcb where
-  {-# INLINE sizeOf #-}
-  sizeOf _ = #{size acb_t}
-  {-# INLINE alignment #-}
+  sizeOf    _ = #{size      acb_t}
   alignment _ = #{alignment acb_t}
-  peek = error "CAcb.peek undefined."
-  poke = error "CAcb.poke undefined."
+  peek ptr = CAcb
+    <$> #{peek acb_struct, real} ptr
+    <*> #{peek acb_struct, imag} ptr
+  poke = error "CAcb.poke not defined."
+  
 
 -- Memory management -----------------------------------------------------------
 

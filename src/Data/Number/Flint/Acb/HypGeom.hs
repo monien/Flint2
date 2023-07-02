@@ -1,5 +1,5 @@
-module Data.Number.Flint.Acb.HypGeom (
-  module Data.Number.Flint.Acb.HypGeom.FFI
+module Data.Number.Flint.Acb.Hypgeom (
+  module Data.Number.Flint.Acb.Hypgeom.FFI
   ) where
 
-import Data.Number.Flint.Acb.HypGeom.FFI
+import Data.Number.Flint.Acb.Hypgeom.FFI

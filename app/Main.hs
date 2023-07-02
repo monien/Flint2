@@ -28,6 +28,16 @@ import Data.Number.Flint
 main = testArbFmpzPoly
 
 testCF = do
+  let r = 2 :: RF 128
+      theta = 2*pi/3 :: RF 128
+      z = cis theta
+  print z
+  print $ z^3
+  print $ polar z
+  print $ realPart z
+  print $ imagPart z
+  
+testContinuedFraction = do
   let n = 64
       x = pi :: RF 1024
       r = toRational x
@@ -796,10 +806,14 @@ testFmpzPolyQ = do
   print r
   withFmpzPolyQNum r $ \n -> do
     fmpz_poly_print n
-    endl
+    putStr "/"
   withFmpzPolyQDen r $ \n -> do
     fmpz_poly_print n
     endl
+  withFmpzPolyQ r $ \r -> do
+    fmpz_poly_q_print r
+    endl
+  return ()
 
  
     

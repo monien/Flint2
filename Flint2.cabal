@@ -130,11 +130,12 @@ library
       Data.Number.Flint.Acb.Acf
       Data.Number.Flint.Acb.Poly
       Data.Number.Flint.Acb.Mat
-      Data.Number.Flint.Acb.HypGeom
+      Data.Number.Flint.Acb.Hypgeom
       Data.Number.Flint.Acb.Elliptic
       Data.Number.Flint.Acb.Modular
       Data.Number.Flint.Acb.Dirichlet
       Data.Number.Flint.Acb.DFT
+      Data.Number.Flint.Acb.ComplexField
       Data.Number.Flint.Bernoulli
       Data.Number.Flint.Partitions
       Data.Number.Flint.Hypgeom
@@ -236,7 +237,7 @@ library
       Data.Number.Flint.Acb.Acf.FFI
       Data.Number.Flint.Acb.Poly.FFI
       Data.Number.Flint.Acb.Mat.FFI
-      Data.Number.Flint.Acb.HypGeom.FFI
+      Data.Number.Flint.Acb.Hypgeom.FFI
       Data.Number.Flint.Acb.Elliptic.FFI
       Data.Number.Flint.Acb.Modular.FFI
       Data.Number.Flint.Acb.Dirichlet.FFI
