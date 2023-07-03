@@ -72,7 +72,7 @@ module Data.Number.Flint.Acb.Dirichlet.FFI (
   , acb_dirichlet_jacobi_sum_gauss
   , acb_dirichlet_jacobi_sum
   , acb_dirichlet_jacobi_sum_ui
-  , acb_dirichlet_chi_theta_arb
+  --, acb_dirichlet_chi_theta_arb
   , acb_dirichlet_ui_theta_arb
   , acb_dirichlet_theta_length
   , acb_dirichlet_qseries_powers_naive
@@ -638,8 +638,8 @@ foreign import ccall "acb_dirichlet.h acb_dirichlet_jacobi_sum"
 foreign import ccall "acb_dirichlet.h acb_dirichlet_jacobi_sum_ui"
   acb_dirichlet_jacobi_sum_ui :: Ptr CAcb -> Ptr CDirichletGroup -> CULong -> CULong -> CLong -> IO ()
 
-foreign import ccall "acb_dirichlet.h acb_dirichlet_chi_theta_arb"
-  acb_dirichlet_chi_theta_arb :: Ptr CAcb -> Ptr CDirichletGroup -> Ptr CDirichletChar -> Ptr CArb -> CLong -> IO ()
+-- foreign import ccall "acb_dirichlet.h acb_dirichlet_chi_theta_arb"
+--   acb_dirichlet_chi_theta_arb :: Ptr CAcb -> Ptr CDirichletGroup -> Ptr CDirichletChar -> Ptr CArb -> CLong -> IO ()
 
 -- | /acb_dirichlet_ui_theta_arb/ /res/ /G/ /a/ /t/ /prec/ 
 -- 
