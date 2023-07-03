@@ -25,17 +25,22 @@ import Data.Ratio (numerator, denominator)
 
 import Data.Number.Flint
 
-main = testArbFmpzPoly
+main = testCF
+
+type RR = RF 128
+type CC = CF 128
 
 testCF = do
-  let r = 2 :: RF 128
-      theta = 2*pi/3 :: RF 128
+  let r = 2 :: RR
+      theta = 2*pi/3 :: RR
       z = cis theta
+      i = cis (pi/2) :: CC
   print z
   print $ z^3
   print $ polar z
   print $ realPart z
   print $ imagPart z
+  print $ magnitude z
   
 testContinuedFraction = do
   let n = 64
@@ -185,10 +190,12 @@ testRest = do
 endl = putStrLn ""
 
 testNModMat = do
-  a <- newNModMat 3 3 7
+  state <- newFRandState  
+  a <- newNModMat 3 5 7
   withNModMat a $ \a -> do
-    d <- nmod_mat_det a
-    print d
+    withFRandState state $ \state -> do
+      nmod_mat_randfull a state
+    nmod_mat_print_pretty a
     
 testPadic = do
   let p = 7 :: Fmpz
