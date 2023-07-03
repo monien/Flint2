@@ -96,6 +96,7 @@ library
       Data.Number.Flint.Fq.NMod.Embed
       Data.Number.Flint.Fq.NMod.Poly
       Data.Number.Flint.Fq.NMod.Poly.Factor
+      Data.Number.Flint.Fq.NMod.MPoly
       Data.Number.Flint.Fq.NMod.Mat
       Data.Number.Flint.Fq.NMod.Vec
       Data.Number.Flint.Fq.Zech.Types
@@ -207,6 +208,7 @@ library
       Data.Number.Flint.Fq.NMod.Types.FFI
       Data.Number.Flint.Fq.NMod.Poly.FFI
       Data.Number.Flint.Fq.NMod.Poly.Factor.FFI
+      Data.Number.Flint.Fq.NMod.MPoly.FFI
       Data.Number.Flint.Fq.NMod.Mat.FFI
       Data.Number.Flint.Fq.NMod.Vec.FFI
       Data.Number.Flint.Fq.Zech.FFI
