@@ -26,7 +26,7 @@ module Data.Number.Flint.Fq.Zech.Vec.FFI (
   , _fq_zech_vec_dot
 ) where 
 
--- Vectors over finite fields (Zech logarithm representation -------------------
+-- Vectors over finite fields (Zech logarithm representation) ------------------
 
 import Foreign.C.String
 import Foreign.C.Types

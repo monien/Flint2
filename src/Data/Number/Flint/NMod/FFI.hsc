@@ -65,7 +65,7 @@ instance Storable CNMod where
 instance Show CNMod where
   show (CNMod n ninv norm) = show n
 
--- NmodDiscreteLogPohligHellman ------------------------------------------------
+-- NModDiscreteLogPohligHellman ------------------------------------------------
 
 data NModDiscreteLogPohligHellman =
    NModDiscreteLogPohligHellman !(ForeignPtr CNModDiscreteLogPohligHellman)
@@ -87,7 +87,7 @@ newNMod n = do
   withForeignPtr x $ \x -> nmod_init x n
   return $ NMod x
 
--- | Use `Nmod` structure
+-- | Use `NMod` structure
 {-# INLINE withNMod #-}
 withNMod (NMod x) f = do
   withForeignPtr x $ \xp -> f xp >>= return . (NMod x,)

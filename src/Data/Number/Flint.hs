@@ -149,6 +149,13 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Fq.Poly.Factor
 , module Data.Number.Flint.Fq.Vec
 , module Data.Number.Flint.Fq.Mat
+-- ** NMod
+, module Data.Number.Flint.Fq.NMod
+, module Data.Number.Flint.Fq.NMod.Embed
+, module Data.Number.Flint.Fq.NMod.Poly
+, module Data.Number.Flint.Fq.NMod.Poly.Factor
+, module Data.Number.Flint.Fq.NMod.Mat
+, module Data.Number.Flint.Fq.NMod.Vec
 -- ** Zech
 , module Data.Number.Flint.Fq.Zech
 , module Data.Number.Flint.Fq.Zech.Embed
@@ -237,6 +244,13 @@ import Data.Number.Flint.Fq.Poly
 import Data.Number.Flint.Fq.Poly.Factor
 import Data.Number.Flint.Fq.Mat
 import Data.Number.Flint.Fq.Vec
+-- NMod
+import Data.Number.Flint.Fq.NMod
+import Data.Number.Flint.Fq.NMod.Embed
+import Data.Number.Flint.Fq.NMod.Poly
+import Data.Number.Flint.Fq.NMod.Poly.Factor
+import Data.Number.Flint.Fq.NMod.Mat
+import Data.Number.Flint.Fq.NMod.Vec
 -- Zech
 import Data.Number.Flint.Fq.Zech
 import Data.Number.Flint.Fq.Zech.Embed

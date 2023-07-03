@@ -106,8 +106,11 @@ library:
    # Fq NMod
    - Data.Number.Flint.Fq.NMod.Types 
    - Data.Number.Flint.Fq.NMod
+   - Data.Number.Flint.Fq.NMod.Embed
    - Data.Number.Flint.Fq.NMod.Poly
+   - Data.Number.Flint.Fq.NMod.Poly.Factor
    - Data.Number.Flint.Fq.NMod.Mat
+   - Data.Number.Flint.Fq.NMod.Vec
    # Fq Zech
    - Data.Number.Flint.Fq.Zech.Types 
    - Data.Number.Flint.Fq.Zech
@@ -230,9 +233,12 @@ library:
    - Data.Number.Flint.Fq.Vec.FFI
    # Fq NMod
    - Data.Number.Flint.Fq.NMod.FFI
+   - Data.Number.Flint.Fq.NMod.Embed.FFI
    - Data.Number.Flint.Fq.NMod.Types.FFI
    - Data.Number.Flint.Fq.NMod.Poly.FFI
+   - Data.Number.Flint.Fq.NMod.Poly.Factor.FFI
    - Data.Number.Flint.Fq.NMod.Mat.FFI
+   - Data.Number.Flint.Fq.NMod.Vec.FFI
    # Fq Zech
    - Data.Number.Flint.Fq.Zech.FFI
    - Data.Number.Flint.Fq.Zech.Embed.FFI
@@ -333,6 +339,11 @@ library:
     # Fq
     - csrc/fq_mat/get_str.c
     - csrc/fq_mat/get_str_pretty.c
+    # FqNMod
+    - csrc/fq_nmod/ctx_get_str.c
+    - csrc/fq_nmod_mat/get_str.c
+    - csrc/fq_nmod_mat/get_str_pretty.c
+    # FqZech
     - csrc/fq_zech/ctx_get_str.c
     - csrc/fq_zech_mat/get_str.c
     - csrc/fq_zech_mat/get_str_pretty.c

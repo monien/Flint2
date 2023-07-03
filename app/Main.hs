@@ -352,6 +352,28 @@ testFq = do
           endl
         endl
 
+testFqNModPoly = do
+  state <- newFRandState
+  ctx <- newFqNModCtx 7 4 "a"
+  poly <- newFqNModPoly ctx
+  pre <- newFqNMod ctx
+  fac <- newFqNModPolyFactor ctx
+  withFRandState state $ \state -> do
+    replicateM_ 10 $ do
+      withFqNModCtx ctx $ \ctx -> do
+        fq_nmod_ctx_print ctx
+        withFqNModPoly poly $ \poly -> do
+          fq_nmod_poly_randtest poly state 5 ctx
+          withCString "x" $ \var -> do
+            fq_nmod_poly_print_pretty poly var ctx
+            endl
+            withFqNMod pre $ \pre -> do
+              withFqNModPolyFactor fac $ \fac -> do
+                fq_nmod_poly_factor fac pre poly ctx
+                withCString "x" $ \var -> do
+                  putStrLn "factorization:"
+                  fq_nmod_poly_factor_print_pretty fac var ctx
+          
 testFmpqPoly = do
   poly <- newFmpqPoly
   withFmpqPoly poly $ \poly -> do

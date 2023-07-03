@@ -75,13 +75,13 @@ module Data.Number.Flint.Fq.NMod.Poly.FFI (
   , fq_nmod_poly_scalar_addmul_fq_nmod
   , _fq_nmod_poly_scalar_submul_fq_nmod
   , fq_nmod_poly_scalar_submul_fq_nmod
-  , _fq_nmod_poly_scalar_div_fq
-  , fq_nmod_poly_scalar_div_fq
+  --, _fq_nmod_poly_scalar_div_fq
+  --, fq_nmod_poly_scalar_div_fq
   -- * Multiplication
   , _fq_nmod_poly_mul_classical
   , fq_nmod_poly_mul_classical
-  , _fq_nmod_poly_mul_reorder
-  , fq_nmod_poly_mul_reorder
+  --, _fq_nmod_poly_mul_reorder
+  --, fq_nmod_poly_mul_reorder
   , _fq_nmod_poly_mul_univariate
   , fq_nmod_poly_mul_univariate
   , _fq_nmod_poly_mul_KS
@@ -673,19 +673,19 @@ foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_scalar_submul_fq_nmod"
 foreign import ccall "fq_nmod_poly.h fq_nmod_poly_scalar_submul_fq_nmod"
   fq_nmod_poly_scalar_submul_fq_nmod :: Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
 
--- | /_fq_nmod_poly_scalar_div_fq/ /rop/ /op/ /len/ /x/ /ctx/ 
---
--- Sets @(rop,len)@ to the quotient of @(op,len)@ by the scalar @x@, in the
--- context defined by @ctx@. An exception is raised if @x@ is zero.
-foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_scalar_div_fq"
-  _fq_nmod_poly_scalar_div_fq :: Ptr (Ptr CFqNMod) -> Ptr (Ptr CFqNMod) -> CLong -> Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
+-- -- | /_fq_nmod_poly_scalar_div_fq/ /rop/ /op/ /len/ /x/ /ctx/ 
+-- --
+-- -- Sets @(rop,len)@ to the quotient of @(op,len)@ by the scalar @x@, in the
+-- -- context defined by @ctx@. An exception is raised if @x@ is zero.
+-- foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_scalar_div_fq"
+--   _fq_nmod_poly_scalar_div_fq :: Ptr (Ptr CFqNMod) -> Ptr (Ptr CFqNMod) -> CLong -> Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
 
--- | /fq_nmod_poly_scalar_div_fq/ /rop/ /op/ /x/ /ctx/ 
---
--- Sets @rop@ to the quotient of @op@ by the scalar @x@, in the context
--- defined by @ctx@. An exception is raised if @x@ is zero.
-foreign import ccall "fq_nmod_poly.h fq_nmod_poly_scalar_div_fq"
-  fq_nmod_poly_scalar_div_fq :: Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
+-- -- | /fq_nmod_poly_scalar_div_fq/ /rop/ /op/ /x/ /ctx/ 
+-- --
+-- -- Sets @rop@ to the quotient of @op@ by the scalar @x@, in the context
+-- -- defined by @ctx@. An exception is raised if @x@ is zero.
+-- foreign import ccall "fq_nmod_poly.h fq_nmod_poly_scalar_div_fq"
+--   fq_nmod_poly_scalar_div_fq :: Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
 
 -- Multiplication --------------------------------------------------------------
 
@@ -707,41 +707,41 @@ foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_mul_classical"
 foreign import ccall "fq_nmod_poly.h fq_nmod_poly_mul_classical"
   fq_nmod_poly_mul_classical :: Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNModCtx -> IO ()
 
--- | /_fq_nmod_poly_mul_reorder/ /rop/ /op1/ /len1/ /op2/ /len2/ /ctx/ 
---
--- Sets @(rop, len1 + len2 - 1)@ to the product of @(op1, len1)@ and
--- @(op2, len2)@, assuming that @len1@ and @len2@ are non-zero.
--- 
--- Permits zero padding. Supports aliasing.
-foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_mul_reorder"
-  _fq_nmod_poly_mul_reorder :: Ptr (Ptr CFqNMod) -> Ptr (Ptr CFqNMod) -> CLong -> Ptr (Ptr CFqNMod) -> CLong -> Ptr CFqNModCtx -> IO ()
+-- -- | /_fq_nmod_poly_mul_reorder/ /rop/ /op1/ /len1/ /op2/ /len2/ /ctx/ 
+-- --
+-- -- Sets @(rop, len1 + len2 - 1)@ to the product of @(op1, len1)@ and
+-- -- @(op2, len2)@, assuming that @len1@ and @len2@ are non-zero.
+-- -- 
+-- -- Permits zero padding. Supports aliasing.
+-- foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_mul_reorder"
+--   _fq_nmod_poly_mul_reorder :: Ptr (Ptr CFqNMod) -> Ptr (Ptr CFqNMod) -> CLong -> Ptr (Ptr CFqNMod) -> CLong -> Ptr CFqNModCtx -> IO ()
 
--- | /fq_nmod_poly_mul_reorder/ /rop/ /op1/ /op2/ /ctx/ 
---
--- Sets @rop@ to the product of @op1@ and @op2@, reordering the two
--- indeterminates \(X\) and \(Y\) when viewing the polynomials as elements
--- of \(\mathbf{F}_p[X,Y]\).
--- 
--- Suppose \(\mathbf{F}_q = \mathbf{F}_p[X]/ (f(X))\) and recall that
--- elements of \(\mathbf{F}_q\) are internally represented by elements of
--- type @fmpz_poly@. For small degree extensions but polynomials in
--- \(\mathbf{F}_q[Y]\) of large degree \(n\), we change the representation
--- to
--- 
--- \[`\]
--- \[\begin{aligned}
--- \begin{split}
--- g(Y) & = \sum_{i=0}^{n} a_i(X) Y^i \\
---      & = \sum_{j=0}^{d} \sum_{i=0}^{n} \text{Coeff}(a_i(X), j) Y^i.
--- \end{split}
--- \end{aligned}\]
--- 
--- This allows us to use a poor algorithm (such as classical
--- multiplication) in the \(X\)-direction and leverage the existing fast
--- integer multiplication routines in the \(Y\)-direction where the
--- polynomial degree \(n\) is large.
-foreign import ccall "fq_nmod_poly.h fq_nmod_poly_mul_reorder"
-  fq_nmod_poly_mul_reorder :: Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNModCtx -> IO ()
+-- -- | /fq_nmod_poly_mul_reorder/ /rop/ /op1/ /op2/ /ctx/ 
+-- --
+-- -- Sets @rop@ to the product of @op1@ and @op2@, reordering the two
+-- -- indeterminates \(X\) and \(Y\) when viewing the polynomials as elements
+-- -- of \(\mathbf{F}_p[X,Y]\).
+-- -- 
+-- -- Suppose \(\mathbf{F}_q = \mathbf{F}_p[X]/ (f(X))\) and recall that
+-- -- elements of \(\mathbf{F}_q\) are internally represented by elements of
+-- -- type @fmpz_poly@. For small degree extensions but polynomials in
+-- -- \(\mathbf{F}_q[Y]\) of large degree \(n\), we change the representation
+-- -- to
+-- -- 
+-- -- \[`\]
+-- -- \[\begin{aligned}
+-- -- \begin{split}
+-- -- g(Y) & = \sum_{i=0}^{n} a_i(X) Y^i \\
+-- --      & = \sum_{j=0}^{d} \sum_{i=0}^{n} \text{Coeff}(a_i(X), j) Y^i.
+-- -- \end{split}
+-- -- \end{aligned}\]
+-- -- 
+-- -- This allows us to use a poor algorithm (such as classical
+-- -- multiplication) in the \(X\)-direction and leverage the existing fast
+-- -- integer multiplication routines in the \(Y\)-direction where the
+-- -- polynomial degree \(n\) is large.
+-- foreign import ccall "fq_nmod_poly.h fq_nmod_poly_mul_reorder"
+--   fq_nmod_poly_mul_reorder :: Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNModPoly -> Ptr CFqNModCtx -> IO ()
 
 -- | /_fq_nmod_poly_mul_univariate/ /rop/ /op1/ /len1/ /op2/ /len2/ /ctx/ 
 --
@@ -1859,9 +1859,10 @@ foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_print_pretty"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fq_nmod_poly.h fq_nmod_poly_print_pretty"
-  fq_nmod_poly_print_pretty :: Ptr CFqNModPoly -> CString -> Ptr CFqNModCtx -> IO CInt
-
+fq_nmod_poly_print_pretty :: Ptr CFqNModPoly -> CString -> Ptr CFqNModCtx -> IO CInt
+fq_nmod_poly_print_pretty poly x ctx = 
+  printCStr (\poly -> fq_nmod_poly_get_str_pretty poly x ctx) poly
+  
 -- | /_fq_nmod_poly_fprint/ /file/ /poly/ /len/ /ctx/ 
 --
 -- Prints the pretty representation of @(poly, len)@ to the stream @file@.
@@ -1895,8 +1896,8 @@ foreign import ccall "fq_nmod_poly.h _fq_nmod_poly_print"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fq_nmod_poly.h fq_nmod_poly_print"
-  fq_nmod_poly_print :: Ptr CFqNModPoly -> Ptr CFqNModCtx -> IO CInt
+fq_nmod_poly_print :: Ptr CFqNModPoly -> Ptr CFqNModCtx -> IO CInt
+fq_nmod_poly_print poly ctx = printCStr (`fq_nmod_poly_get_str` ctx) poly
 
 -- | /_fq_nmod_poly_get_str/ /poly/ /len/ /ctx/ 
 --

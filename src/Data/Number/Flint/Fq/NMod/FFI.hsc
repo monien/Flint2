@@ -301,6 +301,14 @@ fq_nmod_ctx_prime ctx = do
 foreign import ccall "fq_nmod.h fq_nmod_ctx_order"
   fq_nmod_ctx_order :: Ptr CFmpz -> Ptr CFqNModCtx -> IO ()
 
+-- Input and Output ------------------------------------------------------------
+
+-- | /fq_nmod_ctx_get_str/ /ctx/ 
+--
+-- Return a string representation of the context information. 
+foreign import ccall "fq_nmod.h fq_nmod_ctx_get_str"
+  fq_nmod_ctx_get_str :: Ptr CFqNModCtx -> IO CString
+  
 -- | /fq_nmod_ctx_fprint/ /file/ /ctx/ 
 --
 -- Prints the context information to @file@. Returns 1 for a success and a
@@ -311,8 +319,10 @@ foreign import ccall "fq_nmod.h fq_nmod_ctx_fprint"
 -- | /fq_nmod_ctx_print/ /ctx/ 
 --
 -- Prints the context information to @stdout@.
-foreign import ccall "fq_nmod.h fq_nmod_ctx_print"
-  fq_nmod_ctx_print :: Ptr CFqNModCtx -> IO ()
+fq_nmod_ctx_print :: Ptr CFqNModCtx -> IO ()
+fq_nmod_ctx_print ctx = do
+  printCStr fq_nmod_ctx_get_str ctx
+  return ()
 
 -- | /fq_nmod_ctx_randtest/ /ctx/ 
 --
@@ -541,8 +551,9 @@ foreign import ccall "fq_nmod.h fq_nmod_fprint_pretty"
 -- 
 -- In case of success, returns a positive value. In case of failure,
 -- returns a non-positive value.
-foreign import ccall "fq_nmod.h fq_nmod_print_pretty"
-  fq_nmod_print_pretty :: Ptr CFqNMod -> Ptr CFqNModCtx -> IO CInt
+fq_nmod_print_pretty :: Ptr CFqNMod -> Ptr CFqNModCtx -> IO CInt
+fq_nmod_print_pretty op ctx = do
+  printCStr (`fq_nmod_get_str_pretty` ctx) op
 
 -- | /fq_nmod_fprint/ /file/ /op/ /ctx/ 
 --
@@ -558,8 +569,10 @@ foreign import ccall "fq_nmod.h fq_nmod_fprint"
 -- Prints a representation of @op@ to @stdout@.
 -- 
 -- For further details on the representation used, see @nmod_poly_print()@.
-foreign import ccall "fq_nmod.h fq_nmod_print"
-  fq_nmod_print :: Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
+fq_nmod_print :: Ptr CFqNMod -> Ptr CFqNModCtx -> IO ()
+fq_nmod_print op ctx = do
+  printCStr (`fq_nmod_get_str` ctx) op
+  return ()
 
 -- | /fq_nmod_get_str/ /op/ /ctx/ 
 --
