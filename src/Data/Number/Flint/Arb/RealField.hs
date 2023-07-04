@@ -16,6 +16,11 @@ module Data.Number.Flint.Arb.RealField (
 
 import GHC.TypeLits
 import Data.Proxy
+
+import GHC.Read 
+import qualified Text.Read.Lex as Lex
+import Text.ParserCombinators.ReadPrec hiding (prec)
+
 import Data.Ratio
 
 import System.IO.Unsafe
@@ -164,7 +169,21 @@ instance forall n. KnownNat n => Show (RF n) where
       arb_get_str p (fromIntegral digits) arb_str_no_radius
     str <- peekCString cstr
     return str
-    
+
+instance forall n. KnownNat n => Read (RF n) where
+  readPrec     = readNumber convertFrac
+  readListPrec = readListPrecDefault
+  readList     = readListDefault
+
+convertFrac :: RealFloat a => Lex.Lexeme -> ReadPrec a
+convertFrac (Lex.Ident "NaN")      = return (0 / 0)
+convertFrac (Lex.Ident "Infinity") = return (1 / 0)
+convertFrac (Lex.Number n) = let resRange = floatRange (undefined :: a)
+                           in case Lex.numberToRangedRational resRange n of
+                              Nothing -> return (1 / 0)
+                              Just rat -> return $ fromRational rat
+convertFrac _            = pfail
+
 ------------------------------------------------------------------------
 
 instance forall n. KnownNat n => Special (RF n) where
