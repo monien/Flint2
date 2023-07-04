@@ -111,7 +111,7 @@ module Data.Number.Flint.Acb.Dirichlet.FFI (
   , _acb_dirichlet_refine_hardy_z_zero
   --, acb_dirichlet_hardy_z_zero
   , acb_dirichlet_hardy_z_zeros
-  , acb_dirichlet_zeta_zero
+  --, acb_dirichlet_zeta_zero
   , acb_dirichlet_zeta_zeros
   , _acb_dirichlet_exact_zeta_nzeros
   , acb_dirichlet_zeta_nzeros
@@ -1010,12 +1010,12 @@ foreign import ccall "acb_dirichlet.h _acb_dirichlet_refine_hardy_z_zero"
 foreign import ccall "acb_dirichlet.h acb_dirichlet_hardy_z_zeros"
   acb_dirichlet_hardy_z_zeros :: Ptr CArb -> Ptr CFmpz -> CLong -> CLong -> IO ()
 
--- | /acb_dirichlet_zeta_zero/ /res/ /n/ /prec/ 
--- 
--- Sets /res/ to the /n/-th nontrivial zero of \(\zeta(s)\), requiring
--- \(n \ge 1\).
-foreign import ccall "acb_dirichlet.h acb_dirichlet_zeta_zero"
-  acb_dirichlet_zeta_zero :: Ptr CAcb -> Ptr CFmpz -> CLong -> IO ()
+-- -- | /acb_dirichlet_zeta_zero/ /res/ /n/ /prec/ 
+-- -- 
+-- -- Sets /res/ to the /n/-th nontrivial zero of \(\zeta(s)\), requiring
+-- -- \(n \ge 1\).
+-- foreign import ccall "acb_dirichlet.h acb_dirichlet_zeta_zero"
+--   acb_dirichlet_zeta_zero :: Ptr CAcb -> Ptr CFmpz -> CLong -> IO ()
 
 -- | /acb_dirichlet_zeta_zeros/ /res/ /n/ /len/ /prec/ 
 -- 
