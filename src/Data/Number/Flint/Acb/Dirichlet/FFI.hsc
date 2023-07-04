@@ -75,10 +75,10 @@ module Data.Number.Flint.Acb.Dirichlet.FFI (
   --, acb_dirichlet_chi_theta_arb
   , acb_dirichlet_ui_theta_arb
   , acb_dirichlet_theta_length
-  , acb_dirichlet_qseries_powers_naive
-  , acb_dirichlet_qseries_powers_smallorder
+  --, acb_dirichlet_qseries_powers_naive
+  --, acb_dirichlet_qseries_powers_smallorder
   -- * Discrete Fourier transforms
-  , acb_dirichlet_dft_conrey
+  --, acb_dirichlet_dft_conrey
   , acb_dirichlet_dft
   -- * Dirichlet L-functions
   , acb_dirichlet_root_number_theta
@@ -670,71 +670,71 @@ foreign import ccall "acb_dirichlet.h acb_dirichlet_ui_theta_arb"
 foreign import ccall "acb_dirichlet.h acb_dirichlet_theta_length"
   acb_dirichlet_theta_length :: CULong -> Ptr CArb -> CLong -> IO CULong
 
-foreign import ccall "acb_dirichlet.h acb_dirichlet_qseries_powers_naive"
-  acb_dirichlet_qseries_powers_naive :: Ptr CAcb -> Ptr CArb -> CInt -> Ptr CULong -> Ptr CAcbDirichletPowers -> CLong -> CLong -> IO ()
+-- foreign import ccall "acb_dirichlet.h acb_dirichlet_qseries_powers_naive"
+--   acb_dirichlet_qseries_powers_naive :: Ptr CAcb -> Ptr CArb -> CInt -> Ptr CULong -> Ptr CAcbDirichletPowers -> CLong -> CLong -> IO ()
 
--- | /acb_dirichlet_qseries_powers_smallorder/ /res/ /x/ /p/ /a/ /z/ /len/ /prec/ 
--- 
--- Compute the series \(\sum n^p z^{a_n} x^{n^2}\) for exponent list /a/,
--- precomputed powers /z/ and parity /p/ (being 0 or 1).
--- 
--- The /naive/ version sums the series as defined, while the /smallorder/
--- variant evaluates the series on the quotient ring by a cyclotomic
--- polynomial before evaluating at the root of unity, ignoring its argument
--- /z/.
-foreign import ccall "acb_dirichlet.h acb_dirichlet_qseries_powers_smallorder"
-  acb_dirichlet_qseries_powers_smallorder :: Ptr CAcb -> Ptr CArb -> CInt -> Ptr CULong -> Ptr CAcbDirichletPowers -> CLong -> CLong -> IO ()
+-- -- | /acb_dirichlet_qseries_powers_smallorder/ /res/ /x/ /p/ /a/ /z/ /len/ /prec/ 
+-- -- 
+-- -- Compute the series \(\sum n^p z^{a_n} x^{n^2}\) for exponent list /a/,
+-- -- precomputed powers /z/ and parity /p/ (being 0 or 1).
+-- -- 
+-- -- The /naive/ version sums the series as defined, while the /smallorder/
+-- -- variant evaluates the series on the quotient ring by a cyclotomic
+-- -- polynomial before evaluating at the root of unity, ignoring its argument
+-- -- /z/.
+-- foreign import ccall "acb_dirichlet.h acb_dirichlet_qseries_powers_smallorder"
+--   acb_dirichlet_qseries_powers_smallorder :: Ptr CAcb -> Ptr CArb -> CInt -> Ptr CULong -> Ptr CAcbDirichletPowers -> CLong -> CLong -> IO ()
 
 -- Discrete Fourier transforms -------------------------------------------------
 
--- If \(f\) is a function \(\mathbb Z/q\mathbb Z\to \mathbb C\), its
--- discrete Fourier transform is the function defined on Dirichlet
--- characters mod \(q\) by
---
--- \[\hat f(\chi) = \sum_{x\mod q}\overline{\chi(x)}f(x)\]
---
--- See the @acb-dft@ module.
---
--- Here we take advantage of the Conrey isomorphism \(G \to \hat G\) to
--- consider the Fourier transform on Conrey labels as
---
--- \[g(a) = \sum_{b\bmod q}\overline{\chi_q(a,b)}f(b)\]
---
--- | /acb_dirichlet_dft_conrey/ /w/ /v/ /G/ /prec/ 
--- 
--- Compute the DFT of /v/ using Conrey indices. This function assumes /v/
--- and /w/ are vectors of size /G->phi_q/, whose values correspond to a
--- lexicographic ordering of Conrey logs (as obtained using
--- @dirichlet_char_next@ or by @dirichlet_char_index@).
--- 
--- For example, if \(q=15\), the Conrey elements are stored in following
--- order
--- 
--- > +-------+-------------+-------------------+
--- > | index | log = [e,f] | number = 7^e 11^f |
--- > +=======+=============+===================+
--- > | 0     | [0, 0]      | 1                 |
--- > +-------+-------------+-------------------+
--- > | 1     | [0, 1]      | 7                 |
--- > +-------+-------------+-------------------+
--- > | 2     | [0, 2]      | 4                 |
--- > +-------+-------------+-------------------+
--- > | 3     | [0, 3]      | 13                |
--- > +-------+-------------+-------------------+
--- > | 4     | [0, 4]      | 1                 |
--- > +-------+-------------+-------------------+
--- > | 5     | [1, 0]      | 11                |
--- > +-------+-------------+-------------------+
--- > | 6     | [1, 1]      | 2                 |
--- > +-------+-------------+-------------------+
--- > | 7     | [1, 2]      | 14                |
--- > +-------+-------------+-------------------+
--- > | 8     | [1, 3]      | 8                 |
--- > +-------+-------------+-------------------+
--- > | 9     | [1, 4]      | 11                |
--- > +-------+-------------+-------------------+
-foreign import ccall "acb_dirichlet.h acb_dirichlet_dft_conrey"
-  acb_dirichlet_dft_conrey :: Ptr CAcb -> Ptr CAcb -> Ptr CDirichletGroup -> CLong -> IO ()
+-- -- If \(f\) is a function \(\mathbb Z/q\mathbb Z\to \mathbb C\), its
+-- -- discrete Fourier transform is the function defined on Dirichlet
+-- -- characters mod \(q\) by
+-- --
+-- -- \[\hat f(\chi) = \sum_{x\mod q}\overline{\chi(x)}f(x)\]
+-- --
+-- -- See the @acb-dft@ module.
+-- --
+-- -- Here we take advantage of the Conrey isomorphism \(G \to \hat G\) to
+-- -- consider the Fourier transform on Conrey labels as
+-- --
+-- -- \[g(a) = \sum_{b\bmod q}\overline{\chi_q(a,b)}f(b)\]
+-- --
+-- -- | /acb_dirichlet_dft_conrey/ /w/ /v/ /G/ /prec/ 
+-- -- 
+-- -- Compute the DFT of /v/ using Conrey indices. This function assumes /v/
+-- -- and /w/ are vectors of size /G->phi_q/, whose values correspond to a
+-- -- lexicographic ordering of Conrey logs (as obtained using
+-- -- @dirichlet_char_next@ or by @dirichlet_char_index@).
+-- -- 
+-- -- For example, if \(q=15\), the Conrey elements are stored in following
+-- -- order
+-- -- 
+-- -- > +-------+-------------+-------------------+
+-- -- > | index | log = [e,f] | number = 7^e 11^f |
+-- -- > +=======+=============+===================+
+-- -- > | 0     | [0, 0]      | 1                 |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 1     | [0, 1]      | 7                 |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 2     | [0, 2]      | 4                 |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 3     | [0, 3]      | 13                |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 4     | [0, 4]      | 1                 |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 5     | [1, 0]      | 11                |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 6     | [1, 1]      | 2                 |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 7     | [1, 2]      | 14                |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 8     | [1, 3]      | 8                 |
+-- -- > +-------+-------------+-------------------+
+-- -- > | 9     | [1, 4]      | 11                |
+-- -- > +-------+-------------+-------------------+
+-- foreign import ccall "acb_dirichlet.h acb_dirichlet_dft_conrey"
+--   acb_dirichlet_dft_conrey :: Ptr CAcb -> Ptr CAcb -> Ptr CDirichletGroup -> CLong -> IO ()
 
 -- | /acb_dirichlet_dft/ /w/ /v/ /G/ /prec/ 
 -- 
