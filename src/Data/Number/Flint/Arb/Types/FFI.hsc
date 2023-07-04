@@ -32,7 +32,7 @@ instance Storable CMag where
 
 -- | Data structure containing the CArb pointer
 data Arf = Arf {-# UNPACK #-} !(ForeignPtr CArf) 
-data CArf = CArf
+data CArf = CFlint CArf 
 
 instance Storable CArf where
   sizeOf    _ = #{size      arf_t}

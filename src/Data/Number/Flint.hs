@@ -120,7 +120,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.NF.Fmpzi
 , module Data.Number.Flint.NF.QQbar
 -- * Real and complex numbers
-, module Data.Number.Flint.Arb.Types
+-- ** Real
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.RealField
 , module Data.Number.Flint.Arb.Mag
@@ -129,7 +129,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb.Fmpz.Poly
 , module Data.Number.Flint.Arb.Mat
 , module Data.Number.Flint.Arb.Hypgeom
-, module Data.Number.Flint.Acb.Types
+, module Data.Number.Flint.Arb.Calc
+-- * Complex
 , module Data.Number.Flint.Acb
 , module Data.Number.Flint.Acb.ComplexField
 , module Data.Number.Flint.Acb.Acf
@@ -138,6 +139,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Hypgeom
 , module Data.Number.Flint.Acb.Modular
 , module Data.Number.Flint.Acb.DFT
+, module Data.Number.Flint.Acb.Calc
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -268,8 +270,7 @@ import Data.Number.Flint.Padic.Poly
 import Data.Number.Flint.Padic.Mat
 import Data.Number.Flint.Qadic
 -- Real and complex numbers
--- Arb
-import Data.Number.Flint.Arb.Types
+-- Real
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mag
 import Data.Number.Flint.Arb.Arf
@@ -278,8 +279,8 @@ import Data.Number.Flint.Arb.Fmpz.Poly
 import Data.Number.Flint.Arb.Mat
 import Data.Number.Flint.Arb.Hypgeom
 import Data.Number.Flint.Arb.RealField
--- Acb
-import Data.Number.Flint.Acb.Types
+import Data.Number.Flint.Arb.Calc
+-- Complex
 import Data.Number.Flint.Acb
 import Data.Number.Flint.Acb.Acf
 import Data.Number.Flint.Acb.Poly
@@ -288,6 +289,7 @@ import Data.Number.Flint.Acb.Modular
 import Data.Number.Flint.Acb.Hypgeom
 import Data.Number.Flint.Acb.DFT
 import Data.Number.Flint.Acb.ComplexField
+import Data.Number.Flint.Acb.Calc
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers

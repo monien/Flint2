@@ -130,6 +130,7 @@ library
       Data.Number.Flint.Arb.Mat
       Data.Number.Flint.Arb.Hypgeom
       Data.Number.Flint.Arb.RealField
+      Data.Number.Flint.Arb.Calc
       Data.Number.Flint.Acb.Types
       Data.Number.Flint.Acb
       Data.Number.Flint.Acb.Acf
@@ -141,6 +142,7 @@ library
       Data.Number.Flint.Acb.Dirichlet
       Data.Number.Flint.Acb.DFT
       Data.Number.Flint.Acb.ComplexField
+      Data.Number.Flint.Acb.Calc
       Data.Number.Flint.Bernoulli
       Data.Number.Flint.Partitions
       Data.Number.Flint.Hypgeom
@@ -242,6 +244,7 @@ library
       Data.Number.Flint.Arb.Fmpz.Poly.FFI
       Data.Number.Flint.Arb.Mat.FFI
       Data.Number.Flint.Arb.Hypgeom.FFI
+      Data.Number.Flint.Arb.Calc.FFI
       Data.Number.Flint.Acb.Types.FFI
       Data.Number.Flint.Acb.FFI
       Data.Number.Flint.Acb.Acf.FFI
@@ -252,6 +255,7 @@ library
       Data.Number.Flint.Acb.Modular.FFI
       Data.Number.Flint.Acb.Dirichlet.FFI
       Data.Number.Flint.Acb.DFT.FFI
+      Data.Number.Flint.Acb.Calc.FFI
       Data.Number.Flint.Bernoulli.FFI
       Data.Number.Flint.Partitions.FFI
       Data.Number.Flint.Hypgeom.FFI
@@ -321,6 +325,8 @@ library
       csrc/arb/get_str_.c
       csrc/arb_mat/get_strd.c
       csrc/arb_poly/get_strd.c
+      csrc/arb_calc/get_strd.c
+      csrc/arb_calc/inlines.c
       csrc/acb/get_str.c
       csrc/acb/get_strd.c
       csrc/acb/get_strn.c

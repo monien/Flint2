@@ -48,6 +48,22 @@ module Data.Number.Flint.Arb.FFI (
   , arb_zero_pm_one
   , arb_unit_interval
   -- * Input and output
+  , ArbStrOption (..)
+  -- | Default print option
+  , arb_str_none
+  -- | If /arb_str_more/ is added to flags, more (possibly incorrect)
+  -- digits may be printed
+  , arb_str_more
+  -- | If /arb_str_no_radius/ is added to /flags/, the radius is not
+  -- included in the output if at least 1 digit of the midpoint can be
+  -- printed.
+  , arb_str_no_radius
+  -- | By adding a multiple m of /arb_str_condense/ to /flags/, strings of
+  -- more than three times m consecutive digits are condensed, only
+  -- printing the leading and trailing m digits along with brackets
+  -- indicating the number of digits omitted (useful when computing
+  -- values to extremely high precision).
+  , arb_str_condense
   , arb_print
   , arb_fprint
   , arb_printd

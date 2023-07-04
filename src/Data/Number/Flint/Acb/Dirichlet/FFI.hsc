@@ -12,7 +12,7 @@ module Data.Number.Flint.Acb.Dirichlet.FFI (
   -- * Dirichlet L-functions, Riemann zeta and related functions
   -- * Roots of unity
      DirichletRoots (..)
-  , CDirichletRoots (..)
+  , CDirichletRoots
   , newDirichletRoots
   , withDirichletRoots
   , withNewDirichletRoots
