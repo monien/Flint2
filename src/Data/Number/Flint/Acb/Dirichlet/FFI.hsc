@@ -109,7 +109,7 @@ module Data.Number.Flint.Acb.Dirichlet.FFI (
   , _acb_dirichlet_isolate_turing_hardy_z_zero
   , acb_dirichlet_isolate_hardy_z_zero
   , _acb_dirichlet_refine_hardy_z_zero
-  , acb_dirichlet_hardy_z_zero
+  --, acb_dirichlet_hardy_z_zero
   , acb_dirichlet_hardy_z_zeros
   , acb_dirichlet_zeta_zero
   , acb_dirichlet_zeta_zeros
@@ -996,12 +996,12 @@ foreign import ccall "acb_dirichlet.h acb_dirichlet_isolate_hardy_z_zero"
 foreign import ccall "acb_dirichlet.h _acb_dirichlet_refine_hardy_z_zero"
   _acb_dirichlet_refine_hardy_z_zero :: Ptr CArb -> Ptr CArf -> Ptr CArf -> CLong -> IO ()
 
--- | /acb_dirichlet_hardy_z_zero/ /res/ /n/ /prec/ 
--- 
--- Sets /res/ to the /n/-th zero of the Hardy Z-function, requiring
--- \(n \ge 1\).
-foreign import ccall "acb_dirichlet.h acb_dirichlet_hardy_z_zero"
-  acb_dirichlet_hardy_z_zero :: Ptr CArb -> Ptr CFmpz -> CLong -> IO ()
+-- -- | /acb_dirichlet_hardy_z_zero/ /res/ /n/ /prec/ 
+-- -- 
+-- -- Sets /res/ to the /n/-th zero of the Hardy Z-function, requiring
+-- -- \(n \ge 1\).
+-- foreign import ccall "acb_dirichlet.h acb_dirichlet_hardy_z_zero"
+--   acb_dirichlet_hardy_z_zero :: Ptr CArb -> Ptr CFmpz -> CLong -> IO ()
 
 -- | /acb_dirichlet_hardy_z_zeros/ /res/ /n/ /len/ /prec/ 
 -- 
