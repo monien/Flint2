@@ -100,7 +100,7 @@ instance forall n. KnownNat n => RealFloat (RF n) where
   isInfinite = not . liftProp arb_is_finite
   floatRadix _ = 2
   floatDigits _ = fromIntegral $ natVal (Proxy :: Proxy n)
-  floatRange = error "floatRange: not defined"
+  floatRange _ = (minBound :: Int, maxBound :: Int)
   decodeFloat (RF x) = unsafePerformIO $ do
     man <- newFmpz
     exp <- newFmpz 
@@ -259,13 +259,7 @@ fromDouble x = unsafePerformIO $ do
   return $ RF res
   
 toDouble :: forall n. KnownNat n => RF n -> Double
-toDouble (RF x) = realToFrac $ snd $ snd $ snd $ unsafePerformIO $ do
-  withArb x $ \x -> do
-    withNewArb $ \y -> do
-      arb_get_mid_arb y x
-      withNewMag $ \m -> do
-        arb_get_mag m y
-        mag_get_d m
+toDouble x = fromRational $ toRational x
     
 -- lifting -------------------------------------------------------------
 

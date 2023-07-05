@@ -130,6 +130,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb.Mat
 , module Data.Number.Flint.Arb.Hypgeom
 , module Data.Number.Flint.Arb.Calc
+, module Data.Number.Flint.Arb.FpWrap
 -- * Complex
 , module Data.Number.Flint.Acb
 , module Data.Number.Flint.Acb.ComplexField
@@ -280,6 +281,7 @@ import Data.Number.Flint.Arb.Mat
 import Data.Number.Flint.Arb.Hypgeom
 import Data.Number.Flint.Arb.RealField
 import Data.Number.Flint.Arb.Calc
+import Data.Number.Flint.Arb.FpWrap
 -- Complex
 import Data.Number.Flint.Acb
 import Data.Number.Flint.Acb.Acf

@@ -131,6 +131,7 @@ library
       Data.Number.Flint.Arb.Hypgeom
       Data.Number.Flint.Arb.RealField
       Data.Number.Flint.Arb.Calc
+      Data.Number.Flint.Arb.FpWrap
       Data.Number.Flint.Acb.Types
       Data.Number.Flint.Acb
       Data.Number.Flint.Acb.Acf
@@ -245,6 +246,7 @@ library
       Data.Number.Flint.Arb.Mat.FFI
       Data.Number.Flint.Arb.Hypgeom.FFI
       Data.Number.Flint.Arb.Calc.FFI
+      Data.Number.Flint.Arb.FpWrap.FFI
       Data.Number.Flint.Acb.Types.FFI
       Data.Number.Flint.Acb.FFI
       Data.Number.Flint.Acb.Acf.FFI

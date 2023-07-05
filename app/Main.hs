@@ -61,9 +61,10 @@ testRF = do
   let dx = recip 1000 :: RF 1024
       x = map (*dx) $ map fromInteger [0..20000]
       y = map (besselJ 0) x
-      showd = show . toDouble
+      [x', y'] = map (map toDouble) [x, y]
+      fmt = "%18.12e %18.12e"
   writeFile "bessel.out" $ unlines
-                         $ zipWith (\x y -> showd x ++ " " ++ showd y) x y
+                         $ zipWith (\x y -> printf fmt x y) x' y'
 
 testNModPoly = do
   let n = 7
@@ -475,6 +476,26 @@ testArb = do
       arb_printd x 16
       endl
 
+testArbRead = do
+  let prec = 1024
+      decPrec = round $ fromIntegral prec * logBase 10 2
+      bits = 128
+  state <- newFRandState
+  withFRandState state $ \state -> do
+    withNewArb $ \x -> do
+      replicateM_ 100 $ do
+        arb_randtest x state prec bits
+        -- arb_printn x 16 arb_str_no_radius
+        -- endl
+        cs <- arb_get_str x (fromIntegral decPrec) arb_str_no_radius
+        s <- (return . take decPrec) =<< peekCString cs
+        free cs
+        let y = read s :: RF 1024
+        when (isNaN y) $ do
+          arb_printn x 16 arb_str_no_radius
+          endl
+
+      
 testAcb = do
   let prec = 1024
   withNewAcb $ \x -> do
