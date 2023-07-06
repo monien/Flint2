@@ -329,6 +329,7 @@ library
       csrc/arb_poly/get_strd.c
       csrc/arb_calc/get_strd.c
       csrc/arb_calc/inlines.c
+      csrc/arb_fpwrap/fpwrap.c
       csrc/acb/get_str.c
       csrc/acb/get_strd.c
       csrc/acb/get_strn.c
