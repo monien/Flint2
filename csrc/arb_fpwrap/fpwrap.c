@@ -9,10 +9,7 @@ int arb_fpwrap_double_exp_(double * res, double x, int flags) {
 };
 
 int arb_fpwrap_cdouble_exp_(complex_double * res, complex_double * x, int flags) {
-  int flag = arb_fpwrap_cdouble_exp(res, *x, flags);
-  fprintf(stderr, "%f%+fi\n", *x);
-  fprintf(stderr, "%f%+fi\n", *res);
-  return flag;
+  return arb_fpwrap_cdouble_exp(res, *x, flags);
 };
 
 int arb_fpwrap_double_expm1_(double * res, double x, int flags) {

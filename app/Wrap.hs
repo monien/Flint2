@@ -14,20 +14,30 @@ type CC = Complex CDouble
 
 main = do
   let z = 0:+1 :: CC
-  p <- new z
-  r <- malloc :: IO (Ptr CC)
-  flag <- arb_fpwrap_cdouble_exp r p 0
-  print flag
-  print z
-  res <- peek r
-  print res
-  free r
-  free p
+  print $ cexp z
+  print $ airy_ai  1
+  print $ airy_ai' 1
 
-airy :: Double -> Double
-airy x = unsafePerformIO $ do
+cexp =  liftC1 arb_fpwrap_cdouble_exp
+airy_ai  = liftD1 arb_fpwrap_double_airy_ai
+airy_ai' = liftD1 arb_fpwrap_double_airy_ai_prime
+
+liftD1 :: (Ptr CDouble -> CDouble -> CInt -> IO FpWrapReturn)
+       -> (Double -> Double)
+liftD1 f x = unsafePerformIO $ do
   r <- malloc :: IO (Ptr CDouble)
-  flag <- arb_fpwrap_double_airy_ai r (realToFrac x) 0
+  flag <- f r (realToFrac x) 0
   res <- peek r
   free r
   return $ realToFrac res
+
+liftC1 :: (Ptr CC -> Ptr CC -> CInt -> IO FpWrapReturn)
+       -> (CC -> CC)
+liftC1 f z = unsafePerformIO $ do
+  r <- malloc :: IO (Ptr CC)
+  p <- new z
+  flag <- f r p 0
+  res <- peek r
+  free r
+  free p
+  return $ res
