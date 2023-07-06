@@ -350,6 +350,7 @@ library
 executable flint_test
   main-is: Main.hs
   other-modules:
+      Wrap
       Paths_Flint2
   hs-source-dirs:
       app

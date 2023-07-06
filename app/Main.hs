@@ -14,6 +14,7 @@ import Foreign.Ptr (nullPtr, castPtr)
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.Marshal.Array (advancePtr)
+import Foreign.Marshal.Utils (new, with)
 
 import Test.QuickCheck
 import GHC.Exts
@@ -26,7 +27,7 @@ import Data.Ratio (numerator, denominator)
 import Data.Number.Flint
 
 main = testCF
-
+  
 type RR = RF 128
 type CC = CF 128
 
