@@ -322,3 +322,8 @@ import Data.Number.Flint.NF.Fmpzi.Instances
 import Data.Number.Flint.NF.QQbar.Instances
 
 import Data.Number.Flint.NMod.Poly.Instances
+
+import Data.Number.Flint.Arb.Mat.Instances
+import Data.Number.Flint.Acb.Mat.Instances
+
+import Data.Number.Flint.Groups.Qfb.Instances

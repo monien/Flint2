@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 {-# language TypeFamilies #-}
 module Data.Number.Flint.Fmpz.Poly.Q.Instances (
     FmpzPolyQ (..)

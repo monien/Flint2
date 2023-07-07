@@ -29,6 +29,8 @@ module Data.Number.Flint.Groups.Qfb.FFI (
   -- * Comparison
   , qfb_equal
   -- * Input\/output
+  , qfb_get_str
+  , qfb_fprint
   , qfb_print
   -- * Computing with forms
   , qfb_discriminant
@@ -57,6 +59,7 @@ import Foreign.ForeignPtr
 import Foreign.Storable
 import Foreign.C.Types
 import Foreign.C.String
+import Foreign.Marshal.Array
 import Foreign.Marshal.Alloc
 
 import Data.Number.Flint.Flint
@@ -76,20 +79,28 @@ import Data.Number.Flint.Acb.Types
 -- qfb_t -----------------------------------------------------------------------
 
 data Qfb = Qfb {-# UNPACK #-} !(ForeignPtr CQfb)
-type CQfb = CFlint Qfb
+data CQfb = CQfb (Ptr CFmpz) (Ptr CFmpz) (Ptr CFmpz)
 
 instance Storable CQfb where
   {-# INLINE sizeOf #-}
   sizeOf    _ = #{size      qfb_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment qfb_t}
-  peek = undefined
-  poke = undefined
+  peek ptr = do
+    let q = castPtr ptr :: Ptr CFmpz
+    return $ CQfb q (q `advancePtr` 1) (q `advancePtr` 2)
+   
+  poke = error "CQfb.poke: undefined."
 
 -- | Create a Qfb.
-newQfb = do
+newQfb a b c = do
   p <- mallocForeignPtr
-  withForeignPtr p qfb_init
+  withForeignPtr p $ \p -> do
+    qfb_init p
+    CQfb ap bp cp <- peek p
+    withFmpz a $ \a -> fmpz_set ap a
+    withFmpz b $ \b -> fmpz_set bp b
+    withFmpz c $ \c -> fmpz_set cp c
   addForeignPtrFinalizer p_qfb_clear p
   return $ Qfb p
 
@@ -100,8 +111,8 @@ withQfb (Qfb p) f = do
 
 -- | Apply `f` to new Qfb.
 {-# INLINE withNewQfb #-}
-withNewQfb f = do
-  x <- newQfb
+withNewQfb a b c f = do
+  x <- newQfb a b c
   withQfb x f
 
 -- Memory management -----------------------------------------------------------
@@ -186,7 +197,10 @@ foreign import ccall "qbf.h qfb_equal"
 
 foreign import ccall "qfb.h qfb_get_str"
   qfb_get_str :: Ptr CQfb -> IO CString
-  
+
+foreign import ccall "qfb.h qfb_fprint"
+  qfb_fprint :: Ptr CFile -> Ptr CQfb -> IO CString
+
 -- | /qfb_print/ /q/ 
 -- 
 -- Print a binary quadratic form \(q\) in the format \((a, b, c)\) where

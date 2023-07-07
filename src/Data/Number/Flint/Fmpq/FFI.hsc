@@ -428,7 +428,7 @@ foreign import ccall "fmpq.h fmpq_set_mpq"
 -- Returns 0 if no error occurs. Otherwise returns -1 and @dest@ is set to
 -- zero.
 foreign import ccall "fmpq.h fmpq_set_str"
-  fmpq_set_str :: Ptr CFmpq -> CString -> CInt -> IO ()
+  fmpq_set_str :: Ptr CFmpq -> CString -> CInt -> IO CInt
 
 -- | /fmpq_init_set_mpz_frac_readonly/ /z/ /p/ /q/ 
 -- 

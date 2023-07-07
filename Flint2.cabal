@@ -80,6 +80,7 @@ library
       Data.Number.Flint.NMod.Vec
       Data.Number.Flint.Groups.Perm
       Data.Number.Flint.Groups.Qfb
+      Data.Number.Flint.Groups.Qfb.Instances
       Data.Number.Flint.Groups.Dirichlet
       Data.Number.Flint.Groups.DLog
       Data.Number.Flint.Groups.Bool.Mat
@@ -130,6 +131,7 @@ library
       Data.Number.Flint.Arb.Poly
       Data.Number.Flint.Arb.Fmpz.Poly
       Data.Number.Flint.Arb.Mat
+      Data.Number.Flint.Arb.Mat.Instances
       Data.Number.Flint.Arb.Hypgeom
       Data.Number.Flint.Arb.RealField
       Data.Number.Flint.Arb.Calc
@@ -139,6 +141,7 @@ library
       Data.Number.Flint.Acb.Acf
       Data.Number.Flint.Acb.Poly
       Data.Number.Flint.Acb.Mat
+      Data.Number.Flint.Acb.Mat.Instances
       Data.Number.Flint.Acb.Hypgeom
       Data.Number.Flint.Acb.Elliptic
       Data.Number.Flint.Acb.Modular

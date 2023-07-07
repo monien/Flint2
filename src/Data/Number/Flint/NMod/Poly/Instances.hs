@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 {-# language TypeFamilies #-}
 module Data.Number.Flint.NMod.Poly.Instances (
     NModPoly (..)

@@ -200,16 +200,27 @@ testArbMat = do
   let prec = 1024
       n = 5
   h <- newFmpqMat n n
-  withFmpqMat h $ \h -> do
-    fmpq_mat_hilbert_matrix h
-    withNewArbMat n n  $ \a -> do
-      arb_mat_set_fmpq_mat a h prec
-      arb_mat_inv a a prec
-      arb_mat_printd a 16
-      endl
-      fmpq_mat_inv h h
+  withFmpqMat h fmpq_mat_hilbert_matrix
+  a <- newArbMatFromFmpqMat h prec
+  withArbMat a $ \a -> arb_mat_inv a a prec
+  print a
+  withFmpqMat h $ \h -> fmpq_mat_inv h h
   print h
-      
+
+testQfb = do
+  x <- newQfb 7 3 5
+  print x
+  withQfb x $ \x -> do
+    qfb_inverse x x
+    qfb_print x
+    endl
+    withNewFmpz $ \d -> do
+      qfb_discriminant d x
+      fmpz_print d
+      endl
+  return ()
+  
+
 testPadic = do
   let p = 7 :: Fmpz
   withNewPadicCtx p 0 128 padic_series $ \ctx -> do

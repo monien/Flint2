@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 module Data.Number.Flint.Fmpq.Instances (
   Fmpq (..)
 ) where
@@ -14,6 +15,8 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Marshal.Alloc
 
+import Data.Char
+import Text.Read
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpq
@@ -27,6 +30,17 @@ instance Show Fmpq where
       free cs
       return s
 
+instance Read Fmpq where
+  readsPrec _ r = unsafePerformIO $ do
+    result <- newFmpq
+    (_, flag) <- withFmpq result $ \result ->
+      withCString r $ \r ->
+        fmpq_set_str result r 10
+    if flag == 0 then 
+      return [(result, drop (length (show result)) r)]
+    else
+      return []
+      
 instance Eq Fmpq where
   (==) x y = snd $ snd $ unsafePerformIO $ 
     withFmpq x $ \x ->

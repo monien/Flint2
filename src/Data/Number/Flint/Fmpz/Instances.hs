@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 module Data.Number.Flint.Fmpz.Instances (
   Fmpz (..)
 , UFD (..)
@@ -35,10 +36,13 @@ instance Read Fmpz where
     let n :: Integer
         [(n, r)] = readsPrec d s
     result <- newFmpz
-    withFmpz result $ \result -> 
+    (_, flag) <- withFmpz result $ \result -> 
       withCString (show n) $ \s -> 
         fmpz_set_str result s 10
-    return [(result, r)]
+    if flag == 0 then 
+      return [(result, r)]
+    else
+      return []
 
 instance Eq Fmpz where
   (==) x y = snd $ snd $ unsafePerformIO $ 

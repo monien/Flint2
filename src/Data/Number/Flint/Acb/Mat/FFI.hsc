@@ -10,6 +10,11 @@ module Data.Number.Flint.Acb.Mat.FFI (
     AcbMat (..)
   , CAcbMat (..)
   , newAcbMat
+  , newAcbMatFromFmpzMat
+  , newAcbMatFromFmpzMatRound
+  , newAcbMatFromFmpqMat
+  , newAcbMatFromArbMat
+  , newAcbMatFromArbMatRound
   , withAcbMat
   , withNewAcbMat
   -- * Memory management
@@ -29,6 +34,7 @@ module Data.Number.Flint.Acb.Mat.FFI (
   , acb_mat_randtest
   , acb_mat_randtest_eig
   -- * Input and output
+  , acb_mat_get_strd
   , acb_mat_printd
   , acb_mat_fprintd
   -- * Comparisons
@@ -184,6 +190,54 @@ newAcbMat rows cols = do
   withForeignPtr x $ \x -> acb_mat_init x rows cols
   addForeignPtrFinalizer p_acb_mat_clear x
   return $ AcbMat x
+
+newAcbMatFromFmpzMat a = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpzMat a $ \a -> do
+      CFmpzMat _ rows cols _ <- peek a
+      acb_mat_init x rows cols
+      acb_mat_set_fmpz_mat x a
+  addForeignPtrFinalizer p_acb_mat_clear x
+  return $ AcbMat x
+
+newAcbMatFromFmpzMatRound a prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpzMat a $ \a -> do
+      CFmpzMat _ rows cols _ <- peek a
+      acb_mat_init x rows cols
+      acb_mat_set_round_fmpz_mat x a prec
+  addForeignPtrFinalizer p_acb_mat_clear x
+ 
+newAcbMatFromFmpqMat a prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpqMat a $ \a -> do
+      CFmpqMat _ rows cols _ <- peek a
+      acb_mat_init x rows cols
+      acb_mat_set_fmpq_mat x a prec
+  addForeignPtrFinalizer p_acb_mat_clear x
+  return $ AcbMat x
+
+newAcbMatFromArbMat a = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withArbMat a $ \a -> do
+      CArbMat _ rows cols _ <- peek a
+      acb_mat_init x rows cols
+      acb_mat_set_arb_mat x a
+  addForeignPtrFinalizer p_acb_mat_clear x
+  return $ AcbMat x
+
+newAcbMatFromArbMatRound a prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withArbMat a $ \a -> do
+      CArbMat _ rows cols _ <- peek a
+      acb_mat_init x rows cols
+      acb_mat_set_round_arb_mat x a prec
+  addForeignPtrFinalizer p_acb_mat_clear x
 
 {-# INLINE withAcbMat #-}
 withAcbMat (AcbMat x) f = do

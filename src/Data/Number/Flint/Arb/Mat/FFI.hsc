@@ -11,6 +11,9 @@ module Data.Number.Flint.Arb.Mat.FFI (
     ArbMat (..)
   , CArbMat (..)
   , newArbMat
+  , newArbMatFromFmpzMat
+  , newArbMatFromFmpzMatRound
+  , newArbMatFromFmpqMat
   , withArbMat
   , withNewArbMat
   -- * Memory management
@@ -27,6 +30,7 @@ module Data.Number.Flint.Arb.Mat.FFI (
   -- * Random generation
   , arb_mat_randtest
   -- * Input and output
+  , arb_mat_get_strd 
   , arb_mat_printd
   , arb_mat_fprintd
   -- * Comparisons
@@ -183,6 +187,36 @@ instance Storable CArbMat where
 newArbMat rows cols = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x -> arb_mat_init x rows cols
+  addForeignPtrFinalizer p_arb_mat_clear x
+  return $ ArbMat x
+
+newArbMatFromFmpzMat a = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpzMat a $ \a -> do
+      CFmpzMat _ rows cols _ <- peek a
+      arb_mat_init x rows cols
+      arb_mat_set_fmpz_mat x a
+  addForeignPtrFinalizer p_arb_mat_clear x
+  return $ ArbMat x
+
+newArbMatFromFmpzMatRound a prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpzMat a $ \a -> do
+      CFmpzMat _ rows cols _ <- peek a
+      arb_mat_init x rows cols
+      arb_mat_set_round_fmpz_mat x a prec
+  addForeignPtrFinalizer p_arb_mat_clear x
+  return $ ArbMat x
+
+newArbMatFromFmpqMat a prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpqMat a $ \a -> do
+      CFmpqMat _ rows cols _ <- peek a
+      arb_mat_init x rows cols
+      arb_mat_set_fmpq_mat x a prec
   addForeignPtrFinalizer p_arb_mat_clear x
   return $ ArbMat x
 
