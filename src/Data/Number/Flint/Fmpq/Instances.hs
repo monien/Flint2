@@ -94,6 +94,31 @@ instance Fractional Fmpq where
           fmpq_canonicalise result
     return result
 
+instance Real Fmpq where
+  toRational x = unsafePerformIO $ do
+    p <- newFmpz
+    q <- newFmpz
+    withFmpq x $ \x -> do
+      withFmpz p $ \p -> do
+        withFmpz q $ \q -> do
+          fmpq_get_fmpz_frac p q x
+    return $ (toInteger p) % (toInteger q)
+
+instance RealFrac Fmpq where
+  properFraction x =  unsafePerformIO $ do
+    p <- newFmpz
+    q <- newFmpz
+    r <- newFmpq
+    withFmpq x $ \x -> do
+      withFmpz p $ \p -> do
+        withFmpz q $ \q -> do
+          withFmpq r $ \r -> do
+            withNewFmpz $ \tmp -> do
+              fmpq_get_fmpz_frac p q x
+              fmpz_tdiv_qr p tmp p q
+              fmpq_set_fmpz_frac r tmp q
+    return (fromIntegral p, r)
+   
 lift1 f x = fst $ unsafePerformIO $ 
   withNewFmpq $ \result -> 
     withFmpq x $ \x ->
