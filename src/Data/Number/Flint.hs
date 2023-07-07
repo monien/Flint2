@@ -98,7 +98,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.FFT
 --, module Data.Number.Flint.FFT.Small
 -- * Quadratic sieve
-, module Data.Number.Flint.Qs
+, module Data.Number.Flint.QSieve
 -- * Integers mod n
 , module Data.Number.Flint.NMod
 , module Data.Number.Flint.NMod.Poly
@@ -221,7 +221,7 @@ import Data.Number.Flint.APRCL
 import Data.Number.Flint.FFT
 -- import Data.Number.Flint.FFT.Small
 -- Quadratic sieve
-import Data.Number.Flint.Qs
+import Data.Number.Flint.QSieve
 -- Integers mod n
 import Data.Number.Flint.NMod
 import Data.Number.Flint.NMod.Poly
@@ -312,7 +312,13 @@ import Data.Number.Flint.UFD
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly.Instances
 import Data.Number.Flint.Fmpz.Poly.Q.Instances
+import Data.Number.Flint.Fmpz.Mat.Instances
+
 import Data.Number.Flint.Fmpq.Instances
 import Data.Number.Flint.Fmpq.Poly.Instances
+import Data.Number.Flint.Fmpq.Mat.Instances
+
+import Data.Number.Flint.NF.Fmpzi.Instances
+import Data.Number.Flint.NF.QQbar.Instances
 
 import Data.Number.Flint.NMod.Poly.Instances

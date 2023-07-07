@@ -7,7 +7,7 @@
   , TypeFamilies
   #-}
 
-module Data.Number.Flint.Qs.FFI (
+module Data.Number.Flint.QSieve.FFI (
   -- * Quadratic sieve
     Qs (..)
   , CQs()

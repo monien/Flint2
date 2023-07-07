@@ -44,6 +44,7 @@ library:
    - Data.Number.Flint.Fmpz.Arith
    - Data.Number.Flint.Fmpz.Factor
    - Data.Number.Flint.Fmpz.Mat
+   - Data.Number.Flint.Fmpz.Mat.Instances
    - Data.Number.Flint.Fmpz.Vec
    - Data.Number.Flint.Fmpz.Poly
    - Data.Number.Flint.Fmpz.Poly.Instances
@@ -65,7 +66,8 @@ library:
    # Fmpq
    - Data.Number.Flint.Fmpq
    - Data.Number.Flint.Fmpq.Instances
-   - Data.Number.Flint.Fmpq.Mat 
+   - Data.Number.Flint.Fmpq.Mat
+   - Data.Number.Flint.Fmpq.Mat.Instances
    - Data.Number.Flint.Fmpq.Vec
    - Data.Number.Flint.Fmpq.Poly
    - Data.Number.Flint.Fmpq.Poly.Instances
@@ -93,8 +95,8 @@ library:
    # FFT 
    - Data.Number.Flint.FFT
    # - Data.Number.Flint.FFT.Small
-   # Qs
-   - Data.Number.Flint.Qs
+   # QSieve
+   - Data.Number.Flint.QSieve
    # Fq
    - Data.Number.Flint.Fq.Types 
    - Data.Number.Flint.Fq
@@ -170,7 +172,9 @@ library:
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
    - Data.Number.Flint.NF.Fmpzi
+   - Data.Number.Flint.NF.Fmpzi.Instances
    - Data.Number.Flint.NF.QQbar
+   - Data.Number.Flint.NF.QQbar.Instances
   other-modules:
    - Data.Number.Flint.Flint.FFI
    - Data.Number.Flint.Flint.External.GMP.FFI 
@@ -227,7 +231,7 @@ library:
    - Data.Number.Flint.FFT.FFI
    # - Data.Number.Flint.FFT.Small.FFI
    # Qs
-   - Data.Number.Flint.Qs.FFI
+   - Data.Number.Flint.QSieve.FFI
    # Fq
    - Data.Number.Flint.Fq.FFI
    - Data.Number.Flint.Fq.Types.FFI
@@ -346,6 +350,9 @@ library:
     - csrc/qqbar/get_str.c
     - csrc/qqbar/get_strn.c
     - csrc/dlog/inlines.c
+    # Fmpzi
+    - csrc/fmpzi/fprint.c
+    - csrc/fmpzi/get_str.c
     # Fq
     - csrc/fq_mat/get_str.c
     - csrc/fq_mat/get_str_pretty.c

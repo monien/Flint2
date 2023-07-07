@@ -10,7 +10,7 @@ A @Qadic@ represents an element
 of \(\mathbb{Q}_q \cong \mathbb{Q}_p[X] / (f(X))\). 
 This module implements operations on q-adic numbers.
 
-== Basic usage 
+== Example
 
 Calclate a root of the 
 polynomial \(x^{10}+10x^9+9x^8+8x^7+8x^6+2x^4+9x^3+x^2+3x+1\)
@@ -20,16 +20,11 @@ Newton iteration. The iteration starts with \(x=8a^3+4a^2+3\) where \(a\)
 is a generator of \(K\). The value of \(x\) is initialized using a `FmpzPoly`.
 
 @ 
-import System.IO.Unsafe
-import Foreign.Storable 
-
 import Data.Number.Flint
 
 main = do
   let c = [1,10,9,8,8,0,2,9,1,3,1]
-  p <- newFmpz
-  withFmpz p $ \p -> fmpz_set_ui p 11
-  withNewQadicCtx p 4 0 128 "a" padic_series $ \ctx -> do
+  withNewQadicCtx 11 4 0 128 "a" padic_series $ \ctx -> do
     CQadicCtx pctx _ _ _ _ <- peek ctx
     withNewQadic $ \x -> do
       withFmpzPoly (fromList [3,0,4,8]) $ \poly -> do
@@ -62,11 +57,6 @@ newton x c ctx = do
       qadic_sub x x y ctx
       when (is_zero /= 1) $ newton x c ctx
   return ()
-
-fromList c = fst $ unsafePerformIO $ do
-  withNewFmpzPoly $ \\p -> do
-    forM_ [0..length c-1] $ \\j -> do
-      fmpz_poly_set_coeff_si p (fromIntegral j) (c!!j)
 @
 
 Running main yields:

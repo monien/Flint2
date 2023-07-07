@@ -15,6 +15,8 @@ so that the interface is uniform for functions with multiple outputs.
 The Haskell version of the c-functions require Ptr for the complex values.
 The functions can be wrapped to a regular Haskell function 
 
+= Example
+
 @
 import System.IO.Unsafe
 import Foreign.Ptr
@@ -43,8 +45,12 @@ Running main yields:
 
 >>> main
 
+produces the output
+
+@
 0.13529241631288141
 -0.1591474412967932
+@
 -}
 module Data.Number.Flint.Arb.FpWrap (
   module Data.Number.Flint.Arb.FpWrap.FFI

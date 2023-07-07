@@ -10,10 +10,8 @@ import Foreign.Ptr
 import Foreign.Marshal
 import Foreign.Marshal.Array
 import Foreign.Storable
-import Foreign.Ptr (nullPtr, castPtr)
 import Foreign.C.String
 import Foreign.C.Types
-import Foreign.Marshal.Array (advancePtr)
 import Foreign.Marshal.Utils (new, with)
 
 import Test.QuickCheck
@@ -60,12 +58,11 @@ testContinuedFraction = do
     
 testRF = do
   let dx = recip 1000 :: RF 1024
-      x = map (*dx) $ map fromInteger [0..20000]
+      x = map ((*dx) . fromInteger) [0..20000]
       y = map (besselJ 0) x
       [x', y'] = map (map toDouble) [x, y]
-      fmt = "%18.12e %18.12e"
   writeFile "bessel.out" $ unlines
-                         $ zipWith (\x y -> printf fmt x y) x' y'
+                         $ zipWith (printf "%18.12e %18.12e") x' y'
 
 testNModPoly = do
   let n = 7
@@ -106,9 +103,9 @@ testFmpq = do
       y = 7 :: Fmpq
       z = x / y
   print z
-  withFmpqNum z $ fmpz_print
+  withFmpqNum z fmpz_print
   endl
-  withFmpqDen z $ fmpz_print
+  withFmpqDen z fmpz_print
   endl
   withFmpqDen z $ \x -> fmpz_set_ui x 13
   print z
@@ -143,7 +140,7 @@ testRest = do
           putStr "factorization: "
           fmpz_factor_print f
           endl
-  l <- sample' arbitrary :: IO ([Fmpz])
+  l <- sample' arbitrary :: IO [Fmpz]
   print l
   let n = 10
   v <- _fmpz_vec_init n
@@ -176,7 +173,7 @@ testRest = do
     forM_ [0..2] $ \i -> do
       forM_ [0..2] $ \j -> do
         x <- d_mat_get_entry d i j
-        print $ x
+        print x
   poly <- newFmpqPoly
   withFmpqPoly poly $ \poly -> do
     fmpq_poly_legendre_p poly 7
@@ -198,7 +195,21 @@ testNModMat = do
     withFRandState state $ \state -> do
       nmod_mat_randfull a state
     nmod_mat_print_pretty a
-    
+
+testArbMat = do
+  let prec = 1024
+      n = 5
+  h <- newFmpqMat n n
+  withFmpqMat h $ \h -> do
+    fmpq_mat_hilbert_matrix h
+    withNewArbMat n n  $ \a -> do
+      arb_mat_set_fmpq_mat a h prec
+      arb_mat_inv a a prec
+      arb_mat_printd a 16
+      endl
+      fmpq_mat_inv h h
+  print h
+      
 testPadic = do
   let p = 7 :: Fmpz
   withNewPadicCtx p 0 128 padic_series $ \ctx -> do
@@ -225,9 +236,7 @@ testPadic = do
 
 testQadic = do
   let c = [1,10,9,8,8,0,2,9,1,3,1]
-  p <- newFmpz
-  withFmpz p $ \p -> fmpz_set_ui p 11
-  withNewQadicCtx p 4 0 128 "a" padic_series $ \ctx -> do
+  withNewQadicCtx 11 4 0 128 "a" padic_series $ \ctx -> do
     CQadicCtx pctx _ _ _ _ <- peek ctx
     withNewQadic $ \x -> do
       withFmpzPoly (fromList [3,0,4,8]) $ \poly -> do
@@ -245,7 +254,7 @@ testQadic = do
 newton x c ctx = do
   withNewQadic $ \y ->
     withNewQadic $ \y' -> do
-      qadic_set_ui y (c!!0) ctx
+      qadic_set_ui y (head c) ctx
       qadic_set_ui y' 0 ctx
       withNewQadic $ \tmp -> 
         forM_ (tail c) $ \c -> do
@@ -264,7 +273,7 @@ newton x c ctx = do
 horner x c ctx = do
   y <- newQadic
   withQadic y $ \y -> do
-    qadic_set_ui y (c!!0) ctx
+    qadic_set_ui y (head c) ctx
     withNewQadic $ \tmp ->
       forM_ (tail c) $ \c -> do
         qadic_mul y y x ctx
@@ -489,7 +498,7 @@ testArbRead = do
         -- arb_printn x 16 arb_str_no_radius
         -- endl
         cs <- arb_get_str x (fromIntegral decPrec) arb_str_no_radius
-        s <- (return . take decPrec) =<< peekCString cs
+        s <- take decPrec <$> peekCString cs
         free cs
         let y = read s :: RF 1024
         when (isNaN y) $ do
@@ -558,9 +567,22 @@ testFmpzi = do
   z <- newFmpzi
   withFmpzi z $ \z -> do
     fmpzi_set_si_si z 3 7
-    fmpzi_print z
-  endl
+  print z
+  print $ z*z
+  print $ z-z
 
+testQQbar = do
+  let n = 2 :: Fmpz
+  x <- newQQbar
+  withQQbar x $ \x -> do
+    withFmpz n $ \n -> 
+      qqbar_set_fmpz x n
+    qqbar_sqrt x x
+    qqbar_print x
+    endl
+    qqbar_printnd x 16
+    endl
+  
 testAcbPoly = do
   let prec = 1024
       maxIter = 100
@@ -578,7 +600,7 @@ testAcbPoly = do
       n <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
       putStrLn $ "found " ++ show n ++ " roots:"
       forM_ [0..n-1] $ \j -> do
-        acb_printd (roots `advancePtr` (fromIntegral j)) 16
+        acb_printd (roots `advancePtr` fromIntegral j) 16
         endl
       putStrLn "reconstructed polynomial."
       withNewAcbPoly $ \tmp -> do
@@ -604,18 +626,17 @@ testAcbHypGeom = do
         withAcb m $ \m -> do
           acb_set_ui m 7
           forM_ [0..n-1] $ \j -> do
-            acb_set z (roots `advancePtr` (fromIntegral j))
-            acb_printd z 16
-            endl
+            acb_set z (roots `advancePtr` fromIntegral j)
+            acb_printn z 16 arb_str_no_radius
+            putStr " -> " 
             acb_hypgeom_hermite_h z m z prec
-            acb_printd z 16
-            endl
+            acb_printn z 16 arb_str_no_radius
             endl
 
 bernoulliNumber n = unsafePerformIO $ do
   b <- newFmpq
   withFmpq b $ \b -> do
-    arith_bernoulli_number b $ (fromIntegral n)
+    arith_bernoulli_number b $ fromIntegral n
   return b
 
 testSeries = do
@@ -797,7 +818,7 @@ testFqZech = do
         fq_zech_poly_print poly ftx
         endl
         is_square_free <- fq_zech_poly_is_squarefree poly ftx
-        putStrLn $ "polynomial is square free: " ++ (show is_square_free)
+        putStrLn $ "polynomial is square free: " ++ show is_square_free
 
 testFqZechRandom = do
  r <- newFRandState

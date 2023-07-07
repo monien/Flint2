@@ -12,9 +12,10 @@ import Data.Complex
 import Data.Number.Flint.Arb.FpWrap
 
 type CC = Complex CDouble
+type CD = Complex Double
 
 main = do
-  let z = 0:+1 :: CC
+  let z = 0:+1 :: CD
   print $ cexp z
   print $ airy_ai  1
   print $ airy_ai' 1
@@ -22,6 +23,14 @@ main = do
 cexp     = liftCCI arb_fpwrap_cdouble_exp
 airy_ai  = liftDdI arb_fpwrap_double_airy_ai
 airy_ai' = liftDdI arb_fpwrap_double_airy_ai_prime
+
+modular_j      = liftCCI arb_fpwrap_cdouble_modular_j
+modular_delta  = liftCCI arb_fpwrap_cdouble_modular_delta
+modular_lambda = liftCCI arb_fpwrap_cdouble_modular_lambda
+dedekind_eta   = liftCCI arb_fpwrap_cdouble_dedekind_eta
+
+i = 0:+1
+rho = (1 + i*sqrt 3)/2
 
 -- -- real ------------------------------------------------------------------------
 
@@ -85,15 +94,15 @@ liftDdI f x = unsafePerformIO $ do
 -- -- complex ---------------------------------------------------------------------
 
 liftCCI :: (Ptr CC -> Ptr CC -> CInt -> IO FpWrapReturn)
-        -> (CC -> CC)
-liftCCI f z = unsafePerformIO $ do
+        -> (Complex Double -> Complex Double)
+liftCCI f (x:+y) = unsafePerformIO $ do
   r <- malloc :: IO (Ptr CC)
-  p <- new z
+  p <- new (((realToFrac x) :+ (realToFrac y)) :: CC)
   flag <- f r p 0
-  res <- peek r
+  u:+v <- peek r
   free r
   free p
-  return $ res
+  return $ (realToFrac u) :+ (realToFrac v)
 
 -- liftCCCI :: (Ptr CC -> Ptr CC -> Ptr CC -> CInt -> IO FpWrapReturn)
 --         -> (CC -> CC -> CC)

@@ -4,13 +4,13 @@ copyright   : (c) 2020 Hartmut Monien
 license     : BSD-style (see LICENSE)
 maintainer  : hmonien@uni-bonn.de
 
-An @FmpzPoly@ represents an element of \(\mathbb{Z}[x]\).
+An `FmpzPoly` represents an element of \(\mathbb{Z}[x]\).
 This module implements operations on univariate polynomials over the integers.
 
-== Basic usage 
+== Example
 
-__Warning__: Instances like `Show` and `Num` are only
-avaible for some types without context.
+__Warning__: Instances like `Show`, `Num` and `IsList` are only
+avaible for some types.
 
 @
 import Data.Number.Flint
@@ -31,5 +31,6 @@ x^4+4*x^3+16*x^2+24*x+35
 module Data.Number.Flint.Fmpz.Poly (
   module Data.Number.Flint.Fmpz.Poly.FFI
   ) where
-
+  
+import GHC.Exts
 import Data.Number.Flint.Fmpz.Poly.FFI

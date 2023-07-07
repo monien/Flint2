@@ -26,6 +26,8 @@ module Data.Number.Flint.NF.Fmpzi.FFI (
   , fmpzi_set
   , fmpzi_set_si_si
   -- * Input and output
+  , fmpzi_get_str
+  , fmpzi_fprint
   , fmpzi_print
   -- * Random number generation
   , fmpzi_randtest
@@ -146,15 +148,16 @@ foreign import ccall "fmpzi.h fmpzi_set_si_si"
 
 -- Input and output ------------------------------------------------------------
 
+foreign import ccall "fmpzi.h fmpzi_get_str"
+  fmpzi_get_str :: Ptr CFmpzi -> IO CString
+
+foreign import ccall "fmpzi.h fmpzi_fprint"
+  fmpzi_fprint :: Ptr CFile -> Ptr CFmpzi -> IO ()
+  
 fmpzi_print :: Ptr CFmpzi -> IO ()
 fmpzi_print z = do
-  let x = castPtr z
-      y = x `advancePtr` 1
-  fmpz_print x
-  pos <- fmpz_cmp_si y 0
-  when (pos /= 0) $ putStr "+"
-  fmpz_print y
-  putStr "*i"
+  printCStr fmpzi_get_str z
+  return ()
 
 -- Random number generation ----------------------------------------------------
 

@@ -18,9 +18,7 @@ precision (20 digits).
 import Data.Number.Flint
 
 main = do
-  p <- newFmpz
-  withFmpz p $ \\p -> fmpz_set_ui p 7
-  withNewPadicCtx p 1 20 padic_series $ \\ctx -> 
+  withNewPadicCtx 7 1 20 padic_series $ \\ctx -> 
     withNewPadic $ \\x -> do
       padic_set_ui x 2 ctx
       padic_sqrt x x ctx 

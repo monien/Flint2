@@ -14,25 +14,31 @@ module Data.Number.Flint.NF.QQbar.FFI (
     QQbar (..)
   , CQQbar (..)
   , newQQbar
+  , newQQbarFromFmpz
+  , newQQbarFromFmpq
+  , newQQbarFromDouble
   , withQQbar
   , withNewQQbar
-  -- * Memory management
-  , qqbar_init
-  , qqbar_clear
-  , _qqbar_vec_init
-  , _qqbar_vec_clear
   -- * Assignment
   , qqbar_swap
   , qqbar_set
+  , qqbar_set_si
+  , qqbar_set_ui
+  , qqbar_set_fmpz
+  , qqbar_set_fmpq
   , qqbar_set_re_im
   , qqbar_set_d
+  , qqbar_set_re_im_d
   -- * Properties
   , qqbar_degree
   , qqbar_is_rational
   , qqbar_is_integer
   , qqbar_is_algebraic_integer
   , qqbar_is_zero
+  , qqbar_is_one
+  , qqbar_is_neg_one
   , qqbar_is_i
+  , qqbar_is_neg_i
   , qqbar_is_real
   , qqbar_height
   , qqbar_height_bits
@@ -48,6 +54,9 @@ module Data.Number.Flint.NF.QQbar.FFI (
   , qqbar_i
   , qqbar_phi
   -- * Input and output
+  , qqbar_get_str
+  , qqbar_get_strn
+  , qqbar_get_strnd
   , qqbar_print
   , qqbar_printn
   , qqbar_printnd
@@ -82,18 +91,47 @@ module Data.Number.Flint.NF.QQbar.FFI (
   -- * Arithmetic
   , qqbar_neg
   , qqbar_add
+  , qqbar_add_fmpq
+  , qqbar_add_fmpz
+  , qqbar_add_ui
+  , qqbar_add_si
   , qqbar_sub
+  , qqbar_sub_fmpq
+  , qqbar_sub_fmpz
+  , qqbar_sub_ui
+  , qqbar_sub_si
+  , qqbar_fmpq_sub
+  , qqbar_fmpz_sub
+  , qqbar_ui_sub
+  , qqbar_si_sub
   , qqbar_mul
+  , qqbar_mul_fmpq
+  , qqbar_mul_fmpz
+  , qqbar_mul_ui
+  , qqbar_mul_si
   , qqbar_mul_2exp_si
   , qqbar_sqr
   , qqbar_inv
   , qqbar_div
+  , qqbar_div_fmpq
+  , qqbar_div_fmpz
+  , qqbar_div_ui
+  , qqbar_div_si
+  , qqbar_fmpq_div
+  , qqbar_fmpz_div
+  , qqbar_ui_div
+  , qqbar_si_div
   , qqbar_scalar_op
   -- * Powers and roots
   , qqbar_sqrt
+  , qqbar_sqrt_ui
   , qqbar_rsqrt
   , qqbar_pow_ui
+  , qqbar_pow_si
+  , qqbar_pow_fmpz
+  , qqbar_pow_fmpq
   , qqbar_root_ui
+  , qqbar_fmpq_root_ui
   , qqbar_fmpq_pow_si_ui
   , qqbar_pow
   -- * Numerical enclosures
@@ -109,15 +147,27 @@ module Data.Number.Flint.NF.QQbar.FFI (
   , qqbar_conjugates
   -- * Polynomial evaluation
   , _qqbar_evaluate_fmpq_poly
+  , qqbar_evaluate_fmpq_poly
+  , _qqbar_evaluate_fmpz_poly
+  , qqbar_evaluate_fmpz_poly
   , qqbar_evaluate_fmpz_mpoly_iter
+  , qqbar_evaluate_fmpz_mpoly_horner
+  , qqbar_evaluate_fmpz_mpoly
   -- * Polynomial roots
   , qqbar_roots_fmpz_poly
+  , qqbar_roots_fmpq_poly
   , qqbar_eigenvalues_fmpz_mat
+  , qqbar_eigenvalues_fmpq_mat
   -- * Roots of unity and trigonometric functions
   , qqbar_root_of_unity
   , qqbar_is_root_of_unity
   , qqbar_exp_pi_i
   , qqbar_cos_pi
+  , qqbar_sin_pi
+  , qqbar_tan_pi
+  , qqbar_cot_pi
+  , qqbar_sec_pi
+  , qqbar_csc_pi
   , qqbar_log_pi_i
   , qqbar_atan_pi
   , qqbar_asin_pi
@@ -141,8 +191,9 @@ module Data.Number.Flint.NF.QQbar.FFI (
   , _qqbar_validate_uniqueness
   , _qqbar_validate_existence_uniqueness
   , _qqbar_enclosure_raw
+  , qqbar_enclosure_raw
   , _qqbar_acb_lindep
-) where 
+) where
 
 -- Algebraic numbers represented by minimal polynomials ------------------------
 
@@ -184,6 +235,33 @@ instance Storable CQQbar where
 newQQbar = do
   p <- mallocForeignPtr
   withForeignPtr p qqbar_init
+  addForeignPtrFinalizer p_qqbar_clear p
+  return $ QQbar p
+
+-- | Create a QQbar from Fmpz.
+newQQbarFromFmpz x = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    qqbar_init p
+    withFmpz x $ \x -> qqbar_set_fmpz p x
+  addForeignPtrFinalizer p_qqbar_clear p
+  return $ QQbar p
+
+-- | Create a QQbar from Fmpq.
+newQQbarFromFmpq x = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    qqbar_init p
+    withFmpq x $ \x -> qqbar_set_fmpq p x
+  addForeignPtrFinalizer p_qqbar_clear p
+  return $ QQbar p
+
+-- | Create a QQbar from Double.
+newQQbarFromDouble x = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    qqbar_init p
+    qqbar_set_d p (realToFrac x)
   addForeignPtrFinalizer p_qqbar_clear p
   return $ QQbar p
 
@@ -231,93 +309,117 @@ foreign import ccall "qqbar.h _qqbar_vec_clear"
 -- Assignment ------------------------------------------------------------------
 
 -- | /qqbar_swap/ /x/ /y/ 
--- 
+--
 -- Swaps the values of /x/ and /y/ efficiently.
 foreign import ccall "qqbar.h qqbar_swap"
   qqbar_swap :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_set/ /res/ /x/ 
--- 
--- Sets /res/ to the value /x/.
 foreign import ccall "qqbar.h qqbar_set"
   qqbar_set :: Ptr CQQbar -> Ptr CQQbar -> IO ()
+-- | /qqbar_set_si/ /res/ /x/ 
+foreign import ccall "qqbar.h qqbar_set_si"
+  qqbar_set_si :: Ptr CQQbar -> CLong -> IO ()
+-- | /qqbar_set_ui/ /res/ /x/ 
+foreign import ccall "qqbar.h qqbar_set_ui"
+  qqbar_set_ui :: Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_set_fmpz/ /res/ /x/ 
+foreign import ccall "qqbar.h qqbar_set_fmpz"
+  qqbar_set_fmpz :: Ptr CQQbar -> Ptr CFmpz -> IO ()
+-- | /qqbar_set_fmpq/ /res/ /x/ 
+--
+-- Sets /res/ to the value /x/.
+foreign import ccall "qqbar.h qqbar_set_fmpq"
+  qqbar_set_fmpq :: Ptr CQQbar -> Ptr CFmpq -> IO ()
 
 -- | /qqbar_set_re_im/ /res/ /x/ /y/ 
--- 
+--
 -- Sets /res/ to the value \(x + yi\).
 foreign import ccall "qqbar.h qqbar_set_re_im"
   qqbar_set_re_im :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_set_d/ /res/ /x/ 
--- 
+foreign import ccall "qqbar.h qqbar_set_d"
+  qqbar_set_d :: Ptr CQQbar -> CDouble -> IO CInt
+-- | /qqbar_set_re_im_d/ /res/ /x/ /y/ 
+--
 -- Sets /res/ to the value /x/ or \(x + yi\) respectively. These functions
 -- performs error handling: if /x/ and /y/ are finite, the conversion
 -- succeeds and the return flag is 1. If /x/ or /y/ is non-finite (infinity
 -- or NaN), the conversion fails and the return flag is 0.
-foreign import ccall "qqbar.h qqbar_set_d"
-  qqbar_set_d :: Ptr CQQbar -> CDouble -> IO CInt
+foreign import ccall "qqbar.h qqbar_set_re_im_d"
+  qqbar_set_re_im_d :: Ptr CQQbar -> CDouble -> CDouble -> IO CInt
 
 -- Properties ------------------------------------------------------------------
 
 -- | /qqbar_degree/ /x/ 
--- 
+--
 -- Returns the degree of /x/, i.e. the degree of the minimal polynomial.
 foreign import ccall "qqbar.h qqbar_degree"
   qqbar_degree :: Ptr CQQbar -> IO CLong
 
 -- | /qqbar_is_rational/ /x/ 
--- 
+--
 -- Returns whether /x/ is a rational number.
 foreign import ccall "qqbar.h qqbar_is_rational"
   qqbar_is_rational :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_is_integer/ /x/ 
--- 
+--
 -- Returns whether /x/ is an integer (an element of \(\mathbb{Z}\)).
 foreign import ccall "qqbar.h qqbar_is_integer"
   qqbar_is_integer :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_is_algebraic_integer/ /x/ 
--- 
+--
 -- Returns whether /x/ is an algebraic integer, i.e. whether its minimal
 -- polynomial has leading coefficient 1.
 foreign import ccall "qqbar.h qqbar_is_algebraic_integer"
   qqbar_is_algebraic_integer :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_is_zero/ /x/ 
--- 
--- Returns whether /x/ is the number \(0\), \(1\), \(-1\).
 foreign import ccall "qqbar.h qqbar_is_zero"
   qqbar_is_zero :: Ptr CQQbar -> IO CInt
+-- | /qqbar_is_one/ /x/ 
+foreign import ccall "qqbar.h qqbar_is_one"
+  qqbar_is_one :: Ptr CQQbar -> IO CInt
+-- | /qqbar_is_neg_one/ /x/ 
+--
+-- Returns whether /x/ is the number \(0\), \(1\), \(-1\).
+foreign import ccall "qqbar.h qqbar_is_neg_one"
+  qqbar_is_neg_one :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_is_i/ /x/ 
--- 
--- Returns whether /x/ is the imaginary unit \(i\) (respectively \(-i\)).
 foreign import ccall "qqbar.h qqbar_is_i"
   qqbar_is_i :: Ptr CQQbar -> IO CInt
+-- | /qqbar_is_neg_i/ /x/ 
+--
+-- Returns whether /x/ is the imaginary unit \(i\) (respectively \(-i\)).
+foreign import ccall "qqbar.h qqbar_is_neg_i"
+  qqbar_is_neg_i :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_is_real/ /x/ 
--- 
+--
 -- Returns whether /x/ is a real number.
 foreign import ccall "qqbar.h qqbar_is_real"
   qqbar_is_real :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_height/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the height of /x/ (the largest absolute value of the
 -- coefficients of the minimal polynomial of /x/).
 foreign import ccall "qqbar.h qqbar_height"
   qqbar_height :: Ptr CFmpz -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_height_bits/ /x/ 
--- 
+--
 -- Returns the height of /x/ (the largest absolute value of the
 -- coefficients of the minimal polynomial of /x/) measured in bits.
 foreign import ccall "qqbar.h qqbar_height_bits"
   qqbar_height_bits :: Ptr CQQbar -> IO CLong
 
 -- | /qqbar_within_limits/ /x/ /deg_limit/ /bits_limit/ 
--- 
+--
 -- Checks if /x/ has degree bounded by /deg_limit/ and height bounded by
 -- /bits_limit/ bits, returning 0 (false) or 1 (true). If /deg_limit/ is
 -- set to 0, the degree check is skipped, and similarly for /bits_limit/.
@@ -325,7 +427,7 @@ foreign import ccall "qqbar.h qqbar_within_limits"
   qqbar_within_limits :: Ptr CQQbar -> CLong -> CLong -> IO CInt
 
 -- | /qqbar_binop_within_limits/ /x/ /y/ /deg_limit/ /bits_limit/ 
--- 
+--
 -- Checks if \(x + y\), \(x - y\), \(x \cdot y\) and \(x / y\) certainly
 -- have degree bounded by /deg_limit/ (by multiplying the degrees for /x/
 -- and /y/ to obtain a trivial bound). For /bits_limits/, the sum of the
@@ -338,20 +440,20 @@ foreign import ccall "qqbar.h qqbar_binop_within_limits"
 -- Conversions -----------------------------------------------------------------
 
 -- | /_qqbar_get_fmpq/ /num/ /den/ /x/ 
--- 
+--
 -- Sets /num/ and /den/ to the numerator and denominator of /x/. Aborts if
 -- /x/ is not a rational number.
 foreign import ccall "qqbar.h _qqbar_get_fmpq"
   _qqbar_get_fmpq :: Ptr CFmpz -> Ptr CFmpz -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_get_fmpq/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to /x/. Aborts if /x/ is not a rational number.
 foreign import ccall "qqbar.h qqbar_get_fmpq"
   qqbar_get_fmpq :: Ptr CFmpq -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_get_fmpz/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to /x/. Aborts if /x/ is not an integer.
 foreign import ccall "qqbar.h qqbar_get_fmpz"
   qqbar_get_fmpz :: Ptr CFmpz -> Ptr CQQbar -> IO ()
@@ -359,25 +461,25 @@ foreign import ccall "qqbar.h qqbar_get_fmpz"
 -- Special values --------------------------------------------------------------
 
 -- | /qqbar_zero/ /res/ 
--- 
+--
 -- Sets /res/ to the number 0.
 foreign import ccall "qqbar.h qqbar_zero"
   qqbar_zero :: Ptr CQQbar -> IO ()
 
 -- | /qqbar_one/ /res/ 
--- 
+--
 -- Sets /res/ to the number 1.
 foreign import ccall "qqbar.h qqbar_one"
   qqbar_one :: Ptr CQQbar -> IO ()
 
 -- | /qqbar_i/ /res/ 
--- 
+--
 -- Sets /res/ to the imaginary unit \(i\).
 foreign import ccall "qqbar.h qqbar_i"
   qqbar_i :: Ptr CQQbar -> IO ()
 
 -- | /qqbar_phi/ /res/ 
--- 
+--
 -- Sets /res/ to the golden ratio \(\varphi = \tfrac{1}{2}(\sqrt{5} + 1)\).
 foreign import ccall "qqbar.h qqbar_phi"
   qqbar_phi :: Ptr CQQbar -> IO ()
@@ -401,10 +503,8 @@ foreign import ccall "qqbar.h qqbar_get_strnd"
 -- intended for debugging.
 qqbar_print :: Ptr CQQbar -> IO ()
 qqbar_print x = do
-  cs <- qqbar_get_str x
-  s <- peekCString cs
-  free cs
-  putStr s
+  printCStr qqbar_get_str x
+  return ()
   
 -- | /qqbar_printn/ /x/ /n/ 
 -- 
@@ -412,10 +512,8 @@ qqbar_print x = do
 -- approximation to /n/ digits.
 qqbar_printn :: Ptr CQQbar -> CLong -> IO ()
 qqbar_printn x digits = do
-  cs <- qqbar_get_strn x digits
-  s <- peekCString cs
-  free cs
-  putStr s
+  printCStr (\x -> qqbar_get_strn x digits) x
+  return ()
   
 -- | /qqbar_printnd/ /x/ /n/ 
 -- 
@@ -423,33 +521,31 @@ qqbar_printn x digits = do
 -- approximation to /n/ digits, followed by the degree of the number.
 qqbar_printnd :: Ptr CQQbar -> CLong -> IO ()
 qqbar_printnd x digits = do
-  cs <- qqbar_get_strn x digits
-  s <- peekCString cs
-  free cs
-  putStr s
- 
+  printCStr (\x -> qqbar_get_strnd x digits) x
+  return ()
+
 -- For example, /print/, /printn/ and /printnd/ with \(n = 6\) give the
 -- following output for the numbers 0, 1, \(i\), \(\varphi\),
 -- \(\sqrt{2}-\sqrt{3} i\):
---
+
 -- Random generation -----------------------------------------------------------
 
 -- | /qqbar_randtest/ /res/ /state/ /deg/ /bits/ 
--- 
+--
 -- Sets /res/ to a random algebraic number with degree up to /deg/ and with
 -- height (measured in bits) up to /bits/.
 foreign import ccall "qqbar.h qqbar_randtest"
   qqbar_randtest :: Ptr CQQbar -> Ptr CFRandState -> CLong -> CLong -> IO ()
 
 -- | /qqbar_randtest_real/ /res/ /state/ /deg/ /bits/ 
--- 
+--
 -- Sets /res/ to a random real algebraic number with degree up to /deg/ and
 -- with height (measured in bits) up to /bits/.
 foreign import ccall "qqbar.h qqbar_randtest_real"
   qqbar_randtest_real :: Ptr CQQbar -> Ptr CFRandState -> CLong -> CLong -> IO ()
 
 -- | /qqbar_randtest_nonreal/ /res/ /state/ /deg/ /bits/ 
--- 
+--
 -- Sets /res/ to a random nonreal algebraic number with degree up to /deg/
 -- and with height (measured in bits) up to /bits/. Since all algebraic
 -- numbers of degree 1 are real, /deg/ must be at least 2.
@@ -459,52 +555,52 @@ foreign import ccall "qqbar.h qqbar_randtest_nonreal"
 -- Comparisons -----------------------------------------------------------------
 
 -- | /qqbar_equal/ /x/ /y/ 
--- 
+--
 -- Returns whether /x/ and /y/ are equal.
 foreign import ccall "qqbar.h qqbar_equal"
   qqbar_equal :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_equal_fmpq_poly_val/ /x/ /f/ /y/ 
--- 
+--
 -- Returns whether /x/ is equal to \(f(y)\). This function is more
 -- efficient than evaluating \(f(y)\) and comparing the results.
 foreign import ccall "qqbar.h qqbar_equal_fmpq_poly_val"
   qqbar_equal_fmpq_poly_val :: Ptr CQQbar -> Ptr CFmpqPoly -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_cmp_re/ /x/ /y/ 
--- 
+--
 -- Compares the real parts of /x/ and /y/, returning -1, 0 or +1.
 foreign import ccall "qqbar.h qqbar_cmp_re"
   qqbar_cmp_re :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_cmp_im/ /x/ /y/ 
--- 
+--
 -- Compares the imaginary parts of /x/ and /y/, returning -1, 0 or +1.
 foreign import ccall "qqbar.h qqbar_cmp_im"
   qqbar_cmp_im :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_cmpabs_re/ /x/ /y/ 
--- 
+--
 -- Compares the absolute values of the real parts of /x/ and /y/, returning
 -- -1, 0 or +1.
 foreign import ccall "qqbar.h qqbar_cmpabs_re"
   qqbar_cmpabs_re :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_cmpabs_im/ /x/ /y/ 
--- 
+--
 -- Compares the absolute values of the imaginary parts of /x/ and /y/,
 -- returning -1, 0 or +1.
 foreign import ccall "qqbar.h qqbar_cmpabs_im"
   qqbar_cmpabs_im :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_cmpabs/ /x/ /y/ 
--- 
+--
 -- Compares the absolute values of /x/ and /y/, returning -1, 0 or +1.
 foreign import ccall "qqbar.h qqbar_cmpabs"
   qqbar_cmpabs :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_cmp_root_order/ /x/ /y/ 
--- 
+--
 -- Compares /x/ and /y/ using an arbitrary but convenient ordering defined
 -- on the complex numbers. This is useful for sorting the roots of a
 -- polynomial in a canonical order.
@@ -519,7 +615,7 @@ foreign import ccall "qqbar.h qqbar_cmp_root_order"
   qqbar_cmp_root_order :: Ptr CQQbar -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_hash/ /x/ 
--- 
+--
 -- Returns a hash of /x/. As currently implemented, this function only
 -- hashes the minimal polynomial of /x/. The user should mix in some bits
 -- based on the numerical value if it is critical to distinguish between
@@ -534,63 +630,63 @@ foreign import ccall "qqbar.h qqbar_hash"
 -- Complex parts ---------------------------------------------------------------
 
 -- | /qqbar_conj/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the complex conjugate of /x/.
 foreign import ccall "qqbar.h qqbar_conj"
   qqbar_conj :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_re/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the real part of /x/.
 foreign import ccall "qqbar.h qqbar_re"
   qqbar_re :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_im/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the imaginary part of /x/.
 foreign import ccall "qqbar.h qqbar_im"
   qqbar_im :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_re_im/ /res1/ /res2/ /x/ 
--- 
+--
 -- Sets /res1/ to the real part of /x/ and /res2/ to the imaginary part of
 -- /x/.
 foreign import ccall "qqbar.h qqbar_re_im"
   qqbar_re_im :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_abs/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the absolute value of /x/:
 foreign import ccall "qqbar.h qqbar_abs"
   qqbar_abs :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_abs2/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the square of the absolute value of /x/.
 foreign import ccall "qqbar.h qqbar_abs2"
   qqbar_abs2 :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_sgn/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the complex sign of /x/, defined as 0 if /x/ is zero and
 -- as \(x / |x|\) otherwise.
 foreign import ccall "qqbar.h qqbar_sgn"
   qqbar_sgn :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_sgn_re/ /x/ 
--- 
+--
 -- Returns the sign of the real part of /x/ (-1, 0 or +1).
 foreign import ccall "qqbar.h qqbar_sgn_re"
   qqbar_sgn_re :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_sgn_im/ /x/ 
--- 
+--
 -- Returns the sign of the imaginary part of /x/ (-1, 0 or +1).
 foreign import ccall "qqbar.h qqbar_sgn_im"
   qqbar_sgn_im :: Ptr CQQbar -> IO CInt
 
 -- | /qqbar_csgn/ /x/ 
--- 
+--
 -- Returns the extension of the real sign function taking the value 1 for
 -- /x/ strictly in the right half plane, -1 for /x/ strictly in the left
 -- half plane, and the sign of the imaginary part when /x/ is on the
@@ -603,14 +699,14 @@ foreign import ccall "qqbar.h qqbar_csgn"
 -- Integer parts ---------------------------------------------------------------
 
 -- | /qqbar_floor/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the floor function of /x/. If /x/ is not real, the value
 -- is defined as the floor function of the real part of /x/.
 foreign import ccall "qqbar.h qqbar_floor"
   qqbar_floor :: Ptr CFmpz -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_ceil/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the ceiling function of /x/. If /x/ is not real, the value
 -- is defined as the ceiling function of the real part of /x/.
 foreign import ccall "qqbar.h qqbar_ceil"
@@ -619,57 +715,129 @@ foreign import ccall "qqbar.h qqbar_ceil"
 -- Arithmetic ------------------------------------------------------------------
 
 -- | /qqbar_neg/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the negation of /x/.
 foreign import ccall "qqbar.h qqbar_neg"
   qqbar_neg :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_add/ /res/ /x/ /y/ 
--- 
--- Sets /res/ to the sum of /x/ and /y/.
 foreign import ccall "qqbar.h qqbar_add"
   qqbar_add :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
+-- | /qqbar_add_fmpq/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_add_fmpq"
+  qqbar_add_fmpq :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpq -> IO ()
+-- | /qqbar_add_fmpz/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_add_fmpz"
+  qqbar_add_fmpz :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpz -> IO ()
+-- | /qqbar_add_ui/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_add_ui"
+  qqbar_add_ui :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_add_si/ /res/ /x/ /y/ 
+--
+-- Sets /res/ to the sum of /x/ and /y/.
+foreign import ccall "qqbar.h qqbar_add_si"
+  qqbar_add_si :: Ptr CQQbar -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_sub/ /res/ /x/ /y/ 
--- 
--- Sets /res/ to the difference of /x/ and /y/.
 foreign import ccall "qqbar.h qqbar_sub"
   qqbar_sub :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
+-- | /qqbar_sub_fmpq/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_sub_fmpq"
+  qqbar_sub_fmpq :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpq -> IO ()
+-- | /qqbar_sub_fmpz/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_sub_fmpz"
+  qqbar_sub_fmpz :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpz -> IO ()
+-- | /qqbar_sub_ui/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_sub_ui"
+  qqbar_sub_ui :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_sub_si/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_sub_si"
+  qqbar_sub_si :: Ptr CQQbar -> Ptr CQQbar -> CLong -> IO ()
+-- | /qqbar_fmpq_sub/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_fmpq_sub"
+  qqbar_fmpq_sub :: Ptr CQQbar -> Ptr CFmpq -> Ptr CQQbar -> IO ()
+-- | /qqbar_fmpz_sub/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_fmpz_sub"
+  qqbar_fmpz_sub :: Ptr CQQbar -> Ptr CFmpz -> Ptr CQQbar -> IO ()
+-- | /qqbar_ui_sub/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_ui_sub"
+  qqbar_ui_sub :: Ptr CQQbar -> CULong -> Ptr CQQbar -> IO ()
+-- | /qqbar_si_sub/ /res/ /x/ /y/ 
+--
+-- Sets /res/ to the difference of /x/ and /y/.
+foreign import ccall "qqbar.h qqbar_si_sub"
+  qqbar_si_sub :: Ptr CQQbar -> CLong -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_mul/ /res/ /x/ /y/ 
--- 
--- Sets /res/ to the product of /x/ and /y/.
 foreign import ccall "qqbar.h qqbar_mul"
   qqbar_mul :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
+-- | /qqbar_mul_fmpq/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_mul_fmpq"
+  qqbar_mul_fmpq :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpq -> IO ()
+-- | /qqbar_mul_fmpz/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_mul_fmpz"
+  qqbar_mul_fmpz :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpz -> IO ()
+-- | /qqbar_mul_ui/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_mul_ui"
+  qqbar_mul_ui :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_mul_si/ /res/ /x/ /y/ 
+--
+-- Sets /res/ to the product of /x/ and /y/.
+foreign import ccall "qqbar.h qqbar_mul_si"
+  qqbar_mul_si :: Ptr CQQbar -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_mul_2exp_si/ /res/ /x/ /e/ 
--- 
+--
 -- Sets /res/ to /x/ multiplied by \(2^e\).
 foreign import ccall "qqbar.h qqbar_mul_2exp_si"
   qqbar_mul_2exp_si :: Ptr CQQbar -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_sqr/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the square of /x/.
 foreign import ccall "qqbar.h qqbar_sqr"
   qqbar_sqr :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_inv/ /res/ /x/ /y/ 
--- 
+--
 -- Sets /res/ to the multiplicative inverse of /y/. Division by zero calls
 -- /flint_abort/.
 foreign import ccall "qqbar.h qqbar_inv"
   qqbar_inv :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_div/ /res/ /x/ /y/ 
--- 
--- Sets /res/ to the quotient of /x/ and /y/. Division by zero calls
--- /flint_abort/.
 foreign import ccall "qqbar.h qqbar_div"
   qqbar_div :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> IO ()
+-- | /qqbar_div_fmpq/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_div_fmpq"
+  qqbar_div_fmpq :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpq -> IO ()
+-- | /qqbar_div_fmpz/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_div_fmpz"
+  qqbar_div_fmpz :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpz -> IO ()
+-- | /qqbar_div_ui/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_div_ui"
+  qqbar_div_ui :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_div_si/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_div_si"
+  qqbar_div_si :: Ptr CQQbar -> Ptr CQQbar -> CLong -> IO ()
+-- | /qqbar_fmpq_div/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_fmpq_div"
+  qqbar_fmpq_div :: Ptr CQQbar -> Ptr CFmpq -> Ptr CQQbar -> IO ()
+-- | /qqbar_fmpz_div/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_fmpz_div"
+  qqbar_fmpz_div :: Ptr CQQbar -> Ptr CFmpz -> Ptr CQQbar -> IO ()
+-- | /qqbar_ui_div/ /res/ /x/ /y/ 
+foreign import ccall "qqbar.h qqbar_ui_div"
+  qqbar_ui_div :: Ptr CQQbar -> CULong -> Ptr CQQbar -> IO ()
+-- | /qqbar_si_div/ /res/ /x/ /y/ 
+--
+-- Sets /res/ to the quotient of /x/ and /y/. Division by zero calls
+-- /flint_abort/.
+foreign import ccall "qqbar.h qqbar_si_div"
+  qqbar_si_div :: Ptr CQQbar -> CLong -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_scalar_op/ /res/ /x/ /a/ /b/ /c/ 
--- 
+--
 -- Sets /res/ to the rational affine transformation \((ax+b)/c\), performed
 -- as a single operation. There are no restrictions on /a/, /b/ and /c/
 -- except that /c/ must be nonzero. Division by zero calls /flint_abort/.
@@ -679,41 +847,56 @@ foreign import ccall "qqbar.h qqbar_scalar_op"
 -- Powers and roots ------------------------------------------------------------
 
 -- | /qqbar_sqrt/ /res/ /x/ 
--- 
--- Sets /res/ to the principal square root of /x/.
 foreign import ccall "qqbar.h qqbar_sqrt"
   qqbar_sqrt :: Ptr CQQbar -> Ptr CQQbar -> IO ()
+-- | /qqbar_sqrt_ui/ /res/ /x/ 
+--
+-- Sets /res/ to the principal square root of /x/.
+foreign import ccall "qqbar.h qqbar_sqrt_ui"
+  qqbar_sqrt_ui :: Ptr CQQbar -> CULong -> IO ()
 
 -- | /qqbar_rsqrt/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to the reciprocal of the principal square root of /x/.
 -- Division by zero calls /flint_abort/.
 foreign import ccall "qqbar.h qqbar_rsqrt"
   qqbar_rsqrt :: Ptr CQQbar -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_pow_ui/ /res/ /x/ /n/ 
--- 
--- Sets /res/ to /x/ raised to the /n/-th power. Raising zero to a negative
--- power aborts.
 foreign import ccall "qqbar.h qqbar_pow_ui"
   qqbar_pow_ui :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_pow_si/ /res/ /x/ /n/ 
+foreign import ccall "qqbar.h qqbar_pow_si"
+  qqbar_pow_si :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_pow_fmpz/ /res/ /x/ /n/ 
+foreign import ccall "qqbar.h qqbar_pow_fmpz"
+  qqbar_pow_fmpz :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpz -> IO ()
+-- | /qqbar_pow_fmpq/ /res/ /x/ /n/ 
+--
+-- Sets /res/ to /x/ raised to the /n/-th power. Raising zero to a negative
+-- power aborts.
+foreign import ccall "qqbar.h qqbar_pow_fmpq"
+  qqbar_pow_fmpq :: Ptr CQQbar -> Ptr CQQbar -> Ptr CFmpq -> IO ()
 
 -- | /qqbar_root_ui/ /res/ /x/ /n/ 
--- 
--- Sets /res/ to the principal /n/-th root of /x/. The order /n/ must be
--- positive.
 foreign import ccall "qqbar.h qqbar_root_ui"
   qqbar_root_ui :: Ptr CQQbar -> Ptr CQQbar -> CULong -> IO ()
+-- | /qqbar_fmpq_root_ui/ /res/ /x/ /n/ 
+--
+-- Sets /res/ to the principal /n/-th root of /x/. The order /n/ must be
+-- positive.
+foreign import ccall "qqbar.h qqbar_fmpq_root_ui"
+  qqbar_fmpq_root_ui :: Ptr CQQbar -> Ptr CFmpq -> CULong -> IO ()
 
 -- | /qqbar_fmpq_pow_si_ui/ /res/ /x/ /m/ /n/ 
--- 
+--
 -- Sets /res/ to the principal branch of \(x^{m/n}\). The order /n/ must be
 -- positive. Division by zero calls /flint_abort/.
 foreign import ccall "qqbar.h qqbar_fmpq_pow_si_ui"
   qqbar_fmpq_pow_si_ui :: Ptr CQQbar -> Ptr CFmpq -> CLong -> CULong -> IO ()
 
 -- | /qqbar_pow/ /res/ /x/ /y/ 
--- 
+--
 -- General exponentiation: if \(x^y\) is an algebraic number, sets /res/ to
 -- this value and returns 1. If \(x^y\) is transcendental or undefined,
 -- returns 0. Note that this function returns 0 instead of aborting on
@@ -732,13 +915,13 @@ foreign import ccall "qqbar.h qqbar_pow"
 -- @qqbar_cache_enclosure@ can be used to avoid recomputations.
 --
 -- | /qqbar_get_acb/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to an enclosure of /x/ rounded to /prec/ bits.
 foreign import ccall "qqbar.h qqbar_get_acb"
   qqbar_get_acb :: Ptr CAcb -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_get_arb/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to an enclosure of /x/ rounded to /prec/ bits, assuming that
 -- /x/ is a real number. If /x/ is not real, /res/ is set to
 -- \([\operatorname{NaN} \pm \infty]\).
@@ -746,21 +929,21 @@ foreign import ccall "qqbar.h qqbar_get_arb"
   qqbar_get_arb :: Ptr CArb -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_get_arb_re/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to an enclosure of the real part of /x/ rounded to /prec/
 -- bits.
 foreign import ccall "qqbar.h qqbar_get_arb_re"
   qqbar_get_arb_re :: Ptr CArb -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_get_arb_im/ /res/ /x/ /prec/ 
--- 
+--
 -- Sets /res/ to an enclosure of the imaginary part of /x/ rounded to
 -- /prec/ bits.
 foreign import ccall "qqbar.h qqbar_get_arb_im"
   qqbar_get_arb_im :: Ptr CArb -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /qqbar_cache_enclosure/ /res/ /prec/ 
--- 
+--
 -- Polishes the internal enclosure of /res/ to at least /prec/ bits of
 -- precision in-place. Normally, /qqbar/ operations that need
 -- high-precision enclosures compute them on the fly without caching the
@@ -773,14 +956,14 @@ foreign import ccall "qqbar.h qqbar_cache_enclosure"
 -- Numerator and denominator ---------------------------------------------------
 
 -- | /qqbar_denominator/ /res/ /y/ 
--- 
+--
 -- Sets /res/ to the denominator of /y/, i.e. the leading coefficient of
 -- the minimal polynomial of /y/.
 foreign import ccall "qqbar.h qqbar_denominator"
   qqbar_denominator :: Ptr CFmpz -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_numerator/ /res/ /y/ 
--- 
+--
 -- Sets /res/ to the numerator of /y/, i.e. /y/ multiplied by its
 -- denominator.
 foreign import ccall "qqbar.h qqbar_numerator"
@@ -789,7 +972,7 @@ foreign import ccall "qqbar.h qqbar_numerator"
 -- Conjugates ------------------------------------------------------------------
 
 -- | /qqbar_conjugates/ /res/ /x/ 
--- 
+--
 -- Sets the entries of the vector /res/ to the /d/ algebraic conjugates of
 -- /x/, including /x/ itself, where /d/ is the degree of /x/. The output is
 -- sorted in a canonical order (as defined by @qqbar_cmp_root_order@).
@@ -799,17 +982,32 @@ foreign import ccall "qqbar.h qqbar_conjugates"
 -- Polynomial evaluation -------------------------------------------------------
 
 -- | /_qqbar_evaluate_fmpq_poly/ /res/ /poly/ /den/ /len/ /x/ 
--- 
+foreign import ccall "qqbar.h _qqbar_evaluate_fmpq_poly"
+  _qqbar_evaluate_fmpq_poly :: Ptr CQQbar -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CQQbar -> IO ()
+-- | /qqbar_evaluate_fmpq_poly/ /res/ /poly/ /x/ 
+foreign import ccall "qqbar.h qqbar_evaluate_fmpq_poly"
+  qqbar_evaluate_fmpq_poly :: Ptr CQQbar -> Ptr CFmpqPoly -> Ptr CQQbar -> IO ()
+-- | /_qqbar_evaluate_fmpz_poly/ /res/ /poly/ /len/ /x/ 
+foreign import ccall "qqbar.h _qqbar_evaluate_fmpz_poly"
+  _qqbar_evaluate_fmpz_poly :: Ptr CQQbar -> Ptr CFmpz -> CLong -> Ptr CQQbar -> IO ()
+-- | /qqbar_evaluate_fmpz_poly/ /res/ /poly/ /x/ 
+--
 -- Sets /res/ to the value of the given polynomial /poly/ evaluated at the
 -- algebraic number /x/. These methods detect simple special cases and
 -- automatically reduce /poly/ if its degree is greater or equal to that of
 -- the minimal polynomial of /x/. In the generic case, evaluation is done
 -- by computing minimal polynomials of representation matrices.
-foreign import ccall "qqbar.h _qqbar_evaluate_fmpq_poly"
-  _qqbar_evaluate_fmpq_poly :: Ptr CQQbar -> Ptr CFmpz -> Ptr CFmpz -> CLong -> Ptr CQQbar -> IO ()
+foreign import ccall "qqbar.h qqbar_evaluate_fmpz_poly"
+  qqbar_evaluate_fmpz_poly :: Ptr CQQbar -> Ptr CFmpzPoly -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_evaluate_fmpz_mpoly_iter/ /res/ /poly/ /x/ /deg_limit/ /bits_limit/ /ctx/ 
--- 
+foreign import ccall "qqbar.h qqbar_evaluate_fmpz_mpoly_iter"
+  qqbar_evaluate_fmpz_mpoly_iter :: Ptr CQQbar -> Ptr CFmpzMPoly ->Ptr CQQbar -> CLong -> CLong -> Ptr CFmpzMPolyCtx -> IO CInt
+-- | /qqbar_evaluate_fmpz_mpoly_horner/ /res/ /poly/ /x/ /deg_limit/ /bits_limit/ /ctx/ 
+foreign import ccall "qqbar.h qqbar_evaluate_fmpz_mpoly_horner"
+  qqbar_evaluate_fmpz_mpoly_horner :: Ptr CQQbar -> Ptr CFmpzMPoly ->Ptr CQQbar -> CLong -> CLong -> Ptr CFmpzMPolyCtx -> IO CInt
+-- | /qqbar_evaluate_fmpz_mpoly/ /res/ /poly/ /x/ /deg_limit/ /bits_limit/ /ctx/ 
+--
 -- Sets /res/ to the value of /poly/ evaluated at the algebraic numbers
 -- given in the vector /x/. The number of variables is defined by the
 -- context object /ctx/.
@@ -823,13 +1021,16 @@ foreign import ccall "qqbar.h _qqbar_evaluate_fmpq_poly"
 -- the powers that appear. The /horner/ version uses a multivariate
 -- implementation of the Horner scheme. The default algorithm currently
 -- uses the Horner scheme.
-foreign import ccall "qqbar.h qqbar_evaluate_fmpz_mpoly_iter"
-  qqbar_evaluate_fmpz_mpoly_iter :: Ptr CQQbar -> Ptr CFmpzMPoly -> Ptr CQQbar -> CLong -> CLong -> Ptr CFmpzMPolyCtx -> IO CInt
+foreign import ccall "qqbar.h qqbar_evaluate_fmpz_mpoly"
+  qqbar_evaluate_fmpz_mpoly :: Ptr CQQbar -> Ptr CFmpzMPoly ->Ptr CQQbar -> CLong -> CLong -> Ptr CFmpzMPolyCtx -> IO CInt
 
 -- Polynomial roots ------------------------------------------------------------
 
 -- | /qqbar_roots_fmpz_poly/ /res/ /poly/ /flags/ 
--- 
+foreign import ccall "qqbar.h qqbar_roots_fmpz_poly"
+  qqbar_roots_fmpz_poly :: Ptr CQQbar -> Ptr CFmpzPoly -> CInt -> IO ()
+-- | /qqbar_roots_fmpq_poly/ /res/ /poly/ /flags/ 
+--
 -- Sets the entries of the vector /res/ to the /d/ roots of the polynomial
 -- /poly/. Roots with multiplicity appear with repetition in the output
 -- array. By default, the roots will be sorted in a convenient canonical
@@ -843,16 +1044,19 @@ foreign import ccall "qqbar.h qqbar_evaluate_fmpz_mpoly_iter"
 --     factorization is performed internally.
 -- -   QQBAR_ROOTS_UNSORTED - if set, the roots will not be guaranteed to
 --     be sorted (except for repeated roots being listed consecutively).
-foreign import ccall "qqbar.h qqbar_roots_fmpz_poly"
-  qqbar_roots_fmpz_poly :: Ptr CQQbar -> Ptr CFmpzPoly -> CInt -> IO ()
+foreign import ccall "qqbar.h qqbar_roots_fmpq_poly"
+  qqbar_roots_fmpq_poly :: Ptr CQQbar -> Ptr CFmpqPoly -> CInt -> IO ()
 
 -- | /qqbar_eigenvalues_fmpz_mat/ /res/ /mat/ /flags/ 
--- 
+foreign import ccall "qqbar.h qqbar_eigenvalues_fmpz_mat"
+  qqbar_eigenvalues_fmpz_mat :: Ptr CQQbar -> Ptr CFmpzMat -> CInt -> IO ()
+-- | /qqbar_eigenvalues_fmpq_mat/ /res/ /mat/ /flags/ 
+--
 -- Sets the entries of the vector /res/ to the eigenvalues of the square
 -- matrix /mat/. These functions compute the characteristic polynomial of
 -- /mat/ and then call @qqbar_roots_fmpz_poly@ with the same flags.
-foreign import ccall "qqbar.h qqbar_eigenvalues_fmpz_mat"
-  qqbar_eigenvalues_fmpz_mat :: Ptr CQQbar -> Ptr CFmpzMat -> CInt -> IO ()
+foreign import ccall "qqbar.h qqbar_eigenvalues_fmpq_mat"
+  qqbar_eigenvalues_fmpq_mat :: Ptr CQQbar -> Ptr CFmpzMat -> CInt -> IO ()
 
 -- Roots of unity and trigonometric functions ----------------------------------
 
@@ -865,13 +1069,13 @@ foreign import ccall "qqbar.h qqbar_eigenvalues_fmpz_mat"
 -- (they may be added and subtracted internally).
 --
 -- | /qqbar_root_of_unity/ /res/ /p/ /q/ 
--- 
+--
 -- Sets /res/ to the root of unity \(e^{2 \pi i p / q}\).
 foreign import ccall "qqbar.h qqbar_root_of_unity"
   qqbar_root_of_unity :: Ptr CQQbar -> CLong -> CULong -> IO ()
 
 -- | /qqbar_is_root_of_unity/ /p/ /q/ /x/ 
--- 
+--
 -- If /x/ is not a root of unity, returns 0. If /x/ is a root of unity,
 -- returns 1. If /p/ and /q/ are not /NULL/ and /x/ is a root of unity,
 -- this also sets /p/ and /q/ to the minimal integers with \(0 \le p < q\)
@@ -880,22 +1084,37 @@ foreign import ccall "qqbar.h qqbar_is_root_of_unity"
   qqbar_is_root_of_unity :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_exp_pi_i/ /res/ /p/ /q/ 
--- 
+--
 -- Sets /res/ to the root of unity \(e^{\pi i p / q}\).
 foreign import ccall "qqbar.h qqbar_exp_pi_i"
   qqbar_exp_pi_i :: Ptr CQQbar -> CLong -> CULong -> IO ()
 
 -- | /qqbar_cos_pi/ /res/ /p/ /q/ 
--- 
+foreign import ccall "qqbar.h qqbar_cos_pi"
+  qqbar_cos_pi :: Ptr CQQbar -> CLong -> CULong -> IO ()
+-- | /qqbar_sin_pi/ /res/ /p/ /q/ 
+foreign import ccall "qqbar.h qqbar_sin_pi"
+  qqbar_sin_pi :: Ptr CQQbar -> CLong -> CULong -> IO ()
+-- | /qqbar_tan_pi/ /res/ /p/ /q/ 
+foreign import ccall "qqbar.h qqbar_tan_pi"
+  qqbar_tan_pi :: Ptr CQQbar -> CLong -> CULong -> IO CInt
+-- | /qqbar_cot_pi/ /res/ /p/ /q/ 
+foreign import ccall "qqbar.h qqbar_cot_pi"
+  qqbar_cot_pi :: Ptr CQQbar -> CLong -> CULong -> IO CInt
+-- | /qqbar_sec_pi/ /res/ /p/ /q/ 
+foreign import ccall "qqbar.h qqbar_sec_pi"
+  qqbar_sec_pi :: Ptr CQQbar -> CLong -> CULong -> IO CInt
+-- | /qqbar_csc_pi/ /res/ /p/ /q/ 
+--
 -- Sets /res/ to the trigonometric function \(\cos(\pi x)\),
 -- \(\sin(\pi x)\), etc., with \(x = \tfrac{p}{q}\). The functions tan,
 -- cot, sec and csc return the flag 1 if the value exists, and return 0 if
 -- the evaluation point is a pole of the function.
-foreign import ccall "qqbar.h qqbar_cos_pi"
-  qqbar_cos_pi :: Ptr CQQbar -> CLong -> CULong -> IO ()
+foreign import ccall "qqbar.h qqbar_csc_pi"
+  qqbar_csc_pi :: Ptr CQQbar -> CLong -> CULong -> IO CInt
 
 -- | /qqbar_log_pi_i/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{log}(x) / (\pi i)\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(-1 < y \le 1\) and returns 1. If /y/ is not algebraic, returns 0.
@@ -903,7 +1122,7 @@ foreign import ccall "qqbar.h qqbar_log_pi_i"
   qqbar_log_pi_i :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_atan_pi/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{atan}(x) / \pi\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(|y| < \tfrac{1}{2}\) and returns 1. If /y/ is not algebraic,
@@ -912,7 +1131,7 @@ foreign import ccall "qqbar.h qqbar_atan_pi"
   qqbar_atan_pi :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_asin_pi/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{asin}(x) / \pi\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(|y| \le \tfrac{1}{2}\) and returns 1. If /y/ is not algebraic,
@@ -921,7 +1140,7 @@ foreign import ccall "qqbar.h qqbar_asin_pi"
   qqbar_asin_pi :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_acos_pi/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{acos}(x) / \pi\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(0 \le y \le 1\) and returns 1. If /y/ is not algebraic, returns
@@ -930,7 +1149,7 @@ foreign import ccall "qqbar.h qqbar_acos_pi"
   qqbar_acos_pi :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_acot_pi/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{acot}(x) / \pi\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(-\tfrac{1}{2} < y \le \tfrac{1}{2}\) and returns 1. If /y/ is not
@@ -939,7 +1158,7 @@ foreign import ccall "qqbar.h qqbar_acot_pi"
   qqbar_acot_pi :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_asec_pi/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{asec}(x) / \pi\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(0 \le y \le 1\) and returns 1. If /y/ is not algebraic, returns
@@ -948,7 +1167,7 @@ foreign import ccall "qqbar.h qqbar_asec_pi"
   qqbar_asec_pi :: Ptr CLong -> Ptr CULong -> Ptr CQQbar -> IO CInt
 
 -- | /qqbar_acsc_pi/ /p/ /q/ /x/ 
--- 
+--
 -- If \(y = \operatorname{acsc}(x) / \pi\) is algebraic, and hence
 -- necessarily rational, sets \(y = p / q\) to the reduced such fraction
 -- with \(-\tfrac{1}{2} \le y \le \tfrac{1}{2}\) and returns 1. If /y/ is
@@ -959,7 +1178,7 @@ foreign import ccall "qqbar.h qqbar_acsc_pi"
 -- Guessing and simplification -------------------------------------------------
 
 -- | /qqbar_guess/ /res/ /z/ /max_deg/ /max_bits/ /flags/ /prec/ 
--- 
+--
 -- Attempts to find an algebraic number /res/ of degree at most /max_deg/
 -- and height at most /max_bits/ bits matching the numerical enclosure /z/.
 -- The return flag indicates success. This is only a heuristic method, and
@@ -981,7 +1200,7 @@ foreign import ccall "qqbar.h qqbar_guess"
   qqbar_guess :: Ptr CQQbar -> Ptr CAcb -> CLong -> CLong -> CInt -> CLong -> IO CInt
 
 -- | /qqbar_express_in_field/ /res/ /alpha/ /x/ /max_bits/ /flags/ /prec/ 
--- 
+--
 -- Attempts to express /x/ in the number field generated by /alpha/,
 -- returning success (0 or 1). On success, /res/ is set to a polynomial /f/
 -- of degree less than the degree of /alpha/ and with height (counting both
@@ -1018,7 +1237,7 @@ type CFExpr = CFlint FExpr
 --------------------------------------------------------------------------------
 
 -- | /qqbar_get_quadratic/ /a/ /b/ /c/ /q/ /x/ /factoring/ 
--- 
+--
 -- Assuming that /x/ has degree 1 or 2, computes integers /a/, /b/, /c/ and
 -- /q/ such that
 -- 
@@ -1054,7 +1273,7 @@ foreign import ccall "qqbar.h qqbar_get_quadratic"
   qqbar_get_quadratic :: Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CFmpz -> Ptr CQQbar -> CInt -> IO ()
 
 -- | /qqbar_set_fexpr/ /res/ /expr/ 
--- 
+--
 -- Sets /res/ to the algebraic number represented by the symbolic
 -- expression /expr/, returning 1 on success and 0 on failure.
 -- 
@@ -1094,7 +1313,7 @@ foreign import ccall "qqbar.h qqbar_set_fexpr"
   qqbar_set_fexpr :: Ptr CQQbar -> Ptr CFExpr -> IO CInt
 
 -- | /qqbar_get_fexpr_repr/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to a symbolic expression reflecting the exact internal
 -- representation of /x/. The output will have the form
 -- @AlgebraicNumberSerialized(List(coeffs), enclosure)@. The output can be
@@ -1106,7 +1325,7 @@ foreign import ccall "qqbar.h qqbar_get_fexpr_repr"
   qqbar_get_fexpr_repr :: Ptr CFExpr -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_get_fexpr_root_nearest/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to a symbolic expression unambiguously describing /x/ in the
 -- form @PolynomialRootNearest(List(coeffs), point)@ where /point/ is an
 -- approximation of /x/ guaranteed to be closer to /x/ than any conjugate
@@ -1117,7 +1336,7 @@ foreign import ccall "qqbar.h qqbar_get_fexpr_root_nearest"
   qqbar_get_fexpr_root_nearest :: Ptr CFExpr -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_get_fexpr_root_indexed/ /res/ /x/ 
--- 
+--
 -- Sets /res/ to a symbolic expression unambiguously describing /x/ in the
 -- form @PolynomialRootIndexed(List(coeffs), index)@ where /index/ is the
 -- index of /x/ among its conjugate roots in the builtin root sort order.
@@ -1129,7 +1348,7 @@ foreign import ccall "qqbar.h qqbar_get_fexpr_root_indexed"
   qqbar_get_fexpr_root_indexed :: Ptr CFExpr -> Ptr CQQbar -> IO ()
 
 -- | /qqbar_get_fexpr_formula/ /res/ /x/ /flags/ 
--- 
+--
 -- Attempts to express the algebraic number /x/ as a closed-form expression
 -- using arithmetic operations, radicals, and possibly exponentials or
 -- trigonometric functions, but without using @PolynomialRootNearest@ or
@@ -1198,7 +1417,7 @@ foreign import ccall "qqbar.h qqbar_get_fexpr_formula"
 -- Internal functions ----------------------------------------------------------
 
 -- | /qqbar_fmpz_poly_composed_op/ /res/ /A/ /B/ /op/ 
--- 
+--
 -- Given nonconstant polynomials /A/ and /B/, sets /res/ to a polynomial
 -- whose roots are \(a+b\), \(a-b\), \(ab\) or \(a/b\) for all roots /a/ of
 -- /A/ and all roots /b/ of /B/. The parameter /op/ selects the arithmetic
@@ -1208,14 +1427,14 @@ foreign import ccall "qqbar.h qqbar_fmpz_poly_composed_op"
   qqbar_fmpz_poly_composed_op :: Ptr CFmpzPoly -> Ptr CFmpzPoly -> Ptr CFmpzPoly -> CInt -> IO ()
 
 -- | /qqbar_binary_op/ /res/ /x/ /y/ /op/ 
--- 
+--
 -- Performs a binary operation using a generic algorithm. This does not
 -- check for special cases.
 foreign import ccall "qqbar.h qqbar_binary_op"
   qqbar_binary_op :: Ptr CQQbar -> Ptr CQQbar -> Ptr CQQbar -> CInt -> IO ()
 
 -- | /_qqbar_validate_uniqueness/ /res/ /poly/ /z/ /max_prec/ 
--- 
+--
 -- Given /z/ known to be an enclosure of at least one root of /poly/,
 -- certifies that the enclosure contains a unique root, and in that case
 -- sets /res/ to a new (possibly improved) enclosure for the same root,
@@ -1234,7 +1453,7 @@ foreign import ccall "qqbar.h _qqbar_validate_uniqueness"
   _qqbar_validate_uniqueness :: Ptr CAcb -> Ptr CFmpzPoly -> Ptr CAcb -> CLong -> IO CInt
 
 -- | /_qqbar_validate_existence_uniqueness/ /res/ /poly/ /z/ /max_prec/ 
--- 
+--
 -- Given any complex interval /z/, certifies that the enclosure contains a
 -- unique root of /poly/, and in that case sets /res/ to a new (possibly
 -- improved) enclosure for the same root, returning 1. Returns 0 if
@@ -1247,7 +1466,10 @@ foreign import ccall "qqbar.h _qqbar_validate_existence_uniqueness"
   _qqbar_validate_existence_uniqueness :: Ptr CAcb -> Ptr CFmpzPoly -> Ptr CAcb -> CLong -> IO CInt
 
 -- | /_qqbar_enclosure_raw/ /res/ /poly/ /z/ /prec/ 
--- 
+foreign import ccall "qqbar.h _qqbar_enclosure_raw"
+  _qqbar_enclosure_raw :: Ptr CAcb -> Ptr CFmpzPoly -> Ptr CAcb -> CLong -> IO ()
+-- | /qqbar_enclosure_raw/ /res/ /x/ /prec/ 
+--
 -- Sets /res/ to an enclosure of /x/ accurate to about /prec/ bits (the
 -- actual accuracy can be slightly lower, or higher).
 -- 
@@ -1258,11 +1480,11 @@ foreign import ccall "qqbar.h _qqbar_validate_existence_uniqueness"
 -- 
 -- If the initial enclosure is accurate enough, /res/ is set to this value
 -- without rounding and without further computation.
-foreign import ccall "qqbar.h _qqbar_enclosure_raw"
-  _qqbar_enclosure_raw :: Ptr CAcb -> Ptr CFmpzPoly -> Ptr CAcb -> CLong -> IO ()
+foreign import ccall "qqbar.h qqbar_enclosure_raw"
+  qqbar_enclosure_raw :: Ptr CAcb -> Ptr CQQbar -> CLong -> IO ()
 
 -- | /_qqbar_acb_lindep/ /rel/ /vec/ /len/ /check/ /prec/ 
--- 
+--
 -- Attempts to find an integer vector /rel/ giving a linear relation
 -- between the elements of the real or complex vector /vec/, using the LLL
 -- algorithm.
