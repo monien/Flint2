@@ -143,6 +143,7 @@ library:
    # Arb
    - Data.Number.Flint.Arb.Types
    - Data.Number.Flint.Arb
+   - Data.Number.Flint.Arb.Instances
    - Data.Number.Flint.Arb.Mag
    - Data.Number.Flint.Arb.Arf
    - Data.Number.Flint.Arb.Poly
@@ -156,6 +157,7 @@ library:
    # Acb
    - Data.Number.Flint.Acb.Types
    - Data.Number.Flint.Acb
+   - Data.Number.Flint.Acb.Instances
    - Data.Number.Flint.Acb.Acf
    - Data.Number.Flint.Acb.Poly
    - Data.Number.Flint.Acb.Mat

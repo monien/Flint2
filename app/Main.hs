@@ -1,6 +1,8 @@
-{-# language DataKinds #-}
+{-# language DataKinds, RankNTypes #-}
 
 module Main where
+
+import Test.QuickCheck
 
 import System.IO.Unsafe
 
@@ -14,8 +16,11 @@ import Foreign.C.String
 import Foreign.C.Types
 import Foreign.Marshal.Utils (new, with)
 
-import Test.QuickCheck
+import GHC.TypeLits
 import GHC.Exts
+
+import Data.Proxy
+
 import Control.Monad
 import Control.Monad.Reader
 import Text.Printf
@@ -42,14 +47,14 @@ testCF = do
   print $ magnitude z
   
 testContinuedFraction = do
-  let n = 64
-      x = pi :: RF 1024
+  let n = 16
+      x = sqrt (17 / 31)
       r = toRational x
       u = numerator r
       v = denominator r
       p = fromInteger u :: Fmpq
       q = fromInteger v :: Fmpq
-      w = p / q
+      w = (p / q) ^ 2
   c <- _fmpz_vec_init n
   withFmpq w $ \w -> do
     withNewFmpq $ \rem -> do
@@ -898,5 +903,47 @@ testFmpzPolyQ = do
     endl
   return ()
 
- 
-    
+
+testLLL :: forall k. KnownNat k => RF k -> CLong -> IO ()
+testLLL r deg = do
+  let prec = floatDigits r
+      f = 2 ^ prec
+      n = deg + 1
+      m = n + 1
+  lll <- newFmpzLLLDefault
+  a <- newFmpzMat n m
+  b <- newFmpzMat n m
+  poly <- newFmpzPoly
+  withFmpzMat a $ \a  -> do
+    fmpz_mat_one a
+    withFmpzMat b $ \b  -> do
+      forM_ [0..n-1] $ \i -> do
+        x <- fmpz_mat_entry a i (m-1)
+        let tmp = round $ f * r ^ i
+        withFmpz tmp $ \tmp -> fmpz_set x tmp
+      -- fmpz_mat_print_pretty a
+      -- endl
+      withFmpzLLL lll $ \lll -> fmpz_lll a b lll
+      -- fmpz_mat_print_pretty a
+      -- endl
+      withFmpzPoly poly $ \poly -> do
+        forM_ [0..n-1] $ \j -> do
+          x <- fmpz_mat_entry a 0 j
+          fmpz_poly_set_coeff_fmpz poly j x
+  forM_ (factor poly) $ \(poly, e) -> do 
+    poly' <- newArbPoly
+    withFmpzPoly poly $ \poly -> do
+      withCString "x" $ \var -> do
+        fmpz_poly_print_pretty poly var
+      withNewArbPoly $ \p -> do
+        putStr " -> "
+        arb_poly_set_fmpz_poly p poly 1024
+        let (RF x) = r
+        withNewArb $ \tmp -> do
+          withArb x $ \x -> do
+            arb_set tmp x
+            arb_poly_evaluate tmp p tmp 1024
+            arb_abs tmp tmp 
+            arb_printn tmp 16 arb_str_no_radius
+            endl
+  return ()
