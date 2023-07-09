@@ -1,6 +1,8 @@
 {-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 module Data.Number.Flint.Arb.Instances where
 
+import Test.QuickCheck
+
 import System.IO.Unsafe
 import Foreign.C.String
 import Foreign.Marshal.Alloc ( free )

@@ -947,3 +947,10 @@ testLLL r deg = do
             arb_printn tmp 16 arb_str_no_radius
             endl
   return ()
+
+testArbRoots = do
+  let prec = 1024
+      poly = fromList [5,1,0,3,0,1] :: FmpzPoly
+  apoly <- newArbPolyFromFmpzPoly poly prec
+  print apoly
+  

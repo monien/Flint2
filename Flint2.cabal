@@ -130,6 +130,7 @@ library
       Data.Number.Flint.Arb.Mag
       Data.Number.Flint.Arb.Arf
       Data.Number.Flint.Arb.Poly
+      Data.Number.Flint.Arb.Poly.Instances
       Data.Number.Flint.Arb.Fmpz.Poly
       Data.Number.Flint.Arb.Mat
       Data.Number.Flint.Arb.Mat.Instances

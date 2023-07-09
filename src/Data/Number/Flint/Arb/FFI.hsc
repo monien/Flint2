@@ -12,8 +12,12 @@ module Data.Number.Flint.Arb.FFI (
     Arb (..)
   , CArb (..)
   , newArb
+  , newArbFromFmpz
+  , newArbFromFmpq
   , withArb
   , withNewArb
+  , withNewArbFromFmpz
+  , withNewArbFromFmpq
   -- * Memory management
   , arb_init
   , arb_clear
@@ -415,11 +419,37 @@ newArb = do
   addForeignPtrFinalizer p_arb_clear x
   return $ Arb x
 
+newArbFromFmpz value = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    arb_init x
+    withFmpz value $ \value -> do
+      arb_set_fmpz x value
+  addForeignPtrFinalizer p_arb_clear x
+  return $ Arb x
+
+newArbFromFmpq value prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    arb_init x
+    withFmpq value $ \value -> do
+      arb_set_fmpq x value prec
+  addForeignPtrFinalizer p_arb_clear x
+  return $ Arb x
+
 withArb (Arb p) f = do
   withForeignPtr p $ \fp -> (Arb p,) <$> f fp
 
 withNewArb f = do
   x <- newArb
+  withArb x f
+
+withNewArbFromFmpz value f = do
+  x <- newArbFromFmpz value
+  withArb x f
+
+withNewArbFromFmpq value prec f = do
+  x <- newArbFromFmpq value prec
   withArb x f
 
 -- Memory management -----------------------------------------------------------

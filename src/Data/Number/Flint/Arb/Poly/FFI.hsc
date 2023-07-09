@@ -12,8 +12,12 @@ module Data.Number.Flint.Arb.Poly.FFI (
     ArbPoly (..)
   , CArbPoly (..)
   , newArbPoly
+  , newArbPolyFromFmpzPoly
+  , newArbPolyFromFmpqPoly
   , withArbPoly
   , withNewArbPoly
+  , withNewArbPolyFromFmpzPoly
+  , withNewArbPolyFromFmpqPoly
   -- * Memory management
   , arb_poly_init
   , arb_poly_clear
@@ -47,6 +51,7 @@ module Data.Number.Flint.Arb.Poly.FFI (
   , arb_poly_set_fmpq_poly
   , arb_poly_set_si
   -- * Input and output
+  , arb_poly_get_strd
   , arb_poly_printd
   , arb_poly_fprintd
   -- * Random generation
@@ -299,6 +304,22 @@ newArbPoly = do
   addForeignPtrFinalizer p_arb_poly_clear p
   return $ ArbPoly p
 
+newArbPolyFromFmpzPoly poly prec = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    arb_poly_init p
+    withFmpzPoly poly $ \poly -> arb_poly_set_fmpz_poly p poly prec
+  addForeignPtrFinalizer p_arb_poly_clear p
+  return $ ArbPoly p
+
+newArbPolyFromFmpqPoly poly prec = do 
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    arb_poly_init p
+    withFmpqPoly poly $ \poly -> arb_poly_set_fmpq_poly p poly prec
+  addForeignPtrFinalizer p_arb_poly_clear p
+  return $ ArbPoly p
+
 -- | Use `ArbPoly` in f.
 {-# INLINE withArbPoly #-}
 withArbPoly (ArbPoly p) f = do
@@ -309,7 +330,15 @@ withArbPoly (ArbPoly p) f = do
 withNewArbPoly f = do
   p <- newArbPoly
   withArbPoly p f
-  
+
+withNewArbPolyFromFmpzPoly poly prec f = do
+  p <- newArbPolyFromFmpzPoly poly prec
+  withArbPoly p f
+
+withNewArbPolyFromFmpqPoly poly prec f = do
+  p <- newArbPolyFromFmpqPoly poly prec
+  withArbPoly p f
+
 instance Storable CArbPoly where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size arb_poly_t}
@@ -455,9 +484,6 @@ foreign import ccall "arb_poly.h arb_poly_set_coeff_arb"
 -- require that /n/ is nonnegative.
 foreign import ccall "arb_poly.h arb_poly_get_coeff_arb"
   arb_poly_get_coeff_arb :: Ptr CArb -> Ptr CArbPoly -> CLong -> IO ()
-
-
-
 
 -- | /_arb_poly_shift_right/ /res/ /poly/ /len/ /n/ 
 --
