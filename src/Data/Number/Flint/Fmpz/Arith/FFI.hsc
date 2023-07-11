@@ -1,12 +1,3 @@
-{-# language
-  CApiFFI
-, FlexibleInstances
-, ForeignFunctionInterface
-, MultiParamTypeClasses
-, TupleSections
-, TypeFamilies
-#-}
-
 module Data.Number.Flint.Fmpz.Arith.FFI (
   -- * Arithmetic and special functions
   -- * Harmonic numbers

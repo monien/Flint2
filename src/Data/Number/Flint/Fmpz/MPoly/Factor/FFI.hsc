@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
-
 module Data.Number.Flint.Fmpz.MPoly.Factor.FFI (
   -- * Factorisation of multivariate polynomials over the integers
   -- * Types

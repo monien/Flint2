@@ -277,6 +277,12 @@ library
       Data.Number.Flint.NF.QQbar.FFI
   hs-source-dirs:
       src
+  default-extensions:
+      CApiFFI
+      ForeignFunctionInterface
+      FlexibleInstances
+      TupleSections
+      TypeSynonymInstances
   c-sources:
       csrc/fmpz/init.c
       csrc/fmpz/clear.c

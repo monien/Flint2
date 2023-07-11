@@ -30,7 +30,13 @@ executables:
     extra-libraries: flint, gmp, mpfr
       
 library:
-  source-dirs: src 
+  source-dirs: src
+  default-extensions:
+    - CApiFFI
+    - ForeignFunctionInterface
+    - FlexibleInstances
+    - TupleSections
+    - TypeSynonymInstances
   exposed-modules:
    - Data.Number.Flint
    - Data.Number.Flint.Flint

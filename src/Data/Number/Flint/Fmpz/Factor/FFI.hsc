@@ -1,7 +1,3 @@
-{-# language
-  TupleSections
-#-}
-
 module Data.Number.Flint.Fmpz.Factor.FFI (
   -- * Integer factorisation
   -- * Memory management

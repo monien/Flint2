@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
-  
 module Data.Number.Flint.Fmpz.Mod.FFI (
   -- * Arithmetic modulo integers
   -- * Context object

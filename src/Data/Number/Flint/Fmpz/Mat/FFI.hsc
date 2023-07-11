@@ -1,10 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , TupleSections
-  #-}
-
 module Data.Number.Flint.Fmpz.Mat.FFI (
   -- * Matrices over the integers
     FmpzMat (..)

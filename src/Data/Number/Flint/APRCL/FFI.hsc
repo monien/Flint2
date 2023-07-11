@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
-
 module Data.Number.Flint.APRCL.FFI (
   -- * APRCL primality testing
     APRCLConfig (..)
@@ -143,8 +134,8 @@ instance Storable CAPRCLConfig where
   sizeOf    _ = #{size      aprcl_config}
   {-# INLINE alignment #-}
   alignment _ = #{alignment aprcl_config}
-  peek = undefined
-  poke = undefined
+  peek = error "CAPRCLConfig.peek: not implemented."
+  poke = error "CAPRCLConfig.poke: not implemented."
 
 newAPRCLConfigGauss n = do
   x <- mallocForeignPtr
@@ -315,8 +306,8 @@ instance Storable CUnityZpq where
   sizeOf _ = #{size unity_zpq}
   {-# INLINE alignment #-}
   alignment _ = #{alignment unity_zpq}
-  peek = undefined
-  poke = undefined
+  peek = error "CUnityZpq.peek: not implemented."
+  poke = error "CUnityZpq.poke: not implemented."
 
 newUnityZpq q p n = do
   x <- mallocForeignPtr
@@ -345,7 +336,7 @@ instance Storable CUnityZp where
     <*> #{peek _unity_zp, p   } ptr
     <*> #{peek _unity_zp, exp } ptr
     <*> #{peek _unity_zp, ctx } ptr
-  poke = undefined
+  poke = error "CUnityZp.poke: not implemented."
 
 newUnityZp p exp n = do
   x <- mallocForeignPtr

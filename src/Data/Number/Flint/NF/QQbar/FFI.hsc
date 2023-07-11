@@ -1,13 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  , ScopedTypeVariables
-  #-}
-
 module Data.Number.Flint.NF.QQbar.FFI (
   -- * Algebraic numbers represented by minimal polynomials
   -- * Types

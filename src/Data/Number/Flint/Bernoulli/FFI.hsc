@@ -54,8 +54,8 @@ type CBernoulliRev = CFlint BernoulliRev
 instance Storable CBernoulliRev where
   sizeOf    _ = #{size      bernoulli_rev_t}
   alignment _ = #{alignment bernoulli_rev_t}
-  peek = undefined
-  poke = undefined
+  peek = error "CBernoulliRev.peek: not implemented."
+  poke = error "CBernoulliRev.poke: not implemented."
   
 newBernoulliRev n = do
   x <- mallocForeignPtr
