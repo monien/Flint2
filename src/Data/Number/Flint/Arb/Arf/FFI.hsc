@@ -1,11 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
 
 module Data.Number.Flint.Arb.Arf.FFI (
   -- * Arbitrary-precision floating-point numbers

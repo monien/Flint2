@@ -1,11 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
 
 module Data.Number.Flint.NMod.Vec.FFI (
   -- * Vectors over integers mod n (word-size n)

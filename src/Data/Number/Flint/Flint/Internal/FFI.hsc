@@ -1,6 +1,3 @@
-{-# language
-  TypeFamilies
-#-}
 
 module Data.Number.Flint.Flint.Internal.FFI (
     Flint (..)

@@ -1,11 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
 
 module Data.Number.Flint.Acb.Acf.FFI (
   -- * Complex floating-point numbers

@@ -1,11 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
 
 module Data.Number.Flint.Fq.NMod.Mat.FFI  (
   -- * Matrices over finite fields (word-size characteristic)

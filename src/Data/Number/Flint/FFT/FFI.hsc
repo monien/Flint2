@@ -1,11 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
 
 module Data.Number.Flint.FFT.FFI (
   -- * Schoenhage-Strassen FFT

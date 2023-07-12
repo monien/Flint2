@@ -1,9 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , TupleSections
-  #-}
 
 module Data.Number.Flint.Arb.Mat.FFI (
   -- * Matrices over the real numbers

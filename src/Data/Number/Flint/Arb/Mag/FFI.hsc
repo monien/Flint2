@@ -1,9 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , TupleSections
-  #-}
 
 module Data.Number.Flint.Arb.Mag.FFI (
   -- * Fixed-precision unsigned floating-point numbers for bounds

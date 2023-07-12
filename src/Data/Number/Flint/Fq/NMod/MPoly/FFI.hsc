@@ -1,9 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , TupleSections
-  #-}
 
 module Data.Number.Flint.Fq.NMod.MPoly.FFI (
   -- * Multivariate polynomials over finite fields of word-sized characteristic

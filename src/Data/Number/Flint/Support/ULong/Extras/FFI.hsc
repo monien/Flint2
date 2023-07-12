@@ -1,17 +1,3 @@
-{-# language 
-    GADTs
-  , ScopedTypeVariables 
-  , UndecidableInstances
-  , DataKinds 
-  , TypeFamilies 
-  , TypeApplications
-  , TypeOperators 
-  , PolyKinds
-  , KindSignatures
-  , TypeSynonymInstances
-  , TupleSections
-  , FlexibleInstances 
- #-}
 
 module Data.Number.Flint.Support.ULong.Extras.FFI (
   -- * Arithmetic and number-theoretic functions for single-word integers

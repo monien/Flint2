@@ -1,9 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , TupleSections
-  #-}
 
 module Data.Number.Flint.Fmpz.Mod.MPoly.Factor.FFI (
   -- * Factorisation of multivariate polynomials over the integers mod n

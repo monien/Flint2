@@ -1,11 +1,3 @@
-{-# language 
-  GADTs, 
-  ScopedTypeVariables,
-  DataKinds, 
-  TypeFamilies, 
-  TypeOperators 
-  #-}
-
 module Data.Number.Flint.Arb.RealField (
   RF(..)
 , RF'(..)
@@ -77,8 +69,8 @@ instance forall n. KnownNat n => Num (RF n) where
   abs = lift1 arb_abs
   {-# INLINE fromInteger #-}
   fromInteger x = unsafePerformIO $ do
-    result <- newArb
     let prec = fromInteger $ natVal (Proxy :: Proxy n)
+    result <- newArb
     withArb result $ \result -> do
       withCString (show x) $ \s -> do
         flag <- arb_set_str result s prec

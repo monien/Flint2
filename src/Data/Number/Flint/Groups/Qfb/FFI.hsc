@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  , ScopedTypeVariables
-  #-}
 
 module Data.Number.Flint.Groups.Qfb.FFI (
   -- * Binary quadratic forms

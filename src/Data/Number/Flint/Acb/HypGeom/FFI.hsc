@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , EmptyDataDecls
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  #-}
 
 module Data.Number.Flint.Acb.Hypgeom.FFI (
   -- * Hypergeometric functions of complex variables

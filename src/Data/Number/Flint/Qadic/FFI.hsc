@@ -1,13 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  , LambdaCase
-  , FlexibleContexts
-  #-}
 
 module Data.Number.Flint.Qadic.FFI (
   -- * Unramified extensions over p-adic numbers
@@ -292,11 +282,13 @@ qadic_ctx_print ctx = do
   fmpz_print a
   forM_ [1 .. fromIntegral len - 1] $ \k -> do
     i <- peek (j `advancePtr` k)
-    fmpz_is_zero (a `advancePtr` k) >>= \case
+    flag1 <- fmpz_is_zero (a `advancePtr` k)
+    case flag1 of 
       1 -> return ()
       _ -> do
         putStr " + " 
-        fmpz_is_one (a `advancePtr` k) >>= \case
+        flag <- fmpz_is_one (a `advancePtr` k)
+        case flag of 
           1 -> return ()
           _ -> do
             fmpz_print (a `advancePtr` k)

@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  , ScopedTypeVariables
-  #-}
   
 module Data.Number.Flint.NF.Elem.FFI (
   -- * __nf_elem.h__ -- number field elements

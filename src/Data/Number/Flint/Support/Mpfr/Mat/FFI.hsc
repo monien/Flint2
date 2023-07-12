@@ -1,8 +1,3 @@
-{-# language
-    TupleSections
-  , TypeSynonymInstances
-  , FlexibleInstances
-#-}
 
 module Data.Number.Flint.Support.Mpfr.Mat.FFI (
   -- * Matrices of MPFR floating-point numbers

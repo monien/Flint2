@@ -1,5 +1,4 @@
 {-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
-{-# language TypeFamilies #-}
 module Data.Number.Flint.Fmpz.Poly.Instances (
     FmpzPoly (..)
   , module GHC.Exts

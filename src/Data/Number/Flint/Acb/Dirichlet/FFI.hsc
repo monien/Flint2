@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  , ScopedTypeVariables
-  #-}
 
 module Data.Number.Flint.Acb.Dirichlet.FFI (
   -- * Dirichlet L-functions, Riemann zeta and related functions

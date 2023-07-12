@@ -1,10 +1,3 @@
-{-# language 
-  GADTs, 
-  ScopedTypeVariables,
-  DataKinds, 
-  TypeFamilies, 
-  TypeOperators 
-  #-}
 
 module Data.Number.Flint.Acb.ComplexField (
   CF(..)

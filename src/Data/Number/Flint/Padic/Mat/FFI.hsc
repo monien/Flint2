@@ -1,11 +1,3 @@
-{-# language
-  CApiFFI
-, FlexibleInstances
-, ForeignFunctionInterface
-, MultiParamTypeClasses
-, TupleSections
-, TypeFamilies
-#-}
 
 module Data.Number.Flint.Padic.Mat.FFI (
   -- * Matrices over p-adic numbers

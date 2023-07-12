@@ -1,8 +1,3 @@
-{-# language
-    TupleSections
-  , TypeSynonymInstances
-  , FlexibleInstances
-#-}
 
 module Data.Number.Flint.ThreadPool.FFI (
   -- * Thread pool

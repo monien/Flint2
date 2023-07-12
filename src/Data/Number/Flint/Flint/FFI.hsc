@@ -1,10 +1,3 @@
-{-# language
-    CApiFFI
-  , ForeignFunctionInterface
-  , TupleSections
-  , TypeSynonymInstances
-  , FlexibleInstances
-  #-}
   
 module Data.Number.Flint.Flint.FFI (
   -- * Allocation Functions

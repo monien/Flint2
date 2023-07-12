@@ -1,12 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , MultiParamTypeClasses
-  , TupleSections
-  , TypeFamilies
-  , ScopedTypeVariables
-  #-}
 
 module Data.Number.Flint.FFT.Small.FFI (
   -- * FFT modulo word-size primes

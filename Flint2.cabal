@@ -283,6 +283,13 @@ library
       FlexibleInstances
       TupleSections
       TypeSynonymInstances
+      RankNTypes
+      ScopedTypeVariables
+      GADTs
+      DataKinds
+      TypeFamilies
+      TypeOperators
+      KindSignatures
   c-sources:
       csrc/fmpz/init.c
       csrc/fmpz/clear.c

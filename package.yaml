@@ -36,7 +36,14 @@ library:
     - ForeignFunctionInterface
     - FlexibleInstances
     - TupleSections
+    - RankNTypes
+    - ScopedTypeVariables
+    - GADTs
+    - DataKinds
+    - TypeFamilies
+    - TypeOperators
     - TypeSynonymInstances
+    - KindSignatures
   exposed-modules:
    - Data.Number.Flint
    - Data.Number.Flint.Flint

@@ -1,9 +1,3 @@
-{-# language
-    CApiFFI
-  , FlexibleInstances
-  , ForeignFunctionInterface
-  , TupleSections
-  #-}
 
 module Data.Number.Flint.Fmpz.Poly.FFI (
   -- * Univariate polynomials over the integers
@@ -4509,4 +4503,3 @@ foreign import ccall "fmpz_poly.h _fmpz_poly_theta_qexp"
 -- factor of \(f\).
 foreign import ccall "fmpz_poly.h fmpz_poly_CLD_bound"
   fmpz_poly_CLD_bound :: Ptr CFmpz -> Ptr CFmpzPoly -> CLong -> IO ()
-
