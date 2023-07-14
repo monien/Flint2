@@ -1558,7 +1558,7 @@ foreign import ccall "ulong_extras.h n_factor_SQUFOF"
 -- @FLINT_FACTOR_SQUFOF_ITERS@. If that fails an error results and the
 -- program aborts. However this should not happen in practice.
 foreign import ccall "ulong_extras.h n_factor"
-  n_factor :: Ptr (Ptr CNFactor) -> CULong -> CInt -> IO ()
+  n_factor :: Ptr CNFactor -> CULong -> CInt -> IO ()
 
 -- | /n_factor_trial_partial/ /factors/ /n/ /prod/ /num_primes/ /limit/ 
 --

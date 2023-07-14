@@ -948,9 +948,43 @@ testLLL r deg = do
             endl
   return ()
 
-testArbRoots = do
+testAcbRoots = do
   let prec = 1024
-      poly = fromList [5,1,0,3,0,1] :: FmpzPoly
-  apoly <- newArbPolyFromFmpzPoly poly prec
-  print apoly
-  
+      maxIter = 100
+      poly = fromList [1,6,-1,2,0,1] :: FmpzPoly
+  print poly
+  print $ factor poly
+  cpoly <- newAcbPolyFromFmpzPoly poly prec
+  withAcbPoly cpoly $ \cpoly -> do
+    n <- acb_poly_degree cpoly 
+    roots <- _acb_vec_init n
+    acb_poly_find_roots roots cpoly nullPtr maxIter prec
+    putStrLn "\nroots:\n"
+    forM_ [0..n-1] $ \j -> do
+      acb_printn (roots `advancePtr` (fromIntegral j)) 16 arb_str_no_radius
+      endl
+  return ()
+
+testULong = do
+  f <- newNFactor
+  withNFactor f $ \f -> do
+    n_factor f 60 1
+    CNFactor num exp p <- peek f
+    factorization <- forM [0..fromIntegral num-1] $ \j -> do
+      n <- peek $ exp `advancePtr` j
+      x <- peek $ p   `advancePtr` j
+      return $ (x, n)
+    print factorization
+
+testULongPrime = do
+  let x = 1 :: Fmpz
+  prime_iter <- newNPrimes
+  withNPrimes prime_iter $ \prime_iter -> do
+    replicateM_ 100 $ do
+      prime <- n_primes_next prime_iter
+      -- print prime
+      withFmpz x $ \x -> do
+        fmpz_mul_ui x x prime
+  print x
+  print $ factor x
+      

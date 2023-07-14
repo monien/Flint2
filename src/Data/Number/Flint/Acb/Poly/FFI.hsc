@@ -10,8 +10,12 @@ module Data.Number.Flint.Acb.Poly.FFI (
     AcbPoly (..)
   , CAcbPoly (..)
   , newAcbPoly
+  , newAcbPolyFromFmpzPoly
+  , newAcbPolyFromFmpqPoly
   , withAcbPoly
   , withNewAcbPoly
+  , withNewAcbPolyFromFmpzPoly
+  , withNewAcbPolyFromFmpqPoly
   -- * Memory management
   , acb_poly_init
   , acb_poly_clear
@@ -42,6 +46,7 @@ module Data.Number.Flint.Acb.Poly.FFI (
   , acb_poly_truncate
   , acb_poly_valuation
   -- * Input and output
+  , acb_poly_get_strd
   , acb_poly_printd
   , acb_poly_fprintd
   -- * Random generation
@@ -320,6 +325,22 @@ newAcbPoly = do
   addForeignPtrFinalizer p_acb_poly_clear p
   return $ AcbPoly p
 
+newAcbPolyFromFmpzPoly poly prec = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    acb_poly_init p
+    withFmpzPoly poly $ \poly -> acb_poly_set_fmpz_poly p poly prec
+  addForeignPtrFinalizer p_acb_poly_clear p
+  return $ AcbPoly p
+
+newAcbPolyFromFmpqPoly poly prec = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    acb_poly_init p
+    withFmpqPoly poly $ \poly -> acb_poly_set_fmpq_poly p poly prec
+  addForeignPtrFinalizer p_acb_poly_clear p
+  return $ AcbPoly p
+  
 -- | Use `AcbPoly` in f.
 {-# INLINE withAcbPoly #-}
 withAcbPoly (AcbPoly p) f = do
@@ -330,7 +351,15 @@ withAcbPoly (AcbPoly p) f = do
 withNewAcbPoly f = do
   p <- newAcbPoly
   withAcbPoly p f
-  
+
+withNewAcbPolyFromFmpzPoly poly prec f = do
+  p <- newAcbPolyFromFmpzPoly poly prec
+  withAcbPoly p f
+
+withNewAcbPolyFromFmpqPoly poly prec f = do
+  p <- newAcbPolyFromFmpqPoly poly prec
+  withAcbPoly p f
+
 instance Storable CAcbPoly where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size acb_poly_t}
