@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Support.Mpfr.Vec.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Support.Mpfr.Vec.FFI (
   -- * Vectors of MPFR floating-point numbers
   -- * Memory management

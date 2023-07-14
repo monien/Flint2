@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.NMod.Poly.Factor.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.NMod.Poly.Factor.FFI (
   -- * Factorisation of univariate polynomials over integers mod n (word-size n)
   -- * Types

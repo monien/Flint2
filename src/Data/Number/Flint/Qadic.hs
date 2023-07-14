@@ -1,8 +1,8 @@
-{-| 
-module      : Data.Number.Flint.Padic
-copyright   :  (c) 2020 Hartmut Monien
-license     :  BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+{-|
+module      :  Data.Number.Flint.Qadic
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 = Unramified extensions over p-adic numbers
 

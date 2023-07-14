@@ -1,9 +1,8 @@
-{- | 
-module      : Data.Number.Flint.Arb.Arf.FFI
-copyright   : (c) 2023 Hartmut Monien
-license     : BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
-
+{-|
+module      :  Data.Number.Flint.Arb.Arf
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 A variable of type @Arf@ holds an arbitrary-precision binary
 floating-point number: that is, a rational number of the form \(x c\dot 2^y\)

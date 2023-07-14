@@ -1,8 +1,8 @@
-{-| 
-module      : Data.Number.Flint.NF.QQbar
-copyright   :  (c) 2023 Hartmut Monien
-license     :  BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+{-|
+module      :  Data.Number.Flint.NF.QQbar
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 = Algebraic numbers
 

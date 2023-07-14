@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.NMod.Mat.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.NMod.Mat.FFI (
   -- * Matrices over integers mod n (word-size n)
     NModMat (..)

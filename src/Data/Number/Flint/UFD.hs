@@ -1,8 +1,9 @@
-{-| 
+{-|
 module      :  Data.Number.Flint.UFD
-copyright   :  (c) 2023 Hartmut Monien
-license     :  BSD-style (see LICENSE)
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
 maintainer  :  hmonien@uni-bonn.de
+
 = Unique factorization domain
 
 Specifically, a UFD is an integral domain (a nontrivial commutative ring in which the product of any two non-zero elements is non-zero) in which every non-zero non-unit element can be written as a product of prime elements (or irreducible elements), uniquely up to order and units.

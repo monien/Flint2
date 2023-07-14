@@ -1,8 +1,9 @@
-{- |
-module      : Data.Number.Flint.Dirichlet
-copyright   :  (c) 2023 Hartmut Monien
-license     :  BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+{-|
+module      :  Data.Number.Flint.Groups.Dirichlet
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+
 
 __Warning: the interfaces in this module are experimental and may change without notice.__
 

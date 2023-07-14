@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Flint.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Flint.FFI (
   -- * Allocation Functions
     flint_malloc

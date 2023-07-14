@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Fq.Embed.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Fq.Embed.FFI (
   -- * Computing isomorphisms and embeddings of finite fields
     fq_embed_gens

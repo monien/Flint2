@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Acb.Elliptic.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Acb.Elliptic.FFI (
   -- * Elliptic integrals and functions of complex variables
   -- * Complete elliptic integrals

@@ -1,9 +1,9 @@
 {-# OPTIONS_HADDOCK prune, ignore-exports #-}
 
 {-|
-module      :  Data.Number.Flint
-copyright   :  (c) 2019 Hartmut Monien 
-license     :  BSD-style (see LICENSE)
+module      :  Data.Number.Flint.Flint
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
 maintainer  :  hmonien@uni-bonn.de
 
 = What is FLINT ?

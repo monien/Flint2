@@ -1,8 +1,8 @@
-{- | 
-module      : Data.Number.Flint.Fmpz
-copyright   : (c) 2020 Hartmut Monien
-license     : BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+{-|
+module      :  Data.Number.Flint.Fmpz
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 An @Fmpz@ represents an integer.
 This module implements operations on integers.

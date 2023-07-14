@@ -1,8 +1,8 @@
-{- | 
-module      : Data.Number.Flint.Arb.FFI
-copyright   : (c) 2023 Hartmut Monien
-license     : BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+{-|
+module      :  Data.Number.Flint.Arb
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 An @Arb@ represents a ball over the real numbers, that is, an interval
 \([m \pm r] \equiv [m-r, m+r]\) where the midpoint \(m\) and the radius

@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Acb.HypGeom.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Acb.Hypgeom.FFI (
   -- * Hypergeometric functions of complex variables
   -- * Rising factorials

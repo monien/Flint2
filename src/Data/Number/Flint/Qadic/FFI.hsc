@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Qadic.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Qadic.FFI (
   -- * Unramified extensions over p-adic numbers
   -- 

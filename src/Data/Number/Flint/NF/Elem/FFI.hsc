@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.NF.Elem.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.NF.Elem.FFI (
   -- * __nf_elem.h__ -- number field elements
     NFElem (..)

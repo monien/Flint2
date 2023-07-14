@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Arb.Hypgeom.FFI.org
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Arb.Hypergeom.FFI (
   -- * Hypergeometric functions of real variables
   -- * Rising factorials

@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Fq.NMod.Poly.FFi
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Fq.NMod.Poly.FFI (
   -- * Univariate polynomials over finite fields (word-size characteristic)
     FqNModPoly (..)

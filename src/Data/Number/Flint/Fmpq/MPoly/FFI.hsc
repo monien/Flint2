@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Fmpq.MPoly.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Fmpq.MPoly.FFI (
   -- * Multivariate polynomials over the rational numbers
     FmpqMPoly (..)

@@ -1,3 +1,9 @@
+{-|
+module      :  Data.Number.Flint.Fmpz.Poly.Q.FFI
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+-}
 module Data.Number.Flint.Fmpz.Poly.Q.FFI (
   -- * Rational functions over the rational numbers
     FmpzPolyQ (..)

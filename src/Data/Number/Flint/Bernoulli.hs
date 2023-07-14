@@ -1,4 +1,9 @@
-{- |
+{-|
+module      :  Data.Number.Flint.Bernoulli
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+
 This module provides helper functions for exact or approximate
 calculation of the Bernoulli numbers, which are defined by the
 exponential generating function

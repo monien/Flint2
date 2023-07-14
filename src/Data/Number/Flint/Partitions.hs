@@ -1,4 +1,9 @@
-{- |
+{-|
+module      :  Data.Number.Flint.Partitions
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
+
 This module implements the asymptotically fast algorithm for evaluating
 the integer partition function \(p(n)\) described in < [Joh2012]>. The
 idea is to evaluate a truncation of the Hardy-Ramanujan-Rademacher
