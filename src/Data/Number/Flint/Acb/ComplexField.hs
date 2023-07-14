@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.ComplexField (
   CF(..)
 , RF'(..)

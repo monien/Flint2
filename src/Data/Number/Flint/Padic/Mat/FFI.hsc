@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Padic.Mat.FFI (
   -- * Matrices over p-adic numbers
     PadicMat (..)

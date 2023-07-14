@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   -- * Polynomials over integers mod n
     FmpzModPoly (..)

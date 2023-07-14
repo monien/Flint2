@@ -282,13 +282,13 @@ library
       ForeignFunctionInterface
       FlexibleInstances
       TupleSections
-      TypeSynonymInstances
       RankNTypes
       ScopedTypeVariables
       GADTs
       DataKinds
       TypeFamilies
       TypeOperators
+      TypeSynonymInstances
       KindSignatures
   c-sources:
       csrc/fmpz/init.c

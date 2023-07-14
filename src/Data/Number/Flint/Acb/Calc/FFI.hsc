@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.Calc.FFI (
   -- * Calculus with complex-valued functions
   -- * Integration function

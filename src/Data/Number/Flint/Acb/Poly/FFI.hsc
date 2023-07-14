@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.Poly.FFI (
   -- * Polynomials over the complex numbers
   -- * Types

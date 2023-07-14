@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Support.Mpf.Mat.FFI (
   -- * Matrices of MPF floating-point numbers
     MpfMat (..)

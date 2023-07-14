@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.Zech.Mat.FFI (
   -- * Matrices over finite fields (Zech logarithm representation)
     FqZechMat (..)

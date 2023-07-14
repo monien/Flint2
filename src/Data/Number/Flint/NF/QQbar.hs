@@ -1,4 +1,4 @@
-{- | 
+{-| 
 module      : Data.Number.Flint.NF.QQbar
 copyright   :  (c) 2023 Hartmut Monien
 license     :  BSD-style (see LICENSE)

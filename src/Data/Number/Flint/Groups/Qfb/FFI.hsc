@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Groups.Qfb.FFI (
   -- * Binary quadratic forms
     Qfb (..)

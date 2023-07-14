@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NMod.Poly.Mat.FFI (
   -- * Matrices of univariate polynomials over integers mod n (word-size n)
     NModPolyMat (..)

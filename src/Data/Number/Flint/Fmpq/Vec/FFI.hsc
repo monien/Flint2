@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpq.Vec.FFI (
   -- * Vectors over rational numbers
   -- * Memory management

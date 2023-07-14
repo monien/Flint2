@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Qadic.FFI (
   -- * Unramified extensions over p-adic numbers
   -- 

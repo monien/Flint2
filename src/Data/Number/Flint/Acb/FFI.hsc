@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.FFI (
   -- * Complex numbers
   -- * Types

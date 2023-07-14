@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpz.Vec.FFI (
   -- * Vectors of integers
   -- * Memory management

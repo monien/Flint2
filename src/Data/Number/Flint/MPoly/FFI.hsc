@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.MPoly.FFI (
   -- * Support functions for multivariate polynomials
     MPolyCtx (..)

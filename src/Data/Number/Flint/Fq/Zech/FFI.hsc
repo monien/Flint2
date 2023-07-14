@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.Zech.FFI (
   -- * Finite fields (Zech logarithm representation)
     FqZech (..)

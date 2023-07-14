@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpz.Poly.FFI (
   -- * Univariate polynomials over the integers
     FmpzPoly (..)

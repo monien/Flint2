@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Groups.Bool.Mat.FFI (
   -- * Matrices over booleans
     BoolMat (..)

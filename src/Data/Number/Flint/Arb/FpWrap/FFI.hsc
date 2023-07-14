@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.FpWrap.FFI (
   -- * Floating-point wrappers of Arb mathematical functions
   -- * Option and return flags

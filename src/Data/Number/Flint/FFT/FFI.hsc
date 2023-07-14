@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.FFT.FFI (
   -- * Schoenhage-Strassen FFT
   -- * Split\/combine FFT coefficients

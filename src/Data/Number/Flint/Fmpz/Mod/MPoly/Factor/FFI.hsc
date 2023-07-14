@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpz.Mod.MPoly.Factor.FFI (
   -- * Factorisation of multivariate polynomials over the integers mod n
     FmpzModMPolyFactor (..)

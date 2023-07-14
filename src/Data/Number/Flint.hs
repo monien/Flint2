@@ -1,6 +1,6 @@
 {-# OPTIONS_HADDOCK prune, ignore-exports #-}
 
-{- |
+{-|
 module      :  Data.Number.Flint
 copyright   :  (c) 2019 Hartmut Monien 
 license     :  BSD-style (see LICENSE)

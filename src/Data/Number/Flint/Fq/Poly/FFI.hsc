@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.Poly.FFI (
   -- * Univariate polynomials over finite fields
   -- * Types

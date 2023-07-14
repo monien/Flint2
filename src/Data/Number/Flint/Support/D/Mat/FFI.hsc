@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Support.D.Mat.FFI (
   -- * Double precision matrices
     DMat (..)

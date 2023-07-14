@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Padic.FFI (
   -- * Data structures
   -- A \(p\)-adic number of type @CPadic@ comprises a unit \(u\), a

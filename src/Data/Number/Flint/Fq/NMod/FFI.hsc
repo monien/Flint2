@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.NMod.FFI (
   -- * Finite fields (word-size characteristic)
     FqNMod (..)

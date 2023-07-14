@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.FFI (
   -- * Real numbers
     Arb (..)

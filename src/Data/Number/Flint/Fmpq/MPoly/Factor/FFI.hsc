@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpq.MPoly.Factor.FFI (
   -- * Factorisation of multivariate polynomials over the rational numbers
   -- * Memory management

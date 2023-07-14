@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.Calc.FFI (
   -- * Calculus with real-valued functions
     ArfInterval (..)

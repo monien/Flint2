@@ -1,4 +1,4 @@
-{- | 
+{-| 
 module      : Data.Number.Flint.Fq.Vec
 copyright   : (c) 2022 Hartmut Monien
 license     : MIT-style (see LICENSE)

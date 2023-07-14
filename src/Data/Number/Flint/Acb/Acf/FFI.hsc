@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.Acf.FFI (
   -- * Complex floating-point numbers
     Acf (..)

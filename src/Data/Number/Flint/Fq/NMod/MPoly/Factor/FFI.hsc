@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.NMod.MPoly.Factor.FFI (
   -- * Factorisation of multivariate polynomials over finite fields of
   -- word-sized characteristic

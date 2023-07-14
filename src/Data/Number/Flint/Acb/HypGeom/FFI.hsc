@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.Hypgeom.FFI (
   -- * Hypergeometric functions of complex variables
   -- * Rising factorials

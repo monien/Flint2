@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.Modular.FFI (
   -- * Modular forms of complex variables
   -- * The modular group

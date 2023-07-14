@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NMod.FFI (
   -- * Integers mod n (word-size n)
     NMod (..)

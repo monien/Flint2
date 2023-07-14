@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NMod.Poly.FFI (
   -- * Univariate polynomials over integers mod n (word-size n)
   -- * Types

@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.Poly.FFI (
   -- * Polynomials over the real numbers
     ArbPoly (..)

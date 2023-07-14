@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.Mat.FFI (
   -- * Matrices over the complex numbers
     AcbMat (..)

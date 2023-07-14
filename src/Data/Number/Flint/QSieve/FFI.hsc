@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.QSieve.FFI (
   -- * Quadratic sieve
     Qs (..)

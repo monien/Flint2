@@ -1,4 +1,3 @@
-  
 module Data.Number.Flint.NMod.Mat.FFI (
   -- * Matrices over integers mod n (word-size n)
     NModMat (..)

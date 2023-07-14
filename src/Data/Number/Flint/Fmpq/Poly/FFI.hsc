@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpq.Poly.FFI (
   -- * Univariate polynomials over the rational numbers
     FmpqPoly(..)

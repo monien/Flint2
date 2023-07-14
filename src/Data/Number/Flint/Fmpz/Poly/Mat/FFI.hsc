@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpz.Poly.Mat.FFI (
   -- * Matrices of polynomials over the integers
     FmpzPolyMat (..)

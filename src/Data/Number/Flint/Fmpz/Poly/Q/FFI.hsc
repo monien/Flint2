@@ -1,4 +1,3 @@
-  
 module Data.Number.Flint.Fmpz.Poly.Q.FFI (
   -- * Rational functions over the rational numbers
     FmpzPolyQ (..)

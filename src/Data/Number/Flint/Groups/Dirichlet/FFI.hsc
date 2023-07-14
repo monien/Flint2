@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Groups.Dirichlet.FFI (
   -- * Dirichlet characters
   -- * Multiplicative group modulo /q/

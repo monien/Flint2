@@ -1,4 +1,4 @@
-{- | 
+{-| 
 module      : Data.Number.Flint.Fq.Mat
 copyright   : (c) 2022 Hartmut Monien
 license     : MIT-style (see LICENSE)

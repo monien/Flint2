@@ -1,4 +1,4 @@
-{- | 
+{-| 
 module      : Data.Number.Flint.Padic
 copyright   :  (c) 2020 Hartmut Monien
 license     :  BSD-style (see LICENSE)

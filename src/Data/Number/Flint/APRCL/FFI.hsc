@@ -123,11 +123,12 @@ data APRCLConfig =
     Gauss  {-# UNPACK #-} !(ForeignPtr CAPRCLConfig)
   | Jacobi {-# UNPACK #-} !(ForeignPtr CAPRCLConfig)
   
-data CAPRCLConfig = CAPRCLConfig CULong
-                                 (Ptr CFmpz)
-                                 (Ptr CNFactor)
-                                 (Ptr CFmpz)
-                                 (Ptr CInt)
+data CAPRCLConfig =
+  CAPRCLConfig CULong
+               (Ptr CFmpz)
+               (Ptr CNFactor)
+               (Ptr CFmpz)
+               (Ptr CInt)
   
 instance Storable CAPRCLConfig where
   {-# INLINE sizeOf #-}

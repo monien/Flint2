@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 module Data.Number.Flint.Arb.Mat.Instances where
 
 import System.IO.Unsafe

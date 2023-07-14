@@ -1,8 +1,8 @@
-{- | 
-module      : Data.Number.Flint.Padic
+{-| 
+module      :  Data.Number.Flint.Padic
 copyright   :  (c) 2023 Hartmut Monien
 license     :  BSD-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+maintainer  :  hmonien@uni-bonn.de
 
 = p-adic numbers
 

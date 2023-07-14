@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.FFT.Small.FFI (
   -- * FFT modulo word-size primes
   -- * Integer multiplication

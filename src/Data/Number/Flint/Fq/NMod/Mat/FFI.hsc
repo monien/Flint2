@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.NMod.Mat.FFI  (
   -- * Matrices over finite fields (word-size characteristic)
     FqNModMat (..)

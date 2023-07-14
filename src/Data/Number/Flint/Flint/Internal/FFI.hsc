@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Flint.Internal.FFI (
     Flint (..)
   , CFlint (..)

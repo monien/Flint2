@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.Arf.FFI (
   -- * Arbitrary-precision floating-point numbers
     Arf (..)

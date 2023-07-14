@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NMod.Vec.FFI (
   -- * Vectors over integers mod n (word-size n)
   -- * Memory management

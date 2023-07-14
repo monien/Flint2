@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpq.Mat.FFI (
   -- * Matrices over the rational numbers
     FmpqMat (..)

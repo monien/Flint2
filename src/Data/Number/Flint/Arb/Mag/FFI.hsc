@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.Mag.FFI (
   -- * Fixed-precision unsigned floating-point numbers for bounds
   -- * Types

@@ -1,4 +1,3 @@
-  
 module Data.Number.Flint.Flint.FFI (
   -- * Allocation Functions
     flint_malloc

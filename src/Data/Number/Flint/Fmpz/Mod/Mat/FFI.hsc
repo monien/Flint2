@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpz.Mod.Mat.FFI (
   -- * Matrices over integers mod n
     FmpzModMat (..)

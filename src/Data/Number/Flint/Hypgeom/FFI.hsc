@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Hypgeom.FFI (
   -- * Support for hypergeometric series
   -- * Types

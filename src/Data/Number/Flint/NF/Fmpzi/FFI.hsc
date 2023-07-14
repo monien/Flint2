@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NF.Fmpzi.FFI (
   -- * Gaussian integers
     Fmpzi (..)

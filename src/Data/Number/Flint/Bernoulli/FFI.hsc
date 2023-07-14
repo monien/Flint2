@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Bernoulli.FFI (
   -- * Support for Bernoulli numbers
   -- * Generation of Bernoulli numbers

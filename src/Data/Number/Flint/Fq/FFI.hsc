@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.FFI (
   -- * Finite fields
   -- ** Finite field element

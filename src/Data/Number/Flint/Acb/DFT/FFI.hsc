@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Acb.DFT.FFI (
   -- * Discrete Fourier transform
   -- DFTAlgorithms

@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fq.Zech.Poly.Factor.FFI (
   -- * Factorisation of univariate polynomials over finite fields
   -- (Zech logarithm representation)

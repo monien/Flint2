@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NF.FFI (
   -- Number fields
     NF (..)

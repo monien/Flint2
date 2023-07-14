@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.NMod.Types.FFI where
 
 import Foreign.C.Types

@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Groups.DLog.FFI (
   -- * Discrete logarithms mod ulong primes
   -- * Single evaluation

@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Padic.Poly.FFI (
   -- * Polynomials over p-adic numbers
     PadicPoly (..)

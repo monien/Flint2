@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Fmpq.FFI (
   -- * Rational numbers @Fmpq@
     Fmpq (..)

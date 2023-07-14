@@ -1,4 +1,3 @@
-
 module Data.Number.Flint.Arb.Mat.FFI (
   -- * Matrices over the real numbers
   -- * Types
