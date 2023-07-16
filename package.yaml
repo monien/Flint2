@@ -29,6 +29,18 @@ executables:
     - vector
     - Flint2
     extra-libraries: flint, gmp, mpfr
+  arb_plot:
+    source-dirs: app/arb_plot
+    main: complex_plot.hs
+    dependencies:
+      - QuickCheck
+      - mtl
+      - containers
+      - optparse-applicative
+      - JuicyPixels
+      - gloss
+      - gloss-juicy
+      - Flint2
       
 library:
   source-dirs: src
