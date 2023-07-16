@@ -25,11 +25,10 @@ import Control.Monad
 import Control.Monad.Reader
 import Text.Printf
 import Data.List (permutations)
-import Data.Ratio (numerator, denominator)
 
 import Data.Number.Flint
 
-main = testCF
+main = testBernoulliPoly
   
 type RR = RF 128
 type CC = CF 128
@@ -48,13 +47,8 @@ testCF = do
   
 testContinuedFraction = do
   let n = 16
-      x = sqrt (17 / 31)
-      r = toRational x
-      u = numerator r
-      v = denominator r
-      p = fromInteger u :: Fmpq
-      q = fromInteger v :: Fmpq
-      w = (p / q) ^ 2
+      x = sqrt (17 / 31) :: RF 128
+      w = (fromRational (toRational x) :: Fmpq)^2
   c <- _fmpz_vec_init n
   withFmpq w $ \w -> do
     withNewFmpq $ \rem -> do
@@ -104,17 +98,14 @@ testFmpzPolyMat = do
       fmpz_poly_mat_print a x
 
 testFmpq = do
-  let x = 2 :: Fmpq
-      y = 7 :: Fmpq
-      z = x / y
+  let z = 2 // 7
   print z
-  withFmpqNum z fmpz_print
-  endl
-  withFmpqDen z fmpz_print
-  endl
-  withFmpqDen z $ \x -> fmpz_set_ui x 13
-  print z
-  
+  print $ z^2
+  let b = bernoulliB 20
+  print b
+  print $ numerator b
+  print $ denominator b
+  print $ sum $ map (1//) [1..10]
   
 testRest = do
   x <- newFmpz
@@ -225,10 +216,11 @@ testQfb = do
       endl
   return ()
   
-
 testPadic = do
-  let p = 7 :: Fmpz
-  withNewPadicCtx p 0 128 padic_series $ \ctx -> do
+  withNewPadicCtx 7 0 128 padic_series $ \ctx -> do
+    putStr "padic ctx: "
+    padic_ctx_print ctx
+    endl
     withNewPadic $ \x -> do
       padic_set_ui x 2 ctx
       padic_print x ctx
@@ -360,15 +352,15 @@ testPerm = do
   endl
 
 testFq = do
-  let p = 7 :: Fmpz
-      poly = fromList [0, 3, 1] :: FmpzPoly
-  ctx <- newFqCtx p 4 "a"
+  ctx <- newFqCtx 7 5 "a"
   x <- newFq ctx
   tmp <- newFq ctx
   withFqCtx ctx $ \ctx -> do
+    fq_ctx_print ctx
+    endl
     withFq x $ \x -> do
       withFq tmp $ \tmp -> do 
-        withFmpzPoly poly $ \poly -> fq_set x poly ctx
+        withFmpzPoly (fromList [0, 3, 1]) $ \poly -> fq_set x poly ctx
         fq_print_pretty x ctx
         endl
         endl
@@ -602,11 +594,8 @@ testQQbar = do
 testAcbPoly = do
   let prec = 1024
       maxIter = 100
-      poly = fromList [7, 0, 5, 1] :: FmpzPoly
-  print poly
-  cpoly <- newAcbPoly
-  withFmpzPoly poly $ \poly -> do
-    withAcbPoly cpoly $ \cpoly -> do
+  withFmpzPoly (fromList [7, 0, 5, 1]) $ \poly -> do
+    withNewAcbPoly $ \cpoly -> do
       acb_poly_set_fmpz_poly cpoly poly prec
       putStrLn "complex polynomial."
       acb_poly_printd cpoly 16
@@ -624,6 +613,7 @@ testAcbPoly = do
         acb_poly_printd tmp 16
         endl
       _acb_vec_clear roots degree
+
 
 testAcbHypGeom = do
   let prec = 1024
@@ -649,12 +639,45 @@ testAcbHypGeom = do
             acb_printn z 16 arb_str_no_radius
             endl
 
-bernoulliNumber n = unsafePerformIO $ do
+testBernoulliPoly = do
+  let prec = 4096
+      maxIter = 200
+  withFmpqPoly (bernoulliPolynomial 256) $ \poly -> do
+    withNewAcbPoly $ \cpoly -> do
+      acb_poly_set_fmpq_poly cpoly poly prec
+      degree <- acb_poly_degree cpoly
+      roots <- _acb_vec_init degree
+      n <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
+      putStrLn $ "found " ++ show n ++ " roots:"
+      mode <- newCString "w"
+      fileName <- newCString "bernoulli_zeros.out"
+      out <- fopen fileName mode
+      forM_ [0..n-1] $ \j -> do
+        let ptr = roots `advancePtr` fromIntegral j
+        withNewArb $ \x -> do
+          withNewArb $ \y -> do 
+            acb_get_real x ptr
+            acb_get_imag y ptr
+            arb_fprintn out x 16 arb_str_no_radius
+            withCString " " $ \s -> fputs s out
+            arb_fprintn out y 16 arb_str_no_radius
+            withCString "\n" $ \s -> fputs s out
+      fclose out
+  return ()
+
+bernoulliB n = unsafePerformIO $ do
   b <- newFmpq
   withFmpq b $ \b -> do
     arith_bernoulli_number b $ fromIntegral n
   return b
 
+bernoulliPolynomial n = unsafePerformIO $ do
+  poly <- newFmpqPoly
+  withFmpqPoly poly $ \poly -> do
+    arith_bernoulli_polynomial poly (fromIntegral n)
+  return poly
+
+  
 testSeries = do
   let prec = 1024
   withNewAcbPoly $ \x -> do
@@ -978,13 +1001,27 @@ testULong = do
 
 testULongPrime = do
   let x = 1 :: Fmpz
-  prime_iter <- newNPrimes
-  withNPrimes prime_iter $ \prime_iter -> do
-    replicateM_ 100 $ do
+  withNewNPrimes $ \prime_iter -> do
+    replicateM_ 50 $ do
       prime <- n_primes_next prime_iter
       -- print prime
-      withFmpz x $ \x -> do
-        fmpz_mul_ui x x prime
+      when (prime < 100) $ do
+        withFmpz x $ \x -> do
+          fmpz_mul_ui x x prime
+        return ()
   print x
-  print $ factor x
-      
+  print $ map fst $ factor x
+  y <- newFmpz
+  withFmpz y $ \y -> fmpz_primorial y 100
+  print y
+  print $ map fst $ factor y
+  
+testEuler n k = do
+  let s = sum $ map (1//) [1..n]
+      r :: RF 1024
+      r = fromRational (toRational s) - log (fromIntegral n)
+      d = [bernoulliB j / fromIntegral (j*n^j) | j <- [2,4..2*k]]
+      result = r + fromRational (toRational (sum d - 1 // (2*n)))
+  -- print $ result
+  -- print $ result - euler
+  return $ toDouble $ result - euler

@@ -6,7 +6,8 @@ module Data.Number.Flint.Fmpq.Instances (
 import System.IO.Unsafe
 import Control.Monad
 
-import Data.Ratio
+import qualified Data.Ratio as Ratio
+import Data.Ratio ((%))
 
 import Foreign.Storable
 import Foreign.C.Types
@@ -85,8 +86,8 @@ instance Fractional Fmpq where
   recip = lift1 fmpq_inv
   fromRational x = unsafePerformIO $ do
     result <- newFmpq
-    let n = fromInteger $ numerator x
-        d = fromInteger $ denominator x
+    let n = fromInteger $ Ratio.numerator x
+        d = fromInteger $ Ratio.denominator x
     withFmpz n $ \n ->
       withFmpz d $ \d ->
         withFmpq result $ \result -> do

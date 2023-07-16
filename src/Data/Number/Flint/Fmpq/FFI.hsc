@@ -13,6 +13,9 @@ module Data.Number.Flint.Fmpq.FFI (
   , withFmpqNum
   , withFmpqDen
   , withNewFmpq
+  , (//)
+  , numerator
+  , denominator
   -- * Memory management
   , fmpq_init
   , fmpq_clear
@@ -198,6 +201,37 @@ withFmpqNum x f = do
 withFmpqDen x f = do
   withFmpq x $ \x -> do 
     f $ flip advancePtr 1 $ castPtr x
+
+-- Fmpz <-> Fmpq ---------------------------------------------------------------
+
+infixl 7 //
+
+(//) :: Fmpz -> Fmpz -> Fmpq
+(//) x y = unsafePerformIO $ do
+  result <- newFmpq
+  withFmpq result $ \result -> do
+    withFmpz x $ \x -> do
+      withFmpz y $ \y -> do
+        fmpq_set_fmpz_frac result x y
+  return result
+
+numerator :: Fmpq -> Fmpz
+numerator x = unsafePerformIO $ do
+  result <- newFmpz
+  withFmpz result $ \result -> do
+    withFmpq x $ \x -> do
+      withNewFmpz $ \tmp -> do
+        fmpq_get_fmpz_frac result tmp x
+  return result
+
+denominator :: Fmpq -> Fmpz
+denominator x = unsafePerformIO $ do
+  result <- newFmpz
+  withFmpz result $ \result -> do
+    withFmpq x $ \x -> do
+      withNewFmpz $ \tmp -> do
+        fmpq_get_fmpz_frac tmp result x
+  return result
 
 -- Memory management -----------------------------------------------------------
 

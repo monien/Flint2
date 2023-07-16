@@ -26,6 +26,7 @@ executables:
     dependencies: 
     - QuickCheck
     - mtl
+    - vector
     - Flint2
     extra-libraries: flint, gmp, mpfr
       
@@ -374,6 +375,7 @@ library:
     - csrc/fmpzi/fprint.c
     - csrc/fmpzi/get_str.c
     # Fq
+    - csrc/fq/ctx_get_str.c
     - csrc/fq_mat/get_str.c
     - csrc/fq_mat/get_str_pretty.c
     # FqNMod

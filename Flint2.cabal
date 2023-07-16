@@ -331,6 +331,7 @@ library
       csrc/dlog/inlines.c
       csrc/fmpzi/fprint.c
       csrc/fmpzi/get_str.c
+      csrc/fq/ctx_get_str.c
       csrc/fq_mat/get_str.c
       csrc/fq_mat/get_str_pretty.c
       csrc/fq_nmod/ctx_get_str.c
@@ -387,6 +388,7 @@ executable flint_test
     , QuickCheck
     , base >=4.7 && <5
     , mtl
+    , vector
   default-language: Haskell2010
 
 test-suite Flint2-test

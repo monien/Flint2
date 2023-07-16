@@ -10,6 +10,7 @@ module Data.Number.Flint.Support.ULong.Extras.FFI (
   , CNPrimes (..)
   , newNPrimes
   , withNPrimes
+  , withNewNPrimes
   , NFactor (..)
   , CNFactor (..)
   , newNFactor
@@ -219,6 +220,10 @@ newNPrimes = do
 withNPrimes (NPrimes x) f = do
   withForeignPtr x $ \px -> f px >>= return . (NPrimes x,)
 
+withNewNPrimes f = do
+  x <- newNPrimes
+  withNPrimes x f
+  
 -- n_ecm_t ---------------------------------------------------------------------
 
 data NEcm = NEcm {-# UNPACK #-} !(ForeignPtr CNEcm)

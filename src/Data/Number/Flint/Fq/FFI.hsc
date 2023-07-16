@@ -34,6 +34,7 @@ module Data.Number.Flint.Fq.FFI (
   , fq_ctx_degree
   , fq_ctx_prime
   , fq_ctx_order
+  , fq_ctx_get_str
   , fq_ctx_fprint
   , fq_ctx_print
   , fq_ctx_randtest
@@ -320,6 +321,9 @@ foreign import ccall "fq.h fq_ctx_prime"
 foreign import ccall "fq.h fq_ctx_order"
   fq_ctx_order :: Ptr CFmpz -> Ptr CFqCtx -> IO ()
 
+foreign import ccall "fq.h fq_ctx_get_str"
+  fq_ctx_get_str :: Ptr CFqCtx -> IO CString
+
 -- | /fq_ctx_fprint/ /file/ /ctx/ 
 -- 
 -- Prints the context information to @file@. Returns 1 for a success and a
@@ -330,9 +334,11 @@ foreign import ccall "fq.h fq_ctx_fprint"
 -- | /fq_ctx_print/ /ctx/ 
 -- 
 -- Prints the context information to @stdout@.
-foreign import ccall "fq.h fq_ctx_print"
-  fq_ctx_print :: Ptr CFqCtx -> IO ()
-
+fq_ctx_print :: Ptr CFqCtx -> IO ()
+fq_ctx_print ctx = do
+  printCStr fq_ctx_get_str ctx
+  return ()
+  
 -- | /fq_ctx_randtest/ /ctx/ 
 -- 
 -- Initializes @ctx@ to a random finite field. Assumes that @fq_ctx_init@

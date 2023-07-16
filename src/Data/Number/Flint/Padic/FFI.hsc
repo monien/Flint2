@@ -37,6 +37,7 @@ module Data.Number.Flint.Padic.FFI (
   , padic_ctx_init
   , padic_ctx_clear
   , _padic_ctx_pow_ui
+  , padic_ctx_print
   -- * Memory management
   , padic_init
   , padic_init2
@@ -290,6 +291,37 @@ foreign import ccall "padic.h padic_ctx_init"
   padic_ctx_init :: Ptr CPadicCtx
                  -> Ptr CFmpz -> CLong -> CLong -> PadicPrintMode -> IO ()
 
+-- | /padic_ctx_clear/ /ctx/ 
+-- 
+-- Clears all memory that has been allocated as part of the context.
+foreign import ccall "padic.h padic_ctx_clear"
+  padic_ctx_clear :: Ptr CPadicCtx -> IO ()
+
+foreign import ccall "padic.h &padic_ctx_clear"
+  p_padic_ctx_clear :: FunPtr (Ptr CPadicCtx -> IO ())
+
+-- | /_padic_ctx_pow_ui/ /rop/ /e/ /ctx/ 
+-- 
+-- Sets @rop@ to \(p^e\) as efficiently as possible, where @rop@ is
+-- expected to be an uninitialised @fmpz_t@.
+-- 
+-- If the return value is non-zero, it is the responsibility of the caller
+-- to clear the returned integer.
+foreign import ccall "padic.h _padic_ctx_pow_ui"
+  _padic_ctx_pow_ui :: Ptr CFmpz -> CULong -> Ptr CPadicCtx -> IO CInt
+  
+padic_ctx_print ctx = do
+  CPadicCtx p pinv pow min max mode <- peek ctx
+  putStr "p = "
+  fmpz_print p
+  putStrLn $ " (1/pinv = " ++ show (1/pinv)
+           ++ ", min = " ++ show min
+           ++ ", max = " ++ show max
+           ++ ", mode = " ++ show mode
+           ++ ")"
+  
+-- Print modes -----------------------------------------------------------------
+
 newtype PadicPrintMode = PadicPrintMode {_PadicPrintMode :: CInt} deriving Eq
 
 instance Storable PadicPrintMode where
@@ -312,25 +344,6 @@ instance Show PadicPrintMode where
 padic_terse    = PadicPrintMode #const PADIC_TERSE
 padic_series   = PadicPrintMode #const PADIC_SERIES
 padic_val_unit = PadicPrintMode #const PADIC_VAL_UNIT
-
--- | /padic_ctx_clear/ /ctx/ 
--- 
--- Clears all memory that has been allocated as part of the context.
-foreign import ccall "padic.h padic_ctx_clear"
-  padic_ctx_clear :: Ptr CPadicCtx -> IO ()
-
-foreign import ccall "padic.h &padic_ctx_clear"
-  p_padic_ctx_clear :: FunPtr (Ptr CPadicCtx -> IO ())
-
--- | /_padic_ctx_pow_ui/ /rop/ /e/ /ctx/ 
--- 
--- Sets @rop@ to \(p^e\) as efficiently as possible, where @rop@ is
--- expected to be an uninitialised @fmpz_t@.
--- 
--- If the return value is non-zero, it is the responsibility of the caller
--- to clear the returned integer.
-foreign import ccall "padic.h _padic_ctx_pow_ui"
-  _padic_ctx_pow_ui :: Ptr CFmpz -> CULong -> Ptr CPadicCtx -> IO CInt
 
 -- Memory management -----------------------------------------------------------
 
