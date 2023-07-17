@@ -31,7 +31,7 @@ executables:
     extra-libraries: flint, gmp, mpfr
   arb_plot:
     source-dirs: app/arb_plot
-    main: complex_plot.hs
+    main: ComplexPlot.hs
     dependencies:
       - QuickCheck
       - mtl
