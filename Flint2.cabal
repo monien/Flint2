@@ -375,7 +375,7 @@ library
   default-language: Haskell2010
 
 executable arb_plot
-  main-is: ComplexPlot.hs
+  main-is: Main.hs
   other-modules:
       ColorFunction
       Functions

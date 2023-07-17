@@ -15,31 +15,31 @@ import Data.Number.Flint.Acb.Hypgeom
 import Data.Number.Flint.Acb.Modular
 import Data.Number.Flint.Acb.Elliptic
 
-functions = Map.fromList [
-  ("gamma", gamma),
-  ("digamma", digamma),
-  ("lgamma", lgamma),
-  ("zeta", zeta),
-  ("erf", erf),
-  ("ai", ai),
-  ("bi", bi),
-  ("besselj", besselj),
-  ("bessely", bessely),
-  ("besseli", besseli),
-  ("besselk", besselk),
-  ("modj", modj),
-  ("modjq", modjq),
-  ("modeta", modeta),
-  ("modetaq", modetaq),
-  ("modlambda", modlambda),
-  ("modlambdaq", modlambdaq),
-  ("ellipp", ellipp),
-  ("ellipzeta", ellipzeta),
-  ("ellipsigma", ellipsigma),
-  ("barnesg", barnesg),
-  ("agm", agm),
-  ("fresnels", fresnels),
-  ("fresnelc", fresnelc)]
+functions = Map.fromList
+  [ ("gamma"     , gamma)
+  , ("digamma"   , digamma)
+  , ("lgamma"    , lgamma)
+  , ("zeta"      , zeta)
+  , ("erf"       , erf)
+  , ("ai"        , ai)
+  , ("bi"        , bi)
+  , ("besselj"   , besselj)
+  , ("bessely"   , bessely)
+  , ("besseli"   , besseli)
+  , ("besselk"   , besselk)
+  , ("modj"      , modj)
+  , ("modjq"     , modjq)
+  , ("modeta"    , modeta)
+  , ("modetaq"   , modetaq)
+  , ("modlambda" , modlambda)
+  , ("modlambdaq", modlambdaq)
+  , ("ellipp"    , ellipp)
+  , ("ellipzeta" , ellipzeta)
+  , ("ellipsigma", ellipsigma)
+  , ("barnesg"   , barnesg)
+  , ("agm"       , agm)
+  , ("fresnels"  , fresnels)
+  , ("fresnelc"  , fresnelc)]
 
 gamma   = acb_gamma
 digamma = acb_digamma
