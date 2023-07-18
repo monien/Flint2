@@ -7,7 +7,7 @@ maintainer  :  hmonien@uni-bonn.de
 An @Fmpz@ represents an integer.
 This module implements operations on integers.
 
-== Basic usage 
+== Example
 
 __Warning__: Instances like `Show` and `Num` are only
 avaible for some types without context.
@@ -16,14 +16,19 @@ avaible for some types without context.
 import Data.Number.Flint
 
 main = do 
-  let x = 7 :: Fmpz
-  print $ x*x
+  let x, y :: Fmpz
+      x = 7
+      y = 8
+      z = x * y
+  print z
+  print $ factor z
 @
 
 Running main yields:
 
 >>> main 
-49
+56
+[(2,3),(7,1)]
 
 == Using the @Flint@ library directly
 
@@ -32,10 +37,20 @@ import Data.Number.Flint
 
 main = do 
   x <- newFmpz
+  y <- newFmpz
+  z <- newFmpz
   withFmpz x $ \\x -> do
-    fmpz_set_ui x 7
-    fmpz_mul x x x
-    fmpz_print x
+    withFmpz y $ \\y -> do
+      withFmpz z $ \\z -> do
+        fmpz_set_ui x 7
+        fmpz_set_ui y 8
+        fmpz_mul z x y
+        fmpz_print z
+        fac <- newFmpzFactor
+        withFmpzFactor fac $ \\fac -> do
+           fmpz_factor fac z
+           fmpz_factor_print fac
+           putStr "\n"
 @
 
 Running main yields:

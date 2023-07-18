@@ -9,6 +9,8 @@ module Data.Number.Flint.Flint.FFI (
     flint_malloc
   , flint_realloc
   , flint_calloc
+  -- * Constants
+  , flint_bits
   -- * Random Numbers
   , FRandState (..)
   , CFRandState (..)
@@ -59,6 +61,11 @@ foreign import ccall "flint.h flint_realloc"
 -- memory.
 foreign import ccall "flint.h flint_calloc"
   flint_calloc :: Ptr CSize -> Ptr CSize -> IO ()
+
+-- Constants -------------------------------------------------------------------
+
+flint_bits :: CULong
+flint_bits = #const FLINT_BITS
 
 -- Random Numbers --------------------------------------------------------------
 

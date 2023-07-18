@@ -51,11 +51,11 @@ import Data.Number.Flint.Fmpz.Poly
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_poly_factor.h>
 
--- fmpz_poly_factor_t
-----------------------------------------------------------
+-- fmpz_poly_factor_t ----------------------------------------------------------
+
 data FmpzPolyFactor =
   FmpzPolyFactor {-# UNPACK #-} !(ForeignPtr CFmpzPolyFactor)
-data CFmpzPolyFactor = CFmpzPolyFactor CLong (Ptr CFmpzPoly) (Ptr CLong) CLong CLong 
+data CFmpzPolyFactor = CFmpzPolyFactor CFmpz (Ptr CFmpzPoly) (Ptr CLong) CLong CLong 
 
 instance Storable CFmpzPolyFactor where
   {-# INLINE sizeOf #-}

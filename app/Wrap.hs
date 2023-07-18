@@ -14,7 +14,7 @@ import Data.Number.Flint.Arb.FpWrap
 type CC = Complex CDouble
 type CD = Complex Double
 
-main = do
+mainWrap = do
   let z = 0:+1 :: CD
   print $ cexp z
   print $ airy_ai  1

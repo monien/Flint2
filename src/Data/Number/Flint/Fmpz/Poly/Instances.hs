@@ -19,6 +19,8 @@ import Foreign.Storable
 import Foreign.Marshal.Alloc (free)
 import Foreign.Marshal.Array (advancePtr)
 
+import Data.Bits
+
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly
@@ -96,12 +98,14 @@ instance UFD FmpzPoly where
       f <- newFmpzPolyFactor
       withFmpzPolyFactor f $ \f -> do
         fmpz_poly_factor f x
-        (CFmpzPolyFactor c d e n alloc) <- peek f
-        forM [0..fromIntegral n-1] $ \j -> do
+        CFmpzPolyFactor c d e n alloc <- peek f
+        let pre = (fromList [fromIntegral c] :: FmpzPoly, 1)
+        fac <- forM [0..fromIntegral n-1] $ \j -> do
           m <- peek (e `advancePtr` j)
           r <- newFmpzPoly
           withFmpzPoly r $ \r -> fmpz_poly_set r (d `advancePtr` j)
           return (r, fromIntegral m)
+        return $ if c == 1 then fac else pre : fac
 
 instance Arbitrary FmpzPoly where
   arbitrary = do

@@ -18,7 +18,7 @@ import Functions
 main = run =<< execParser opts where
   opts = info (parameters <**> helper) (
        fullDesc
-    <> progDesc "\nplotting special functions:\n"
+    <> progDesc "\nplotting special functions.\n"
     <> header "test program for arb.")
 
 run p@(Parameters xa xb ya yb w h colorMode f) = do
@@ -26,7 +26,7 @@ run p@(Parameters xa xb ya yb w h colorMode f) = do
     Just g -> do let u i j = evalSafe (xa, xb, w) (ya, yb, h) g i (h-j)
                      v i j = rgba colorMode (u i j)
                      img = ImageRGBA8 (generateImage v w h)
-                 savePngImage "arbplot.png" img
+                 savePngImage "arb_plot.png" img
                  case fromDynamicImage img of
                    Just picture -> display (InWindow "arb plot" (w, h) (0, 0))
                                            white picture
@@ -56,33 +56,33 @@ parameters :: Parser Parameters
 parameters = Parameters
   <$> option auto (
       long "xa" <>
-      value (-10.0) <>
+      value (-1.0) <>
       showDefault <>
       metavar "XA")
   <*> option auto (
       long "xb" <>
-      value 10.0 <>
+      value 1.0 <>
       showDefault <>
       metavar "XB")
   <*> option auto (
       long "ya" <>
-      value (-10.0) <>
+      value (0.0) <>
       showDefault <>
       metavar "YA") 
   <*> option auto (
       long "yb" <>
-      value 10 <>
+      value 2 <>
       showDefault <>
       metavar "YB")
   <*> option auto (
       long "width" <>
-      short 'w' <>
+      -- short 'w' <>
       value 512 <>
       showDefault <>
       metavar "WIDTH")
   <*> option auto (
       long "height" <>
-      short 'h' <>
+      -- short 'h' <>
       value 512 <>
       showDefault <>
       metavar "HEIGHT")
@@ -94,6 +94,7 @@ parameters = Parameters
   <*> strOption (
       short 'f' <>
       long "function" <>
+      value "modj" <> 
       help ("possible values: " ++ intercalate ", " (Map.keys functions)) <>
       metavar "FUNCTION")
 

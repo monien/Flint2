@@ -1025,3 +1025,15 @@ testEuler n k = do
   -- print $ result
   -- print $ result - euler
   return $ toDouble $ result - euler
+
+testPolyFactor = do
+  let poly = fromList [35,24,16,4,1] :: FmpzPoly
+      pol = 340282366920938463426481119284349108225 * poly
+  print pol
+  print $ factor pol
+  f <- newFmpzPolyFactor
+  withFmpzPolyFactor f $ \f -> do
+    withFmpzPoly pol $ \pol -> do
+      fmpz_poly_factor f pol
+      fmpz_poly_factor_print f
+      endl
