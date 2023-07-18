@@ -294,6 +294,7 @@ import Foreign.Storable
 import Foreign.Marshal ( free )
 
 import Data.Int ( Int64 )
+import Data.Bits
 import Data.Functor ((<&>))
 
 import Data.Number.Flint.Flint
@@ -309,7 +310,7 @@ import Data.Number.Flint.NMod.Types
 -- | Integer (opaque pointer)
 data Fmpz = Fmpz {-# UNPACK #-} !(ForeignPtr CFmpz)
 type CFmpz = #type fmpz
-  
+
 -- fmpz_preinv_t --------------------------------------------------
 
 -- | Data structure containing the /CFmpz/ pointer

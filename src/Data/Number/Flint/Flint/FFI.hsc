@@ -64,8 +64,12 @@ foreign import ccall "flint.h flint_calloc"
 
 -- Constants -------------------------------------------------------------------
 
+flint_release :: CULong
+flint_release = #const __FLINT_RELEASE
 flint_bits :: CULong
 flint_bits = #const FLINT_BITS
+flint_d_bits :: CULong
+flint_d_bits = #const FLINT_D_BITS
 
 -- Random Numbers --------------------------------------------------------------
 

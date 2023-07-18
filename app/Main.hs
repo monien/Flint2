@@ -5,6 +5,7 @@ module Main where
 import Test.QuickCheck
 
 import System.IO.Unsafe
+import Unsafe.Coerce
 
 import Data.Typeable
 
@@ -25,6 +26,7 @@ import Control.Monad
 import Control.Monad.Reader
 import Text.Printf
 import Data.List (permutations)
+import Data.Bits
 
 import Data.Number.Flint
 
@@ -1026,7 +1028,7 @@ testEuler n k = do
   -- print $ result - euler
   return $ toDouble $ result - euler
 
-testPolyFactor = do
+testFmpzPolyFactor = do
   let poly = fromList [35,24,16,4,1] :: FmpzPoly
       pol = 340282366920938463426481119284349108225 * poly
   print pol
@@ -1037,3 +1039,20 @@ testPolyFactor = do
       fmpz_poly_factor f pol
       fmpz_poly_factor_print f
       endl
+
+testFmpz = do
+  let x = 340282366920938463426481119284349108225 :: Fmpz
+      y = 18446744073709551615 :: Fmpz
+      z = 7 :: Fmpz
+  print =<< withFmpz x fmpz_abs_fits_ui
+  print =<< withFmpz y fmpz_abs_fits_ui
+  print =<< withFmpz z fmpz_abs_fits_ui
+  let Fmpz px = x
+      Fmpz py = y
+      Fmpz pz = z
+  print px
+  let ptr = unsafeCoerce ((unsafeCoerce px :: CULong) .<<. 2) :: Ptr CMpz
+  print ptr
+  w <- newFmpz
+  withFmpz w $ \w -> fmpz_set_mpz w ptr
+  print w

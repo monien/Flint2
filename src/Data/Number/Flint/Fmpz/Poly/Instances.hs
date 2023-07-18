@@ -99,14 +99,15 @@ instance UFD FmpzPoly where
       withFmpzPolyFactor f $ \f -> do
         fmpz_poly_factor f x
         CFmpzPolyFactor c d e n alloc <- peek f
-        let pre = (fromList [fromIntegral c] :: FmpzPoly, 1)
+        -- let pre = (fromList [fromIntegral c] :: FmpzPoly, 1)
         fac <- forM [0..fromIntegral n-1] $ \j -> do
           m <- peek (e `advancePtr` j)
           r <- newFmpzPoly
           withFmpzPoly r $ \r -> fmpz_poly_set r (d `advancePtr` j)
           return (r, fromIntegral m)
-        return $ if c == 1 then fac else pre : fac
-
+        -- return $ if c == 1 then fac else pre : fac
+        return fac
+        
 instance Arbitrary FmpzPoly where
   arbitrary = do
     c <- listOf arbitrary
