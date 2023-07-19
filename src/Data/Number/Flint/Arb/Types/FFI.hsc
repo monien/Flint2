@@ -103,10 +103,7 @@ instance Storable CArb where
   sizeOf _ = #{size arb_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment arb_t}
-  -- peek = error "CArb.peek undefined."
-  peek ptr = CArb
-    <$> #{peek arb_struct, mid} ptr
-    <*> #{peek arb_struct, rad} ptr
+  peek = error "CArb.peek undefined."
   poke = error "CArb.poke undefined."
   
 -- | string options

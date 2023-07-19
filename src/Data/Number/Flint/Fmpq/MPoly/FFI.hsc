@@ -207,7 +207,7 @@ import Data.Number.Flint.Fmpq.Poly
 -- fmpq_mpoly_t ----------------------------------------------------------------
 
 data FmpqMPoly = FmpqMPoly {-# UNPACK #-} !(ForeignPtr CFmpqMPoly)
-data CFmpqMPoly = CFmpqMPoly CFmpq CFmpzMPoly
+data CFmpqMPoly = CFmpqMPoly (Ptr CFmpq) CFmpzMPoly
 
 instance Storable CFmpqMPoly where
   sizeOf    _ = #{size      fmpq_mpoly_t}

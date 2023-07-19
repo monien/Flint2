@@ -328,12 +328,9 @@ withAcbIm (Acb p) f = do
 instance Storable CAcb where
   sizeOf    _ = #{size      acb_t}
   alignment _ = #{alignment acb_t}
-  peek ptr = CAcb
-    <$> #{peek acb_struct, real} ptr
-    <*> #{peek acb_struct, imag} ptr
+  peek = error "CAcb.peek not defined."
   poke = error "CAcb.poke not defined."
   
-
 -- Memory management -----------------------------------------------------------
 
 -- | /acb_init/ /x/ 

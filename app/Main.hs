@@ -26,11 +26,15 @@ import Control.Monad
 import Control.Monad.Reader
 import Text.Printf
 import Data.List (permutations)
-import Data.Bits
+
+import qualified Data.Vector as Vector
+import Data.Vector (Vector, (!))
 
 import Data.Number.Flint
 
-main = testBernoulliPoly
+import Types
+
+main = printAllTypes
   
 type RR = RF 128
 type CC = CF 128
@@ -51,6 +55,9 @@ testContinuedFraction = do
   let n = 16
       x = sqrt (17 / 31) :: RF 128
       w = (fromRational (toRational x) :: Fmpq)^2
+  printCF n w
+  
+printCF n w = do
   c <- _fmpz_vec_init n
   withFmpq w $ \w -> do
     withNewFmpq $ \rem -> do
@@ -229,6 +236,10 @@ testPadic = do
       endl
       padic_sqrt x x ctx
       padic_print x ctx
+      endl
+      CPadic a b c <- peek x
+      putStrLn "examine padic structure:"
+      fmpz_print a
       endl
       padic_neg x x ctx
       padic_print x ctx
@@ -1032,7 +1043,9 @@ testFmpzPolyFactor = do
   let poly = fromList [35,24,16,4,1] :: FmpzPoly
       pol = 340282366920938463426481119284349108225 * poly
   print pol
+  endl
   print $ factor pol
+  endl
   f <- newFmpzPolyFactor
   withFmpzPolyFactor f $ \f -> do
     withFmpzPoly pol $ \pol -> do
@@ -1040,19 +1053,59 @@ testFmpzPolyFactor = do
       fmpz_poly_factor_print f
       endl
 
-testFmpz = do
-  let x = 340282366920938463426481119284349108225 :: Fmpz
-      y = 18446744073709551615 :: Fmpz
-      z = 7 :: Fmpz
-  print =<< withFmpz x fmpz_abs_fits_ui
-  print =<< withFmpz y fmpz_abs_fits_ui
-  print =<< withFmpz z fmpz_abs_fits_ui
-  let Fmpz px = x
-      Fmpz py = y
-      Fmpz pz = z
-  print px
-  let ptr = unsafeCoerce ((unsafeCoerce px :: CULong) .<<. 2) :: Ptr CMpz
-  print ptr
-  w <- newFmpz
-  withFmpz w $ \w -> fmpz_set_mpz w ptr
-  print w
+-- class ComplexPolynomial a where
+--   withNewAcbPoly_ :: a -> CLong -> (Ptr CAcbPoly -> IO b) -> IO (AcbPoly, b)
+
+-- instance ComplexPolynomial FmpzPoly where
+--   withNewAcbPoly_ = withNewAcbPolyFromFmpzPoly
+
+-- instance ComplexPolynomial FmpqPoly where
+--   withNewAcbPoly_ = withNewAcbPolyFromFmpqPoly
+
+class Polynomial a b where
+  roots :: a -> b
+
+instance Polynomial FmpzPoly (Vector Fmpz) where
+  roots poly = snd $ snd $ unsafePerformIO $ do
+    withFmpzPoly poly $ \poly -> do
+      f <- newFmpzPolyFactor
+      withFmpzPolyFactor f $ \f -> do
+        fmpz_poly_factor f poly
+        CFmpzPolyFactor c d e n alloc <- peek f
+        fac <- forM [0..fromIntegral n-1] $ \j -> do
+          m <- peek (e `advancePtr` j)
+          a <- newFmpz
+          let r = d `advancePtr` j
+          fmpz_poly_neg r r
+          withFmpz a $ \a -> do
+            fmpz_zero a
+            fmpz_poly_evaluate_fmpz a r a
+          deg <- fmpz_poly_degree r
+          return (a, deg)
+        return $ Vector.fromList (map fst $ filter ((==1) . snd) fac)
+            
+instance forall n. KnownNat n => Polynomial FmpzPoly (Vector (CF n)) where
+  roots poly = snd $ unsafePerformIO $ do
+    let prec = fromInteger $ natVal (Proxy :: Proxy n)
+        maxIter = 100
+    withNewAcbPolyFromFmpzPoly poly prec $ \cpoly -> do
+      m <- acb_poly_degree cpoly
+      roots <- _acb_vec_init m
+      found <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
+      Vector.generateM (fromIntegral found) $ \j -> do
+        z <- newAcb
+        withAcb z $ \z -> acb_set z (roots `advancePtr` (fromIntegral j))
+        return $ CF z 
+
+instance forall n. KnownNat n => Polynomial FmpqPoly (Vector (CF n)) where
+  roots poly = snd $ unsafePerformIO $ do
+    let prec = fromInteger $ natVal (Proxy :: Proxy n)
+        maxIter = 100
+    withNewAcbPolyFromFmpqPoly poly prec $ \cpoly -> do
+      m <- acb_poly_degree cpoly
+      roots <- _acb_vec_init m
+      found <- acb_poly_find_roots roots cpoly nullPtr maxIter prec
+      Vector.generateM (fromIntegral found) $ \j -> do
+        z <- newAcb
+        withAcb z $ \z -> acb_set z (roots `advancePtr` (fromIntegral j))
+        return $ CF z 

@@ -144,7 +144,7 @@ instance Storable CPadic where
   {-# INLINE alignment #-}
   alignment _ = #{alignment padic_t}
   peek ptr = CPadic
-    <$> #{peek padic_struct, u} ptr
+    <$> (return $ castPtr ptr)
     <*> #{peek padic_struct, v} ptr
     <*> #{peek padic_struct, N} ptr
   poke ptr (CPadic u v n) = do

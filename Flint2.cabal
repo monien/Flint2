@@ -397,10 +397,15 @@ executable arb_plot
 executable flint_test
   main-is: Main.hs
   other-modules:
+      Types
       Wrap
       Paths_Flint2
   hs-source-dirs:
       app
+  default-extensions:
+      QuantifiedConstraints
+      MultiParamTypeClasses
+      FlexibleInstances
   extra-libraries:
       flint, gmp, mpfr
   build-depends:

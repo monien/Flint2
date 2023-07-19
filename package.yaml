@@ -29,6 +29,10 @@ executables:
     - vector
     - Flint2
     extra-libraries: flint, gmp, mpfr
+    default-extensions:
+      - QuantifiedConstraints
+      - MultiParamTypeClasses
+      - FlexibleInstances
   arb_plot:
     source-dirs: app/arb_plot
     main: Main.hs

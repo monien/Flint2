@@ -309,7 +309,15 @@ import Data.Number.Flint.NMod.Types
 
 -- | Integer (opaque pointer)
 data Fmpz = Fmpz {-# UNPACK #-} !(ForeignPtr CFmpz)
-type CFmpz = #type fmpz
+type CFmpz = CFlint Fmpz
+
+instance Storable CFmpz where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_t}
+  peek = error "CFmpz.peek: Not defined"
+  poke = error "CFmpz.poke: Not defined"
 
 -- fmpz_preinv_t --------------------------------------------------
 

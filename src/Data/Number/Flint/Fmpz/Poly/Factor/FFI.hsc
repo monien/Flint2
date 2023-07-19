@@ -37,7 +37,7 @@ module Data.Number.Flint.Fmpz.Poly.Factor.FFI (
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Ptr ( Ptr, FunPtr, plusPtr, castPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free )
 
@@ -53,22 +53,28 @@ import Data.Number.Flint.Fmpz.Poly
 
 -- fmpz_poly_factor_t ----------------------------------------------------------
 
+-- Note that the structure of CFmpzPolyFactor is different from the
+-- corresponding structure in <flint/fmpz_poly_factor.h>. The reason
+-- for this is that we can only deal with `Ptr CFmpz` and not with the
+-- structure `CFmpz` directly in Haskell. Otherwise we would have to
+-- cope with the `fmpz_t` structure either containing an `slong` or
+-- `mpz_ptr`.
+
 data FmpzPolyFactor =
   FmpzPolyFactor {-# UNPACK #-} !(ForeignPtr CFmpzPolyFactor)
-data CFmpzPolyFactor = CFmpzPolyFactor CFmpz (Ptr CFmpzPoly) (Ptr CLong) CLong CLong 
+data CFmpzPolyFactor = CFmpzPolyFactor (Ptr CFmpz) (Ptr CFmpzPoly) (Ptr CLong) CLong CLong 
 
 instance Storable CFmpzPolyFactor where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size fmpz_poly_factor_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpz_poly_factor_t}
-  peek ptr = do
-    c     <- #{peek fmpz_poly_factor_struct, c    } ptr
-    p     <- #{peek fmpz_poly_factor_struct, p    } ptr
-    exp   <- #{peek fmpz_poly_factor_struct, exp  } ptr
-    num   <- #{peek fmpz_poly_factor_struct, num  } ptr
-    alloc <- #{peek fmpz_poly_factor_struct, alloc} ptr
-    return $ CFmpzPolyFactor c p exp num alloc
+  peek ptr = CFmpzPolyFactor
+    <$> (return $ castPtr ptr)
+    <*> #{peek fmpz_poly_factor_struct, p    } ptr
+    <*> #{peek fmpz_poly_factor_struct, exp  } ptr
+    <*> #{peek fmpz_poly_factor_struct, num  } ptr
+    <*> #{peek fmpz_poly_factor_struct, alloc} ptr
   poke = error "CFmpzPolyFactor.poke: Not defined"
 
 newFmpzPolyFactor = do
