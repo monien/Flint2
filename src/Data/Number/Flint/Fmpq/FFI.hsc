@@ -126,6 +126,7 @@ module Data.Number.Flint.Fmpq.FFI (
   , _fmpq_next_calkin_wilf
   , _fmpq_next_signed_calkin_wilf
   , fmpq_farey_neighbors
+  , fmpq_mediant
   , fmpq_simplest_between
   -- * Continued fractions
   , fmpq_get_cfrac
@@ -997,6 +998,12 @@ foreign import ccall "fmpq.h _fmpq_next_signed_calkin_wilf"
 -- not canonical or \(Q\) is less than the denominator of \(x\).
 foreign import ccall "fmpq.h fmpq_farey_neighbors"
   fmpq_farey_neighbors :: Ptr CFmpq -> Ptr CFmpq -> Ptr CFmpq -> Ptr CFmpz -> IO ()
+
+-- | /fmpq_farey_mediant/ /x/ /l/ /r/
+--
+-- Set \(x\) to the mediant of \(l\) and \(r\)
+foreign import ccall "fmpq.h fmpq_mediant"
+  fmpq_mediant :: Ptr CFmpq -> Ptr CFmpq -> Ptr CFmpq -> IO ()
 
 -- | /fmpq_simplest_between/ /x/ /l/ /r/ 
 -- 

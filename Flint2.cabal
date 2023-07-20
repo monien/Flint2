@@ -317,6 +317,7 @@ library
       csrc/nmod_poly_mat/get_str.c
       csrc/aprcl/fprint.c
       csrc/aprcl/get_str.c
+      csrc/fmpq/mediant.c
       csrc/fmpq/get_fmpz_frac.c
       csrc/fmpq_mat/get_str.c
       csrc/fmpq_mat/fprint.c
@@ -397,12 +398,14 @@ executable arb_plot
 executable flint_test
   main-is: Main.hs
   other-modules:
+      Polynomial
       Types
       Wrap
       Paths_Flint2
   hs-source-dirs:
       app
   default-extensions:
+      ScopedTypeVariables
       QuantifiedConstraints
       MultiParamTypeClasses
       FlexibleInstances
@@ -414,6 +417,7 @@ executable flint_test
     , base >=4.7 && <5
     , mtl
     , vector
+    , vector-algorithms
   default-language: Haskell2010
 
 test-suite Flint2-test
