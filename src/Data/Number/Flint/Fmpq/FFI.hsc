@@ -166,7 +166,7 @@ import Data.Number.Flint.Fmpz
 
 -- | Rational numbers (opaque pointer)
 data Fmpq = Fmpq {-# UNPACK #-} !(ForeignPtr CFmpq)
-data CFmpq = CFmpq CFmpz CFmpz
+data CFmpq = CFmpq (Ptr CFmpz) (Ptr CFmpz)
 
 instance Storable CFmpq where
   {-# INLINE sizeOf #-}
@@ -174,8 +174,8 @@ instance Storable CFmpq where
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpq_t}
   peek ptr = CFmpq
-    <$> #{peek fmpq, num} ptr
-    <*> #{peek fmpq, den} ptr
+    <$> (return $ castPtr ptr)
+    <*> (return $ castPtr ptr `advancePtr` 1)
   poke = error "CFmpz.poke: Not defined"
 
 -- Fmpq ------------------------------------------------------------------------

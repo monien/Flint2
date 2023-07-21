@@ -149,6 +149,7 @@ library
       Data.Number.Flint.Acb.Hypgeom
       Data.Number.Flint.Acb.Elliptic
       Data.Number.Flint.Acb.Modular
+      Data.Number.Flint.Acb.Modular.Instances
       Data.Number.Flint.Acb.Dirichlet
       Data.Number.Flint.Acb.DFT
       Data.Number.Flint.Acb.ComplexField
@@ -373,6 +374,7 @@ library
   build-depends:
       QuickCheck
     , base >=4.7 && <5
+    , groups
   default-language: Haskell2010
 
 executable arb_plot
@@ -415,6 +417,7 @@ executable flint_test
       Flint2
     , QuickCheck
     , base >=4.7 && <5
+    , groups
     , mtl
     , vector
     , vector-algorithms

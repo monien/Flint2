@@ -28,6 +28,7 @@ executables:
     - mtl
     - vector
     - vector-algorithms
+    - groups
     - Flint2
     extra-libraries: flint, gmp, mpfr
     default-extensions:
@@ -199,6 +200,7 @@ library:
    - Data.Number.Flint.Acb.Hypgeom
    - Data.Number.Flint.Acb.Elliptic 
    - Data.Number.Flint.Acb.Modular
+   - Data.Number.Flint.Acb.Modular.Instances
    - Data.Number.Flint.Acb.Dirichlet
    - Data.Number.Flint.Acb.DFT
    - Data.Number.Flint.Acb.ComplexField
@@ -438,6 +440,7 @@ library:
   extra-libraries: flint, gmp
   dependencies:
     - QuickCheck
+    - groups
   
 tests:
   Flint2-test:

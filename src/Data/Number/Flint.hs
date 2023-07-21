@@ -330,5 +330,6 @@ import Data.Number.Flint.Arb.Mat.Instances
 import Data.Number.Flint.Acb.Instances
 import Data.Number.Flint.Acb.Poly.Instances
 import Data.Number.Flint.Acb.Mat.Instances
+import Data.Number.Flint.Acb.Modular.Instances
 
 import Data.Number.Flint.Groups.Qfb.Instances

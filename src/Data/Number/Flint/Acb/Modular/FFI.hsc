@@ -10,6 +10,7 @@ module Data.Number.Flint.Acb.Modular.FFI (
     PSL2Z (..)
   , CPSL2Z (..)
   , newPSL2Z
+  , newPSL2Z_
   , withPSL2Z
   , withNewPSL2Z
   , psl2z_init
@@ -18,6 +19,7 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , psl2z_set
   , psl2z_one
   , psl2z_is_one
+  , psl2z_get_str
   , psl2z_print
   , psl2z_fprint
   , psl2z_equal
@@ -68,12 +70,15 @@ module Data.Number.Flint.Acb.Modular.FFI (
 
 -- Modular forms of complex variables ------------------------------------------
 
+import Control.Monad
+
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
 import Foreign.Ptr ( Ptr, FunPtr, plusPtr, castPtr, nullPtr )
 import Foreign.Storable
 import Foreign.Marshal ( free, peekArray )
+import Foreign.Marshal.Array ( advancePtr )
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -89,7 +94,7 @@ import Data.Number.Flint.Acb.Poly
 -- psl2z_t ---------------------------------------------------------------------
 
 data PSL2Z = PSL2Z {-# UNPACK #-} !(ForeignPtr CPSL2Z) 
-data CPSL2Z = CPSL2Z CFmpz CFmpz CFmpz CFmpz 
+data CPSL2Z = CPSL2Z (Ptr CFmpz) (Ptr CFmpz) (Ptr CFmpz) (Ptr CFmpz) 
 
 instance Storable CPSL2Z where
   {-# INLINE sizeOf #-}
@@ -97,19 +102,33 @@ instance Storable CPSL2Z where
   {-# INLINE alignment #-}
   alignment _ = #{alignment psl2z_t}
   peek ptr = CPSL2Z
-    <$> #{peek psl2z_struct, a} ptr
-    <*> #{peek psl2z_struct, b} ptr
-    <*> #{peek psl2z_struct, c} ptr
-    <*> #{peek psl2z_struct, d} ptr
-  poke ptr (CPSL2Z a b c d) = do
-    #{poke psl2z_struct, a} ptr a
-    #{poke psl2z_struct, b} ptr b
-    #{poke psl2z_struct, c} ptr c
-    #{poke psl2z_struct, d} ptr d
-    
+    <$> (return $ castPtr ptr)
+    <*> (return $ castPtr ptr `advancePtr` 1)
+    <*> (return $ castPtr ptr `advancePtr` 2)
+    <*> (return $ castPtr ptr `advancePtr` 3)
+  poke = error "CPSL2Z.poke: undefined."
+  
 newPSL2Z = do
   x <- mallocForeignPtr
-  withForeignPtr x $ \x -> psl2z_init x
+  withForeignPtr x psl2z_init
+  addForeignPtrFinalizer p_psl2z_clear x
+  return $ PSL2Z x
+
+newPSL2Z_ a b c d = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    psl2z_init x
+    withFmpz a $ \a' -> do
+      withFmpz b $ \b' -> do
+        withFmpz c $ \c' -> do
+          withFmpz d $ \d' -> do
+            CPSL2Z a b c d <- peek x
+            fmpz_set a a'
+            fmpz_set b b'
+            fmpz_set c c'
+            fmpz_set d d'
+    flag <- psl2z_is_correct x
+    when (flag /= 1) $ do error "newPSL2Z_ a b c d with ad - bc not one."
   addForeignPtrFinalizer p_psl2z_clear x
   return $ PSL2Z x
 
