@@ -291,6 +291,7 @@ library
       TypeFamilies
       TypeOperators
       TypeSynonymInstances
+      TypeFamilies
       KindSignatures
   c-sources:
       csrc/fmpz/init.c
@@ -369,6 +370,8 @@ library
       csrc/mpfr_mat/swap_entrywise.c
   extra-libraries:
       flint, gmp
+  pkgconfig-depends:
+      flint >= 2.9, gmp
   build-tools:
       hsc2hs
   build-depends:
@@ -400,6 +403,7 @@ executable arb_plot
 executable flint_test
   main-is: Main.hs
   other-modules:
+      Modular
       Polynomial
       Types
       Wrap
@@ -411,6 +415,7 @@ executable flint_test
       QuantifiedConstraints
       MultiParamTypeClasses
       FlexibleInstances
+      TypeFamilies
   extra-libraries:
       flint, gmp, mpfr
   build-depends:

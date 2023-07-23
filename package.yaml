@@ -36,6 +36,7 @@ executables:
       - QuantifiedConstraints
       - MultiParamTypeClasses
       - FlexibleInstances
+      - TypeFamilies
   arb_plot:
     source-dirs: app/arb_plot
     main: Main.hs
@@ -63,6 +64,7 @@ library:
     - TypeFamilies
     - TypeOperators
     - TypeSynonymInstances
+    - TypeFamilies
     - KindSignatures
   exposed-modules:
    - Data.Number.Flint
@@ -438,6 +440,7 @@ library:
     - csrc/mpfr_mat/swap_entrywise.c
   build-tools: hsc2hs
   extra-libraries: flint, gmp
+  pkgconfig-depends: flint >= 2.9, gmp
   dependencies:
     - QuickCheck
     - groups

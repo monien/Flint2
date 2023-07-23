@@ -25,4 +25,5 @@ cabal.project.local~
 .ghc.environment.*
 Dump/
 .DS_Store
+arb_plot.png 
 

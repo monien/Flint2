@@ -5,6 +5,7 @@ import Data.Complex
 
 import System.IO
 import System.IO.Unsafe
+import Control.Monad
 
 import Options.Applicative
 
@@ -22,6 +23,7 @@ main = run =<< execParser opts where
     <> header "test program for arb.")
 
 run p@(Parameters xa xb ya yb w h colorMode f) = do
+  when (colorMode < 0 || colorMode > 6) $ do error "colorMode not available."
   case Map.lookup f functions of 
     Just g -> do let u i j = evalSafe (xa, xb, w) (ya, yb, h) g i (h-j)
                      v i j = rgba colorMode (u i j)
@@ -66,7 +68,7 @@ parameters = Parameters
       metavar "XB")
   <*> option auto (
       long "ya" <>
-      value (0.0) <>
+      value 0.0 <>
       showDefault <>
       metavar "YA") 
   <*> option auto (
@@ -90,6 +92,7 @@ parameters = Parameters
       long "color-mode" <>
       short 'c' <>
       value 0 <>
+      help ("possible values: 0 .. 6") <>
       metavar "COLOR-MODE")
   <*> strOption (
       short 'f' <>
