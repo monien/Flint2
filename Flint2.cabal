@@ -293,6 +293,8 @@ library
       TypeSynonymInstances
       TypeFamilies
       KindSignatures
+  include-dirs:
+      csrc
   c-sources:
       csrc/fmpz/init.c
       csrc/fmpz/clear.c
@@ -368,6 +370,7 @@ library
       csrc/acb_modular/inlines.c
       csrc/acb_modular/get_str.c
       csrc/mpfr_mat/swap_entrywise.c
+      csrc/psl2z/to_word.c
   extra-libraries:
       flint, gmp
   pkgconfig-depends:

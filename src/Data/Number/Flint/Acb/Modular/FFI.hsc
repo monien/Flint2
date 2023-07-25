@@ -27,6 +27,18 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , psl2z_inv
   , psl2z_is_correct
   , psl2z_randtest
+  -- * Word problem
+  , PSL2ZWord (..)
+  , CPSL2ZWord (..)
+  , newPSL2ZWord
+  , withPSL2ZWord
+  , withNewPSL2ZWord
+  , psl2z_to_word
+  , psl2z_word_init
+  , psl2z_word_clear
+  , psl2z_word_fprint
+  , psl2z_word_print
+  , psl2z_word_get_str
   -- * Modular transformations
   , acb_modular_transform
   , acb_modular_fundamental_domain_approx_d
@@ -235,6 +247,59 @@ foreign import ccall "acb_modular.h psl2z_is_correct"
 -- by the GCD, and then correct the signs.
 foreign import ccall "acb_modular.h psl2z_randtest"
   psl2z_randtest :: Ptr CPSL2Z -> Ptr CFRandState -> CLong -> IO ()
+
+-- Word problem ----------------------------------------------------------------
+
+#include "psl2z.h"
+
+data PSL2ZWord = PSL2ZWord {-#UNPACK#-} !(ForeignPtr CPSL2ZWord)
+data CPSL2ZWord = CPSL2ZWord (Ptr CFmpz) CLong
+
+instance Storable CPSL2ZWord where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size psl2z_word_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment psl2z_word_t}
+  peek ptr = CPSL2ZWord
+    <$> #{peek psl2z_word_struct, letters} ptr
+    <*> #{peek psl2z_word_struct, alloc  } ptr
+  poke = error "CPSL2ZWord.poke: undefined."
+  
+newPSL2ZWord = do
+  x <- mallocForeignPtr
+  withForeignPtr x psl2z_word_init
+  addForeignPtrFinalizer p_psl2z_word_clear x
+  return $ PSL2ZWord x
+
+{-# INLINE withPSL2ZWord #-}
+withPSL2ZWord (PSL2ZWord x) f = do
+  withForeignPtr x $ \px -> f px >>= return . (PSL2ZWord x,)
+
+{-# INLINE withNewPSL2ZWord #-}
+withNewPSL2ZWord f = do
+  x <- newPSL2ZWord
+  withPSL2ZWord x f
+  
+foreign import ccall "psl2z.h psl2z_word_init"
+  psl2z_word_init :: Ptr CPSL2ZWord -> IO ()
+
+foreign import ccall "psl2z.h psl2z_word_clear"
+  psl2z_word_clear :: Ptr CPSL2ZWord -> IO ()
+
+foreign import ccall "psl2z.h &psl2z_word_clear"
+  p_psl2z_word_clear :: FunPtr (Ptr CPSL2ZWord -> IO ())
+
+foreign import ccall "psl2z.h psl2z_to_word"
+  psl2z_to_word :: Ptr CPSL2ZWord -> Ptr CPSL2Z -> IO ()
+
+foreign import ccall "psl2z.h psl2z_word_fprint"
+  psl2z_word_fprint :: Ptr CFile -> Ptr CPSL2ZWord -> IO ()
+
+foreign import ccall "psl2z.h psl2z_word_print"
+  psl2z_word_print :: Ptr CPSL2ZWord -> IO ()
+
+foreign import ccall "psl2z.h psl2z_word_get_str"
+  psl2z_word_get_str :: Ptr CPSL2ZWord -> IO CString
 
 -- Modular transformations -----------------------------------------------------
 

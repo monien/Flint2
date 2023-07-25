@@ -41,3 +41,10 @@ instance Group PSL2Z where
     withNewPSL2Z $ \result -> do
       withPSL2Z x $ \x -> do
         psl2z_inv result x
+
+instance Show PSL2ZWord where
+  show x = unsafePerformIO $ do
+    (_, cs) <- withPSL2ZWord x psl2z_word_get_str
+    s <- peekCString cs
+    free cs
+    return s

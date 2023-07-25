@@ -1,7 +1,12 @@
 module Modular where
 
 import System.IO.Unsafe
+
 import Foreign.Storable
+import Foreign.Marshal.Array (advancePtr)
+
+import Control.Monad
+
 import Data.Group
 import Data.Ratio
 
@@ -90,3 +95,25 @@ class Group a => WordProblem a where
   fromWord :: [(Letter a, Integer)] -> a
   fromWord w = mconcat $ map (\(x, n) -> hom x `pow` n) w
 
+instance WordProblem PSL2Z where
+  data Letter PSL2Z = S | T deriving (Show, Eq)
+  hom S = unsafePerformIO $ newPSL2Z_ 0 (-1) 1 0
+  hom T = unsafePerformIO $ newPSL2Z_ 1 1 0 1
+  toWord x = snd $ unsafePerformIO $ do
+    word <- newPSL2ZWord
+    withPSL2ZWord word $ \w -> do
+      withPSL2Z x $ \x -> do
+        psl2z_to_word w x
+      CPSL2ZWord l n <- peek w
+      result <- forM [0 .. fromIntegral n-1] $ \j -> do
+        flag <- fmpz_is_zero (l `advancePtr` j)
+        e <- newFmpz
+        withFmpz e $ \e -> fmpz_set e (l `advancePtr` j)
+        return $ if flag == 1 then (S, 3) else (T, toInteger e)
+      return result
+    
+testWord = do
+  m <- newPSL2Z_ 2889659343093 (-73086250453981)
+                 5380580492512 (-136087478409347)
+  print $ toWord m
+  print $ m

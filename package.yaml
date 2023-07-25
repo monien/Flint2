@@ -438,6 +438,9 @@ library:
     - csrc/acb_modular/inlines.c
     - csrc/acb_modular/get_str.c
     - csrc/mpfr_mat/swap_entrywise.c
+    # word problem
+    - csrc/psl2z/to_word.c
+  include-dirs: csrc
   build-tools: hsc2hs
   extra-libraries: flint, gmp
   pkgconfig-depends: flint >= 2.9, gmp
