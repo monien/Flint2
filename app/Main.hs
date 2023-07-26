@@ -35,8 +35,9 @@ import Data.Number.Flint
 
 import Polynomial
 import Types
+import Modular
 
-main = printAllTypes
+main = testWord
   
 type RR = RF 128
 type CC = CF 128
