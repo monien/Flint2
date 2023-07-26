@@ -24,6 +24,7 @@ module Data.Number.Flint.Fmpz.Vec.FFI (
   , _fmpz_vec_read
   , _fmpz_vec_fprint
   , _fmpz_vec_print
+  , _fmpz_vec_get_str
   -- * Conversions
   , _fmpz_vec_get_nmod_vec
   , _fmpz_vec_set_nmod_vec

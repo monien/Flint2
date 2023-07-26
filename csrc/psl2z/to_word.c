@@ -18,36 +18,16 @@ void psl2z_word_clear(psl2z_word_t word) {
   word->alloc = 0;
 }
 
-void psl2z_word_fprint(FILE * file, psl2z_word_t word) {
-  flint_fprintf(file, "[");
-  for(slong j=0; j<word->alloc; j++) {
-    flint_fprintf(file, "(");
-    if( fmpz_is_zero(word->letters + j) ) {
-      flint_fprintf(file, "S,3");
-    } else {
-      flint_fprintf(file, "T,");
-      fmpz_fprint(file, word->letters + j);
-    }
-    flint_fprintf(file, ")");
-    if( j + 1 < word->alloc ) flint_fprintf(file, ",");
+void psl2z_normal_form(psl2z_t x) {
+  if (fmpz_sgn(&x->c) < 0 || (fmpz_is_zero(&x->c) && fmpz_sgn(&x->d) < 0)) {
+    fmpz_neg(&x->a, &x->a);
+    fmpz_neg(&x->b, &x->b);
+    fmpz_neg(&x->c, &x->c);
+    fmpz_neg(&x->d, &x->d);
   }
-  flint_fprintf(file, "]");
 }
 
-void psl2z_word_print(psl2z_word_t word) {
-  psl2z_word_fprint(stdout, word);
-}
-
-char * psl2z_word_get_str(psl2z_word_t word) {
-  char * buffer = NULL;
-  size_t buffer_size = 0;
-  FILE * out = open_memstream(&buffer, &buffer_size);
-  psl2z_word_fprint(out, word);
-  fclose(out);
-  return buffer;
-}
-
-void psl2z_to_word(psl2z_word_t word, psl2z_t x) {
+void psl2z_get_word(psl2z_word_t word, psl2z_t x) {
   
   if( psl2z_is_one(x) ) return;
 
@@ -100,21 +80,85 @@ void psl2z_to_word(psl2z_word_t word, psl2z_t x) {
     fmpz_neg(&x->a, &x->a);
     fmpz_neg(&x->b, &x->b);
     fmpz_zero(word->letters + word->alloc - 1);
-  } 
-
-  // SL2Z -> PSL2Z
-  if (fmpz_sgn(&x->c) < 0 || (fmpz_is_zero(&x->c) && fmpz_sgn(&x->d) < 0)) {
-    fmpz_neg(&x->a, &x->a);
-    fmpz_neg(&x->b, &x->b);
-    fmpz_neg(&x->c, &x->c);
-    fmpz_neg(&x->d, &x->d);
   }
-  
+
+  psl2z_normal_form(x);
+
   fmpz_clear(u);
   fmpz_clear(v);
   fmpz_clear(q);
   fmpz_clear(r);
 
-  psl2z_to_word(word, x);
+  psl2z_get_word(word, x);
+}
+
+void psl2z_set_word(psl2z_t x, psl2z_word_t word) {
+
+  psl2z_one(x);
+ 
+  for(slong j=0; j<word->alloc; j++) {
+    fmpz * q = word->letters + word->alloc - 1 - j;
+    if( fmpz_cmp_si(q, 0) == 0) {
+      // multiply by S
+      fmpz_swap(&x->a, &x->c);
+      fmpz_swap(&x->b, &x->d);
+      fmpz_neg(&x->a, &x->a);
+      fmpz_neg(&x->b, &x->b);
+    } else {
+      // multiply be T ^ q;
+      fmpz_addmul(&x->a, q, &x->c);
+      fmpz_addmul(&x->b, q, &x->d);
+    }
+  }
+
+  psl2z_normal_form(x);
+}
+    
+//-- Input and Output ----------------------------------------------------------
+
+void psl2z_word_fprint_pretty(FILE * file, psl2z_word_t word) {
+  flint_fprintf(file, "[");
+  for(slong j=0; j<word->alloc; j++) {
+    flint_fprintf(file, "(");
+    if( fmpz_is_zero(word->letters + j) ) {
+      flint_fprintf(file, "S,3");
+    } else {
+      flint_fprintf(file, "T,");
+      fmpz_fprint(file, word->letters + j);
+    }
+    flint_fprintf(file, ")");
+    if( j + 1 < word->alloc ) flint_fprintf(file, ",");
+  }
+  flint_fprintf(file, "]");
+}
+
+void psl2z_word_print_pretty(psl2z_word_t word) {
+  psl2z_word_fprint_pretty(stdout, word);
+}
+
+char * psl2z_word_get_str_pretty(psl2z_word_t word) {
+  char * buffer = NULL;
+  size_t buffer_size = 0;
+  FILE * out = open_memstream(&buffer, &buffer_size);
+  psl2z_word_fprint_pretty(out, word);
+  fclose(out);
+  return buffer;
+}
+
+void psl2z_word_fprint(FILE * file, psl2z_word_t word) {
+  _fmpz_vec_fprint(file, word->letters, word->alloc);
+}
+
+void psl2z_word_print(psl2z_word_t word) {
+  psl2z_word_fprint(stdout, word);
+}
+
+char * psl2z_word_get_str(psl2z_word_t word) {
+  char * buffer = NULL;
+  size_t buffer_size = 0;
+  FILE * out = open_memstream(&buffer, &buffer_size);
+  psl2z_word_fprint(out, word);
+  fclose(out);
+  return buffer;
 }
 

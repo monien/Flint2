@@ -44,7 +44,7 @@ instance Group PSL2Z where
 
 instance Show PSL2ZWord where
   show x = unsafePerformIO $ do
-    (_, cs) <- withPSL2ZWord x psl2z_word_get_str
+    (_, cs) <- withPSL2ZWord x psl2z_word_get_str_pretty
     s <- peekCString cs
     free cs
     return s

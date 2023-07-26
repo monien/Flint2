@@ -37,7 +37,7 @@ import Polynomial
 import Types
 import Modular
 
-main = testWord
+main = testWord'
   
 type RR = RF 128
 type CC = CF 128

@@ -33,12 +33,16 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , newPSL2ZWord
   , withPSL2ZWord
   , withNewPSL2ZWord
-  , psl2z_to_word
+  , psl2z_get_word
+  , psl2z_set_word
   , psl2z_word_init
   , psl2z_word_clear
   , psl2z_word_fprint
   , psl2z_word_print
   , psl2z_word_get_str
+  , psl2z_word_fprint_pretty
+  , psl2z_word_print_pretty
+  , psl2z_word_get_str_pretty
   -- * Modular transformations
   , acb_modular_transform
   , acb_modular_fundamental_domain_approx_d
@@ -279,28 +283,77 @@ withPSL2ZWord (PSL2ZWord x) f = do
 withNewPSL2ZWord f = do
   x <- newPSL2ZWord
   withPSL2ZWord x f
-  
+
+--- | /psl2z_init/ /word/
+--
+-- Initializes /word/ for the word problem with the empty word.
 foreign import ccall "psl2z.h psl2z_word_init"
   psl2z_word_init :: Ptr CPSL2ZWord -> IO ()
 
+--- | /psl2z_clear/ /word/
+--
+-- Clears /word/.
 foreign import ccall "psl2z.h psl2z_word_clear"
   psl2z_word_clear :: Ptr CPSL2ZWord -> IO ()
 
 foreign import ccall "psl2z.h &psl2z_word_clear"
   p_psl2z_word_clear :: FunPtr (Ptr CPSL2ZWord -> IO ())
 
-foreign import ccall "psl2z.h psl2z_to_word"
-  psl2z_to_word :: Ptr CPSL2ZWord -> Ptr CPSL2Z -> IO ()
+-- | /psl2z_get_word/ /word/ /x/
+--
+-- Decomposes \x\ into a word in /S/ ( \(z\rightarrow -1/z\) ),
+-- and /T/ (\( \z\rightarrow z+1\)).
+foreign import ccall "psl2z.h psl2z_get_word"
+  psl2z_get_word :: Ptr CPSL2ZWord -> Ptr CPSL2Z -> IO ()
 
+-- | /psl2z__word/ /word/ /x/
+--
+-- Compose \x\ from a word in /S/ ( \(z\rightarrow -1/z\) ),
+-- and /T/ (\( \z\rightarrow z+1\)).
+foreign import ccall "psl2z.h psl2z_set_word"
+  psl2z_set_word :: Ptr CPSL2Z -> Ptr CPSL2ZWord -> IO ()
+
+-- Word input output -----------------------------------------------------------
+
+-- | /psl2z_word_fprint/ /word/
+--
+-- Outputs /word/ to a file as vector. 
 foreign import ccall "psl2z.h psl2z_word_fprint"
   psl2z_word_fprint :: Ptr CFile -> Ptr CPSL2ZWord -> IO ()
 
+-- | /psl2z_word_print/ /word/
+--
+-- Outputs /word/ to `stdout` as vector. 
 foreign import ccall "psl2z.h psl2z_word_print"
   psl2z_word_print :: Ptr CPSL2ZWord -> IO ()
 
+-- | /psl2z_word_get_str/ /word/
+--
+-- Returns as string representation of /word/ as vector. 
 foreign import ccall "psl2z.h psl2z_word_get_str"
   psl2z_word_get_str :: Ptr CPSL2ZWord -> IO CString
 
+-- | /psl2z_word_fprint_pretty/ /word/
+--
+-- Outputs /word/ to a file in tuples of generators with the
+-- corresponding power.
+foreign import ccall "psl2z.h psl2z_word_fprint_pretty"
+  psl2z_word_fprint_pretty :: Ptr CFile -> Ptr CPSL2ZWord -> IO ()
+
+-- | /psl2z_word_print_pretty/ /word/
+--
+-- Outputs /word/ to stdout in tuples of generators with the
+-- corresponding power.
+foreign import ccall "psl2z.h psl2z_word_print_pretty"
+  psl2z_word_print_pretty :: Ptr CPSL2ZWord -> IO ()
+
+-- | /psl2z_word_get_str_pretty/ /word/
+--
+-- Returns a string representation of /word/ in tuples of generators with the
+-- corresponding power.
+foreign import ccall "psl2z.h psl2z_word_get_str_pretty"
+  psl2z_word_get_str_pretty :: Ptr CPSL2ZWord -> IO CString
+  
 -- Modular transformations -----------------------------------------------------
 
 -- | /acb_modular_transform/ /w/ /g/ /z/ /prec/ 
