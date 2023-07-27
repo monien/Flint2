@@ -7,6 +7,7 @@
 #include <flint/acb_modular.h>
 #include <flint/perm.h>
 
+#include "../perm.h"
 #include "../psl2z.h"
 
 void psl2z_word_init(psl2z_word_t word) {
@@ -119,33 +120,42 @@ void psl2z_set_word(psl2z_t x, psl2z_word_t word) {
 
 void _perm_set_word(slong *x, slong *s, slong *t, slong n, psl2z_word_t word) {
 
-  fmpz_t q;
+  fmpz_t q, m;
+
   fmpz_init(q);
+  fmpz_init(m);
+
+  _perm_order(m, t, n);
   
   slong *r;
-  
+  r = _perm_init(n);
+
   _perm_set_one(x, n);
  
   for(slong j=0; j<word->alloc; j++) {
-    // fmpz_set(q, word->letters + j);
     fmpz_set(q, word->letters + word->alloc - 1 - j);
     if( fmpz_cmp_si(q, 0) == 0) {
       _perm_compose(x, x, s, n);
     } else {
       // multiply be T ^ q;
-      r = _perm_init(n);
-      if( fmpz_cmp_si(q, 0) > 0 ) {
-	_perm_inv(r, t, n);
+      if( fmpz_cmp_si(q, 0) < 0 ) {
 	fmpz_neg(q, q);
+	_perm_inv(r, t, n);
       } else {
 	_perm_set(r, t, n);
       }
-      _perm_compose(x, x, r, n);
-      _perm_clear(r);
+      fmpz_mod(q, q, m);
+      slong e = fmpz_get_si(q);
+      for(slong j=0; j<e; j++) {
+	_perm_compose(x, x, r, n);
+      }
     }
   }
 
   fmpz_clear(q);
+  fmpz_clear(m);
+  
+  _perm_clear(r);
 
 }
  

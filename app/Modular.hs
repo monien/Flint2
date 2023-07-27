@@ -179,6 +179,8 @@ testPerm' = do
       withNewPSL2ZWord $ \w -> do
         psl2z_get_word w m
         _perm_set_word p s t n w
+        psl2z_word_print_pretty w
+        putStr "\n"
         putStr "p: "
         _perm_print_pretty p n
         putStr "\n"
