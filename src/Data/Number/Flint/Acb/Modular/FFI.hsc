@@ -13,6 +13,7 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , newPSL2Z_
   , withPSL2Z
   , withNewPSL2Z
+  , withNewPSL2Z_
   , psl2z_init
   , psl2z_clear
   , psl2z_swap
@@ -33,10 +34,11 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , newPSL2ZWord
   , withPSL2ZWord
   , withNewPSL2ZWord
-  , psl2z_get_word
-  , psl2z_set_word
   , psl2z_word_init
   , psl2z_word_clear
+  , psl2z_get_word
+  , psl2z_set_word
+  , _perm_set_word
   , psl2z_word_fprint
   , psl2z_word_print
   , psl2z_word_get_str
@@ -155,6 +157,11 @@ withPSL2Z (PSL2Z x) f = do
 {-# INLINE withNewPSL2Z #-}
 withNewPSL2Z f = do
   x <- newPSL2Z
+  withPSL2Z x f
+
+{-# INLINE withNewPSL2Z_ #-}
+withNewPSL2Z_ a b c d f = do
+  x <- newPSL2Z_ a b c d
   withPSL2Z x f
 
 -- The modular group -----------------------------------------------------------
@@ -309,10 +316,17 @@ foreign import ccall "psl2z.h psl2z_get_word"
 -- | /psl2z__word/ /word/ /x/
 --
 -- Compose \x\ from a word in /S/ ( \(z\rightarrow -1/z\) ),
--- and /T/ (\( \z\rightarrow z+1\)).
+-- and /T/ (\( z\rightarrow z+1 \)).
 foreign import ccall "psl2z.h psl2z_set_word"
   psl2z_set_word :: Ptr CPSL2Z -> Ptr CPSL2ZWord -> IO ()
 
+-- | /perm_set_word/ /x/ /s/ /t/ /n/ /word/
+--
+-- Calculate homomorphism for word from permutations `s` and `t`.
+foreign import ccall "psl2z.h _perm_set_word"
+  _perm_set_word :: Ptr CLong -> Ptr CLong -> Ptr CLong -> CLong
+                 -> Ptr CPSL2ZWord -> IO ()
+                
 -- Word input output -----------------------------------------------------------
 
 -- | /psl2z_word_fprint/ /word/
@@ -324,8 +338,10 @@ foreign import ccall "psl2z.h psl2z_word_fprint"
 -- | /psl2z_word_print/ /word/
 --
 -- Outputs /word/ to `stdout` as vector. 
-foreign import ccall "psl2z.h psl2z_word_print"
-  psl2z_word_print :: Ptr CPSL2ZWord -> IO ()
+psl2z_word_print :: Ptr CPSL2ZWord -> IO ()
+psl2z_word_print word = do
+  printCStr psl2z_word_get_str word
+  return ()
 
 -- | /psl2z_word_get_str/ /word/
 --
@@ -344,8 +360,10 @@ foreign import ccall "psl2z.h psl2z_word_fprint_pretty"
 --
 -- Outputs /word/ to stdout in tuples of generators with the
 -- corresponding power.
-foreign import ccall "psl2z.h psl2z_word_print_pretty"
-  psl2z_word_print_pretty :: Ptr CPSL2ZWord -> IO ()
+psl2z_word_print_pretty :: Ptr CPSL2ZWord -> IO ()
+psl2z_word_print_pretty word = do
+  printCStr psl2z_word_get_str_pretty word
+  return ()
 
 -- | /psl2z_word_get_str_pretty/ /word/
 --

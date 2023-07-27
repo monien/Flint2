@@ -5,6 +5,7 @@
 #include <flint/fmpz.h>
 #include <flint/fmpz_vec.h>
 #include <flint/acb_modular.h>
+#include <flint/perm.h>
 
 #include "../psl2z.h"
 
@@ -38,6 +39,16 @@ void psl2z_get_word(psl2z_word_t word, psl2z_t x) {
   fmpz_init(q);
   fmpz_init(r);
 
+  // add space for new letter
+  word->alloc += 1;
+  if( word->alloc == 1 ) {
+    word->letters = flint_malloc(word->alloc * sizeof(fmpz));
+  } else {
+    word->letters = flint_realloc(word->letters, word->alloc * sizeof(fmpz));
+  }
+  
+  fmpz_init(word->letters + word->alloc - 1);
+
   // 2*u = 2*(4*a*c + b*d)
   fmpz_mul(u, &x->a, &x->c);
   fmpz_mul_ui(u, u, 4);
@@ -59,14 +70,6 @@ void psl2z_get_word(psl2z_word_t word, psl2z_t x) {
   // |2*u| - v
   fmpz_abs(u, u);
   fmpz_sub(u, u, v);
-
-  word->alloc += 1;
-  if( word->alloc == 1 ) {
-    word->letters = flint_malloc(word->alloc * sizeof(fmpz));
-  } else {
-    word->letters = flint_realloc(word->letters, word->alloc * sizeof(fmpz));
-  }
-  fmpz_init(word->letters + word->alloc - 1);
 
   if( fmpz_cmp_si(u, 0) > 0) {
     // multiply be T ^ (-q)
@@ -113,6 +116,39 @@ void psl2z_set_word(psl2z_t x, psl2z_word_t word) {
 
   psl2z_normal_form(x);
 }
+
+void _perm_set_word(slong *x, slong *s, slong *t, slong n, psl2z_word_t word) {
+
+  fmpz_t q;
+  fmpz_init(q);
+  
+  slong *r;
+  
+  _perm_set_one(x, n);
+ 
+  for(slong j=0; j<word->alloc; j++) {
+    // fmpz_set(q, word->letters + j);
+    fmpz_set(q, word->letters + word->alloc - 1 - j);
+    if( fmpz_cmp_si(q, 0) == 0) {
+      _perm_compose(x, x, s, n);
+    } else {
+      // multiply be T ^ q;
+      r = _perm_init(n);
+      if( fmpz_cmp_si(q, 0) > 0 ) {
+	_perm_inv(r, t, n);
+	fmpz_neg(q, q);
+      } else {
+	_perm_set(r, t, n);
+      }
+      _perm_compose(x, x, r, n);
+      _perm_clear(r);
+    }
+  }
+
+  fmpz_clear(q);
+
+}
+ 
     
 //-- Input and Output ----------------------------------------------------------
 

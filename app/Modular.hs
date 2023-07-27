@@ -5,7 +5,7 @@ import System.IO.Unsafe
 import Foreign.Storable
 import Foreign.C.String
 import Foreign.Marshal.Alloc (free)
-import Foreign.Marshal.Array (advancePtr)
+import Foreign.Marshal.Array (advancePtr, pokeArray)
 
 import Control.Monad
 
@@ -143,8 +143,7 @@ testWord' = do
   print m
   let w = toWord' m
   print w
-  let x = fromWord' w
-  print x
+  print $ fromWord' w
   
 toWord' x = fst $ unsafePerformIO $ do
   withNewPSL2ZWord $ \w ->
@@ -155,5 +154,32 @@ fromWord' w = fst $ unsafePerformIO $ do
   withNewPSL2Z $ \x -> do
     withPSL2ZWord w $ \w ->
       psl2z_set_word x w
-  
+
+testPerm' = do
+  let n = 12
+  u <- _perm_init n
+  v <- _perm_init n
+  w <- _perm_init n
+  pokeArray u [1,0,3,2,5,4,8,9,6,7,11,10]
+  pokeArray v [3,0,9,1,10,2,11,6,4,5,8,7]
+  pokeArray w [0,2,4,1,6,7,9,10,11,3,5,8]
+  s <- _perm_init n
+  t <- _perm_init n
+  p <- _perm_init n
+  _perm_set s u n
+  _perm_set t w n
+  _perm_inv t t n
+  forM_ [u, v, w] $ \p -> do
+    _perm_print_pretty p n
+    putStr "\n"
+  putStrLn "\ngenerators as permutations:\n"
+  let g = [[1,1,0,1],[5,-1,6,-1],[7,-3,12,-5]]
+  forM_ g $ \[a,b,c,d] -> do
+    withNewPSL2Z_ a b c d $ \m -> do
+      withNewPSL2ZWord $ \w -> do
+        psl2z_get_word w m
+        _perm_set_word p s t n w
+        putStr "p: "
+        _perm_print_pretty p n
+        putStr "\n"
   

@@ -20,6 +20,11 @@ module Data.Number.Flint.Groups.Perm.FFI (
   , _perm_randtest
   -- * Input and output
   , _perm_print
+  , _perm_print_pretty
+  , _perm_fprint_pretty
+  , _perm_get_str_pretty
+  -- * Properties
+  , _perm_order
 ) where 
 
 -- permutations ----------------------------------------------------------------
@@ -34,6 +39,7 @@ import Foreign.Storable
 import Foreign.Marshal ( free, peekArray )
 
 import Data.Number.Flint.Flint
+import Data.Number.Flint.Fmpz
 
 #include <flint/flint.h>
 #include <flint/perm.h>
@@ -94,6 +100,9 @@ foreign import ccall "perm.h _perm_compose"
 foreign import ccall "perm.h _perm_parity"
   _perm_parity :: Ptr CLong -> CLong -> IO CInt
 
+foreign import ccall "perm.h _perm_order"
+  _perm_order :: Ptr CFmpz -> Ptr CLong -> CLong -> IO ()
+
 -- Randomisation ---------------------------------------------------------------
 
 -- | /_perm_randtest/ /vec/ /n/ /state/ 
@@ -118,3 +127,24 @@ _perm_print p n = do
   forM_ a $ \x -> putStr $ " " ++ show x
   return 1
 
+-- | /_perm_get_str_pretty/ /vec/ /n/ 
+--
+-- Return a string representation of permutation vector of length \(n\)
+-- in cycle representation.
+foreign import ccall "perm.h _perm_get_str_pretty"
+  _perm_get_str_pretty :: Ptr CLong -> CLong -> IO CString
+
+
+-- | /_perm_print_pretty/ /vec/ /n/ 
+--
+-- Prints permutation vector of length \(n\) in cycle representation
+-- to @stdout@.
+_perm_print_pretty :: Ptr CLong -> CLong -> IO CInt
+_perm_print_pretty p n = printCStr (flip _perm_get_str_pretty n) p
+
+-- | /_perm_fprint_pretty/ /vec/ /n/ 
+--
+-- Prints permutation vector of length \(n\) in cycle representation
+-- to @file@.
+foreign import ccall "perm.h _perm_fprint_pretty"
+  _perm_fprint_pretty :: Ptr CFile -> Ptr CLong -> CLong -> IO ()

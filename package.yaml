@@ -439,7 +439,10 @@ library:
     - csrc/acb_modular/get_str.c
     - csrc/mpfr_mat/swap_entrywise.c
     # word problem
-    - csrc/psl2z/to_word.c
+    - csrc/psl2z/word_problem.c
+    # perm
+    - csrc/perm/order.c
+    - csrc/perm/print_pretty.c
   include-dirs: csrc
   build-tools: hsc2hs
   extra-libraries: flint, gmp

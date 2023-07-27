@@ -370,7 +370,9 @@ library
       csrc/acb_modular/inlines.c
       csrc/acb_modular/get_str.c
       csrc/mpfr_mat/swap_entrywise.c
-      csrc/psl2z/to_word.c
+      csrc/psl2z/word_problem.c
+      csrc/perm/order.c
+      csrc/perm/print_pretty.c
   extra-libraries:
       flint, gmp
   pkgconfig-depends:

@@ -37,7 +37,7 @@ import Polynomial
 import Types
 import Modular
 
-main = testWord'
+main = testPerm'
   
 type RR = RF 128
 type CC = CF 128
@@ -351,21 +351,26 @@ testHilbert = do
           print $ factor b
 
 testPerm = do
-  let n = 6
-  p <- _perm_init n
-  q <- _perm_init n
-  a <- peekArray (fromIntegral n) p
-  print a
-  pokeArray p [3, 0, 1, 2, 5, 4]
-  _perm_print p n
+  let n = 12
+  a <- _perm_init n
+  b <- _perm_init n
+  c <- _perm_init n
+  pokeArray a [1,0,3,2,5,4,8,9,6,7,11,10]
+  pokeArray b [3,0,9,1,10,2,11,6,4,5,8,7]
+  pokeArray c [0,2,4,1,6,7,9,10,11,3,5,8]
+  forM_ [a, b, c] $ \p -> do
+    _perm_print_pretty p n
+    endl
+  -- a * b * c
+  d <- _perm_init n
+  _perm_compose d b a n
+  _perm_compose d c d n
+  _perm_print_pretty d n
   endl
-  _perm_compose q p p n
-  _perm_print q n
-  endl
-  _perm_compose q p p n
-  _perm_compose q q p n
-  _perm_print q n
-  endl
+  -- a * b
+  _perm_compose d b a n
+  _perm_print_pretty d n; endl
+  return ()
 
 testFq = do
   ctx <- newFqCtx 7 5 "a"
