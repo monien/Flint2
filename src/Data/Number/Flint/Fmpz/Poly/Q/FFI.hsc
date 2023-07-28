@@ -10,6 +10,7 @@ module Data.Number.Flint.Fmpz.Poly.Q.FFI (
   , CFmpzPolyQ (..)
   , newFmpzPolyQ
   , withFmpzPolyQ
+  , withNewFmpzPolyQ
   , withFmpzPolyQNum
   , withFmpzPolyQDen
   -- * Memory management
@@ -103,6 +104,10 @@ newFmpzPolyQ = do
 
 withFmpzPolyQ (FmpzPolyQ x) f = do
   withForeignPtr x $ \xp -> (FmpzPolyQ x,) <$> f xp
+
+withNewFmpzPolyQ f = do
+  x <- newFmpzPolyQ
+  withFmpzPolyQ x f
 
 withFmpzPolyQNum :: FmpzPolyQ -> (Ptr CFmpzPoly -> IO t) -> IO (FmpzPolyQ, t)
 withFmpzPolyQNum x f = do

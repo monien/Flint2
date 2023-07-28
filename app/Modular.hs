@@ -9,6 +9,7 @@ import Foreign.Marshal.Array (advancePtr, pokeArray)
 
 import Control.Monad
 
+import Data.List (sort)
 import Data.Group
 import Data.Ratio
 
@@ -184,4 +185,42 @@ testPerm' = do
         putStr "p: "
         _perm_print_pretty p n
         putStr "\n"
-  
+  putStrLn "\ncoset representatives:\n"
+  let cr =[[1,0,0,1]
+         ,[0,1,-1,3]
+         ,[0,1,-1,2]
+         ,[0,1,-1,1]
+         ,[-1,1,-3,2]
+         ,[-1,2,-2,3]
+         ,[-1,1,-2,1]
+         ,[-1,0,-2,-1]
+         ,[-2,1,-3,1]
+         ,[-1,1,-1,0]
+         ,[-1,0,-1,-1]
+         ,[-1,-1,-1,-2]]
+  let f = testGroup s t n 
+  forM_ cr $ \[a,b,c,d] -> do
+    withNewPSL2Z_ a b c d $ \m -> do
+      withNewPSL2ZWord $ \w -> do
+        psl2z_get_word w m
+        _perm_set_word p s t n w
+        -- psl2z_word_print_pretty w
+        -- putStr "\n"
+        putStr "p: "
+        _perm_print_pretty p n
+        putStr "\n"
+  putStrLn "\ncoset index:\n"
+  ci <- forM cr $ \[a,b,c,d] -> do
+    x <- newPSL2Z_ a b c d
+    return $ f x
+  print ci
+  print $ sort ci
+
+testGroup s t n x = unsafePerformIO $ do
+  p <- _perm_init n
+  withNewPSL2ZWord $ \w -> do
+    withPSL2Z x $ \x -> do
+      psl2z_get_word w x
+      _perm_set_word p s t n w
+  flag <- peek p
+  return $ fromIntegral flag

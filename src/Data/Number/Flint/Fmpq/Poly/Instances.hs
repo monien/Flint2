@@ -10,6 +10,9 @@ import Foreign.C.String
 import Foreign.Marshal.Alloc
 
 import Data.Ratio hiding (numerator, denominator)
+
+import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Poly
 
@@ -45,8 +48,12 @@ instance Num FmpqPoly where
   (-) = lift2 fmpq_poly_sub
   abs = undefined
   signum = undefined
-  fromInteger = undefined
-
+  fromInteger x = fst $ unsafePerformIO $ do
+    let t = fromInteger x :: Fmpz
+    withNewFmpqPoly $ \poly -> do
+      withFmpz t $ \x -> do
+        fmpq_poly_set_fmpz poly x
+      
 lift2 f x y = unsafePerformIO $ do
     result <- newFmpqPoly
     withFmpqPoly result $ \result -> do

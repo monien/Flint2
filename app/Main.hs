@@ -110,14 +110,16 @@ testFmpzPolyMat = do
       fmpz_poly_mat_print a x
 
 testFmpq = do
-  let z = 2 // 7
+  let z, s :: Fmpq
+      z = 2 // 7
+      s = sum $ map (1//) [1..10]
   print z
   print $ z^2
   let b = bernoulliB 20
   print b
   print $ numerator b
   print $ denominator b
-  print $ sum $ map (1//) [1..10]
+  print $ s
   
 testRest = do
   x <- newFmpz
@@ -956,18 +958,22 @@ testBoolMat = do
 testFmpzPolyQ = do
   r <- newFmpzPolyQ
   withFmpzPolyQ r $ \r -> do
-    withCString "2  7 1/3  11 0 1" $ \s -> 
-      fmpz_poly_q_set_str r s
+    withCString "2  7 1/3  11 0 1" $ \s -> fmpz_poly_q_set_str r s
   print r
   withFmpzPolyQNum r $ \n -> do
     fmpz_poly_print n
     putStr "/"
-  withFmpzPolyQDen r $ \n -> do
-    fmpz_poly_print n
+  withFmpzPolyQDen r $ \d -> do
+    fmpz_poly_print d
     endl
   withFmpzPolyQ r $ \r -> do
     fmpz_poly_q_print r
     endl
+  let p, q :: FmpzPoly
+      [p, q] = map fromList [[7, 1], [3, 11, 0, 1]] :: [FmpzPoly]
+      r :: FmpzPolyQ
+      r = p // q
+  print r
   return ()
 
 
@@ -1059,9 +1065,11 @@ testULongPrime = do
   withFmpz y $ \y -> fmpz_primorial y 100
   print y
   print $ map fst $ factor y
-  
+
+testEuler :: Fmpz -> Fmpz -> IO Double
 testEuler n k = do
-  let s = sum $ map (1//) [1..n]
+  let s :: Fmpq
+      s = sum $ map (1//) [1..n]
       r :: RF 1024
       r = fromRational (toRational s) - log (fromIntegral n)
       d = [bernoulliB j / fromIntegral (j*n^j) | j <- [2,4..2*k]]

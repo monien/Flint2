@@ -13,6 +13,8 @@ typedef psl2z_word_struct psl2z_word_t[1];
 void psl2z_word_init(psl2z_word_t word); 
 void psl2z_word_clear(psl2z_word_t word);
 
+void psl2z_normal_form(psl2z_t x);
+
 void psl2z_get_word(psl2z_word_t word, psl2z_t gamma);
 void psl2z_set_word(psl2z_t gamma, psl2z_word_t word);
 

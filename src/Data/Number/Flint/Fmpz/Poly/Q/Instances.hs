@@ -16,6 +16,7 @@ import Foreign.Storable
 import Foreign.Marshal.Alloc (free)
 import Foreign.Marshal.Array (advancePtr)
 
+import Data.Number.Flint.Quotient
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly
@@ -30,6 +31,25 @@ instance Show FmpzPolyQ where
         s <- peekCString cs
         free cs
         return s
+
+instance Quotient FmpzPolyQ FmpzPoly where
+  (//) x y = fst $ unsafePerformIO $ do
+    withNewFmpzPolyQ $ \poly -> do
+      withFmpzPoly x $ \x -> do
+        withFmpzPoly y $ \y -> do
+          CFmpzPolyQ p q <- peek poly
+          fmpz_poly_set p x
+          fmpz_poly_set q y
+  numerator q = fst $ unsafePerformIO $ do
+    withNewFmpzPoly $ \poly -> do 
+      withFmpzPolyQ q $ \q -> do
+        CFmpzPolyQ num _ <- peek q
+        fmpz_poly_set poly num
+  denominator q = fst $ unsafePerformIO $ do
+    withNewFmpzPoly $ \poly -> do 
+      withFmpzPolyQ q $ \q -> do
+        CFmpzPolyQ _ den <- peek q
+        fmpz_poly_set poly den
 
 instance Num FmpzPolyQ where
   (*) = lift2 fmpz_poly_q_mul

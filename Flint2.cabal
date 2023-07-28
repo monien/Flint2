@@ -35,6 +35,7 @@ library
       Data.Number.Flint.Flint.Internal
       Data.Number.Flint.MPoly
       Data.Number.Flint.UFD
+      Data.Number.Flint.Quotient
       Data.Number.Flint.Fmpz
       Data.Number.Flint.Fmpz.Instances
       Data.Number.Flint.Fmpz.Arith
@@ -293,6 +294,8 @@ library
       TypeSynonymInstances
       TypeFamilies
       KindSignatures
+      MultiParamTypeClasses
+      FunctionalDependencies
   include-dirs:
       csrc
   c-sources:

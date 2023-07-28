@@ -13,9 +13,12 @@ module Data.Number.Flint.UFD where
 class (Num a) => UFD a where
   -- | factor /x/ 
   --
-  -- factor /x/ into `prime` factors \(x = p_1^{e_1}\ldots p_n^{e_n}\) 
+  -- Factor /x/ into `prime` factors \(x = p_1^{e_1}\ldots p_n^{e_n}\) 
   -- with the representation \([(p_1, e_1) \ldots (p_n, e_n)]\)
   --
   factor :: a -> [(a, Int)]
+  -- | unfactor /f/
+  --
+  -- Find /x/ which has the unique factorization /f/.
   unfactor :: [(a, Int)] -> a
   unfactor x = product $ map (uncurry (^)) x

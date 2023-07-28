@@ -29,6 +29,8 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , psl2z_is_correct
   , psl2z_randtest
   -- * Word problem
+  --
+  -- $WordProblem
   , PSL2ZWord (..)
   , CPSL2ZWord (..)
   , newPSL2ZWord
@@ -145,6 +147,7 @@ newPSL2Z_ a b c d = do
             fmpz_set b b'
             fmpz_set c c'
             fmpz_set d d'
+    psl2z_normal_form x
     flag <- psl2z_is_correct x
     when (flag /= 1) $ do error "newPSL2Z_ a b c d with ad - bc not one."
   addForeignPtrFinalizer p_psl2z_clear x
@@ -180,6 +183,9 @@ foreign import ccall "acb_modular.h psl2z_clear_"
 
 foreign import ccall "acb_modular.h &psl2z_clear_"
   p_psl2z_clear :: FunPtr (Ptr CPSL2Z -> IO ())
+
+foreign import ccall "acb_modular.h psl2z_normal_form"
+  psl2z_normal_form :: Ptr CPSL2Z -> IO ()
 
 -- | /psl2z_swap/ /f/ /g/ 
 -- 
@@ -261,6 +267,16 @@ foreign import ccall "acb_modular.h psl2z_randtest"
 
 -- Word problem ----------------------------------------------------------------
 
+-- $WordProblem
+--
+-- Any element \(\gamma\) of \(\rm{PSL}_2(\mathbb{Z})\) can be
+-- expressed in a word in the generatars of the modular group \(S\)
+-- and \(T\). This decomposition is not unique. E.g.
+-- the element \[\gamma = \begin{pmatrix} 36 & 7 \\ 5 & 1 \end{pmatrix}\]
+-- corresponds to the word \([(T,7),(S,3),(T,-5),(S,3)]\) meaning
+-- that \(\gamma\) can be written as
+-- \[\gamma = T^7 S^3 T^{-5} S^3.\]
+
 #include "psl2z.h"
 
 data PSL2ZWord = PSL2ZWord {-#UNPACK#-} !(ForeignPtr CPSL2ZWord)
@@ -308,15 +324,13 @@ foreign import ccall "psl2z.h &psl2z_word_clear"
 
 -- | /psl2z_get_word/ /word/ /x/
 --
--- Decomposes \x\ into a word in /S/ ( \(z\rightarrow -1/z\) ),
--- and /T/ (\( \z\rightarrow z+1\)).
+-- Decomposes \x\ into a word in /S/ and /T/.
 foreign import ccall "psl2z.h psl2z_get_word"
   psl2z_get_word :: Ptr CPSL2ZWord -> Ptr CPSL2Z -> IO ()
 
 -- | /psl2z__word/ /word/ /x/
 --
--- Compose \x\ from a word in /S/ ( \(z\rightarrow -1/z\) ),
--- and /T/ (\( z\rightarrow z+1 \)).
+-- Compose \x\ from a word in /S/ and /T/.
 foreign import ccall "psl2z.h psl2z_set_word"
   psl2z_set_word :: Ptr CPSL2Z -> Ptr CPSL2ZWord -> IO ()
 

@@ -158,6 +158,7 @@ import Data.Functor ((<&>))
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Quotient
 
 #include <flint/flint.h>
 #include <flint/fmpq.h>
@@ -179,7 +180,6 @@ instance Storable CFmpq where
   poke = error "CFmpz.poke: Not defined"
 
 -- Fmpq ------------------------------------------------------------------------
-
 -- | Create a new `Fmpq` structure.
 newFmpq = do
   x <- mallocForeignPtr
@@ -203,36 +203,30 @@ withFmpqDen x f = do
   withFmpq x $ \x -> do 
     f $ flip advancePtr 1 $ castPtr x
 
--- Fmpz <-> Fmpq ---------------------------------------------------------------
+-- Fmpz <-> Fmpq --------------------------------------------------------------
 
-infixl 7 //
-
-(//) :: Fmpz -> Fmpz -> Fmpq
-(//) x y = unsafePerformIO $ do
-  result <- newFmpq
-  withFmpq result $ \result -> do
-    withFmpz x $ \x -> do
-      withFmpz y $ \y -> do
-        fmpq_set_fmpz_frac result x y
-  return result
-
-numerator :: Fmpq -> Fmpz
-numerator x = unsafePerformIO $ do
-  result <- newFmpz
-  withFmpz result $ \result -> do
-    withFmpq x $ \x -> do
-      withNewFmpz $ \tmp -> do
-        fmpq_get_fmpz_frac result tmp x
-  return result
-
-denominator :: Fmpq -> Fmpz
-denominator x = unsafePerformIO $ do
-  result <- newFmpz
-  withFmpz result $ \result -> do
-    withFmpq x $ \x -> do
-      withNewFmpz $ \tmp -> do
-        fmpq_get_fmpz_frac tmp result x
-  return result
+instance Quotient Fmpq Fmpz where
+  (//) x y = unsafePerformIO $ do
+    result <- newFmpq
+    withFmpq result $ \result -> do
+      withFmpz x $ \x -> do
+        withFmpz y $ \y -> do
+          fmpq_set_fmpz_frac result x y
+    return result
+  numerator x = unsafePerformIO $ do
+    result <- newFmpz
+    withFmpz result $ \result -> do
+      withFmpq x $ \x -> do
+        withNewFmpz $ \tmp -> do
+          fmpq_get_fmpz_frac result tmp x
+    return result
+  denominator x = unsafePerformIO $ do
+    result <- newFmpz
+    withFmpz result $ \result -> do
+      withFmpq x $ \x -> do
+        withNewFmpz $ \tmp -> do
+          fmpq_get_fmpz_frac tmp result x
+    return result
 
 -- Memory management -----------------------------------------------------------
 

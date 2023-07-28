@@ -66,6 +66,8 @@ library:
     - TypeSynonymInstances
     - TypeFamilies
     - KindSignatures
+    - MultiParamTypeClasses
+    - FunctionalDependencies
   exposed-modules:
    - Data.Number.Flint
    - Data.Number.Flint.Flint
@@ -73,6 +75,7 @@ library:
    - Data.Number.Flint.Flint.Internal
    - Data.Number.Flint.MPoly
    - Data.Number.Flint.UFD
+   - Data.Number.Flint.Quotient
    # Fmpz
    - Data.Number.Flint.Fmpz
    - Data.Number.Flint.Fmpz.Instances
