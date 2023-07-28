@@ -8,6 +8,7 @@ module Data.Number.Flint.Fmpz.Mat.FFI (
   -- * Matrices over the integers
     FmpzMat (..)
   , CFmpzMat (..)
+  -- * Constructor
   , newFmpzMat
   , withFmpzMat
   , withNewFmpzMat

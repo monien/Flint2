@@ -8,6 +8,7 @@ module Data.Number.Flint.Support.D.Mat.FFI (
   -- * Double precision matrices
     DMat (..)
   , CDMat (..)
+  -- * Smart constructors
   , newDMat
   , withDMat
   , withNewDMat
@@ -26,7 +27,9 @@ module Data.Number.Flint.Support.D.Mat.FFI (
   -- * Random matrix generation
   , d_mat_randtest
   -- * Input and output
-  , d_mat_print
+  , d_mat_get_str
+  , d_mat_fprint
+  , d_mat_print       
   -- * Comparison
   , d_mat_equal
   , d_mat_approx_equal
@@ -46,6 +49,7 @@ module Data.Number.Flint.Support.D.Mat.FFI (
 -- double precision matrices ---------------------------------------------------
 
 import Foreign.C.Types
+import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Storable
@@ -72,16 +76,26 @@ instance Storable CDMat where
     <*> #{peek d_mat_struct, rows   } ptr
   poke = error "CDMat.poke: Not defined."
 
+-- | /newDMat/ /rows/ /cols/
+--
+-- Construct new `DMat` with /rows/ rows and /cols/ columns.
 newDMat rows cols = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x -> d_mat_init x rows cols
   addForeignPtrFinalizer p_d_mat_clear x
   return $ DMat x
 
+-- | /withDMat/ /mat/ /f/
+--
+-- Apply /f/ to a /mat/.
 {-# INLINE withDMat #-}
 withDMat (DMat x) f = do
   withForeignPtr x $ \px -> f px >>= return . (DMat x,)
 
+-- | /withNewDMat/ /rows/ /cols/ /f/
+--
+-- Apply /f/ to a new `DMat` with /rows/ rows and /cols/ columns.
+{-# INLINE withNewDMat #-}
 withNewDMat rows cols f = do
   x <- newDMat rows cols
   withDMat x f
@@ -177,11 +191,25 @@ foreign import ccall "d_mat.h d_mat_randtest"
 
 -- Input and output ------------------------------------------------------------
 
+-- | /d_mat_get_str/ /mat/ 
+-- 
+-- Returns a string representation of the given matrix.
+foreign import ccall "d_mat.h d_mat_get_str"
+  d_mat_get_str :: Ptr CDMat -> IO CString
+
+-- | /d_mat_fprint/ /file/ /mat/ 
+-- 
+-- Prints the given matrix to the stream @stdout@.
+foreign import ccall "d_mat.h d_mat_fprint"
+  d_mat_fprint :: Ptr CFile -> Ptr CDMat -> IO ()
+
 -- | /d_mat_print/ /mat/ 
 -- 
 -- Prints the given matrix to the stream @stdout@.
-foreign import ccall "d_mat.h d_mat_print"
-  d_mat_print :: Ptr CDMat -> IO ()
+d_mat_print :: Ptr CDMat -> IO ()
+d_mat_print mat = do
+  printCStr d_mat_get_str mat
+  return ()
 
 -- Comparison ------------------------------------------------------------------
 

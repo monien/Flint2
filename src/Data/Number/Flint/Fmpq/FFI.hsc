@@ -6,16 +6,14 @@ maintainer  :  hmonien@uni-bonn.de
 -}
 module Data.Number.Flint.Fmpq.FFI (
   -- * Rational numbers @Fmpq@
-    Fmpq (..)
+    Fmpq
   , CFmpq (..)
+  -- * Constructors
   , newFmpq
   , withFmpq
   , withFmpqNum
   , withFmpqDen
   , withNewFmpq
-  , (//)
-  , numerator
-  , denominator
   -- * Memory management
   , fmpq_init
   , fmpq_clear
@@ -180,25 +178,38 @@ instance Storable CFmpq where
   poke = error "CFmpz.poke: Not defined"
 
 -- Fmpq ------------------------------------------------------------------------
--- | Create a new `Fmpq` structure.
+
+-- | /newFmpq/
+--
+-- Construct a `Fmpq`.
 newFmpq = do
   x <- mallocForeignPtr
   withForeignPtr x fmpq_init
   addForeignPtrFinalizer p_fmpq_clear x
   return $ Fmpq x
 
--- | Use `Fmpq` structure.
+-- | /withFmpq/ /x/ /f/
+--
+-- Execute /f/ with /x/.
 {-# INLINE withFmpq #-}
 withFmpq (Fmpq x) f = withForeignPtr x $ \xp -> f xp <&> (Fmpq x,)
 
--- | Use new `Fmpq` structure.
+-- | /withNewFmpq/ /f/
+--
+-- Execture /f/ with a new `Fmpq`.
 {-# INLINE withNewFmpq #-}
 withNewFmpq f = newFmpq >>= flip withFmpq f
 
+-- | /withFmpqNum/ /x/ /f/
+--
+-- Execute /f/ on the numerator of /x/.
 withFmpqNum x f = do
   withFmpq x $ \x -> do 
     f $ castPtr x
 
+-- | /withFmpqDen/ /x/ /f/
+--
+-- Execute /f/ on the denominator of /x/.
 withFmpqDen x f = do
   withFmpq x $ \x -> do 
     f $ flip advancePtr 1 $ castPtr x
@@ -206,6 +217,7 @@ withFmpqDen x f = do
 -- Fmpz <-> Fmpq --------------------------------------------------------------
 
 instance Quotient Fmpq Fmpz where
+
   (//) x y = unsafePerformIO $ do
     result <- newFmpq
     withFmpq result $ \result -> do
@@ -213,6 +225,7 @@ instance Quotient Fmpq Fmpz where
         withFmpz y $ \y -> do
           fmpq_set_fmpz_frac result x y
     return result
+
   numerator x = unsafePerformIO $ do
     result <- newFmpz
     withFmpz result $ \result -> do
@@ -220,6 +233,7 @@ instance Quotient Fmpq Fmpz where
         withNewFmpz $ \tmp -> do
           fmpq_get_fmpz_frac result tmp x
     return result
+
   denominator x = unsafePerformIO $ do
     result <- newFmpz
     withFmpz result $ \result -> do

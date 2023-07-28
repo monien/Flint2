@@ -60,6 +60,7 @@ monad using `newFmpz` and used with the `withFmpz` function.
 module Data.Number.Flint (
   module Data.Number.Flint.Flint
 , module Data.Number.Flint.UFD
+, module Data.Number.Flint.Quotient
 , module Data.Number.Flint.MPoly
 -- * Integers
 , module Data.Number.Flint.Fmpz
@@ -308,6 +309,7 @@ import Data.Number.Flint.Support.Mpfr.Mat
 import Data.Number.Flint.Support.Mpfr.Vec
 
 import Data.Number.Flint.UFD
+import Data.Number.Flint.Quotient
 
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpz.Poly.Instances
@@ -333,3 +335,5 @@ import Data.Number.Flint.Acb.Mat.Instances
 import Data.Number.Flint.Acb.Modular.Instances
 
 import Data.Number.Flint.Groups.Qfb.Instances
+
+import Data.Number.Flint.Support.D.Mat.Instances

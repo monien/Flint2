@@ -4,7 +4,7 @@ copyright   :  (c) 2022 Hartmut Monien
 license     :  GNU GPL, version 2 or above (see LICENSE)
 maintainer  :  hmonien@uni-bonn.de
 
-An @Fmpz@ represents an integer.
+An `Fmpz` represents an integer.
 This module implements operations on integers.
 
 == Example
@@ -47,17 +47,18 @@ main = do
         fmpz_mul z x y
         fmpz_print z
         fac <- newFmpzFactor
+        putStr "\\n"
         withFmpzFactor fac $ \\fac -> do
            fmpz_factor fac z
            fmpz_factor_print fac
-           putStr "\n"
+           putStr "\\n"
 @
 
 Running main yields:
 
 >>> main 
-49
-
+56
+2^3 * 7
 
 -}
 

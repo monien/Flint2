@@ -102,7 +102,7 @@ import Data.Number.Flint.NF
 -- nf_elem_t -------------------------------------------------------------------
 
 data NFElem = NFElem !(ForeignPtr CNFElem)
-data CNFElem = CNFElem
+type CNFElem = CFlint NFElem
 
 instance Storable CNFElem where
   {-# INLINE sizeOf #-}

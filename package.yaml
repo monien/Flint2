@@ -172,6 +172,7 @@ library:
    - Data.Number.Flint.Support.D.Extras
    - Data.Number.Flint.Support.D.Interval
    - Data.Number.Flint.Support.D.Mat
+   - Data.Number.Flint.Support.D.Mat.Instances
    - Data.Number.Flint.Support.D.Vec
    - Data.Number.Flint.Support.Mpf.Mat
    - Data.Number.Flint.Support.Mpf.Vec
@@ -421,6 +422,8 @@ library:
     # Support
     - csrc/double_interval/fprint.c
     - csrc/double_interval/get_str.c
+    - csrc/d_mat/entry.c
+    - csrc/d_mat/io.c
     # arb
     - csrc/arb/midref.c
     - csrc/arf/inlines.c

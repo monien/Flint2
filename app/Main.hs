@@ -1106,3 +1106,25 @@ testMediant = do
           endl
   return ()
 
+exampleFmpz = do
+  x <- newFmpz
+  y <- newFmpz
+  z <- newFmpz
+  withFmpz x $ \x -> do
+    withFmpz y $ \y -> do
+      withFmpz z $ \z -> do
+        fmpz_set_ui x 7
+        fmpz_set_ui y 8
+        fmpz_mul z x y
+        fmpz_print z
+        putStr "\n"
+        fac <- newFmpzFactor
+        withFmpzFactor fac $ \fac -> do
+           fmpz_factor fac z
+           fmpz_factor_print fac
+           putStr "\n"
+
+type family Q a  where
+  Q Fmpz = '[Fmpq, Fmpz]
+  Q FmpzPoly = '[FmpzPolyQ, FmpzPoly]
+  

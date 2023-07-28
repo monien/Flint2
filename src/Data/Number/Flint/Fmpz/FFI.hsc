@@ -6,8 +6,9 @@ maintainer  :  hmonien@uni-bonn.de
 -}
 module Data.Number.Flint.Fmpz.FFI (
   -- * Integers @Fmpz@
-    Fmpz (..)
-  , CFmpz (..)
+    Fmpz
+  , CFmpz
+  -- * Constructors
   , newFmpz
   , withFmpz
   , withNewFmpz
@@ -42,8 +43,6 @@ module Data.Number.Flint.Fmpz.FFI (
   , fmpz_randtest_mod_signed
   , fmpz_randprime
   -- * Conversion
-  -- , toFmpz
-  -- , fromFmpz
   , fmpz_get_si
   , fmpz_get_ui
   , fmpz_get_uiui
@@ -388,18 +387,24 @@ instance Storable CFmpzFactor where
 
 -- Fmpz ------------------------------------------------------------------------
 
--- | Create a new `Fmpz` structure.
+-- | /newFmpz/
+--
+-- Create a new `Fmpz`.
 newFmpz = do
   x <- mallocForeignPtr
   withForeignPtr x fmpz_init
   addForeignPtrFinalizer p_fmpz_clear x
   return $ Fmpz x
 
--- | Use `Fmpz` structure.
+-- | /withFmpz/ /x/ /f/
+--
+-- Apply /f/ to /x/.
 {-# INLINE withFmpz #-}
 withFmpz (Fmpz x) f = withForeignPtr x $ \xp -> f xp <&> (Fmpz x,)
 
--- | Use new `Fmpz` structure.
+-- | /withNewFmpz/ /f/
+--
+-- Apply /f/ to a new `Fmpz`.
 {-# INLINE withNewFmpz #-}
 withNewFmpz f = newFmpz >>= flip withFmpz f
 

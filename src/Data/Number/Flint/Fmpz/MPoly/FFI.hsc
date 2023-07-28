@@ -8,6 +8,7 @@ module Data.Number.Flint.Fmpz.MPoly.FFI (
   -- * Multivariate polynomials over the integers
     FmpzMPoly (..)
   , CFmpzMPoly (..)
+  -- * Constructor
   , newFmpzMPoly
   , withFmpzMPoly
   -- * Context object
@@ -230,7 +231,9 @@ instance Storable CFmpzMPoly where
   peek = error "CFmpzMPoly.peek: Not defined"
   poke = error "CFmpzMPoly.poke: Not defined"
 
--- | Create a new `FmpzMPoly`
+-- | /newFmpzMPoly/ /ctx/
+--
+-- Construct a new `FmpzMPoly` with context /ctx/.
 newFmpzMPoly ctx@(FmpzMPolyCtx pctx) = do
   p <- mallocForeignPtr
   withForeignPtr p $ \p ->
@@ -242,6 +245,14 @@ newFmpzMPoly ctx@(FmpzMPolyCtx pctx) = do
 {-# INLINE withFmpzMPoly #-}
 withFmpzMPoly (FmpzMPoly p) f = do
   withForeignPtr p $ \fp -> (FmpzMPoly p,) <$> f fp
+
+-- | /withNewFmpzMPoly/ /ctx/
+--
+-- Execute computation /f/ on a new `FmpzMPoly` with context /ctx/.
+{-# INLINE withNewFmpzMPoly #-}
+withNewFmpzMPoly ctx f = do
+  x <- newFmpzMPoly ctx
+  withFmpzMPoly x f
 
 -- fmpz_mpoly_univar_t ---------------------------------------------------------
 
@@ -649,9 +660,6 @@ foreign import ccall "fmpz_mpoly.h fmpz_mpoly_set_fmpz_poly"
   fmpz_mpoly_set_fmpz_poly :: Ptr CFmpzMPoly -> Ptr CFmpzPoly -> CLong -> Ptr CFmpzMPolyCtx -> IO ()
 
 -- Container operations --------------------------------------------------------
-
-
-
 
 -- | /fmpz_mpoly_term_coeff_ref/ /A/ /i/ /ctx/ 
 -- 

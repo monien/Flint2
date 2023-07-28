@@ -96,7 +96,7 @@ printAllTypes = do
   print $ typeOf CMpq
   print $ typeOf CMpz
   print $ typeOf CNF
-  print $ typeOf CNFElem
+  -- print $ typeOf CNFElem
   print $ typeOf CNFactor
   print $ typeOf CNMod
   -- print $ typeOf CNModDiscreteLogPohligHellman

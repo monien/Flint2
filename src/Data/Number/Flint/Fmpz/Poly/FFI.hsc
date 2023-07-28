@@ -8,6 +8,7 @@ module Data.Number.Flint.Fmpz.Poly.FFI (
   -- * Univariate polynomials over the integers
     FmpzPoly (..)
   , CFmpzPoly (..)
+  -- * Constructor
   , newFmpzPoly
   , withFmpzPoly
   , withNewFmpzPoly
@@ -489,19 +490,25 @@ instance Storable CFmpzPoly where
     return $ CFmpzPoly coeffs alloc length
   poke = error "CFmpzPoly.poke: Not defined"
 
--- | Create a new `FmpzPoly`
+-- | /newFmpzPoly/
+--
+-- Construct a new `FmpzPoly`
 newFmpzPoly = do
   p <- mallocForeignPtr
   withForeignPtr p fmpz_poly_init
   addForeignPtrFinalizer p_fmpz_poly_clear p
   return $ FmpzPoly p
 
--- | Use a `FmpzPoly`
+-- | /withFmpzPoly/ /poly/ /f/
+-- 
+-- Execute /f/ on /poly/
 {-# INLINE withFmpzPoly #-}
 withFmpzPoly (FmpzPoly p) f = do
   withForeignPtr p $ \fp -> f fp >>= return . (FmpzPoly p,)
 
--- | Create and use a new `FmpzPoly`
+-- | /withNewFmpzPoly/ /poly/ /f/
+-- 
+-- Execute /f/ on a new `FmpzPoly`
 withNewFmpzPoly f = do
   x <- newFmpzPoly
   withFmpzPoly x $ \x -> f x
