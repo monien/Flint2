@@ -39,6 +39,8 @@ module Data.Number.Flint.Arb.FFI (
   , arb_set_fmpq
   , arb_set_str
   , arb_get_str
+  , arb_get_strd
+  , arb_get_strn
   -- * Assignment of special values
   , arb_zero
   , arb_one
@@ -626,6 +628,9 @@ foreign import ccall "arb.h arb_get_str"
 
 foreign import ccall "arb.h arb_get_strd"
   arb_get_strd :: Ptr CArb -> CLong -> IO CString
+
+foreign import ccall "arb.h arb_get_strn"
+  arb_get_strn :: Ptr CArb -> CLong -> IO CString
 
 foreign import ccall "arb.h arb_get_str_"
   arb_get_str_ :: Ptr CArb -> IO CString

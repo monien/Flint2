@@ -9,6 +9,7 @@ module Data.Number.Flint.Arb.Mat.FFI (
   -- * Types
     ArbMat (..)
   , CArbMat (..)
+  -- * Constructors
   , newArbMat
   , newArbMatFromFmpzMat
   , newArbMatFromFmpzMatRound
@@ -23,15 +24,18 @@ module Data.Number.Flint.Arb.Mat.FFI (
   , arb_mat_window_clear
   -- * Conversions
   , arb_mat_set
+  , arb_mat_entry
   , arb_mat_set_fmpz_mat
   , arb_mat_set_round_fmpz_mat
   , arb_mat_set_fmpq_mat
   -- * Random generation
   , arb_mat_randtest
   -- * Input and output
-  , arb_mat_get_strd 
+  , arb_mat_get_strd
+  , arb_mat_get_strn 
   , arb_mat_printd
   , arb_mat_fprintd
+  , arb_mat_fprintn
   -- * Comparisons
   , arb_mat_equal
   , arb_mat_overlaps
@@ -273,6 +277,9 @@ foreign import ccall "arb_mat.h arb_mat_window_clear"
 foreign import ccall "arb_mat.h arb_mat_set"
   arb_mat_set :: Ptr CArbMat -> Ptr CArbMat -> IO ()
 
+foreign import ccall "arb_mat.h arb_mat_entry_"
+  arb_mat_entry :: Ptr CArbMat -> CLong -> CLong -> IO (Ptr CArb)
+
 foreign import ccall "arb_mat.h arb_mat_set_fmpz_mat"
   arb_mat_set_fmpz_mat :: Ptr CArbMat -> Ptr CFmpzMat -> IO ()
 
@@ -298,17 +305,18 @@ foreign import ccall "arb_mat.h arb_mat_randtest"
 
 foreign import ccall "arb_mat.h arb_mat_get_strd"
   arb_mat_get_strd :: Ptr CArbMat -> CLong -> IO CString
-  
+
+foreign import ccall "arb_mat.h arb_mat_get_strn"
+  arb_mat_get_strn :: Ptr CArbMat -> CLong -> ArbStrOption -> IO CString
+
 -- | /arb_mat_printd/ /mat/ /digits/ 
 -- 
 -- Prints each entry in the matrix with the specified number of decimal
 -- digits.
 arb_mat_printd :: Ptr CArbMat -> CLong -> IO ()
 arb_mat_printd mat digits = do
-  cs <- arb_mat_get_strd mat digits
-  s <- peekCString cs
-  free cs
-  putStr s
+  printCStr (flip arb_mat_get_strd digits) mat
+  return ()
   
 -- | /arb_mat_fprintd/ /file/ /mat/ /digits/ 
 -- 
@@ -316,6 +324,9 @@ arb_mat_printd mat digits = do
 -- digits to the stream /file/.
 foreign import ccall "arb_mat.h arb_mat_fprintd"
   arb_mat_fprintd :: Ptr CFile -> Ptr CArbMat -> CLong -> IO ()
+
+foreign import ccall "arb_mat.h arb_mat_fprintn"
+  arb_mat_fprintn :: Ptr CFile -> Ptr CArbMat -> CLong -> ArbStrOption -> IO ()
 
 -- Comparisons -----------------------------------------------------------------
 

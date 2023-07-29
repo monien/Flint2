@@ -19,10 +19,33 @@ import Data.Vector.Algorithms.Intro (sort)
 
 import Data.Number.Flint
 
+class PolynomialProp a where
+  degree :: a -> Int
+
+instance PolynomialProp FmpzPoly where
+  degree poly = unsafePerformIO $ do
+    (_, d) <- withFmpzPoly poly $ \poly -> fmpz_poly_degree poly
+    return $ fromIntegral d
+
+instance PolynomialProp FmpqPoly where
+  degree poly = unsafePerformIO $ do
+    (_, d) <- withFmpqPoly poly $ \poly -> fmpq_poly_degree poly
+    return $ fromIntegral d
+
+instance PolynomialProp AcbPoly where
+  degree poly = unsafePerformIO $ do
+    (_, d) <- withAcbPoly poly $ \poly -> acb_poly_degree poly
+    return $ fromIntegral d
+
+instance PolynomialProp ArbPoly where
+  degree poly = unsafePerformIO $ do
+    (_, d) <- withArbPoly poly $ \poly -> arb_poly_degree poly
+    return $ fromIntegral d
+
 class Polynomial a b where
   roots :: a -> b
 
-instance Polynomial FmpzPoly (Vector Fmpz) where
+instance Polynomial FmpzPoly (Vector Fmpz) where    
   roots poly = snd $ snd $ unsafePerformIO $ do
     withFmpzPoly poly $ \poly -> do
       f <- newFmpzPolyFactor

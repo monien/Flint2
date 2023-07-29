@@ -1143,5 +1143,28 @@ testFmpqPolyPrint = do
       withCString "x" $ \var -> do
         fmpq_poly_print_pretty_as_series series var
         endl
-
   return ()
+
+testArbSolve = do
+  let prec = 1024
+      d :: [[Fmpq]]
+      d = [[3, 2, -1], [2, -2, 4], [-1, 1//2, -1]]
+      v = [1, -2, 0]
+  a <- newArbMat 3 3
+  b <- newArbMat 3 1
+  x <- newArbMat 3 1
+  withArbMat x $ \x -> do
+    withArbMat a $ \a -> do
+      withArbMat b $ \b -> do
+        forM_ [0..2] $ \i -> do
+          withFmpq (v!!i) $ \q -> do
+            p <- arb_mat_entry b (fromIntegral i) (fromIntegral 0)
+            arb_set_fmpq p q prec
+          forM_ [0..2] $ \j -> do
+            p <- arb_mat_entry a (fromIntegral i) (fromIntegral j)
+            withFmpq ((d !! i) !! j) $ \x -> do 
+              arb_set_fmpq p x prec
+        arb_mat_solve x a b prec
+  print a
+  print b
+  print x

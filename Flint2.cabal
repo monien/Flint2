@@ -363,8 +363,12 @@ library
       csrc/arf/inlines.c
       csrc/mag/get_str.c
       csrc/arb/get_strd.c
+      csrc/arb/get_strn.c
       csrc/arb/get_str_.c
       csrc/arb_mat/get_strd.c
+      csrc/arb_mat/get_strn.c
+      csrc/arb_mat/fprintn.c
+      csrc/arb_mat/entry.c
       csrc/arb_poly/get_strd.c
       csrc/arb_calc/get_strd.c
       csrc/arb_calc/inlines.c
