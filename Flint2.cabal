@@ -317,6 +317,12 @@ library
       csrc/fmpz_mod_poly_factor/fprint_pretty.c
       csrc/fmpz_mod_poly_factor/get_str.c
       csrc/fmpz_mod_poly_factor/get_str_pretty.c
+      csrc/fmpq/mediant.c
+      csrc/fmpq/get_fmpz_frac.c
+      csrc/fmpq_mat/get_str.c
+      csrc/fmpq_mat/fprint.c
+      csrc/fmpq_vec/get_str.c
+      csrc/fmpq_poly/io_as_series.c
       csrc/nmod_poly_factor/get_str.c
       csrc/nmod_poly_factor/get_str_pretty.c
       csrc/nmod_poly_factor/fprint.c
@@ -325,11 +331,6 @@ library
       csrc/nmod_poly_mat/get_str.c
       csrc/aprcl/fprint.c
       csrc/aprcl/get_str.c
-      csrc/fmpq/mediant.c
-      csrc/fmpq/get_fmpz_frac.c
-      csrc/fmpq_mat/get_str.c
-      csrc/fmpq_mat/fprint.c
-      csrc/fmpq_vec/get_str.c
       csrc/bool_mat/get_str.c
       csrc/qfb/get_str.c
       csrc/qfb/fprint.c
@@ -399,6 +400,7 @@ executable arb_plot
       Paths_Flint2
   hs-source-dirs:
       app/arb_plot
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Flint2
     , JuicyPixels

@@ -188,6 +188,9 @@ testRest = do
   withFmpqPoly poly $ \poly -> do
     fmpq_poly_legendre_p poly 7
   print poly
+  withFmpqPoly poly $ \poly -> do
+    withCString "x" $ \var -> do
+      fmpq_poly_print_pretty_as_series poly var 
   print $ poly^3
   testFmpqMat
   testPadic
@@ -969,12 +972,12 @@ testFmpzPolyQ = do
   withFmpzPolyQ r $ \r -> do
     fmpz_poly_q_print r
     endl
-  let p, q :: FmpzPoly
-      [p, q] = map fromList [[7, 1], [3, 11, 0, 1]] :: [FmpzPoly]
-      r :: FmpzPolyQ
-      r = p // q
-  print r
-  return ()
+  -- let p, q :: FmpzPoly
+  --     [p, q] = map fromList [[7, 1], [3, 11, 0, 1]] :: [FmpzPoly]
+  --     r :: FmpzPolyQ
+  --     r = p // q
+  -- print r
+  -- return ()
 
 
 testLLL :: forall k. KnownNat k => RF k -> CLong -> IO ()
@@ -1124,7 +1127,12 @@ exampleFmpz = do
            fmpz_factor_print fac
            putStr "\n"
 
-type family Q a  where
-  Q Fmpz = '[Fmpq, Fmpz]
-  Q FmpzPoly = '[FmpzPolyQ, FmpzPoly]
-  
+testFmpqPolyPrint = do
+  poly <- newFmpqPoly
+  withFmpqPoly poly $ \poly -> do
+    fmpq_poly_legendre_p poly 7
+  print poly
+  withFmpqPoly poly $ \poly -> do
+    withCString "x" $ \var -> do
+      fmpq_poly_print_pretty_as_series poly var
+      endl

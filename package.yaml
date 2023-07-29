@@ -49,6 +49,10 @@ executables:
       - gloss
       - gloss-juicy
       - Flint2
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
       
 library:
   source-dirs: src
@@ -373,6 +377,13 @@ library:
     - csrc/fmpz_mod_poly_factor/fprint_pretty.c
     - csrc/fmpz_mod_poly_factor/get_str.c
     - csrc/fmpz_mod_poly_factor/get_str_pretty.c
+   # Fmpq
+    - csrc/fmpq/mediant.c
+    - csrc/fmpq/get_fmpz_frac.c
+    - csrc/fmpq_mat/get_str.c
+    - csrc/fmpq_mat/fprint.c
+    - csrc/fmpq_vec/get_str.c
+    - csrc/fmpq_poly/io_as_series.c
     # NMod
     - csrc/nmod_poly_factor/get_str.c
     - csrc/nmod_poly_factor/get_str_pretty.c
@@ -383,12 +394,6 @@ library:
     # APRCL
     - csrc/aprcl/fprint.c
     - csrc/aprcl/get_str.c
-    # Fmpq
-    - csrc/fmpq/mediant.c
-    - csrc/fmpq/get_fmpz_frac.c
-    - csrc/fmpq_mat/get_str.c
-    - csrc/fmpq_mat/fprint.c
-    - csrc/fmpq_vec/get_str.c
     # Groups
     - csrc/bool_mat/get_str.c
     - csrc/qfb/get_str.c

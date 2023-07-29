@@ -10,6 +10,7 @@ maintainer  :  hmonien@uni-bonn.de
 module Data.Number.Flint.Quotient where
 
 class Quotient a b | a -> b where
+
   -- | /x/ \/\/ /y/
   --
   -- Construct an /quotient/ from numerator /x/ and denominator /y/.

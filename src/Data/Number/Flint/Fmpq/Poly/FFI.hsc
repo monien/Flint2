@@ -49,10 +49,6 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_get_nmod_poly_den
   -- , _fmpq_poly_set_array_mpq  -- deprecated
   -- , fmpq_poly_set_array_mpq   -- deprecated
-  , _fmpq_poly_set_str
-  , fmpq_poly_set_str
-  , fmpq_poly_get_str
-  , fmpq_poly_get_str_pretty
   , fmpq_poly_zero
   , fmpq_poly_one
   , fmpq_poly_neg
@@ -268,6 +264,11 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   -- * Square-free
   , fmpq_poly_is_squarefree
   -- * Input and output
+  , _fmpq_poly_set_str
+  , fmpq_poly_set_str
+  , fmpq_poly_get_str
+  , fmpq_poly_get_str_pretty
+  , fmpq_poly_get_str_pretty_as_series
   , _fmpq_poly_print
   , fmpq_poly_print
   , _fmpq_poly_print_pretty
@@ -276,6 +277,8 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_fprint
   , _fmpq_poly_fprint_pretty
   , fmpq_poly_fprint_pretty
+  , fmpq_poly_fprint_pretty_as_series
+  , fmpq_poly_print_pretty_as_series
   , fmpq_poly_read
   , fmpq_poly_fread
 ) where 
@@ -2462,3 +2465,12 @@ foreign import ccall "fmpq_poly.h fmpq_poly_read"
 foreign import ccall "fmpq_poly.h fmpq_poly_fread"
   fmpq_poly_fread :: Ptr CFile -> Ptr CFmpqPoly -> IO CInt
 
+foreign import ccall "fmpq_poly.h fmpq_poly_fprint_pretty_as_series"
+  fmpq_poly_fprint_pretty_as_series :: Ptr CFile -> Ptr CFmpqPoly -> CString -> IO CInt
+
+fmpq_poly_print_pretty_as_series :: Ptr CFmpqPoly -> CString -> IO CInt
+fmpq_poly_print_pretty_as_series poly var =
+  printCStr (flip fmpq_poly_get_str_pretty_as_series var) poly
+  
+foreign import ccall "fmpq_poly.h fmpq_poly_get_str_pretty_as_series"
+  fmpq_poly_get_str_pretty_as_series :: Ptr CFmpqPoly -> CString -> IO CString
