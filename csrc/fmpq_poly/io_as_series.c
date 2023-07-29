@@ -48,6 +48,9 @@ fmpq_poly_fprint_pretty_as_series(
 	} else {
 	  flint_fprintf(file, "%s", var);
 	}
+      } else if( j == 0 ) {
+	fmpq_abs(c, c);
+	fmpq_fprint(file, c);
       }
     } else {
       fmpq_abs(c, c);

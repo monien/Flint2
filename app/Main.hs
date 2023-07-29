@@ -1129,10 +1129,19 @@ exampleFmpz = do
 
 testFmpqPolyPrint = do
   poly <- newFmpqPoly
-  withFmpqPoly poly $ \poly -> do
-    fmpq_poly_legendre_p poly 7
+  withFmpqPoly poly $ \poly -> fmpq_poly_legendre_p poly 7
   print poly
-  withFmpqPoly poly $ \poly -> do
-    withCString "x" $ \var -> do
-      fmpq_poly_print_pretty_as_series poly var
-      endl
+  let poly = fromList [0, 1] :: FmpqPoly
+  withNewFmpqPoly $ \series -> do
+    withFmpqPoly poly $ \poly -> do
+      fmpq_poly_cos_series series poly 32
+      withCString "x" $ \var -> do
+        fmpq_poly_print_pretty_as_series series var
+        endl
+      fmpq_poly_cos_series series poly 32
+      fmpq_poly_neg series series
+      withCString "x" $ \var -> do
+        fmpq_poly_print_pretty_as_series series var
+        endl
+
+  return ()
