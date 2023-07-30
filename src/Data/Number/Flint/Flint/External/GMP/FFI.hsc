@@ -10,6 +10,8 @@ import Data.Int
 import Data.Word
 import Foreign.ForeignPtr
 import Foreign.C.Types
+import Foreign.Storable
+
 import Data.Number.Flint.Flint.Internal
 
 #undef _LONG_LONG_LIMB
@@ -42,3 +44,11 @@ type CMpf = CFlint Mpf
 -- | Data structure containing the CGmpRandstate pointer
 data GmpRandstate = GmpRandstate {-# UNPACK #-} !(ForeignPtr CGmpRandstate)
 type CGmpRandstate = CFlint GmpRandstate
+
+instance Storable CMpf where
+  {-# INLINE sizeOf #-}
+  sizeOf   _ = #{size       mpf_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment mpf_t}
+  peek = undefined
+  poke = undefined

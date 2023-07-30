@@ -12,6 +12,16 @@ import Foreign.C.Types
 
 import Data.Number.Flint.Flint
 
+-- fq_zech_t -------------------------------------------------------------------
+
+data FqZech = FqZech {-# UNPACK #-} !(ForeignPtr CFqZech)
+type CFqZech = CFlint FqZech
+
+-- fq_zech_ctx_t ---------------------------------------------------------------
+
+data FqZechCtx = FqZechCtx {-# UNPACK #-} !(ForeignPtr CFqZechCtx)
+type CFqZechCtx = CFlint FqZechCtx
+
 -- fq_zech_poly_t --------------------------------------------------------------
 
 data FqZechPoly = FqZechPoly {-# UNPACK #-} !(ForeignPtr CFqZechPoly)
@@ -25,5 +35,5 @@ data CFqZechPolyFactor = CFqZechPolyFactor (Ptr CFqZechPoly) (Ptr CLong) CLong C
 -- fq_zech_mat_t ---------------------------------------------------------------
 
 data FqZechMat = FqZechMat {-# UNPACK #-} !(ForeignPtr CFqZechMat)
-type CFqZechMat = CFlint FqZechMat
+data CFqZechMat = CFqZechMat (Ptr CFqZech) CLong CLong (Ptr (Ptr CFqZech))
 

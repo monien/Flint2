@@ -8,10 +8,10 @@ module Data.Number.Flint.Fmpz.Mod.Mat.FFI (
   -- * Matrices over integers mod n
     FmpzModMat (..)
   , CFmpzModMat (..)
+  -- * Constructors
   , newFmpzModMat
   , withFmpzModMat
   , withNewFmpzModMat
-  -- * Types, macros and constants
   -- * Element access
   , fmpz_mod_mat_entry
   , fmpz_mod_mat_set_entry
@@ -109,14 +109,16 @@ import Data.Number.Flint.Fmpq
 -- fmpz_mod_mat_t --------------------------------------------------------------
 
 data FmpzModMat = FmpzModMat {-# UNPACK #-} !(ForeignPtr CFmpzModMat)
-type CFmpzModMat = CFlint FmpzModMat
+data CFmpzModMat = CFmpzModMat (Ptr CFmpzMat) (Ptr CFmpz)
 
 instance Storable CFmpzModMat where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size fmpz_mod_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fmpz_mod_mat_t}
-  peek = undefined
+  peek ptr = CFmpzModMat
+    <$> #{peek fmpz_mod_mat_struct, mat} ptr
+    <*> #{peek fmpz_mod_mat_struct, mod} ptr
   poke = undefined
 
 newFmpzModMat nrows ncols n = do
@@ -140,9 +142,11 @@ withNewFmpzModMat nrows ncols n f =
 -- | /fmpz_mod_mat_entry/ /mat/ /i/ /j/ 
 -- 
 -- Return a reference to the element at row @i@ and column @j@ of @mat@.
-foreign import ccall "fmpz_mod_mat.h fmpz_mod_mat_entry"
-  fmpz_mod_mat_entry :: Ptr CFmpzModMat -> CLong -> CLong -> IO (Ptr CFmpz)
-
+fmpz_mod_mat_entry :: Ptr CFmpzModMat -> CLong -> CLong -> IO (Ptr CFmpz)
+fmpz_mod_mat_entry mat i j = do
+  CFmpzModMat a _ <- peek mat
+  fmpz_mat_entry a i j
+  
 -- | /fmpz_mod_mat_set_entry/ /mat/ /i/ /j/ /val/ 
 -- 
 -- Set the entry at row @i@ and column @j@ of @mat@ to @val@.

@@ -44,6 +44,7 @@ import Foreign.C.Types
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Storable
+import Foreign.Marshal.Array
 
 import Data.Number.Flint.Flint
 
@@ -53,14 +54,18 @@ import Data.Number.Flint.Flint
 -- mpf_mat_t -------------------------------------------------------------------
 
 data MpfMat = MpfMat {-# UNPACK #-} !(ForeignPtr CMpfMat)
-type CMpfMat = CFlint MpfMat
+data CMpfMat = CMpfMat (Ptr CMpf) CLong CLong (Ptr (Ptr CMpf))
 
 instance Storable CMpfMat where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size mpf_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment mpf_mat_t}
-  peek = error "CMpfMat.peek: Not defined."
+  peek ptr = CMpfMat
+    <$> #{peek mpf_mat_struct, entries} ptr
+    <*> #{peek mpf_mat_struct, r      } ptr
+    <*> #{peek mpf_mat_struct, c      } ptr
+    <*> #{peek mpf_mat_struct, rows   } ptr
   poke = error "CMpfMat.poke: Not defined."
 
 newMpfMat rows cols prec = do
@@ -124,8 +129,10 @@ foreign import ccall "mpf_mat.h mpf_mat_swap_entrywise"
 -- Returns a reference to the entry of @mat@ at row \(i\) and column \(j\).
 -- Both \(i\) and \(j\) must not exceed the dimensions of the matrix. The
 -- return value can be used to either retrieve or set the given entry.
-foreign import ccall "mpf_mat.h mpf_mat_entry"
-  mpf_mat_entry :: Ptr CMpfMat -> CLong -> CLong -> IO (Ptr CMpf)
+mpf_mat_entry :: Ptr CMpfMat -> CLong -> CLong -> IO (Ptr CMpf)
+mpf_mat_entry mat i j = do
+  CMpfMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
 
 -- | /mpf_mat_zero/ /mat/ 
 -- 

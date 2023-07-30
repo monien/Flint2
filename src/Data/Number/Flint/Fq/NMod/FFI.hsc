@@ -113,23 +113,21 @@ import Foreign.C.String
 import Foreign.C.Types
 import qualified Foreign.Concurrent
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr, castPtr )
+import Foreign.Ptr
 import Foreign.Storable
-import Foreign.Marshal ( free )
+import Foreign.Marshal
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.NMod
 import Data.Number.Flint.NMod.Types
+import Data.Number.Flint.Fq.NMod.Types
 
 #include <flint/flint.h>
 
 #include <flint/fq_nmod.h>
 
 -- fq_nmod_t -------------------------------------------------------------------
-
-data FqNMod = FqNMod {-# UNPACK #-} !(ForeignPtr CFqNMod)
-type CFqNMod = CFlint FqNMod
 
 instance Storable CFqNMod where
   {-# INLINE sizeOf #-}
@@ -152,9 +150,6 @@ withFqNMod (FqNMod x) f = do
   withForeignPtr x $ \px -> f px >>= return . (FqNMod x,)
 
 -- fq_nmod_ctx_t ---------------------------------------------------------------
-
-data FqNModCtx = FqNModCtx {-# UNPACK #-} !(ForeignPtr CFqNModCtx)
-data CFqNModCtx = CFqNModCtx (Ptr CFmpz) (Ptr CNMod) CInt CInt (Ptr CMpLimb) (Ptr CLong) (Ptr CLong) (Ptr CNModPoly) (Ptr CNModPoly) CString 
 
 instance Storable CFqNModCtx where
   {-# INLINE sizeOf #-}

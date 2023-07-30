@@ -8,6 +8,7 @@ module Data.Number.Flint.Acb.Mat.FFI (
   -- * Matrices over the complex numbers
     AcbMat (..)
   , CAcbMat (..)
+  -- * Constructors
   , newAcbMat
   , newAcbMatFromFmpzMat
   , newAcbMatFromFmpzMatRound
@@ -23,6 +24,7 @@ module Data.Number.Flint.Acb.Mat.FFI (
   , acb_mat_window_init
   --, acb_mat_window_clear
   -- * Conversions
+  , acb_mat_entry
   , acb_mat_set
   , acb_mat_set_fmpz_mat
   , acb_mat_set_round_fmpz_mat
@@ -36,6 +38,9 @@ module Data.Number.Flint.Acb.Mat.FFI (
   , acb_mat_get_strd
   , acb_mat_printd
   , acb_mat_fprintd
+  , acb_mat_get_strn
+  , acb_mat_printn
+  , acb_mat_fprintn
   -- * Comparisons
   , acb_mat_equal
   , acb_mat_overlaps
@@ -152,9 +157,10 @@ import Control.Monad
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, nullPtr, plusPtr )
+import Foreign.Ptr
 import Foreign.Storable
-import Foreign.Marshal ( free )
+import Foreign.Marshal
+import Foreign.Marshal.Array
 
 import Data.Number.Flint.Flint
 
@@ -181,7 +187,11 @@ instance Storable CAcbMat where
   sizeOf _ = #{size acb_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment acb_mat_t}
-  peek = error "CAcbMat.peek: Not defined."
+  peek ptr = CAcbMat
+    <$> #{peek acb_mat_struct, entries} ptr
+    <*> #{peek acb_mat_struct, r      } ptr
+    <*> #{peek acb_mat_struct, c      } ptr
+    <*> #{peek acb_mat_struct, rows   } ptr
   poke = error "CAcbMat.poke: Not defined."
  
 newAcbMat rows cols = do
@@ -289,6 +299,9 @@ foreign import ccall "acb_mat.h acb_mat_window_init"
 
 -- Conversions -----------------------------------------------------------------
 
+foreign import ccall "acb_mat.h acb_mat_entry_"
+  acb_mat_entry :: Ptr CAcbMat -> CLong -> CLong -> IO (Ptr CAcb)
+ 
 foreign import ccall "acb_mat.h acb_mat_set"
   acb_mat_set :: Ptr CAcbMat -> Ptr CAcbMat -> IO ()
 
@@ -332,24 +345,41 @@ foreign import ccall "acb_mat.h acb_mat_randtest_eig"
 
 foreign import ccall "acb_mat acb_mat_get_strd"
   acb_mat_get_strd :: Ptr CAcbMat -> CLong -> IO CString
-  
+
+foreign import ccall "acb_mat acb_mat_get_strn"
+  acb_mat_get_strn :: Ptr CAcbMat -> CLong -> ArbStrOption -> IO CString
+
 -- | /acb_mat_printd/ /mat/ /digits/ 
 -- 
 -- Prints each entry in the matrix with the specified number of decimal
 -- digits.
 acb_mat_printd :: Ptr CAcbMat -> CLong -> IO ()
 acb_mat_printd mat digits = do
-  cs <- acb_mat_get_strd mat digits
-  s <- peekCString cs
-  free cs
-  putStr s
-  
+  printCStr (\mat -> acb_mat_get_strd mat digits) mat
+  return ()
+
 -- | /acb_mat_fprintd/ /file/ /mat/ /digits/ 
 -- 
 -- Prints each entry in the matrix with the specified number of decimal
 -- digits to the stream /file/.
 foreign import ccall "acb_mat.h acb_mat_fprintd"
   acb_mat_fprintd :: Ptr CFile -> Ptr CAcbMat -> CLong -> IO ()
+
+-- | /acb_mat_printn/ /mat/ /digits/ /options/
+-- 
+-- Prints each entry in the matrix with the specified number of decimal
+-- digits.
+acb_mat_printn :: Ptr CAcbMat -> CLong -> ArbStrOption -> IO ()
+acb_mat_printn mat digits options = do
+  printCStr (\mat -> acb_mat_get_strn mat digits options) mat
+  return ()
+
+-- | /acb_mat_fprintd/ /file/ /mat/ /digits/ 
+-- 
+-- Prints each entry in the matrix with the specified number of decimal
+-- digits to the stream /file/.
+foreign import ccall "acb_mat.h acb_mat_fprintn"
+  acb_mat_fprintn :: Ptr CFile -> Ptr CAcbMat -> CLong -> ArbStrOption -> IO ()
 
 -- Comparisons -----------------------------------------------------------------
 

@@ -102,9 +102,9 @@ module Data.Number.Flint.Fq.Mat.FFI (
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, nullPtr, plusPtr )
+import Foreign.Ptr 
 import Foreign.Storable
-import Foreign.Marshal ( free )
+import Foreign.Marshal
 
 import Data.Number.Flint.Flint
 
@@ -136,7 +136,11 @@ instance Storable CFqMat where
   sizeOf _ = #{size fq_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fq_mat_t}
-  peek = undefined
+  peek ptr = CFqMat
+    <$> #{peek fq_mat_struct, entries} ptr
+    <*> #{peek fq_mat_struct, r      } ptr
+    <*> #{peek fq_mat_struct, c      } ptr
+    <*> #{peek fq_mat_struct, rows   } ptr
   poke = undefined
 
 newFqMat rows cols ctx@(FqCtx fctx) = do
@@ -195,9 +199,11 @@ foreign import ccall "fq_mat.h fq_mat_set"
 --
 -- Directly accesses the entry in @mat@ in row \(i\) and column \(j\),
 -- indexed from zero. No bounds checking is performed.
-foreign import ccall "fq_mat.h fq_mat_entry"
-  fq_mat_entry :: Ptr CFqMat -> CLong -> CLong -> IO (Ptr (Ptr CFq))
-
+fq_mat_entry :: Ptr CFqMat -> CLong -> CLong -> IO (Ptr CFq)
+fq_mat_entry mat i j = do
+  CFqMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
+  
 -- | /fq_mat_entry_set/ /mat/ /i/ /j/ /x/ /ctx/ 
 --
 -- Sets the entry in @mat@ in row \(i\) and column \(j\) to @x@.

@@ -171,8 +171,11 @@ foreign import ccall "nmod_poly_mat.h nmod_poly_mat_modulus"
 -- can be passed as an input or output variable to any @nmod_poly@ function
 -- for direct manipulation of the matrix element. No bounds checking is
 -- performed.
-foreign import ccall "nmod_poly_mat.h nmod_poly_mat_entry"
-  nmod_poly_mat_entry :: Ptr CNModPolyMat -> CLong -> CLong -> IO (Ptr (Ptr CNModPoly))
+nmod_poly_mat_entry :: Ptr CNModPolyMat -> CLong -> CLong -> IO (Ptr CNModPoly)
+nmod_poly_mat_entry mat i j = do
+  CNModPolyMat entries r c rows mod <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
+
 
 -- | /nmod_poly_mat_set/ /mat1/ /mat2/ 
 --

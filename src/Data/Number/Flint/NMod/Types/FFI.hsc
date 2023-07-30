@@ -59,7 +59,12 @@ instance Storable CNModMat where
   sizeOf _ = #{size nmod_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment nmod_mat_t}
-  peek = undefined
+  peek ptr = CNModMat
+    <$> #{peek nmod_mat_struct, entries} ptr
+    <*> #{peek nmod_mat_struct, r      } ptr
+    <*> #{peek nmod_mat_struct, c      } ptr
+    <*> #{peek nmod_mat_struct, rows   } ptr
+    <*> #{peek nmod_mat_struct, mod    } ptr
   poke = undefined
 
 -- nmod_poly_mat_t -------------------------------------------------------------

@@ -18,7 +18,7 @@ module Data.Number.Flint.NMod.Mat.FFI (
   , nmod_mat_swap
   , nmod_mat_swap_entrywise
   -- * Basic properties and manipulation
-  -- , nmod_mat_entry
+  , nmod_mat_entry
   , nmod_mat_get_entry
   , nmod_mat_entry_ptr
   , nmod_mat_set_entry
@@ -179,6 +179,10 @@ foreign import ccall "nmod_mat.h nmod_mat_clear"
 foreign import ccall "nmod_mat.h &nmod_mat_clear"
   p_nmod_mat_clear :: FunPtr (Ptr CNModMat -> IO ())
 
+nmod_mat_entry mat i j = do
+  CNModMat entries r c rows mod <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
+  
 -- | /nmod_mat_set/ /mat/ /src/ 
 -- 
 -- Sets @mat@ to a copy of @src@. It is assumed that @mat@ and @src@ have

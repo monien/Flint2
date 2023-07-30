@@ -17,6 +17,7 @@ module Data.Number.Flint.Support.Mpfr.Mat.FFI (
   -- * Basic manipulation
   , mpfr_mat_swap
   , mpfr_mat_swap_entrywise
+  , mpfr_mat_entry
   , mpfr_mat_set
   , mpfr_mat_zero
   -- * Comparison
@@ -43,14 +44,18 @@ import Data.Number.Flint.Flint
 -- mpfr_mat_t ------------------------------------------------------------------
 
 data MpfrMat = MpfrMat {-# UNPACK #-} !(ForeignPtr CMpfrMat)
-type CMpfrMat = CFlint MpfrMat
+data CMpfrMat = CMpfrMat (Ptr CMpfr) CLong CLong (Ptr (Ptr CMpfr))
 
 instance Storable CMpfrMat where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size mpfr_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment mpfr_mat_t}
-  peek = error "CMpfrMat.peek: Not defined."
+  peek ptr = CMpfrMat
+    <$> #{peek mpfr_mat_struct, entries} ptr
+    <*> #{peek mpfr_mat_struct, r      } ptr
+    <*> #{peek mpfr_mat_struct, c      } ptr
+    <*> #{peek mpfr_mat_struct, rows   } ptr
   poke = error "CMpfrMat.poke: Not defined."
 
 newMpfrMat rows cols prec = do
@@ -87,6 +92,10 @@ foreign import ccall "mpfr_mat.h &mpfr_mat_clear"
   p_mpfr_mat_clear :: FunPtr (Ptr CMpfrMat -> IO ())
 
 -- Basic manipulation ----------------------------------------------------------
+
+mpfr_mat_entry mat i j = do
+  CMpfrMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
 
 -- | /mpfr_mat_swap/ /mat1/ /mat2/ 
 -- 

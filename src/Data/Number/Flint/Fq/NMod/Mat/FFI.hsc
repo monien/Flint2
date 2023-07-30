@@ -102,9 +102,10 @@ import Foreign.C.String
 import Foreign.C.Types
 import qualified Foreign.Concurrent
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Ptr
 import Foreign.Storable
-import Foreign.Marshal ( free )
+import Foreign.Marshal
+import Foreign.Marshal.Array
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz.Mod.Mat
@@ -123,7 +124,11 @@ instance Storable CFqNModMat where
   sizeOf _ = #{size fq_nmod_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fq_nmod_mat_t}
-  peek = undefined
+  peek ptr = CFqNModMat
+    <$> #{peek fq_nmod_mat_struct, entries} ptr
+    <*> #{peek fq_nmod_mat_struct, r      } ptr
+    <*> #{peek fq_nmod_mat_struct, c      } ptr
+    <*> #{peek fq_nmod_mat_struct, rows   } ptr
   poke = undefined
 
 newFqNModMat rows cols ctx@(FqNModCtx ftx) = do
@@ -178,8 +183,10 @@ foreign import ccall "fq_nmod_mat.h fq_nmod_mat_set"
 --
 -- Directly accesses the entry in @mat@ in row \(i\) and column \(j\),
 -- indexed from zero. No bounds checking is performed.
-foreign import ccall "fq_nmod_mat.h fq_nmod_mat_entry"
-  fq_nmod_mat_entry :: Ptr CFqNModMat -> CLong -> CLong -> IO (Ptr (Ptr CFqNMod))
+fq_nmod_mat_entry :: Ptr CFqNModMat -> CLong -> CLong -> IO (Ptr CFqNMod)
+fq_nmod_mat_entry mat i j = do
+  CFqNModMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
 
 -- | /fq_nmod_mat_entry_set/ /mat/ /i/ /j/ /x/ /ctx/ 
 --

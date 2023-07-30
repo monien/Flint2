@@ -1168,3 +1168,51 @@ testArbSolve = do
   print a
   print b
   print x
+  return a
+
+testAcbSolve = do
+  let prec = 1024
+      d :: [[Fmpq]]
+      d = [[3, 2, -1], [2, -2, 4], [-1, 1//2, -1]]
+      v = [1, -2, 0]
+  a <- newAcbMat 3 3
+  b <- newAcbMat 3 1
+  x <- newAcbMat 3 1
+  withAcbMat x $ \x -> do
+    withAcbMat a $ \a -> do
+      withAcbMat b $ \b -> do
+        forM_ [0..2] $ \i -> do
+          withFmpq (v!!i) $ \q -> do
+            p <- acb_mat_entry b (fromIntegral i) (fromIntegral 0)
+            acb_set_fmpq p q prec
+          forM_ [0..2] $ \j -> do
+            p <- acb_mat_entry a (fromIntegral i) (fromIntegral j)
+            withFmpq ((d !! i) !! j) $ \x -> do 
+              acb_set_fmpq p x prec
+        acb_mat_solve x a b prec
+  print a
+  print b
+  print x
+
+testPtr = do
+  let prec = 1024
+      d :: [[Fmpq]]
+      d = [[3, 2, -1], [2, -2, 4], [-1, 1//2, -1]]
+  q <- newFmpqMat 3 3
+  withFmpqMat q $ \q -> do
+    forM_ [0..2] $ \i -> do
+      forM_ [0..2] $ \j -> do
+        p <- fmpq_mat_entry q (fromIntegral i) (fromIntegral j)
+        withFmpq ((d !! i) !! j) $ \x -> fmpq_set p x
+    CFmpqMat entries r c rows <- peek q
+    print $ rows
+    let tmp :: Ptr CFmpq
+        tmp = castPtr rows
+    print $ rows
+    print $ entries
+  print q
+  a <- newAcbMatFromFmpqMat q prec
+  print a
+
+  
+

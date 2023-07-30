@@ -20,6 +20,7 @@ module Data.Number.Flint.Groups.Bool.Mat.FFI (
   , bool_mat_is_empty
   , bool_mat_is_square
   -- * Conversions
+  , bool_mat_entry
   , bool_mat_set
   -- * Input and output
   , bool_mat_print
@@ -184,6 +185,10 @@ bool_mat_is_square mat = do
 
 -- Conversions -----------------------------------------------------------------
 
+bool_mat_entry mat i j = do
+  CBoolMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
+  
 -- | /bool_mat_set/ /dest/ /src/ 
 --
 -- Sets /dest/ to /src/. The operands must have identical dimensions.

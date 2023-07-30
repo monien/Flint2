@@ -8,6 +8,7 @@ module Data.Number.Flint.Padic.Mat.FFI (
   -- * Matrices over p-adic numbers
     PadicMat (..)
   , CPadicMat (..)
+  -- * Constructors
   , newPadicMat
   , withPadicMat
   -- * Macros
@@ -96,7 +97,7 @@ import Data.Number.Flint.Padic
 -- padic_mat_t -----------------------------------------------------------------
 
 data PadicMat = PadicMat {-# UNPACK #-} !(ForeignPtr CPadicMat)
-data CPadicMat = CPadicMat CFmpzMat CLong CLong
+data CPadicMat = CPadicMat (Ptr CFmpzMat) CLong CLong
 
 instance Storable CPadicMat where
   {-# INLINE sizeOf #-}
@@ -147,9 +148,11 @@ padic_mat ptr = return $ castPtr ptr
 -- 
 -- The return value can be used as an argument to the functions in the
 -- @fmpz@ module.
-foreign import ccall "padic_mat.h padic_mat_entry"
-  padic_mat_entry :: Ptr CPadicMat -> CLong -> CLong -> IO (Ptr CFmpz)
-
+padic_mat_entry :: Ptr CPadicMat -> CLong -> CLong -> IO (Ptr CFmpz)
+padic_mat_entry a i j = do
+  CPadicMat mat _ _ <- peek a
+  fmpz_mat_entry mat i j
+  
 -- | /padic_mat_get_val/ /A/ 
 -- 
 -- Returns the valuation of the matrix.

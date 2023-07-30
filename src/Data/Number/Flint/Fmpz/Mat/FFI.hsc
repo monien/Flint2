@@ -314,9 +314,8 @@ foreign import ccall "fmpz_mat.h fmpz_mat_swap_entrywise"
 -- This reference can be passed as an input or output variable to any
 -- function in the @fmpz@ module for direct manipulation.
 -- 
--- Both \(i\) and \(j\) must not exceed the dimensions of the matrix.
--- 
--- This function is implemented as a macro.
+-- Both \(i\) and \(j\) must not exceed the dimensions of the
+-- matrix. No bounds checking is performed.
 fmpz_mat_entry :: Ptr CFmpzMat -> CLong -> CLong -> IO (Ptr CFmpz)
 fmpz_mat_entry mat i j = do
   CFmpzMat entries r c rows <- peek mat

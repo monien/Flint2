@@ -8,6 +8,7 @@ module Data.Number.Flint.Fq.Zech.Mat.FFI (
   -- * Matrices over finite fields (Zech logarithm representation)
     FqZechMat (..)
   , CFqZechMat (..)
+  -- * Constructors
   , newFqZechMat
   , withFqZechMat
   -- * Memory management
@@ -96,9 +97,10 @@ import Foreign.C.String
 import Foreign.C.Types
 import qualified Foreign.Concurrent
 import Foreign.ForeignPtr
-import Foreign.Ptr ( Ptr, FunPtr, plusPtr )
+import Foreign.Ptr 
 import Foreign.Storable
-import Foreign.Marshal ( free )
+import Foreign.Marshal
+import Foreign.Marshal.Array
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -122,7 +124,11 @@ instance Storable CFqZechMat where
   sizeOf _ = #{size fq_zech_mat_t}
   {-# INLINE alignment #-}
   alignment _ = #{alignment fq_zech_mat_t}
-  peek = undefined
+  peek ptr = CFqZechMat
+    <$> #{peek fq_zech_mat_struct, entries} ptr
+    <*> #{peek fq_zech_mat_struct, r      } ptr
+    <*> #{peek fq_zech_mat_struct, c      } ptr
+    <*> #{peek fq_zech_mat_struct, rows   } ptr
   poke = undefined
 
 newFqZechMat rows cols ctx@(FqZechCtx ftx) = do
@@ -177,10 +183,11 @@ foreign import ccall "fq_zech_mat.h fq_zech_mat_set"
 --
 -- Directly accesses the entry in @mat@ in row \(i\) and column \(j\),
 -- indexed from zero. No bounds checking is performed.
-foreign import ccall "fq_zech_mat.h fq_zech_mat_entry"
-  fq_zech_mat_entry :: Ptr CFqZechMat
-                    -> CLong -> CLong -> IO (Ptr (Ptr CFqZech))
-                    
+fq_zech_mat_entry :: Ptr CFqZechMat -> CLong -> CLong -> IO (Ptr CFqZech)
+fq_zech_mat_entry mat i j = do
+  CFqZechMat entries r c rows <- peek mat
+  return $ entries `advancePtr` (fromIntegral (i*c + j))
+  
 -- | /fq_zech_mat_entry_set/ /mat/ /i/ /j/ /x/ /ctx/ 
 --
 -- Sets the entry in @mat@ in row \(i\) and column \(j\) to @x@.

@@ -134,14 +134,12 @@ import Data.Number.Flint.Fmpz.Mod
 import Data.Number.Flint.Fmpz.Mod.Poly
 import Data.Number.Flint.Fmpz.Mod.Mat
 import Data.Number.Flint.Fmpq
+import Data.Number.Flint.Fq.Types
 
 #include <flint/flint.h>
 #include <flint/fq.h>
 
 -- fq_t ------------------------------------------------------------------------
-
-data Fq = Fq {-# UNPACK #-} !(ForeignPtr CFq)
-type CFq = CFmpzPoly
 
 -- | Create a new `Fq` with context `ctx`.
 newFq :: FqCtx -> IO Fq

@@ -137,14 +137,12 @@ import Data.Number.Flint.NMod.Mat
 import Data.Number.Flint.Fq
 import Data.Number.Flint.Fq.NMod
 import Data.Number.Flint.Fq.NMod.Mat
+import Data.Number.Flint.Fq.Zech.Types
 
 #include <flint/flint.h>
 #include <flint/fq_zech.h>
 
 -- fq_zech_t -------------------------------------------------------------------
-
-data FqZech = FqZech {-# UNPACK #-} !(ForeignPtr CFqZech)
-type CFqZech = CFlint FqZech
 
 instance Storable CFqZech where
   {-# INLINE sizeOf #-}
@@ -167,9 +165,6 @@ withFqZech (FqZech x) f = do
   withForeignPtr x $ \px -> f px >>= return . (FqZech x,)
 
 -- fq_zech_ctx_t ---------------------------------------------------------------
-
-data FqZechCtx = FqZechCtx {-# UNPACK #-} !(ForeignPtr CFqZechCtx)
-type CFqZechCtx = CFlint FqZechCtx
 
 instance Storable CFqZechCtx where
   {-# INLINE sizeOf #-}
