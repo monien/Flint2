@@ -1200,10 +1200,10 @@ testPtr = do
       d = [[3, 2, -1], [2, -2, 4], [-1, 1//2, -1]]
   q <- newFmpqMat 3 3
   withFmpqMat q $ \q -> do
-    forM_ [0..2] $ \i -> do
-      forM_ [0..2] $ \j -> do
-        p <- fmpq_mat_entry q (fromIntegral i) (fromIntegral j)
-        withFmpq ((d !! i) !! j) $ \x -> fmpq_set p x
+    forM_ [0..2] $ \i ->
+      forM_ [0..2] $ \j -> 
+        withFmpq ((d !! i) !! j) $ \x ->
+          fmpq_mat_set_entry q (fromIntegral i) (fromIntegral j) x
     CFmpqMat entries r c rows <- peek q
     print $ rows
     let tmp :: Ptr CFmpq
@@ -1212,7 +1212,53 @@ testPtr = do
     print $ entries
   print q
   a <- newAcbMatFromFmpqMat q prec
+  b <- newAcbMat 3 3
+  withAcbMat b $ \b -> do
+    withAcbMat a $ \a -> do
+      acb_mat_set b a
+      acb_mat_inv b b prec
   print a
+  print b
 
+testBernoulliDet n = do
+  b <- newFmpqMat n n
+  d <- newFmpq
+  withFmpqMat b $ \b -> do
+    withNewFmpq $ \tmp -> 
+      forM_ [0 .. n-1] $ \i ->
+        forM_ [0 .. n-1] $ \j -> do
+          let k = fromIntegral $ 2*(i+j+1)
+          tmp <- zetaRational k
+          withFmpq tmp $ \tmp ->
+            fmpq_mat_set_entry b i j tmp
+          withFmpq d $ \d -> do
+            fmpq_mat_det d b
+  -- print b
+  return $ denominator d
+  -- mapM_ print $ factor $ denominator d
+
+bernoulliDet n = do
+  withNewFmpz $ \d -> do
+    fmpz_one d
+    forM_ [1..n] $ \j -> do
+      fmpz_mul_ui d d (4*j-1)
+      fmpz_mul_ui d d (4*j-1)
+      fmpz_mul_ui d d (4*j-3)
+      
+zetaRational k = do
+  (result, _) <- withNewFmpq $ \z -> do
+    arith_bernoulli_number z k
+    withNewFmpz $ \tmp -> do
+      fmpz_fac_ui tmp k
+      fmpq_div_fmpz z z tmp
+      fmpz_set_ui tmp 2
+      fmpz_pow_ui tmp tmp (k-1)
+      fmpq_mul_fmpz z z tmp
+    fmpq_abs z z 
+  return result
+  
+      
+     
+      
   
 

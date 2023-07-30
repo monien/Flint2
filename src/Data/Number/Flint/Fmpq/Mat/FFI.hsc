@@ -21,6 +21,8 @@ module Data.Number.Flint.Fmpq.Mat.FFI (
   , fmpq_mat_entry
   , fmpq_mat_entry_num
   , fmpq_mat_entry_den
+  , fmpq_mat_set_entry
+  , fmpq_mat_get_entry
   , fmpq_mat_nrows
   , fmpq_mat_ncols
   -- * Basic assignment
@@ -89,9 +91,17 @@ module Data.Number.Flint.Fmpq.Mat.FFI (
   , fmpq_mat_det
   -- * Nonsingular solving
   , fmpq_mat_solve_fraction_free
+  , fmpq_mat_solve_dixon
+  , fmpq_mat_solve_multi_mod
+  , fmpq_mat_solve
   , fmpq_mat_solve_fmpz_mat_fraction_free
+  , fmpq_mat_solve_fmpz_mat_dixon
+  , fmpq_mat_solve_fmpz_mat_multi_mod
+  , fmpq_mat_solve_fmpz_mat
   , fmpq_mat_can_solve_multi_mod
   , fmpq_mat_can_solve_fraction_free
+  , fmpq_mat_can_solve_fmpz_mat_dixon
+  , fmpq_mat_can_solve_dixon
   , fmpq_mat_can_solve
   -- * Inverse
   , fmpq_mat_inv
@@ -214,6 +224,16 @@ fmpq_mat_entry :: Ptr CFmpqMat -> CLong -> CLong -> IO (Ptr CFmpq)
 fmpq_mat_entry mat i j = do
   CFmpqMat entries r c rows <- peek mat
   return $ entries `advancePtr` (fromIntegral (i*c + j))
+
+fmpq_mat_set_entry :: Ptr CFmpqMat -> CLong -> CLong -> Ptr CFmpq -> IO ()
+fmpq_mat_set_entry mat i j x = do
+  p <- fmpq_mat_entry mat i j
+  fmpq_set p x
+  
+fmpq_mat_get_entry :: Ptr CFmpq -> Ptr CFmpqMat -> CLong -> CLong -> IO ()
+fmpq_mat_get_entry x mat i j = do
+  p <- fmpq_mat_entry mat i j
+  fmpq_set x p
 
 -- | /fmpq_mat_entry_num/ /mat/ /i/ /j/ 
 -- 
@@ -659,7 +679,16 @@ foreign import ccall "fmpq_mat.h fmpq_mat_det"
 -- Nonsingular solving ---------------------------------------------------------
 
 -- | /fmpq_mat_solve_fraction_free/ /X/ /A/ /B/ 
--- 
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_fraction_free"
+  fmpq_mat_solve_fraction_free :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
+-- | /fmpq_mat_solve_dixon/ /X/ /A/ /B/ 
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_dixon"
+  fmpq_mat_solve_dixon :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
+-- | /fmpq_mat_solve_multi_mod/ /X/ /A/ /B/ 
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_multi_mod"
+  fmpq_mat_solve_multi_mod :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
+-- | /fmpq_mat_solve/ /X/ /A/ /B/ 
+--
 -- Solves @AX = B@ for nonsingular @A@. Returns nonzero if @A@ is
 -- nonsingular or if the right hand side is empty, and zero otherwise.
 -- 
@@ -671,19 +700,28 @@ foreign import ccall "fmpq_mat.h fmpq_mat_det"
 -- are generally the best choice for large systems.
 -- 
 -- The default method chooses an algorithm automatically.
-foreign import ccall "fmpq_mat.h fmpq_mat_solve_fraction_free"
-  fmpq_mat_solve_fraction_free :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
+foreign import ccall "fmpq_mat.h fmpq_mat_solve"
+  fmpq_mat_solve :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
 
 -- | /fmpq_mat_solve_fmpz_mat_fraction_free/ /X/ /A/ /B/ 
--- 
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_fmpz_mat_fraction_free"
+  fmpq_mat_solve_fmpz_mat_fraction_free :: Ptr CFmpqMat -> Ptr CFmpzMat -> Ptr CFmpzMat -> IO CInt
+-- | /fmpq_mat_solve_fmpz_mat_dixon/ /X/ /A/ /B/ 
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_fmpz_mat_dixon"
+  fmpq_mat_solve_fmpz_mat_dixon :: Ptr CFmpqMat -> Ptr CFmpzMat -> Ptr CFmpzMat -> IO CInt
+-- | /fmpq_mat_solve_fmpz_mat_multi_mod/ /X/ /A/ /B/ 
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_fmpz_mat_multi_mod"
+  fmpq_mat_solve_fmpz_mat_multi_mod :: Ptr CFmpqMat -> Ptr CFmpzMat -> Ptr CFmpzMat -> IO CInt
+-- | /fmpq_mat_solve_fmpz_mat/ /X/ /A/ /B/ 
+--
 -- Solves @AX = B@ for nonsingular @A@, where /A/ and /B/ are integer
 -- matrices. Returns nonzero if @A@ is nonsingular or if the right hand
 -- side is empty, and zero otherwise.
-foreign import ccall "fmpq_mat.h fmpq_mat_solve_fmpz_mat_fraction_free"
-  fmpq_mat_solve_fmpz_mat_fraction_free :: Ptr CFmpqMat -> Ptr CFmpzMat -> Ptr CFmpzMat -> IO CInt
+foreign import ccall "fmpq_mat.h fmpq_mat_solve_fmpz_mat"
+  fmpq_mat_solve_fmpz_mat :: Ptr CFmpqMat -> Ptr CFmpzMat -> Ptr CFmpzMat -> IO CInt
 
 -- | /fmpq_mat_can_solve_multi_mod/ /X/ /A/ /B/ 
--- 
+--
 -- Returns \(1\) if @AX = B@ has a solution and if so, sets @X@ to one such
 -- solution. The matrices can have any shape but must have the same number
 -- of rows.
@@ -691,21 +729,44 @@ foreign import ccall "fmpq_mat.h fmpq_mat_can_solve_multi_mod"
   fmpq_mat_can_solve_multi_mod :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
 
 -- | /fmpq_mat_can_solve_fraction_free/ /X/ /A/ /B/ 
--- 
+--
 -- Returns \(1\) if @AX = B@ has a solution and if so, sets @X@ to one such
 -- solution. The matrices can have any shape but must have the same number
 -- of rows.
 foreign import ccall "fmpq_mat.h fmpq_mat_can_solve_fraction_free"
   fmpq_mat_can_solve_fraction_free :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
 
+-- | /fmpq_mat_can_solve_fmpz_mat_dixon/ /X/ /A/ /B/
+--
+-- Returns if \(AX = B\) has a solution and if so, sets \(X\) to one
+-- such solution. The matrices can have any shape but must have the
+-- same number of rows. The input matrices must have integer entries
+-- and cannot be an empty matrix.
+foreign import ccall "fmpq_mat.h fmpq_mat_can_solve_fmpz_mat_dixon"
+  fmpq_mat_can_solve_fmpz_mat_dixon :: Ptr CFmpqMat
+                                    -> Ptr CFmpzMat
+                                    -> Ptr CFmpzMat
+                                    -> IO CInt
+  
+-- | /fmpq_mat_can_solve_dixon/ /X/ /A/ /B/
+--
+-- Returns \(1\) if \(AX = B\) has a solution and if so, sets \(X\) to one
+-- such solution. The matrices can have any shape but must have the
+-- same number of rows.
+foreign import ccall "fmpq_mat.h fmpq_mat_can_solve_dixon"
+  fmpq_mat_can_solve_dixon :: Ptr CFmpqMat
+                                    -> Ptr CFmpqMat
+                                    -> Ptr CFmpqMat
+                                    -> IO CInt
+
 -- | /fmpq_mat_can_solve/ /X/ /A/ /B/ 
--- 
+--
 -- Returns \(1\) if @AX = B@ has a solution and if so, sets @X@ to one such
 -- solution. The matrices can have any shape but must have the same number
 -- of rows.
 foreign import ccall "fmpq_mat.h fmpq_mat_can_solve"
   fmpq_mat_can_solve :: Ptr CFmpqMat -> Ptr CFmpqMat -> Ptr CFmpqMat -> IO CInt
-
+  
 -- Inverse ---------------------------------------------------------------------
 
 -- | /fmpq_mat_inv/ /B/ /A/ 

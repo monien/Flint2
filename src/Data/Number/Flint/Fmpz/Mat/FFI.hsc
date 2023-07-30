@@ -21,6 +21,8 @@ module Data.Number.Flint.Fmpz.Mat.FFI (
   , fmpz_mat_swap
   , fmpz_mat_swap_entrywise
   , fmpz_mat_entry
+  , fmpz_mat_set_entry
+  , fmpz_mat_get_entry
   , fmpz_mat_zero
   , fmpz_mat_one
   , fmpz_mat_swap_rows
@@ -320,7 +322,17 @@ fmpz_mat_entry :: Ptr CFmpzMat -> CLong -> CLong -> IO (Ptr CFmpz)
 fmpz_mat_entry mat i j = do
   CFmpzMat entries r c rows <- peek mat
   return $ entries `advancePtr` (fromIntegral (i*c + j))
+
+fmpz_mat_set_entry :: Ptr CFmpzMat -> CLong -> CLong -> Ptr CFmpz -> IO ()
+fmpz_mat_set_entry mat i j x = do
+  p <- fmpz_mat_entry mat i j
+  fmpz_set p x
   
+fmpz_mat_get_entry :: Ptr CFmpz -> Ptr CFmpzMat -> CLong -> CLong -> IO ()
+fmpz_mat_get_entry x mat i j = do
+  p <- fmpz_mat_entry mat i j
+  fmpz_set x p
+
 -- | /fmpz_mat_zero/ /mat/ 
 -- 
 -- Sets all entries of @mat@ to 0.

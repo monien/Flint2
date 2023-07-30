@@ -203,7 +203,7 @@ fq_mat_entry :: Ptr CFqMat -> CLong -> CLong -> IO (Ptr CFq)
 fq_mat_entry mat i j = do
   CFqMat entries r c rows <- peek mat
   return $ entries `advancePtr` (fromIntegral (i*c + j))
-  
+
 -- | /fq_mat_entry_set/ /mat/ /i/ /j/ /x/ /ctx/ 
 --
 -- Sets the entry in @mat@ in row \(i\) and column \(j\) to @x@.
