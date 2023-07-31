@@ -39,6 +39,7 @@ import Data.Number.Flint.Acb
 import Data.Number.Flint.Acb.Acf
 import Data.Number.Flint.Acb.Types
 import Data.Number.Flint.Acb.Hypgeom
+import Data.Number.Flint.Acb.Modular
 import Data.Number.Flint.Support.D.Interval
 
 newtype CF (n :: Nat) = CF Acb
@@ -211,7 +212,13 @@ instance forall n. KnownNat n => Special (CF n) where
   besselK = lift2 acb_hypgeom_bessel_k
   modj = undefined
   modjq = undefined
-  modeta = undefined
+  modeta (CF z) = unsafePerformIO $ do
+    let prec = fromInteger $ natVal (Proxy :: Proxy n)
+    result <- newAcb
+    withAcb result $ \result -> do
+      withAcb z $ \z -> do
+        acb_modular_eta result z prec
+    return $ CF result
   modetaq = undefined
   modlambda = undefined
   modlambdaq = undefined

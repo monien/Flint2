@@ -761,14 +761,23 @@ testAcbModular = do
   endl
   withPSL2Z s psl2z_print
   endl
-  
+
+testModular = do
+  let i = sqrt (-1 :: CF 1024)
+      rho = (1 + i*sqrt 3) / 2
+      f z = (modeta z / modeta (7*z)) ^ 4
+      fRho = -245/2-sqrt((245/2)^2-2401)
+      fI = 7/2*sqrt(7)*sqrt(172*sqrt(7) + 455) + 49*sqrt(7) + 245/2
+  print $ f rho / fRho
+  print $ f i / fI
+  -- testLLL (realPart (f rho)) 12
 
 numberOfPartitions n = do
   result <- newFmpz
   withFmpz result $ \result -> do
     partitions_fmpz_ui result n
   return result
-
+  
 nextBernoulli = do
   x <- newBernoulliRev 20
   n <- newFmpz
