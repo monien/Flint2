@@ -318,10 +318,10 @@ class Special a where
   modetaq :: a -> a
   modlambda :: a -> a
   modlambdaq :: a -> a
-  ellipp :: a -> a
-  ellipzeta :: a -> a
-  ellipsigma :: a -> a
+  ellipp :: a -> a -> a
+  ellipzeta :: a -> a -> a
+  ellipsigma :: a -> a -> a
   barnesg :: a -> a
-  agm :: a -> a
+  agm :: a -> a -> a
   fresnels :: a -> a
   fresnelc :: a -> a

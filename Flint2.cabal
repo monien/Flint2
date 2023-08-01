@@ -399,27 +399,6 @@ library
     , groups
   default-language: Haskell2010
 
-executable arb_plot
-  main-is: Main.hs
-  other-modules:
-      ColorFunction
-      Functions
-      Paths_Flint2
-  hs-source-dirs:
-      app/arb_plot
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      Flint2
-    , JuicyPixels
-    , QuickCheck
-    , base >=4.7 && <5
-    , containers
-    , gloss
-    , gloss-juicy
-    , mtl
-    , optparse-applicative
-  default-language: Haskell2010
-
 executable flint_test
   main-is: Main.hs
   other-modules:

@@ -29,10 +29,14 @@ void psl2z_normal_form(psl2z_t x) {
   }
 }
 
-void psl2z_get_word(psl2z_word_t word, psl2z_t x) {
-  
-  if( psl2z_is_one(x) ) return;
+void psl2z_get_word(psl2z_word_t word, psl2z_t g) {
 
+  if( psl2z_is_one(g) ) return;
+
+  psl2z_t x;
+  psl2z_init(x);
+  psl2z_set(x, g);
+  
   fmpz_t u, v, q, r;
 
   fmpz_init(u);
@@ -40,60 +44,63 @@ void psl2z_get_word(psl2z_word_t word, psl2z_t x) {
   fmpz_init(q);
   fmpz_init(r);
 
-  // add space for new letter
-  word->alloc += 1;
-  if( word->alloc == 1 ) {
-    word->letters = flint_malloc(word->alloc * sizeof(fmpz));
-  } else {
-    word->letters = flint_realloc(word->letters, word->alloc * sizeof(fmpz));
+  while( ! psl2z_is_one(x) ) {
+
+    // add space for new letter
+    word->alloc += 1;
+    if( word->alloc == 1 ) {
+      word->letters = flint_malloc(word->alloc * sizeof(fmpz));
+    } else {
+      word->letters = flint_realloc(word->letters, word->alloc * sizeof(fmpz));
+    }
+
+    fmpz_init(word->letters + word->alloc - 1);
+
+    // 2*u = 2*(4*a*c + b*d)
+    fmpz_mul(u, &x->a, &x->c);
+    fmpz_mul_ui(u, u, 4);
+    fmpz_mul(r, &x->b, &x->d);
+    fmpz_add(u, u, r);
+    fmpz_mul_ui(u, u, 2);
+
+    // v = 4*c^2 + d^2
+    fmpz_mul(v, &x->c, &x->c);
+    fmpz_mul_ui(v, v, 4);
+    fmpz_mul(r, &x->d, &x->d);
+    fmpz_add(v, v, r);
+
+    // quotRem (2*u + v) (2*v) = (q, r)
+    fmpz_add(q, u, v);
+    fmpz_mul_ui(r, v, 2);
+    fmpz_fdiv_q(q, q, r);
+
+    // |2*u| - v
+    fmpz_abs(u, u);
+    fmpz_sub(u, u, v);
+
+    if( fmpz_cmp_si(u, 0) > 0) {
+      // multiply be T ^ (-q)
+      fmpz_submul(&x->a, q, &x->c);
+      fmpz_submul(&x->b, q, &x->d);
+      fmpz_set(word->letters + word->alloc - 1, q);
+    } else {
+      // multiply by S
+      fmpz_swap(&x->a, &x->c);
+      fmpz_swap(&x->b, &x->d);
+      fmpz_neg(&x->a, &x->a);
+      fmpz_neg(&x->b, &x->b);
+      fmpz_zero(word->letters + word->alloc - 1);
+    }
+
+    psl2z_normal_form(x);
   }
-  
-  fmpz_init(word->letters + word->alloc - 1);
-
-  // 2*u = 2*(4*a*c + b*d)
-  fmpz_mul(u, &x->a, &x->c);
-  fmpz_mul_ui(u, u, 4);
-  fmpz_mul(r, &x->b, &x->d);
-  fmpz_add(u, u, r);
-  fmpz_mul_ui(u, u, 2);
-
-  // v = 4*c^2 + d^2
-  fmpz_mul(v, &x->c, &x->c);
-  fmpz_mul_ui(v, v, 4);
-  fmpz_mul(r, &x->d, &x->d);
-  fmpz_add(v, v, r);
-
-  // quotRem (2*u + v) (2*v) = (q, r)
-  fmpz_add(q, u, v);
-  fmpz_mul_ui(r, v, 2);
-  fmpz_fdiv_q(q, q, r);
-  
-  // |2*u| - v
-  fmpz_abs(u, u);
-  fmpz_sub(u, u, v);
-
-  if( fmpz_cmp_si(u, 0) > 0) {
-    // multiply be T ^ (-q)
-    fmpz_submul(&x->a, q, &x->c);
-    fmpz_submul(&x->b, q, &x->d);
-    fmpz_set(word->letters + word->alloc - 1, q);
-  } else {
-    // multiply by S
-    fmpz_swap(&x->a, &x->c);
-    fmpz_swap(&x->b, &x->d);
-    fmpz_neg(&x->a, &x->a);
-    fmpz_neg(&x->b, &x->b);
-    fmpz_zero(word->letters + word->alloc - 1);
-  }
-
-  psl2z_normal_form(x);
 
   fmpz_clear(u);
   fmpz_clear(v);
   fmpz_clear(q);
   fmpz_clear(r);
 
-  psl2z_get_word(word, x);
+  psl2z_clear(x);
 }
 
 void psl2z_set_word(psl2z_t x, psl2z_word_t word) {

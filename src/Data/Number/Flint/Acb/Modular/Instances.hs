@@ -24,6 +24,13 @@ instance Show PSL2Z where
     free cs
     return s
 
+instance Eq PSL2Z where
+  (==) x y =  snd $ snd $ unsafePerformIO $ do
+    withPSL2Z x $ \x -> do
+      withPSL2Z y $ \y -> do
+        flag <- psl2z_equal x y
+        return $ flag == 1
+        
 instance Monoid PSL2Z where
   mempty = unsafePerformIO $ do
     result <- newPSL2Z

@@ -29,6 +29,17 @@ fareyNext (x:y:xs) = x : mediant x y : fareyNext (y:xs)
 fareyIter = iterate fareyNext [0, 1]
 farey n = fareyIter !! n
 
+neighbor' x y = a*d - b*c where
+  a = numerator x
+  b = denominator x
+  c = numerator y
+  d = denominator y
+
+testFarey' n = do
+  let f (x : y : []) = [- neighbor' x y]
+      f (x : y : xs) = - neighbor' x y : f (y : xs)
+  print $ f $ farey' n
+  
 fareyNext' [x, y] = x : mediant' x y : [y]
 fareyNext' (x:y:xs) = x : mediant' x y : fareyNext' (y:xs)
 
@@ -224,3 +235,19 @@ testGroup s t n x = unsafePerformIO $ do
       _perm_set_word p s t n w
   flag <- peek p
   return $ fromIntegral flag
+
+testRand ntest = do
+  r <- newFRandState
+  withFRandState r $ \r -> do
+    tests <- forM [1..ntest] $ \j -> do
+      x <- newPSL2Z
+      withPSL2Z x $ \x -> do
+        psl2z_randtest x r 128
+      let w = toWord' x
+          y = fromWord' w
+      return $ x == y
+    if and tests then
+      putStrLn $ "all " ++ show ntest ++ " tests succeeded."
+    else do
+      let nfail = length $ filter not tests
+      putStrLn $ "of " ++ show ntest ++ "tests, " ++ show nfail ++ " failed."
