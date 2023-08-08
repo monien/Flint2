@@ -1270,23 +1270,35 @@ testST = do
   let n = 32
       x :: Fmpq
       x = read "5530667668905449271708456552/74748754315003247146347079"
+  c <- getCF n x
+  t <- newPSL2Z_ 1 1 0 1
+  s <- newPSL2Z_ 0 (-1) 1 0
+  print x
+  putStrLn "\ncontinued fraction decomposition"
+  print c
+  endl
+  let g = mconcat $ map (\n -> t `pow` n <> s) c
+  withPSL2Z g $ \g -> do
+    CPSL2Z a b c d <- peek g
+    print $ numerator x
+    fmpz_print a
+    endl
+    endl
+    print $ denominator x
+    fmpz_print c
+    endl
+  return ()
+
+getCF n x = do 
   c <- _fmpz_vec_init n
   withFmpq x $ \x -> do
     withNewFmpq $ \rem -> do
       m <- fmpq_get_cfrac_st c rem x n
-      _fmpz_vec_print c m
-      endl
+      return ()
   cf <- forM [0 .. fromIntegral n - 1] $ \j -> do
           tmp <- newFmpz
           withFmpz tmp $ \tmp -> do
             fmpz_set tmp (c `advancePtr` j)
           return tmp
   _fmpz_vec_clear c n
-  let c = takeWhile (/=0) cf
-  t <- newPSL2Z_ 1 1 0 1
-  s <- newPSL2Z_ 0 (-1) 1 0
-  let g = mconcat $ map (\n -> t `pow` n <> s) c
-  print g
-  return ()
-  
-
+  return $ takeWhile (/=0) cf
