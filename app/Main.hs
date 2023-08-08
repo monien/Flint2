@@ -1271,13 +1271,11 @@ testST = do
       x :: Fmpq
       x = read "5530667668905449271708456552/74748754315003247146347079"
   c <- getCF n x
-  t <- newPSL2Z_ 1 1 0 1
-  s <- newPSL2Z_ 0 (-1) 1 0
   print x
   putStrLn "\ncontinued fraction decomposition"
   print c
   endl
-  let g = mconcat $ map (\n -> t `pow` n <> s) c
+  g <- getST c
   withPSL2Z g $ \g -> do
     CPSL2Z a b c d <- peek g
     print $ numerator x
@@ -1302,3 +1300,9 @@ getCF n x = do
           return tmp
   _fmpz_vec_clear c n
   return $ takeWhile (/=0) cf
+
+getST c = do
+  t <- newPSL2Z_ 1 1 0 1
+  s <- newPSL2Z_ 0 (-1) 1 0
+  let g = mconcat $ map (\n -> t `pow` n <> s) c
+  return g
