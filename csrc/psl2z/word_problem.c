@@ -3,6 +3,7 @@
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
+#include <flint/fmpq.h>
 #include <flint/fmpz_vec.h>
 #include <flint/acb_modular.h>
 #include <flint/perm.h>
@@ -165,8 +166,7 @@ void _perm_set_word(slong *x, slong *s, slong *t, slong n, psl2z_word_t word) {
   _perm_clear(r);
 
 }
- 
-    
+
 //-- Input and Output ----------------------------------------------------------
 
 void psl2z_word_fprint_pretty(FILE * file, psl2z_word_t word) {

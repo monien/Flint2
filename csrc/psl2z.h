@@ -2,6 +2,7 @@
 #define CSRC_PULLBACK_H_
 
 #include <flint/acb_modular.h>
+#include <flint/fmpz.h>
 
 typedef struct {
   fmpz * letters;
@@ -26,4 +27,6 @@ void psl2z_word_fprint_pretty(FILE * file, psl2z_word_t word);
 void psl2z_word_print_pretty(psl2z_word_t word);
 char * psl2z_word_get_str_pretty(psl2z_word_t word);
 
+void _perm_set_word(slong *x, slong *s, slong *t, slong n, psl2z_word_t word);
+  
 #endif // CSRC_PULLBACK_H_

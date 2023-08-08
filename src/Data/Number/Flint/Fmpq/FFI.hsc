@@ -130,6 +130,8 @@ module Data.Number.Flint.Fmpq.FFI (
   , fmpq_get_cfrac
   , fmpq_set_cfrac
   , fmpq_cfrac_bound
+  , fmpq_get_cfrac_st
+  , fmpq_set_cfrac_st
   -- * Special functions
   , _fmpq_harmonic_ui
   , fmpq_harmonic_ui
@@ -1033,10 +1035,10 @@ foreign import ccall "fmpq.h fmpq_simplest_between"
 -- \(r\) to the @rem@ variable. The return value is the number \(k\) of
 -- generated terms. The output satisfies
 -- 
--- \[`\]
 -- \[x = c_0 + \cfrac{1}{c_1 + \cfrac{1}{c_2 +
 --     \cfrac{1}{ \ddots + \cfrac{1}{c_{k-1} + r }}}}\]
--- 
+-- \]
+--
 -- If \(r\) is zero, the continued fraction expansion is complete. If \(r\)
 -- is nonzero, \(1/r\) can be passed back as input to generate
 -- \(c_k, c_{k+1}, \ldots\). Calls to @fmpq_get_cfrac@ can therefore be
@@ -1091,6 +1093,36 @@ foreign import ccall "fmpq.h fmpq_set_cfrac"
 -- fraction of length \(n\) is the Fibonacci number \(F_{n+1}\).
 foreign import ccall "fmpq.h fmpq_cfrac_bound"
   fmpq_cfrac_bound :: Ptr CFmpq -> IO CLong
+
+-- | /fmpq_get_cfrac_st/ /c/ /rem/ /x/ /n/
+--
+-- Generates up to \(n\) terms of the continued fraction expansion
+-- of \(x\), writing the coefficients to the vector \(c\) and the remainder
+-- \(r\) to the @rem@ variable. The return value is the number \(k\) of
+-- generated terms. The output satisfies
+--
+-- \[
+--      x = c_0 - \cfrac{1}{c_1 - \cfrac{1}{c_2 -
+--     \cfrac{1}{ \ddots - \cfrac{1}{c_{k-1} - r }}}}
+-- \]
+--
+-- This expansion is closely related to the modular group. In terms of
+-- the generators of the modular group \(S\) and \(T\) the expandion
+-- of \(x=h/k\) satisfies:
+--
+-- \[
+--      T^{c_0} S T^{c_1} \cdots T^{c_{k-1}} S
+--      \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+--      = \begin{pmatrix} h \\ k \end{pmatrix}
+-- \]
+foreign import ccall "fmpq.h fmpq_get_cfrac_st"
+  fmpq_get_cfrac_st :: Ptr CFmpz -> Ptr CFmpq -> Ptr CFmpq -> CLong -> IO CLong
+
+-- | /fmpq_set_cfrac_st/ /x/ /c/ /n/
+--
+-- Returns the value \(x\) corresponding to the continued fraction \(c\).
+foreign import ccall "fmpq.h fmpq_set_cfrac_st"
+  fmpq_set_cfrac_st :: Ptr CFmpq -> Ptr CFmpz -> CLong -> IO ()
 
 -- Special functions -----------------------------------------------------------
 

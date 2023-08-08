@@ -364,6 +364,7 @@ library:
    # Fmpq
     - csrc/fmpq/mediant.c
     - csrc/fmpq/get_fmpz_frac.c
+    - csrc/fmpq/cfrac_st.c
     - csrc/fmpq_mat/get_str.c
     - csrc/fmpq_mat/fprint.c
     - csrc/fmpq_vec/get_str.c
