@@ -1285,6 +1285,15 @@ testST = do
     print $ denominator x
     fmpz_print c
     endl
+    putStrLn "\nmatrix"
+    fmpz_print a
+    putStr " "
+    fmpz_print b
+    putStr " "
+    fmpz_print c
+    putStr " "
+    fmpz_print d
+    endl
   return ()
 
 getCF n x = do 
@@ -1306,3 +1315,4 @@ getST c = do
   s <- newPSL2Z_ 0 (-1) 1 0
   let g = mconcat $ map (\n -> t `pow` n <> s) c
   return g
+
