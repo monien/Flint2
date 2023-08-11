@@ -5,6 +5,7 @@ import Control.Monad
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.C.Types
 import Foreign.Storable
 import Foreign.Marshal.Array
 
@@ -20,29 +21,45 @@ import Data.Vector.Algorithms.Intro (sort)
 import Data.Number.Flint
 
 class PolynomialProp a where
+  type BaseRing a
   degree :: a -> Int
-
+  evaluate :: a -> BaseRing a -> BaseRing a
+    
 instance PolynomialProp FmpzPoly where
+  type BaseRing FmpzPoly = Fmpz
   degree poly = unsafePerformIO $ do
     (_, d) <- withFmpzPoly poly $ \poly -> fmpz_poly_degree poly
     return $ fromIntegral d
+  evaluate poly x = fst $ unsafePerformIO $ do
+    withNewFmpz $ \result -> do
+      withFmpzPoly poly $ \poly -> do
+        withFmpz x $ \x -> do 
+          fmpz_poly_evaluate_fmpz result poly x
 
 instance PolynomialProp FmpqPoly where
+  type BaseRing FmpqPoly = Fmpq
   degree poly = unsafePerformIO $ do
     (_, d) <- withFmpqPoly poly $ \poly -> fmpq_poly_degree poly
     return $ fromIntegral d
-
+  evaluate poly x = fst $ unsafePerformIO $ do
+    withNewFmpq $ \result -> do
+      withFmpqPoly poly $ \poly -> do
+        withFmpq x $ \x -> do 
+          fmpq_poly_evaluate_fmpq result poly x
+    
 instance PolynomialProp AcbPoly where
+  type BaseRing AcbPoly = Acb
   degree poly = unsafePerformIO $ do
     (_, d) <- withAcbPoly poly $ \poly -> acb_poly_degree poly
     return $ fromIntegral d
 
 instance PolynomialProp ArbPoly where
+  type BaseRing ArbPoly = Arb
   degree poly = unsafePerformIO $ do
     (_, d) <- withArbPoly poly $ \poly -> arb_poly_degree poly
     return $ fromIntegral d
 
-class Polynomial a b where
+class (PolynomialProp a) => Polynomial a b where
   roots :: a -> b
 
 instance Polynomial FmpzPoly (Vector Fmpz) where    
