@@ -117,6 +117,7 @@ library:
    - Data.Number.Flint.Groups.Dirichlet
    - Data.Number.Flint.Groups.DLog
    - Data.Number.Flint.Groups.Bool.Mat
+   - Data.Number.Flint.Groups.Bool.Mat.Instances
    # APRCL
    - Data.Number.Flint.APRCL
    # FFT 

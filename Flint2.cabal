@@ -85,6 +85,7 @@ library
       Data.Number.Flint.Groups.Dirichlet
       Data.Number.Flint.Groups.DLog
       Data.Number.Flint.Groups.Bool.Mat
+      Data.Number.Flint.Groups.Bool.Mat.Instances
       Data.Number.Flint.APRCL
       Data.Number.Flint.FFT
       Data.Number.Flint.QSieve

@@ -959,13 +959,10 @@ exFmpzModPoly mtx = do
 testBoolMat = do
   a <- newBoolMat 3 5
   withBoolMat a $ \a -> do
-    bool_mat_print a
-    endl
     forM_ [0..2] $ \j -> do
       bool_mat_set_entry a j j 1
       bool_mat_set_entry a j (j+2) 1
-    bool_mat_print a
-    endl
+  print a
 
 testFmpzPolyQ = do
   r <- newFmpzPolyQ
@@ -1315,4 +1312,22 @@ getST c = do
   s <- newPSL2Z_ 0 (-1) 1 0
   let g = mconcat $ map (\n -> t `pow` n <> s) c
   return g
+
+test = do
+  g <- newPSL2Z_ (-9444732965739290427388)
+                 148754559975189931622431
+                 4521254170618233912705
+                 (-71209760733946064941912)
+  print g
+  withNewPSL2ZWord $ \w -> do
+    withPSL2Z g $ \g -> do
+      psl2z_get_word w g
+      psl2z_word_print_pretty w
+      endl
+      withNewPSL2Z $ \y -> do
+        psl2z_set_word y w
+        psl2z_print y
+        endl
+  return ()
+    
 

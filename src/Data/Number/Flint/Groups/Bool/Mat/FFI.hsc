@@ -11,7 +11,7 @@ module Data.Number.Flint.Groups.Bool.Mat.FFI (
   , newBoolMat
   , withBoolMat
   , withNewBoolMat
-  -- * entries
+  -- * Entries
   , bool_mat_get_entry
   , bool_mat_set_entry
   -- * Memory management
@@ -23,6 +23,7 @@ module Data.Number.Flint.Groups.Bool.Mat.FFI (
   , bool_mat_entry
   , bool_mat_set
   -- * Input and output
+  , bool_mat_get_str
   , bool_mat_print
   , bool_mat_fprint
   -- * Value comparisons

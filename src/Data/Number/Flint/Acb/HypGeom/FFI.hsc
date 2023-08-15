@@ -627,16 +627,19 @@ foreign import ccall "acb_hypgeom.h acb_hypgeom_erf_1f1b"
 --
 -- Computes the error function respectively using
 -- 
--- \[`\]
--- \[\operatorname{erf}(z) &= \frac{2z}{\sqrt{\pi}}
---     {}_1F_1(\tfrac{1}{2}, \tfrac{3}{2}, -z^2)\]
--- \[\operatorname{erf}(z) &= \frac{2z e^{-z^2}}{\sqrt{\pi}}
---     {}_1F_1(1, \tfrac{3}{2}, z^2)\]
--- \[\operatorname{erf}(z) &= \frac{z}{\sqrt{z^2}}
+-- \[
+--     \begin{aligned}
+--     \operatorname{erf}(z) &= \frac{2z}{\sqrt{\pi}}
+--     {}_1F_1(\tfrac{1}{2}, \tfrac{3}{2}, -z^2)\\
+--     \operatorname{erf}(z) &= \frac{2z e^{-z^2}}{\sqrt{\pi}}
+--     {}_1F_1(1, \tfrac{3}{2}, z^2)\\
+--     \operatorname{erf}(z) &= \frac{z}{\sqrt{z^2}}
 --     \left(1 - \frac{e^{-z^2}}{\sqrt{\pi}}
 --     U(\tfrac{1}{2}, \tfrac{1}{2}, z^2)\right) =
 --     \frac{z}{\sqrt{z^2}} - \frac{e^{-z^2}}{z \sqrt{\pi}}
---     U^{*}(\tfrac{1}{2}, \tfrac{1}{2}, z^2).\]
+--     U^{*}(\tfrac{1}{2}, \tfrac{1}{2}, z^2).
+--     \end{aligned}
+-- \]
 -- 
 -- The /asymp/ version takes a second precision to use for the /U/ term. It
 -- also takes an extra flag /complementary/, computing the complementary

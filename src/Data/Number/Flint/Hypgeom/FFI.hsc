@@ -9,6 +9,7 @@ module Data.Number.Flint.Hypgeom.FFI (
   -- * Types
     Hypgeom (..)
   , CHypgeom (..)
+  , newHypgeom
   , withHypgeom
   , withNewHypgeom
   -- * Memory management
@@ -35,7 +36,7 @@ import Data.Number.Flint.Arb.Types
 
 #include <flint/hypgeom.h>
 
--- Types -----------------------------------------------------------------------
+-- hypgeom_t -------------------------------------------------------------------
 
 data Hypgeom = Hypgeom {-# UNPACK #-} !(ForeignPtr CHypgeom)
 type CHypgeom = CFlint Hypgeom
