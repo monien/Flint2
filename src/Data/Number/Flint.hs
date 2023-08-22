@@ -140,6 +140,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Mat
 , module Data.Number.Flint.Acb.Hypgeom
 , module Data.Number.Flint.Acb.Modular
+, module Data.Number.Flint.Acb.Dirichlet
 , module Data.Number.Flint.Acb.DFT
 , module Data.Number.Flint.Acb.Calc
 -- ** Partitions
@@ -289,6 +290,7 @@ import Data.Number.Flint.Acb.Acf
 import Data.Number.Flint.Acb.Poly
 import Data.Number.Flint.Acb.Mat
 import Data.Number.Flint.Acb.Modular
+import Data.Number.Flint.Acb.Dirichlet
 import Data.Number.Flint.Acb.Hypgeom
 import Data.Number.Flint.Acb.DFT
 import Data.Number.Flint.Acb.ComplexField
