@@ -5,6 +5,7 @@
 #include <flint/perm.h>
 
 void _perm_order(fmpz_t order, slong *x, slong n);
+void _perm_power(slong *x_p, slong *x, slong p, slong n);
 
 void _perm_fprint_pretty(FILE *out, slong *x, slong n);
 void _perm_print_pretty(slong *x, slong n);

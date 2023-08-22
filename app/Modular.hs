@@ -13,6 +13,8 @@ import Data.List (sort)
 import Data.Group
 import Data.Ratio
 
+import Text.Printf
+
 import Data.Number.Flint hiding (numerator, denominator)
 
 mediant l r = unsafePerformIO $ do
@@ -36,7 +38,7 @@ neighbor' x y = a*d - b*c where
   d = denominator y
 
 testFarey' n = do
-  let f (x : y : []) = [- neighbor' x y]
+  let f [x, y] = [- neighbor' x y]
       f (x : y : xs) = - neighbor' x y : f (y : xs)
   print $ f $ farey' n
   
@@ -178,6 +180,7 @@ testPerm' = do
   s <- _perm_init n
   t <- _perm_init n
   p <- _perm_init n
+  q <- _perm_init n
   _perm_set s u n
   _perm_set t w n
   _perm_inv t t n
@@ -193,11 +196,11 @@ testPerm' = do
         _perm_set_word p s t n w
         psl2z_word_print_pretty w
         putStr "\n"
-        putStr "p: "
         _perm_print_pretty p n
         putStr "\n"
   putStrLn "\ncoset representatives:\n"
-  let cr =[[1,0,0,1]
+  let cosetReps =
+         [[1,0,0,1]
          ,[0,1,-1,3]
          ,[0,1,-1,2]
          ,[0,1,-1,1]
@@ -209,24 +212,39 @@ testPerm' = do
          ,[-1,1,-1,0]
          ,[-1,0,-1,-1]
          ,[-1,-1,-1,-2]]
-  let f = testGroup s t n 
-  forM_ cr $ \[a,b,c,d] -> do
-    withNewPSL2Z_ a b c d $ \m -> do
+  cr <- forM cosetReps $ \[a, b, c, d] -> newPSL2Z_ a b c d
+  let f x = do
+        withPSL2Z x $ \x -> psl2z_get_perm p s t n x
+        peek p
+  forM_ cr $ \m -> do
+    withPSL2Z m $ \m -> do 
       withNewPSL2ZWord $ \w -> do
         psl2z_get_word w m
         _perm_set_word p s t n w
-        -- psl2z_word_print_pretty w
-        -- putStr "\n"
-        putStr "p: "
+        psl2z_get_perm q s t n m
+        k <- peek p
+        j <- peek q
+        printf "%2d (%2d): " (toInteger k) (toInteger j)
+        -- putStr $ show k ++ "(" ++ show j ++ ")" ++ ": "
         _perm_print_pretty p n
         putStr "\n"
   putStrLn "\ncoset index:\n"
-  ci <- forM cr $ \[a,b,c,d] -> do
-    x <- newPSL2Z_ a b c d
-    return $ f x
+  ci <- mapM f cr
   print ci
   print $ sort ci
 
+testPerm'' = do
+  let n = 12
+  w <- _perm_init n
+  pokeArray w [0,2,4,1,6,7,9,10,11,3,5,8]
+  putStr "w: "
+  _perm_print_pretty w n
+  putStr "\n"
+  _perm_power w w 6 n
+  putStr "w^6: "
+  _perm_print_pretty w n
+  putStr "\n"
+  
 testGroup s t n x = unsafePerformIO $ do
   p <- _perm_init n
   withNewPSL2ZWord $ \w -> do

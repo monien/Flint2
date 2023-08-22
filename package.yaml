@@ -370,6 +370,7 @@ library:
     - csrc/fmpq_mat/fprint.c
     - csrc/fmpq_vec/get_str.c
     - csrc/fmpq_poly/io_as_series.c
+    - csrc/fmpq_poly/monien.c
     # NMod
     - csrc/nmod_poly_factor/get_str.c
     - csrc/nmod_poly_factor/get_str_pretty.c
@@ -447,6 +448,7 @@ library:
     # perm
     - csrc/perm/order.c
     - csrc/perm/print_pretty.c
+    - csrc/perm/power.c
   include-dirs: csrc
   build-tools: hsc2hs
   extra-libraries: flint, gmp

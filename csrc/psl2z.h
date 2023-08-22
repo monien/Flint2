@@ -3,6 +3,7 @@
 
 #include <flint/acb_modular.h>
 #include <flint/fmpz.h>
+#include <flint/perm.h>
 
 typedef struct {
   fmpz * letters;
@@ -28,5 +29,7 @@ void psl2z_word_print_pretty(psl2z_word_t word);
 char * psl2z_word_get_str_pretty(psl2z_word_t word);
 
 void _perm_set_word(slong *x, slong *s, slong *t, slong n, psl2z_word_t word);
-  
+
+void psl2z_get_perm(slong *p, slong *s, slong *t, slong n, psl2z_t g);
+
 #endif // CSRC_PULLBACK_H_

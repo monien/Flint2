@@ -52,12 +52,14 @@ instance PolynomialProp AcbPoly where
   degree poly = unsafePerformIO $ do
     (_, d) <- withAcbPoly poly $ \poly -> acb_poly_degree poly
     return $ fromIntegral d
+  evaluate = undefined
 
 instance PolynomialProp ArbPoly where
   type BaseRing ArbPoly = Arb
   degree poly = unsafePerformIO $ do
     (_, d) <- withArbPoly poly $ \poly -> arb_poly_degree poly
     return $ fromIntegral d
+  evaluate = undefined
 
 class (PolynomialProp a) => Polynomial a b where
   roots :: a -> b

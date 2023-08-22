@@ -14,6 +14,7 @@ module Data.Number.Flint.Groups.Perm.FFI (
   , _perm_inv
   -- * Composition
   , _perm_compose
+  , _perm_power
   -- * Parity
   , _perm_parity
   -- * Randomisation
@@ -90,6 +91,9 @@ foreign import ccall "perm.h _perm_inv"
 -- Allows aliasing of @res@, @vec1@ and @vec2@.
 foreign import ccall "perm.h _perm_compose"
   _perm_compose :: Ptr CLong -> Ptr CLong -> Ptr CLong -> CLong -> IO ()
+
+foreign import ccall "perm.h _perm_power"
+  _perm_power :: Ptr CLong -> Ptr CLong -> CLong -> CLong -> IO ()
 
 -- Parity ----------------------------------------------------------------------
 

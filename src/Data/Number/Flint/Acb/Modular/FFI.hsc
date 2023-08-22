@@ -47,6 +47,7 @@ module Data.Number.Flint.Acb.Modular.FFI (
   , psl2z_word_fprint_pretty
   , psl2z_word_print_pretty
   , psl2z_word_get_str_pretty
+  , psl2z_get_perm
   -- * Modular transformations
   , acb_modular_transform
   , acb_modular_fundamental_domain_approx_d
@@ -340,7 +341,7 @@ foreign import ccall "psl2z.h psl2z_set_word"
 foreign import ccall "psl2z.h _perm_set_word"
   _perm_set_word :: Ptr CLong -> Ptr CLong -> Ptr CLong -> CLong
                  -> Ptr CPSL2ZWord -> IO ()
-                
+
 -- Word input output -----------------------------------------------------------
 
 -- | /psl2z_word_fprint/ /word/
@@ -385,7 +386,23 @@ psl2z_word_print_pretty word = do
 -- corresponding power.
 foreign import ccall "psl2z.h psl2z_word_get_str_pretty"
   psl2z_word_get_str_pretty :: Ptr CPSL2ZWord -> IO CString
-  
+
+-- | /psl2z_get_perm/ /p/ /s/ /t/ /n/ /x/
+--
+-- Returns the permutation \(p\) corresponding to \(x\) by the 
+-- homomorphism \(\phi:{\textrm PSL}_2\left({\mathbb Z}\right)\rightarrow S_n\)
+-- defined by the permutations \(s\) and \(t\):
+--
+-- \[
+--    \begin{align}
+--      \begin{pmatrix} 0 &-1 \\ 1 & 0 \end{pmatrix} &\mapsto s \\
+--      \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} &\mapsto t. \\
+--    \end{align}
+-- \]
+foreign import ccall "psl2z.h psl2z_get_perm"
+  psl2z_get_perm :: Ptr CLong -> Ptr CLong -> Ptr CLong -> CLong
+                 -> Ptr CPSL2Z -> IO ()
+                 
 -- Modular transformations -----------------------------------------------------
 
 -- | /acb_modular_transform/ /w/ /g/ /z/ /prec/ 

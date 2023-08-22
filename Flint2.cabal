@@ -325,6 +325,7 @@ library
       csrc/fmpq_mat/fprint.c
       csrc/fmpq_vec/get_str.c
       csrc/fmpq_poly/io_as_series.c
+      csrc/fmpq_poly/monien.c
       csrc/nmod_poly_factor/get_str.c
       csrc/nmod_poly_factor/get_str_pretty.c
       csrc/nmod_poly_factor/fprint.c
@@ -389,6 +390,7 @@ library
       csrc/psl2z/word_problem.c
       csrc/perm/order.c
       csrc/perm/print_pretty.c
+      csrc/perm/power.c
   extra-libraries:
       flint, gmp
   pkgconfig-depends:

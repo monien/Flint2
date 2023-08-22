@@ -221,6 +221,8 @@ module Data.Number.Flint.Fmpq.Poly.FFI (
   , fmpq_poly_laguerre_l
   , _fmpq_poly_gegenbauer_c
   , fmpq_poly_gegenbauer_c
+  , _fmpq_poly_monien_h
+  , fmpq_poly_monien_h
   -- * Evaluation
   , _fmpq_poly_evaluate_fmpz
   , fmpq_poly_evaluate_fmpz
@@ -2002,6 +2004,12 @@ foreign import ccall "fmpq_poly.h _fmpq_poly_gegenbauer_c"
 -- hypergeometric recurrence.
 foreign import ccall "fmpq_poly.h fmpq_poly_gegenbauer_c"
   fmpq_poly_gegenbauer_c :: Ptr CFmpqPoly -> CULong -> Ptr CFmpq -> IO ()
+
+foreign import ccall "fmpq_poly.h _fmpq_poly_monien_h"
+  _fmpq_poly_monien_h :: Ptr CFmpz -> Ptr CFmpz -> Ptr CULong -> IO ()
+
+foreign import ccall "fmpq_poly.h fmpq_poly_monien_h"
+  fmpq_poly_monien_h :: Ptr CFmpqPoly -> CULong -> IO ()
 
 -- Evaluation ------------------------------------------------------------------
 

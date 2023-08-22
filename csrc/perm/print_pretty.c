@@ -80,4 +80,3 @@ char * _perm_get_str_pretty(slong *x, slong n) {
   return buffer;
 }
 
-

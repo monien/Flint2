@@ -37,7 +37,7 @@ import Polynomial
 import Types
 import Modular
 
-main = testPerm'
+main = testMember
   
 type RR = RF 128
 type CC = CF 128
@@ -119,7 +119,7 @@ testFmpq = do
   print b
   print $ numerator b
   print $ denominator b
-  print $ s
+  print s
   
 testRest = do
   x <- newFmpz
@@ -375,6 +375,31 @@ testPerm = do
   -- a * b
   _perm_compose d b a n
   _perm_print_pretty d n; endl
+  endl
+  t <- newPSL2Z_ 1 1 0 1
+  p <- _perm_init n
+  withPSL2Z t $ \t -> do
+    psl2z_get_perm p a c n t
+  _perm_print_pretty p n
+  endl
+  _perm_print_pretty c n
+  endl
+  endl
+  g <- newPSL2Z_ (-9444732965739290427388)
+               148754559975189931622431
+               4521254170618233912705
+               (-71209760733946064941912)
+  withPSL2Z g $ \g -> do
+    psl2z_get_perm p a c n g
+  _perm_print_pretty p n
+  endl
+  res <- _perm_init n
+  withNewPSL2ZWord $ \w -> do
+    withPSL2Z g $ \g -> do
+      psl2z_get_word w g
+      _perm_set_word res a c n w
+  _perm_print_pretty res n
+  endl
   return ()
 
 testFq = do
@@ -767,7 +792,7 @@ testModular = do
       rho = (1 + i*sqrt 3) / 2
       f z = (modeta z / modeta (7*z)) ^ 4
       fRho = -245/2-sqrt((245/2)^2-2401)
-      fI = 7/2*sqrt(7)*sqrt(172*sqrt(7) + 455) + 49*sqrt(7) + 245/2
+      fI = 7/2*sqrt 7*sqrt(172*sqrt 7 + 455) + 49*sqrt 7 + 245/2
   print $ f rho / fRho
   print $ f i / fI
   -- testLLL (realPart (f rho)) 12
@@ -983,7 +1008,9 @@ testFmpzPolyQ = do
   --     r :: FmpzPolyQ
   --     r = p // q
   -- print r
-  -- return ()
+  print $ numerator r
+  print $ denominator r
+  return ()
 
 
 testLLL :: forall k. KnownNat k => RF k -> CLong -> IO ()
@@ -1028,7 +1055,6 @@ testLLL r deg = do
             arb_abs tmp tmp 
             arb_printn tmp 16 arb_str_no_radius
             endl
-  return ()
 
 testAcbRoots = do
   let prec = 1024
@@ -1043,7 +1069,7 @@ testAcbRoots = do
     acb_poly_find_roots roots cpoly nullPtr maxIter prec
     putStrLn "\nroots:\n"
     forM_ [0..n-1] $ \j -> do
-      acb_printn (roots `advancePtr` (fromIntegral j)) 16 arb_str_no_radius
+      acb_printn (roots `advancePtr` fromIntegral j) 16 arb_str_no_radius
       endl
   return ()
 
@@ -1055,7 +1081,7 @@ testULong = do
     factorization <- forM [0..fromIntegral num-1] $ \j -> do
       n <- peek $ exp `advancePtr` j
       x <- peek $ p   `advancePtr` j
-      return $ (x, n)
+      return (x, n)
     print factorization
 
 testULongPrime = do
@@ -1164,7 +1190,7 @@ testArbSolve = do
       withArbMat b $ \b -> do
         forM_ [0..2] $ \i -> do
           withFmpq (v!!i) $ \q -> do
-            p <- arb_mat_entry b (fromIntegral i) (fromIntegral 0)
+            p <- arb_mat_entry b (fromIntegral i) 0
             arb_set_fmpq p q prec
           forM_ [0..2] $ \j -> do
             p <- arb_mat_entry a (fromIntegral i) (fromIntegral j)
@@ -1189,7 +1215,7 @@ testAcbSolve = do
       withAcbMat b $ \b -> do
         forM_ [0..2] $ \i -> do
           withFmpq (v!!i) $ \q -> do
-            p <- acb_mat_entry b (fromIntegral i) (fromIntegral 0)
+            p <- acb_mat_entry b (fromIntegral i) 0
             acb_set_fmpq p q prec
           forM_ [0..2] $ \j -> do
             p <- acb_mat_entry a (fromIntegral i) (fromIntegral j)
@@ -1211,11 +1237,11 @@ testPtr = do
         withFmpq ((d !! i) !! j) $ \x ->
           fmpq_mat_set_entry q (fromIntegral i) (fromIntegral j) x
     CFmpqMat entries r c rows <- peek q
-    print $ rows
+    print rows
     let tmp :: Ptr CFmpq
         tmp = castPtr rows
-    print $ rows
-    print $ entries
+    print rows
+    print entries
   print q
   a <- newAcbMatFromFmpqMat q prec
   b <- newAcbMat 3 3
@@ -1248,7 +1274,7 @@ bernoulliDet n = do
     fmpz_one d
     forM_ [1..n] $ \j -> do
       fmpz_mul_ui d d (4*j-1)
-      fmpz_mul_ui d d (4*j-1)
+      fmpz_mul_ui d d (4*j-3)
       fmpz_mul_ui d d (4*j-3)
       
 zetaRational k = do
@@ -1313,21 +1339,64 @@ getST c = do
   let g = mconcat $ map (\n -> t `pow` n <> s) c
   return g
 
-test = do
-  g <- newPSL2Z_ (-9444732965739290427388)
-                 148754559975189931622431
-                 4521254170618233912705
-                 (-71209760733946064941912)
-  print g
-  withNewPSL2ZWord $ \w -> do
-    withPSL2Z g $ \g -> do
-      psl2z_get_word w g
-      psl2z_word_print_pretty w
+testMember = do
+  let n = 12
+  u <- _perm_init n
+  v <- _perm_init n
+  w <- _perm_init n
+  p <- _perm_init n
+  q <- _perm_init n
+  pokeArray u [1,0,3,2,5,4,8,9,6,7,11,10]
+  pokeArray v [3,0,9,1,10,2,11,6,4,5,8,7]
+  pokeArray w [0,2,4,1,6,7,9,10,11,3,5,8]
+  state <- newFRandState
+  withFRandState state $ \state -> do
+    withNewPSL2Z $ \x -> do
+      withNewFmpz $ \k -> do 
+        result <- forM [1..10000] $ \j -> do
+          psl2z_randtest x state 256
+          psl2z_get_perm p u w n x
+          withNewPSL2ZWord $ \word -> do
+            psl2z_get_word word x
+            _perm_set_one q n
+            _perm_set_word q u w n word
+          m <- peek p
+          CPSL2Z a b c d <- peek x
+          fmpz_mod_ui k c 6
+          p' <- peekArray (fromIntegral n) p
+          q' <- peekArray (fromIntegral n) q
+          when (p' /= q') $ do
+            _perm_print_pretty p n; endl
+            _perm_print_pretty q n; endl
+            endl
+          return (p' == q')
+        when (and result) $ do
+          putStrLn $ "passed " ++ show (length result) ++ " tests."
+          
+testMember' = do
+  putStrLn "testMember'"
+  let n = 12
+  u <- _perm_init n
+  v <- _perm_init n
+  w <- _perm_init n
+  p <- _perm_init n
+  q <- _perm_init n
+  pokeArray u [1,0,3,2,5,4,8,9,6,7,11,10]
+  pokeArray v [3,0,9,1,10,2,11,6,4,5,8,7]
+  pokeArray w [0,2,4,1,6,7,9,10,11,3,5,8]
+  x <- newPSL2Z_ (-452312848583266388373300214947361458987557370876366686577763474145015758847) (-221360937680592961535) 67291784947467583839342053325963375003878788407085294533517086453298069468 32932455181913915357
+  withPSL2Z x $ \x -> do
+    psl2z_get_perm p u w n x
+    putStr "p: "
+    _perm_print_pretty p n
+    endl
+    withNewPSL2ZWord $ \word -> do
+      psl2z_get_word word x
+      _perm_set_word q u w n word
+      putStr "q: "
+      _perm_print_pretty q n
       endl
-      withNewPSL2Z $ \y -> do
-        psl2z_set_word y w
-        psl2z_print y
-        endl
   return ()
-    
+
+
 

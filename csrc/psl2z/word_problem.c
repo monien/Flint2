@@ -215,3 +215,87 @@ char * psl2z_word_get_str(psl2z_word_t word) {
   return buffer;
 }
 
+//------------------------------------------------------------------------------
+
+void psl2z_get_perm(slong *p, slong *s, slong *t, slong n, psl2z_t g) {
+
+  slong *tmp = _perm_init(n);
+  
+  _perm_set(p, tmp, n);
+
+  if( psl2z_is_one(g) ) {
+    _perm_clear(tmp);
+    return;
+  }
+
+
+  psl2z_t x;
+  psl2z_init(x);
+  psl2z_set(x, g);
+  
+  fmpz_t u, v, q, r, order;
+
+  fmpz_init(u);
+  fmpz_init(v);
+  fmpz_init(q);
+  fmpz_init(r);
+  fmpz_init(order);
+
+  _perm_order(order, t, n);
+
+  while( ! psl2z_is_one(x) ) {
+
+     // 2*u = 2*(4*a*c + b*d)
+    fmpz_mul(u, &x->a, &x->c);
+    fmpz_mul_ui(u, u, 4);
+    fmpz_mul(r, &x->b, &x->d);
+    fmpz_add(u, u, r);
+    fmpz_mul_ui(u, u, 2);
+
+    // v = 4*c^2 + d^2
+    fmpz_mul(v, &x->c, &x->c);
+    fmpz_mul_ui(v, v, 4);
+    fmpz_mul(r, &x->d, &x->d);
+    fmpz_add(v, v, r);
+
+    // quotRem (2*u + v) (2*v) = (q, r)
+    fmpz_add(q, u, v);
+    fmpz_mul_ui(r, v, 2);
+    fmpz_fdiv_q(q, q, r);
+
+    // |2*u| - v
+    fmpz_abs(u, u);
+    fmpz_sub(u, u, v);
+
+    if( fmpz_cmp_si(u, 0) > 0) {
+      // multiply be T ^ (-q)
+      fmpz_submul(&x->a, q, &x->c);
+      fmpz_submul(&x->b, q, &x->d);
+      fmpz_neg(q, q);
+      fmpz_mod(q, q, order);
+      _perm_power(tmp, t, fmpz_get_si(q), n);
+      _perm_compose(p, p, tmp, n);
+    } else {
+      // multiply by S
+      fmpz_swap(&x->a, &x->c);
+      fmpz_swap(&x->b, &x->d);
+      fmpz_neg(&x->a, &x->a);
+      fmpz_neg(&x->b, &x->b);
+      _perm_compose(p, p, s, n);
+    }
+
+    psl2z_normal_form(x);
+    
+  }
+
+  fmpz_clear(u);
+  fmpz_clear(v);
+  fmpz_clear(q);
+  fmpz_clear(r);
+  fmpz_clear(order);
+  
+  psl2z_clear(x);
+  _perm_clear(tmp);
+
+  _perm_inv(p, p, n);
+}
