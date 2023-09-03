@@ -28,7 +28,7 @@ import Data.List (permutations)
 
 import qualified Data.Vector as Vector
 import Data.Vector (Vector, (!))
-import Data.Vector.Algorithms.Intro (sort)
+import qualified Data.Vector.Algorithms.Merge as Vector (sort)
 import Data.Group
 
 import Data.Number.Flint
@@ -325,6 +325,7 @@ testPadicMat = do
 
 testFmpqMat = do
   mat <- newFmpqMat 4 4
+  poly <- newFmpqPoly
   withFmpqMat mat $ \mat -> do
     fmpq_mat_hilbert_matrix mat
     p <- fmpq_mat_entry mat 1 2
@@ -336,10 +337,9 @@ testFmpqMat = do
       fmpq_mat_det d mat
       fmpq_print d
       endl
-    poly <- newFmpqPoly
     withFmpqPoly poly $ \poly -> fmpq_mat_charpoly poly mat
-    print poly
-
+  print poly
+  
 testHilbert = do
   putStrLn "testHilbert:"
   forM_ [1..10] $ \n -> do
@@ -357,13 +357,12 @@ testHilbert = do
 
 testPerm = do
   let n = 12
-  a <- _perm_init n
-  b <- _perm_init n
-  c <- _perm_init n
-  pokeArray a [1,0,3,2,5,4,8,9,6,7,11,10]
-  pokeArray b [3,0,9,1,10,2,11,6,4,5,8,7]
-  pokeArray c [0,2,4,1,6,7,9,10,11,3,5,8]
-  forM_ [a, b, c] $ \p -> do
+  sigma@[a, b, c] <- replicateM 3 (_perm_init 12)
+  zipWithM_ pokeArray sigma [
+      [1,0,3,2,5,4,8,9,6,7,11,10]
+    , [3,0,9,1,10,2,11,6,4,5,8,7]
+    , [0,2,4,1,6,7,9,10,11,3,5,8]]
+  forM_ sigma $ \p -> do
     _perm_print_pretty p n
     endl
   -- a * b * c
@@ -451,20 +450,20 @@ testFmpqPoly = do
   print poly
 
 testFmpzMPoly = do
-  ctx <- newFmpzMPolyCtx 3 ord_lex
+  let n = 4
+  ctx <- newFmpzMPolyCtx n ord_lex
   poly <- newFmpzMPoly ctx
-  
   withFmpzMPolyCtx ctx $ \ctx -> do
     withFmpzMPoly poly $ \poly -> do
-      forM_ [0..3] $ \j -> do 
+      forM_ [0..fromIntegral n] $ \j -> do 
         fmpz_mpoly_symmetric poly j ctx
         fmpz_mpoly_print_pretty poly nullPtr ctx
         endl
   endl  
-  x <- newArray =<< traverse newCString ["x", "y", "z"]
+  x <- newArray =<< traverse newCString [[c] | c <- ['A'..'z']]
   withFmpzMPolyCtx ctx $ \ctx -> do
     withFmpzMPoly poly $ \poly -> do
-      forM_ [0..3] $ \j -> do 
+      forM_ [0..fromIntegral n] $ \j -> do 
         fmpz_mpoly_symmetric poly j ctx
         fmpz_mpoly_print_pretty poly x ctx
         endl 
@@ -561,6 +560,7 @@ testArbRead = do
         free cs
         let y = read s :: RF 1024
         when (isNaN y) $ do
+          putStr "--> "
           arb_printn x 16 arb_str_no_radius
           endl
 
@@ -613,6 +613,26 @@ testNF = do
           fmpq_mat_print r
   endl
 
+testNF' = do
+  let poly = fromList [1,10,32,38,58,25,25,-12,-6,-11,1,0,1] :: FmpqPoly
+      z = fromList [0, 1] :: FmpqPoly
+  nf <- newNF poly
+  x <- newNFElem nf
+  withNF nf $ \f -> do 
+    withNFElem x $ \x -> do
+      withFmpqPoly z $ \z -> do
+        nf_elem_set_fmpq_poly x z f
+      withNewNFElem nf $ \y -> do
+        forM_ [0..11] $ \j -> do 
+          nf_elem_pow y x j f
+          withCString "a" $ \a -> do
+            nf_elem_print_pretty y f a
+            endl
+          withNewFmpq $ \q -> do
+            nf_elem_norm q y f
+            fmpq_print q
+            endl
+           
 nfRep x nf = do
   (_, n) <- withNewFmpqPoly $ \poly -> do
     nf_elem_get_fmpq_poly poly x nf
@@ -623,9 +643,7 @@ nfRep x nf = do
   return a
     
 testFmpzi = do
-  z <- newFmpzi
-  withFmpzi z $ \z -> do
-    fmpzi_set_si_si z 3 7
+  z <- newFmpzi_ 3 7
   print z
   print $ z*z
   print $ z-z
@@ -1012,7 +1030,18 @@ testFmpzPolyQ = do
   print $ denominator r
   return ()
 
-
+testFmpzMat = do
+  let n = 5
+  a <- newFmpzMat n n 
+  withFmpzMat a $ \a -> do
+    withNewFmpz $ \tmp -> do
+      forM_ [0..n-1] $ \i -> do
+        forM_ [0..n-1] $ \j -> do
+          fmpz_set_si tmp ((i+j+1)^4)
+          fmpz_mat_set_entry a i j tmp
+    fmpz_mat_hnf a a 
+  print a
+  
 testLLL :: forall k. KnownNat k => RF k -> CLong -> IO ()
 testLLL r deg = do
   let prec = floatDigits r
@@ -1398,5 +1427,29 @@ testMember' = do
       endl
   return ()
 
+sort :: (Ord a) => Vector a -> Vector a
+sort x = unsafePerformIO $ do
+  v <- Vector.thaw x
+  Vector.sort v
+  Vector.freeze v
+
+testSort = do
+  l <- sample' arbitrary :: IO [Positive Int]
+  let v = Vector.fromList $ map getPositive l
+  print v
+  print $ sort v
+  print $ Vector.uniq $ sort v
 
 
+newtype W = W [Positive Int] deriving Show 
+newtype U = U (Vector Int) deriving Show
+
+instance Arbitrary W where
+  arbitrary = do
+    v <- vector 10
+    return $ W v
+
+instance Arbitrary U where
+  arbitrary = do
+    W x <- arbitrary
+    return $ U (Vector.fromList $ map getPositive x)

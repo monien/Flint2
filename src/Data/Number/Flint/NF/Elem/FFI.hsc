@@ -10,6 +10,7 @@ module Data.Number.Flint.NF.Elem.FFI (
   , CNFElem (..)
   , newNFElem
   , withNFElem
+  , withNewNFElem
   -- * Initialisation
   , nf_elem_init
   , nf_elem_clear
@@ -126,6 +127,10 @@ newNFElem nf@(NF pnf) = do
 {-# INLINE withNFElem #-}
 withNFElem (NFElem p) f = do
   withForeignPtr p $ \fp -> (NFElem p,) <$> f fp
+
+withNewNFElem nf f = do
+  x <- newNFElem nf
+  withNFElem x f
   
 --------------------------------------------------------------------------------
 

@@ -120,7 +120,6 @@ instance UFD Fmpz where
         else do
           return [(1, 1)]
 
-
 instance Arbitrary Fmpz where
   arbitrary = do
     x <- arbitrary

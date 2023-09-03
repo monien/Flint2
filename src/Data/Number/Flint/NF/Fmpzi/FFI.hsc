@@ -9,6 +9,7 @@ module Data.Number.Flint.NF.Fmpzi.FFI (
     Fmpzi (..)
   , CFmpzi (..)
   , newFmpzi
+  , newFmpzi_
   , withFmpzi
   , withNewFmpzi
   , withFmpziReal
@@ -91,6 +92,15 @@ instance Storable CFmpzi where
 newFmpzi = do
   x <- mallocForeignPtr
   withForeignPtr x fmpzi_init
+  addForeignPtrFinalizer p_fmpzi_clear x
+  return $ Fmpzi x
+
+-- | Create `Fmpzi`.
+newFmpzi_ a b = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    fmpzi_init x
+    fmpzi_set_si_si x a b
   addForeignPtrFinalizer p_fmpzi_clear x
   return $ Fmpzi x
 
