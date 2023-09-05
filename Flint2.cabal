@@ -407,6 +407,7 @@ executable flint_test
   main-is: Main.hs
   other-modules:
       Modular
+      NF
       Polynomial
       Types
       Wrap

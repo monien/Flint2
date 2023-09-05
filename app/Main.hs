@@ -36,6 +36,7 @@ import Data.Number.Flint
 import Polynomial
 import Types
 import Modular
+import NF
 
 main = testMember
   
@@ -1454,33 +1455,9 @@ instance Arbitrary U where
     W x <- arbitrary
     return $ U (Vector.fromList $ map getPositive x)
 
-type MF = NumberField "11  1 10 9 8 8 0 2 9 1 3 1" String
-data NumberField (s :: Symbol) t = Element t
-
-instance forall s . KnownSymbol s => Show (NumberField s String) where
-  show x@(Element e) =  e ++ " :: NumberField(" ++ show (polynomial x) ++ ")"
-  
-nf_get_ctx :: forall s t . KnownSymbol s => NumberField s t -> NF
-nf_get_ctx _ =  unsafePerformIO $ do
-  putStrLn "nf_get_ctx"
-  poly <- newFmpqPoly
-  let s = symbolVal (Proxy :: Proxy s)
-  withCString s $ \cs ->
-    withFmpqPoly poly $ \poly -> do 
-      fmpq_poly_set_str poly cs
-  newNF poly
-  
-polynomial :: forall s t . KnownSymbol s => NumberField s t -> FmpqPoly
-polynomial _ = unsafePerformIO $ do
-  poly <- newFmpqPoly
-  let s = symbolVal (Proxy :: Proxy s)
-  withCString s $ \cs ->
-    withFmpqPoly poly $ \poly -> do 
-      fmpq_poly_set_str poly cs
-  return poly
+type F = NumberField "11  1 10 9 8 8 0 2 9 1 3 1"
 
 nfTest = do
-  let x = Element "x" :: MF
-  print x
+  x <- NF.generator :: IO F
+  print $ x^10
   print $ polynomial x
-
