@@ -5,7 +5,7 @@ license     :  GNU GPL, version 2 or above (see LICENSE)
 maintainer  :  hmonien@uni-bonn.de
 
 
-An @Acb@ represents a complex number with error bounds. An @Arb@
+An @Acb@ represents a complex number with error bounds. An @Acb@
 consists of a pair of real number balls of type @Arb@,
 representing the real and imaginary part with separate error bounds.
 

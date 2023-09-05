@@ -1453,3 +1453,30 @@ instance Arbitrary U where
   arbitrary = do
     W x <- arbitrary
     return $ U (Vector.fromList $ map getPositive x)
+
+type MF = NumberField "11  1 10 9 8 8 0 2 9 1 3 1" String
+data NumberField (s :: Symbol) t = Element t deriving Show
+
+nf_get_ctx :: forall s t . KnownSymbol s => NumberField s t -> NF
+nf_get_ctx _ =  unsafePerformIO $ do
+  poly <- newFmpqPoly
+  let s = symbolVal (Proxy :: Proxy s)
+  withCString s $ \cs ->
+    withFmpqPoly poly $ \poly -> do 
+      fmpq_poly_set_str poly cs
+  newNF poly
+  
+polynomial :: forall s t . KnownSymbol s => NumberField s t -> FmpqPoly
+polynomial _ = unsafePerformIO $ do
+  poly <- newFmpqPoly
+  let s = symbolVal (Proxy :: Proxy s)
+  withCString s $ \cs ->
+    withFmpqPoly poly $ \poly -> do 
+      fmpq_poly_set_str poly cs
+  return poly
+
+nfTest = do
+  let x = Element "x" :: MF
+  print x
+  print $ polynomial x
+
