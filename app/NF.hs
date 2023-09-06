@@ -74,8 +74,8 @@ nf_get_ctx _ =  do
       fmpq_poly_set_str poly cs
   newNF poly
   
-polynomial :: forall s . KnownSymbol s => NumberField s -> FmpqPoly
-polynomial _ = unsafePerformIO $ do
+polynomial :: forall s . KnownSymbol s => NumberField s -> IO FmpqPoly
+polynomial _ = do
   poly <- newFmpqPoly
   let s = symbolVal (Proxy :: Proxy s)
   withCString s $ \cs ->

@@ -1459,5 +1459,5 @@ type F = NumberField "11  1 10 9 8 8 0 2 9 1 3 1"
 
 nfTest = do
   x <- NF.generator :: IO F
-  print $ x^10
-  print $ polynomial x
+  print $ x^12
+  print =<< polynomial x
