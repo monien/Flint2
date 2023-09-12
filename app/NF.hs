@@ -4,6 +4,7 @@ module NF (
   NumberField (..)
 , polynomial
 , generator
+, nf_get_ctx
 ) where
 
 import GHC.TypeLits
