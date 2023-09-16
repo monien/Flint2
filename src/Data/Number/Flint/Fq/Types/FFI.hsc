@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 {-|
 module      :  Data.Number.Flint.Fq.Types.FFI
 copyright   :  (c) 2022 Hartmut Monien
