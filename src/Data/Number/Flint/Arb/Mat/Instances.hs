@@ -2,8 +2,10 @@
 module Data.Number.Flint.Arb.Mat.Instances where
 
 import System.IO.Unsafe
+
 import Foreign.C.String
 import Foreign.Marshal.Alloc ( free )
+import Foreign.Storable
 
 import Data.Number.Flint.Arb
 import Data.Number.Flint.Arb.Mat

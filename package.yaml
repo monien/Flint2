@@ -449,6 +449,7 @@ library:
     - csrc/perm/order.c
     - csrc/perm/print_pretty.c
     - csrc/perm/power.c
+    - csrc/perm/mat.c
   include-dirs: csrc
   build-tools: hsc2hs
   extra-libraries: flint, gmp

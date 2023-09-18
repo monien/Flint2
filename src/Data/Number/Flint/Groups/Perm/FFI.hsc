@@ -15,8 +15,6 @@ module Data.Number.Flint.Groups.Perm.FFI (
   -- * Composition
   , _perm_compose
   , _perm_power
-  -- * Parity
-  , _perm_parity
   -- * Randomisation
   , _perm_randtest
   -- * Input and output
@@ -26,6 +24,8 @@ module Data.Number.Flint.Groups.Perm.FFI (
   , _perm_get_str_pretty
   -- * Properties
   , _perm_order
+  , _perm_parity
+  , _perm_mat
 ) where 
 
 -- permutations ----------------------------------------------------------------
@@ -41,6 +41,7 @@ import Foreign.Marshal ( free, peekArray )
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
+import Data.Number.Flint.Fmpz.Mat
 
 #include <flint/flint.h>
 #include <flint/perm.h>
@@ -106,6 +107,9 @@ foreign import ccall "perm.h _perm_parity"
 
 foreign import ccall "perm.h _perm_order"
   _perm_order :: Ptr CFmpz -> Ptr CLong -> CLong -> IO ()
+
+foreign import ccall "perm.h _perm_mat"
+  _perm_mat :: Ptr CFmpzMat -> Ptr CLong -> CLong -> IO ()
 
 -- Randomisation ---------------------------------------------------------------
 

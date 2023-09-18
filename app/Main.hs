@@ -422,6 +422,33 @@ testFq = do
           endl
         endl
 
+testPermMat = do
+  let n = 12
+  sigma@[a, b, c] <- replicateM 3 (_perm_init 12)
+  zipWithM_ pokeArray sigma [
+      [1,0,3,2,5,4,8,9,6,7,11,10]
+    , [3,0,9,1,10,2,11,6,4,5,8,7]
+    , [0,2,4,1,6,7,9,10,11,3,5,8]]
+  a <- newFmpzMat n n
+  d <- newFmpz
+  forM_ sigma $ \p -> do
+    _perm_print_pretty p n
+    endl
+    withFmpzMat a $ \a -> do
+      _perm_mat a p n
+      withFmpz d $ \d -> do
+        fmpz_mat_det d a
+    print a
+    print d
+  mapM (\s -> do
+    a <- newFmpqMat n n
+    withNewFmpzMat n n $ \r -> do
+      withFmpqMat a $ \a -> do
+        _perm_mat r s n
+        fmpq_mat_set_fmpz_mat a r
+    return a) sigma
+      
+
 testFqNModPoly = do
   state <- newFRandState
   ctx <- newFqNModCtx 7 4 "a"

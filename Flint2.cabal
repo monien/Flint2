@@ -391,6 +391,7 @@ library
       csrc/perm/order.c
       csrc/perm/print_pretty.c
       csrc/perm/power.c
+      csrc/perm/mat.c
   extra-libraries:
       flint, gmp
   pkgconfig-depends:
