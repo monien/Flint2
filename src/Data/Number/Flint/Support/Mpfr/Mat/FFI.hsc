@@ -80,7 +80,7 @@ withNewMpfrMat rows cols prec f = do
 -- given precision for use. The precision is the exact precision of the
 -- entries.
 foreign import ccall "mpfr_mat.h mpfr_mat_init"
-  mpfr_mat_init :: Ptr CMpfrMat -> CLong -> CLong -> Ptr CMpfrPrec -> IO ()
+  mpfr_mat_init :: Ptr CMpfrMat -> CLong -> CLong -> CMpfrPrec -> IO ()
 
 -- | /mpfr_mat_clear/ /mat/ 
 -- 

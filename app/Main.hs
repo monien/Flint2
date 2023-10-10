@@ -1488,3 +1488,36 @@ nfTest = do
   x <- NF.generator :: IO F
   print $ x^12
   print =<< polynomial x
+
+isPrime x = (==1) $ snd $ unsafePerformIO $ do
+  withFmpz x $ \x -> fmpz_is_prime x
+  
+fibonacciNumber n = fst $ unsafePerformIO $ do
+  withNewFmpz $ \f -> fmpz_fib_ui f n
+  
+testFibonacci = do
+  m <- newFmpzMat 2 2
+  withFmpzMat m $ \m -> do
+    withNewFmpz $ \x -> do
+      withNewFmpz $ \s -> do
+        fmpz_zero s
+        fmpz_set_ui x 1
+        fmpz_mat_set_entry m 0 0 x
+        fmpz_mat_set_entry m 0 1 x
+        fmpz_mat_set_entry m 1 0 x
+        withNewFmpzMat 2 2 $ \a -> do
+          fmpz_mat_set a m
+          replicateM_ 100 $ do
+            fmpz_mat_mul a a m
+            fmpz_mat_get_entry x a 0 1
+            flag <- fmpz_is_prime x
+            when (flag == 1 ) $ do
+              fmpz_print x
+              endl
+            fmpz_mul x x x
+            fmpz_add s s x
+        endl
+        fmpz_print s
+        endl
+  return ()
+        
