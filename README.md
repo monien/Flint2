@@ -3,8 +3,8 @@
 
 ## Installation
 
-- Install  [Flint](https://flintlib.org). There are packages available
-  for various operating systems.
+- Install the C-library available from [Flint](https://flintlib.org). 
+   There are packages available for various operating systems.
 
 - Install the Haskell interface with
 
