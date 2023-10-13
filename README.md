@@ -3,10 +3,10 @@
 
 ## Installation
 
-As prerequisite the  [Flint](https://flintlib.org) C-library is
-available (version 2.9 or higher).
+- Install  [Flint](https://flintlib.org). There are packages available
+  for various operating systems.
 
-Install with 
+- Install the Haskell interface with
 
 ```bash
 cabal install Flint2
