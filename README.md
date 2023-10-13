@@ -16,22 +16,12 @@ stack install
 stack haddock
 ```
 
-Have a look at the **Main.hs** in the **app** directory first and then use
-As long as Flint2 is not available from Stackage (Hackage) this requires specification of
-the location of Flint2 in the global stack.yaml file which might be either a local directory
-or github commit. See the [stack](https://docs.haskellstack.org/en/stable/GUIDE/) documentation for details.
+See the [stack](https://docs.haskellstack.org/en/stable/GUIDE/) documentation for details.
 
 ```bash
 stack install Flint2
 stack haddock Flint2
 ```
-
-This will install a binary **flint_test** in **~/.local/bin** which is just shows the basic functionality of the current Flint2 wrapper.
-
-```bash
-stack ghci
-```
-for Flint2 in a haskell shell. 
 
 ## Quick Start
 
