@@ -18,26 +18,7 @@ description:  Please see the README on GitHub at <https://github.com/monien/Flin
 
 dependencies:
 - base >= 4.7 && < 5
-
-executables:
-  flint_test:
-    source-dirs: app
-    main: Main.hs
-    dependencies: 
-    - QuickCheck
-    - mtl
-    - vector
-    - vector-algorithms
-    - groups
-    - Flint2
-    extra-libraries: flint, gmp, mpfr
-    default-extensions:
-      - ScopedTypeVariables
-      - QuantifiedConstraints
-      - MultiParamTypeClasses
-      - FlexibleInstances
-      - TypeFamilies
-      
+    
 library:
   source-dirs: src
   default-extensions:
