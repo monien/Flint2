@@ -324,6 +324,50 @@ library:
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI
    - Data.Number.Flint.NF.QQbar.FFI
+  install-includes:
+    - acb.h
+    - acb_mat.h
+    - acb_modular.h
+    - acb_poly.h
+    - aprcl.h
+    - arb.h
+    - arb_calc.h
+    - arb_fpwrap.h
+    - arb_mat.h
+    - arb_poly.h
+    - arf.h
+    - bool_mat.h
+    - d_mat.h
+    - double_interval.h
+    - fmpq.h
+    - fmpq_mat.h
+    - fmpq_poly.h
+    - fmpq_vec.h
+    - fmpz.h
+    - fmpz_factor.h
+    - fmpz_mat.h
+    - fmpz_mod_poly_factor.h
+    - fmpz_mpoly_q.h
+    - fmpz_poly_mat.h
+    - fmpz_vec.h
+    - fmpzi.h
+    - fq.h
+    - fq_mat.h
+    - fq_nmod.h
+    - fq_nmod_mat.h
+    - fq_zech.h
+    - fq_zech_mat.h
+    - mag.h
+    - mpfr_mat.h
+    - nmod_poly_factor.h
+    - nmod_poly_mat.h
+    - padic_mat.h
+    - padic_poly.h
+    - perm.h
+    - psl2z.h
+    - qadic.h
+    - qfb.h
+    - qqbar.h
   c-sources:
     # Fmpz
     - csrc/fmpz/init.c

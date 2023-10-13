@@ -3,24 +3,13 @@
 
 ## Installation
 
-Clone it with
+As prerequisite the  [Flint](https://flintlib.org) C-library is
+available (version 2.9 or higher).
+
+Install with 
 
 ```bash
-git clone https://github.com/monien/Flint2.git
-```
-
-then goto to the Flint2 directory and use
-
-```bash
-stack install
-stack haddock
-```
-
-See the [stack](https://docs.haskellstack.org/en/stable/GUIDE/) documentation for details.
-
-```bash
-stack install Flint2
-stack haddock Flint2
+cabal install Flint2
 ```
 
 ## Quick Start

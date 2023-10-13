@@ -66,6 +66,3 @@ packages:
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
-extra-deps:
-  - git: https://github.com/hpacheco/gloss-juicy.git
-    commit: acbdfd864b7e574dfbe1595fbdcd154563b2a0ef
