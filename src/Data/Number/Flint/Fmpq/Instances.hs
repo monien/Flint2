@@ -21,6 +21,7 @@ import Text.Read
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpq
+import Data.Number.Flint.Quotient ((//))
 
 instance Show Fmpq where
   show x = snd $ unsafePerformIO $ do
@@ -32,16 +33,17 @@ instance Show Fmpq where
       return s
 
 instance Read Fmpq where
-  readsPrec _ r = unsafePerformIO $ do
-    result <- newFmpq
-    (_, flag) <- withFmpq result $ \result ->
-      withCString r $ \r ->
-        fmpq_set_str result r 10
-    if flag == 0 then 
-      return [(result, drop (length (show result)) r)]
-    else
-      return []
-      
+  readPrec = parens $ (prec app_prec $ do
+                         x <- step readPrec
+                         Symbol "/" <- lexP
+                         y <- step readPrec
+                         return (x // y))
+                  +++ (prec up_prec $ do
+                         x <- step readPrec
+                         return (x // 1))
+          where app_prec = 10
+                up_prec = 5
+       
 instance Eq Fmpq where
   (==) x y = snd $ snd $ unsafePerformIO $ 
     withFmpq x $ \x ->
