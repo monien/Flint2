@@ -32,11 +32,10 @@ main = do
 
 which will print the numerical value 42.
 
-In the app directory more practical information on how to use the thin wrapper can be found. 
-The above example simplifies to 
+The above example simplifies using instances to 
 
 ```haskell
-include Fmpz
+import Data.Number.Flint
 
 main = do
   let x = 7 :: Fmpz 

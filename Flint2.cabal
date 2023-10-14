@@ -5,7 +5,7 @@ cabal-version: 1.18
 -- see: https://github.com/sol/hpack
 
 name:           Flint2
-version:        0.1.0.0
+version:        0.1.0.1
 synopsis:       Haskell bindings for the flint library for number theory
 description:    Please see the README on GitHub at <https://github.com/monien/Flint2#readme>
 category:       Math
@@ -20,6 +20,9 @@ build-type:     Simple
 extra-source-files:
     README.md
     ChangeLog.md
+    package.yaml
+    stack.yaml
+    gpl-2.0.txt
 extra-doc-files:
     docs/out.png
 

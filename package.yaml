@@ -1,5 +1,5 @@
 name:                Flint2
-version:             0.1.0.0
+version:             0.1.0.1
 github:              "monien/Flint2"
 license:             BSD3
 author:              "Hartmut Monien"
@@ -11,6 +11,9 @@ synopsis:          "Haskell bindings for the flint library for number theory"
 extra-source-files:
 - README.md
 - ChangeLog.md
+- package.yaml
+- stack.yaml
+- gpl-2.0.txt
 
 extra-doc-files:  docs/*.png
 

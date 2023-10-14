@@ -14,6 +14,8 @@ module Data.Number.Flint.Acb.FFI (
   , withNewAcb
   , withAcbRe
   , withAcbIm
+  , acb_realref
+  , acb_imagref
   -- * Memory management
   , acb_init
   , acb_clear
@@ -317,20 +319,34 @@ withNewAcb f = do
 withAcbRe :: Acb -> (Ptr CArb -> IO t) -> IO (Acb, t)
 withAcbRe (Acb p) f = do
    withForeignPtr p $ \fp -> do
-     withForeignPtr p $ \fp -> (Acb p,) <$> f (castPtr fp)
+     withForeignPtr p $ \fp -> (Acb p,) <$> f (acb_realref fp)
 
 -- | Apply function `f` to imaginary part of `Acb`
 withAcbIm :: Acb -> (Ptr CArb -> IO t) -> IO (Acb, t)
 withAcbIm (Acb p) f = do
    withForeignPtr p $ \fp -> do
-     withForeignPtr p $ \fp -> (Acb p,) <$> f (castPtr fp `advancePtr` 1)
+     withForeignPtr p $ \fp -> (Acb p,) <$> f (acb_imagref fp)
 
 instance Storable CAcb where
   sizeOf    _ = #{size      acb_t}
   alignment _ = #{alignment acb_t}
   peek = error "CAcb.peek not defined."
   poke = error "CAcb.poke not defined."
-  
+
+-- Access to real and imaginary part -------------------------------------------
+
+-- | /acb_realref/ /z/
+--
+-- /acb_realref/ returns a `CArb` pointer to the real part of /z/.
+acb_realref :: Ptr CAcb -> Ptr CArb
+acb_realref z = castPtr z
+
+-- | /acb_imagref/ /z/
+--
+-- /acb_imagref/ returns a `CArb` pointer to the imaginary part of /z/.
+acb_imagref :: Ptr CAcb -> Ptr CArb
+acb_imagref z = castPtr z `advancePtr` 1
+
 -- Memory management -----------------------------------------------------------
 
 -- | /acb_init/ /x/ 
