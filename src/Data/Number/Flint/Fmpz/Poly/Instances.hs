@@ -24,8 +24,10 @@ import Foreign.C.String
 import Foreign.Storable
 import Foreign.Marshal.Alloc (free)
 import Foreign.Marshal.Array (advancePtr)
+import Text.ParserCombinators.ReadP
 
 import Data.Bits
+import Data.Char
 
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Instances
@@ -42,6 +44,9 @@ instance Show FmpzPoly where
         s <- peekCString cs
         free cs
         return s
+
+instance Read FmpzPoly where
+  readsPrec _ = readP_to_S parseFmpzPoly
 
 instance Num FmpzPoly where
   (*) = lift2 fmpz_poly_mul
@@ -152,6 +157,18 @@ lift1 f x = unsafePerformIO $ do
     f result x
   return result
 
+parseFmpzPoly :: ReadP FmpzPoly
+parseFmpzPoly = do
+  n <- parseItemNumber
+  v <- count n parseItem 
+  return $ fromList v
+  where
+    parseItem = read <$> (char ' ' *> parsePositiveNumber)
+    parseItemNumber = read <$> munch1 isNumber <* char ' '
+    parseNumber = parseNegativeNumber <++ parsePositiveNumber
+    parseNegativeNumber = fst <$> gather (char '-' *> munch1 isNumber)
+    parsePositiveNumber = munch1 isNumber
+  
 -- special functions -----------------------------------------------------------
 
 cyclotomicPolynomial n = unsafePerformIO $ do
@@ -165,3 +182,4 @@ hermitePolynomial n = unsafePerformIO $ do
   withFmpzPoly poly $ \poly ->
     fmpz_poly_hermite_h poly n
   return poly
+

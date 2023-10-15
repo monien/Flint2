@@ -8,12 +8,15 @@ import System.IO.Unsafe
 import Control.Monad
 import Foreign.C.String
 import Foreign.Marshal.Alloc
+import Text.ParserCombinators.ReadP
 
 import Data.Ratio hiding (numerator, denominator)
+import Data.Char
 
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Fmpz.Instances
 import Data.Number.Flint.Fmpq
+import Data.Number.Flint.Fmpq.Instances
 import Data.Number.Flint.Fmpq.Poly
 
 instance IsList FmpqPoly where
@@ -42,6 +45,9 @@ instance Show FmpqPoly where
         free cs
         return s
 
+instance Read FmpqPoly where
+  readsPrec _ = readP_to_S parseFmpqPoly
+
 instance Num FmpqPoly where
   (*) = lift2 fmpq_poly_mul
   (+) = lift2 fmpq_poly_add
@@ -61,3 +67,17 @@ lift2 f x y = unsafePerformIO $ do
         withFmpqPoly y $ \y -> do
           f result x y
     return result
+
+parseFmpqPoly :: ReadP FmpqPoly
+parseFmpqPoly = do
+  n <- parseItemNumber
+  v <- count n parseItem
+  return $ fromList v
+  where
+    parseItem = read <$> (char ' ' *> parseFrac)
+    parseItemNumber = read <$> munch1 isNumber <* char ' '
+    parseFrac = parseFraction <++ parseNumber
+    parseFraction = fst <$> gather (parseNumber *> char '/' *> parsePositive)
+    parseNumber = parseNegative <++ parsePositive
+    parseNegative = fst <$> gather (char '-' *> munch1 isNumber)
+    parsePositive = munch1 isNumber

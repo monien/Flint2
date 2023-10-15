@@ -33,14 +33,15 @@ instance Show Fmpq where
       return s
 
 instance Read Fmpq where
-  readPrec = parens $ (prec app_prec $ do
-                         x <- step readPrec
-                         Symbol "/" <- lexP
-                         y <- step readPrec
-                         return (x // y))
-                  +++ (prec up_prec $ do
-                         x <- step readPrec
-                         return (x // 1))
+  readPrec = parens $
+               (prec app_prec $ do
+                  x <- step readPrec
+                  Symbol "/" <- lexP
+                  y <- step readPrec
+                  return (x // y))
+           +++ (prec up_prec $ do
+                  x <- step readPrec
+                  return (x // 1))
           where app_prec = 10
                 up_prec = 5
        
