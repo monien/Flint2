@@ -23,7 +23,9 @@ module Data.Number.Flint.Bernoulli.FFI (
   -- * Isolated Bernoulli numbers
   , bernoulli_mod_p_harvey
   , _bernoulli_fmpq_ui_zeta
+  , _bernoulli_fmpq_ui_multi_mod
   , _bernoulli_fmpq_ui
+  , bernoulli_fmpq_ui
 ) where
 
 -- Support for Bernoulli numbers -----------------------------------------------
@@ -168,6 +170,9 @@ foreign import ccall "bernoulli.h bernoulli_mod_p_harvey"
 foreign import ccall "bernoulli.h _bernoulli_fmpq_ui_zeta"
   _bernoulli_fmpq_ui_zeta :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
 
+foreign import ccall "bernoulli.h  _bernoulli_fmpq_ui_multi_mod"
+   _bernoulli_fmpq_ui_multi_mod :: Ptr CFmpz -> Ptr CFmpz -> CULong
+                                -> CDouble -> IO () 
 -- | /_bernoulli_fmpq_ui/ /num/ /den/ /n/ 
 -- 
 -- Computes the Bernoulli number \(B_n\) as an exact fraction, for an
@@ -177,3 +182,5 @@ foreign import ccall "bernoulli.h _bernoulli_fmpq_ui_zeta"
 foreign import ccall "bernoulli.h _bernoulli_fmpq_ui"
   _bernoulli_fmpq_ui :: Ptr CFmpz -> Ptr CFmpz -> CULong -> IO ()
 
+foreign import ccall "bernoulli.h bernoulli_fmpq_ui"
+  bernoulli_fmpq_ui :: Ptr CFmpq -> CULong -> IO ()

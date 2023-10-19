@@ -9,7 +9,7 @@
 - Install the Haskell interface with
 
 ```bash
-cabal install Flint2
+cabal install Flint2 --lib
 ```
 
 ## Quick Start
@@ -51,3 +51,4 @@ which prints
 42 
 [(2,1),(3,1),(7,1)]
 ```
+
