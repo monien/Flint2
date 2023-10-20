@@ -904,4 +904,3 @@ foreign import ccall "acb_modular.h acb_modular_elliptic_p_zpx"
 -- input, /res/ is set to the zero polynomial.
 foreign import ccall "acb_modular.h acb_modular_hilbert_class_poly"
   acb_modular_hilbert_class_poly :: Ptr CFmpzPoly -> CLong -> IO ()
-

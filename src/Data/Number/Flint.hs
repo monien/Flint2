@@ -1,4 +1,3 @@
-{-# OPTIONS_HADDOCK prune, ignore-exports #-}
 
 {-|
 module      :  Data.Number.Flint.Flint

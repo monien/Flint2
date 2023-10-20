@@ -1,4 +1,3 @@
-{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 module Data.Number.Flint.NF.Fmpzi.Instances where
 
 import System.IO.Unsafe

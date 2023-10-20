@@ -1,4 +1,3 @@
-{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 {-|
 module      :  Data.Number.Flint.Fmpz.Poly.Instances
 copyright   :  (c) 2022 Hartmut Monien

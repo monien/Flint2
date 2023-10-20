@@ -1,4 +1,3 @@
-{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 module Data.Number.Flint.Arb.Poly.Instances (
     ArbPoly (..)
   , module GHC.Exts

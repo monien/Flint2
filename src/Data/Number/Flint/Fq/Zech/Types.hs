@@ -1,4 +1,3 @@
-{-# OPTIONS_HADDOCK hide, prune, ignore-exports #-}
 {- | 
 module      : Data.Number.Flint.Fq.Zech.Types
 copyright   : (c) 2022 Hartmut Monien
