@@ -16,7 +16,9 @@ module Data.Number.Flint.Fmpz.MPoly.Factor.FFI (
   , fmpz_mpoly_factor_init
   , fmpz_mpoly_factor_clear
   -- * Input and Output
+  , fmpz_mpoly_get_str_pretty
   , fmpz_mpoly_factor_print_pretty
+  , fmpz_mpoly_factor_fprint_pretty    
   -- * Basic manipulation
   , fmpz_mpoly_factor_swap
   , fmpz_mpoly_factor_length
@@ -109,8 +111,16 @@ foreign import ccall "fmpz_mpoly_factor.h &fmpz_mpoly_factor_clear"
 
 -- Input and Output ------------------------------------------------------------
 
+foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_get_str_pretty"
+  fmpz_mpoly_factor_get_str_pretty :: Ptr CFmpzMPolyFactor -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO CString
+
+fmpz_mpoly_factor_print_pretty :: Ptr CFmpzMPolyFactor -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO ()
+fmpz_mpoly_factor_print_pretty fac vars ctx = do
+  flag <- printCStr (\fac -> fmpz_mpoly_factor_get_str_pretty fac vars ctx) fac
+  return ()
+  
 foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_print_pretty"
-  fmpz_mpoly_factor_print_pretty :: Ptr CFmpzMPolyFactor -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO ()
+  fmpz_mpoly_factor_fprint_pretty :: Ptr CFile -> Ptr CFmpzMPolyFactor -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO ()
   
 -- Basic manipulation ----------------------------------------------------------
 
