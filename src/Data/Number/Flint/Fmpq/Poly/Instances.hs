@@ -73,8 +73,8 @@ parseFmpqPoly = do
   v <- count n parseItem
   return $ fromList v
   where
-    parseItem = read <$> (char ' ' *> parseFrac)
     parseItemNumber = read <$> munch1 isNumber <* char ' '
+    parseItem = read <$> (char ' ' *> parseFrac)
     parseFrac = parseFraction <++ parseNumber
     parseFraction = fst <$> gather (parseNumber *> char '/' *> parsePositive)
     parseNumber = parseNegative <++ parsePositive

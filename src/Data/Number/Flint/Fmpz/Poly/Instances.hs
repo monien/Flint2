@@ -162,8 +162,8 @@ parseFmpzPoly = do
   v <- count n parseItem 
   return $ fromList v
   where
-    parseItem = read <$> (char ' ' *> parsePositiveNumber)
     parseItemNumber = read <$> munch1 isNumber <* char ' '
+    parseItem = read <$> (char ' ' *> parseNumber)
     parseNumber = parseNegativeNumber <++ parsePositiveNumber
     parseNegativeNumber = fst <$> gather (char '-' *> munch1 isNumber)
     parsePositiveNumber = munch1 isNumber

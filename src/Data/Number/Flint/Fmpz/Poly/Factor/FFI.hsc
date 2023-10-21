@@ -10,6 +10,7 @@ module Data.Number.Flint.Fmpz.Poly.Factor.FFI (
   , CFmpzPolyFactor (..)
   , newFmpzPolyFactor
   , withFmpzPolyFactor
+  , withNewFmpzPolyFactor
   -- * Types, macros and constants
   -- * Memory management
   , fmpz_poly_factor_init
