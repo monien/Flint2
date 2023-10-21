@@ -16,6 +16,7 @@ module Data.Number.Flint.Fmpz.MPoly.FFI (
   , CFmpzMPolyCtx (..)
   , newFmpzMPolyCtx
   , withFmpzMPolyCtx
+  , withNewFmpzMPolyCtx
   , fmpz_mpoly_ctx_init
   , fmpz_mpoly_ctx_nvars
   , fmpz_mpoly_ctx_ord
@@ -306,6 +307,10 @@ newFmpzMPolyCtx nvars ord = do
 withFmpzMPolyCtx (FmpzMPolyCtx p) f = do
   withForeignPtr p $ \fp -> f fp >>= return . (FmpzMPolyCtx p,)
 
+withNewFmpzMPolyCtx nvars ord f = do
+  mctx <- newFmpzMPolyCtx nvars ord
+  withFmpzMPolyCtx mctx f
+  
 -- fmpz_mpoly_vec_t ------------------------------------------------------------
 
 data FmpzMPolyVec = FmpzMPolyVec {-# UNPACK #-} !(ForeignPtr CFmpzMPolyVec)
