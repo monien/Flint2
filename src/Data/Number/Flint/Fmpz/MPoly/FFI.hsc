@@ -11,6 +11,7 @@ module Data.Number.Flint.Fmpz.MPoly.FFI (
   -- * Constructor
   , newFmpzMPoly
   , withFmpzMPoly
+  , withNewFmpzMPoly
   -- * Context object
   , FmpzMPolyCtx (..)
   , CFmpzMPolyCtx (..)

@@ -11,9 +11,12 @@ module Data.Number.Flint.Fmpz.MPoly.Factor.FFI (
   , CFmpzMPolyFactor (..)
   , newFmpzMPolyFactor
   , withFmpzMPolyFactor
+  , withNewFmpzMPolyFactor
   -- * Memory management
   , fmpz_mpoly_factor_init
   , fmpz_mpoly_factor_clear
+  -- * Input and Output
+  , fmpz_mpoly_factor_print_pretty
   -- * Basic manipulation
   , fmpz_mpoly_factor_swap
   , fmpz_mpoly_factor_length
@@ -82,6 +85,10 @@ newFmpzMPolyFactor ctx@(FmpzMPolyCtx pctx) = do
 
 withFmpzMPolyFactor (FmpzMPolyFactor p) f = do
   withForeignPtr p $ \fp -> f fp >>= return . (FmpzMPolyFactor p,)
+
+withNewFmpzMPolyFactor ctx f = do
+  x <- newFmpzMPolyFactor ctx
+  withFmpzMPolyFactor x f
   
 -- Memory management -----------------------------------------------------------
 
@@ -100,6 +107,11 @@ foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_clear"
 foreign import ccall "fmpz_mpoly_factor.h &fmpz_mpoly_factor_clear"
   p_fmpz_mpoly_factor_clear :: FunPtr (Ptr CFmpzMPolyFactor -> Ptr CFmpzMPolyCtx -> IO ())
 
+-- Input and Output ------------------------------------------------------------
+
+foreign import ccall "fmpz_mpoly_factor.h fmpz_mpoly_factor_print_pretty"
+  fmpz_mpoly_factor_print_pretty :: Ptr CFmpzMPolyFactor -> Ptr (Ptr CChar) -> Ptr CFmpzMPolyCtx -> IO ()
+  
 -- Basic manipulation ----------------------------------------------------------
 
 -- | /fmpz_mpoly_factor_swap/ /f/ /g/ /ctx/ 
