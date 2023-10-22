@@ -114,9 +114,9 @@ instance Num ArbStrOption where
   (+) (ArbStrOption x) (ArbStrOption y) = ArbStrOption (x + y)
   (*) = undefined
   abs = undefined
-  signum = undefined
-  fromInteger = undefined
-  negate = undefined
+  signum = error "ArbStrOption: \"signum\" not defined."
+  fromInteger = error "ArbStrOption: \"fromInteger\" not defined."
+  negate = error "ArbStrOption: \"negate\" not defined."
 
 -- | Default print option
 arb_str_none      = ArbStrOption 0
