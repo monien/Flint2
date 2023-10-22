@@ -55,6 +55,7 @@ module Data.Number.Flint.Arb.Mag.FFI (
   , mag_min
   , mag_max
   -- * Input and output
+  , mag_get_str
   , mag_print
   , mag_fprint
   , mag_dump_str

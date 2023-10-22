@@ -11,8 +11,8 @@ module Data.Number.Flint.Acb.Calc.FFI (
   -- * Integration
   , acb_calc_integrate
   -- * Options for integration
-  , AcbCalcIntegrateOpt ()
-  , CAcbCalcIntegrateOpt
+  , AcbCalcIntegrateOpt (..)
+  , CAcbCalcIntegrateOpt (..)
   , newAcbCalcIntegrateOpt
   , withAcbCalcIntegrateOpt
   , acb_calc_integrate_opt_init
@@ -61,8 +61,13 @@ instance Storable CAcbCalcIntegrateOpt where
     <*> #{peek acb_calc_integrate_opt_struct, depth_limit} ptr
     <*> #{peek acb_calc_integrate_opt_struct, use_heap   } ptr
     <*> #{peek acb_calc_integrate_opt_struct, verbose    } ptr
-  poke = error "CAcbCalcIntegrateOpt.poke undefined."
-
+  poke ptr (CAcbCalcIntegrateOpt deg eval depth heap verbose) = do
+    (#poke acb_calc_integrate_opt_struct, deg_limit  ) ptr deg
+    (#poke acb_calc_integrate_opt_struct, eval_limit ) ptr eval
+    (#poke acb_calc_integrate_opt_struct, depth_limit) ptr depth
+    (#poke acb_calc_integrate_opt_struct, use_heap   ) ptr heap
+    (#poke acb_calc_integrate_opt_struct, verbose    ) ptr verbose
+    
 newAcbCalcIntegrateOpt = do
   x <- mallocForeignPtr
   withForeignPtr x acb_calc_integrate_opt_init
