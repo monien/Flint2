@@ -124,6 +124,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Arb
 , module Data.Number.Flint.Arb.RealField
 , module Data.Number.Flint.Arb.Mag
+, module Data.Number.Flint.Arb.Mag.Instances
 , module Data.Number.Flint.Arb.Arf
 , module Data.Number.Flint.Arb.Poly
 , module Data.Number.Flint.Arb.Fmpz.Poly
@@ -327,6 +328,7 @@ import Data.Number.Flint.NF.QQbar.Instances
 import Data.Number.Flint.NMod.Poly.Instances
 
 import Data.Number.Flint.Arb.Instances
+import Data.Number.Flint.Arb.Mag.Instances
 import Data.Number.Flint.Arb.Poly.Instances
 import Data.Number.Flint.Arb.Mat.Instances
 

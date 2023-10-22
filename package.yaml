@@ -157,6 +157,7 @@ library:
    - Data.Number.Flint.Arb
    - Data.Number.Flint.Arb.Instances
    - Data.Number.Flint.Arb.Mag
+   - Data.Number.Flint.Arb.Mag.Instances
    - Data.Number.Flint.Arb.Arf
    - Data.Number.Flint.Arb.Poly
    - Data.Number.Flint.Arb.Poly.Instances

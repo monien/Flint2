@@ -14,7 +14,11 @@ module Data.Number.Flint.Acb.Calc.FFI (
   , AcbCalcIntegrateOpt (..)
   , CAcbCalcIntegrateOpt (..)
   , newAcbCalcIntegrateOpt
+  , newAcbCalcIntegrateOpt_
   , withAcbCalcIntegrateOpt
+  , withNewAcbCalcIntegrateOpt
+  , withNewAcbCalcIntegrateOpt_
+  -- * Memory management
   , acb_calc_integrate_opt_init
   -- * Local integration algorithms
   , acb_calc_integrate_gl_auto_deg
@@ -73,12 +77,28 @@ newAcbCalcIntegrateOpt = do
   withForeignPtr x acb_calc_integrate_opt_init
   return $ AcbCalcIntegrateOpt x
 
+newAcbCalcIntegrateOpt_ deg eval depth heap verbose = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    acb_calc_integrate_opt_init x
+    poke x (CAcbCalcIntegrateOpt deg eval depth heap verbose)
+  return $ AcbCalcIntegrateOpt x
+
 withAcbCalcIntegrateOpt (AcbCalcIntegrateOpt x) f =
   withForeignPtr x $ \xp -> f xp <&> (AcbCalcIntegrateOpt x,)
-  
+
+withNewAcbCalcIntegrateOpt f = do
+  x <- newAcbCalcIntegrateOpt
+  withAcbCalcIntegrateOpt x f
+
+withNewAcbCalcIntegrateOpt_ deg eval depth heap verbose f = do
+  x <- newAcbCalcIntegrateOpt_ deg eval depth heap verbose
+  withAcbCalcIntegrateOpt x f
+
 -- acb_calc_func_t -------------------------------------------------------------
 
-type CAcbCalcFunc = Ptr CAcb -> Ptr () -> CLong -> CLong
+type CAcbCalcFunc =
+  (Ptr CAcb -> Ptr CAcb -> Ptr () -> CLong -> CLong -> IO CInt)
 
 -- Integration -----------------------------------------------------------------
 
