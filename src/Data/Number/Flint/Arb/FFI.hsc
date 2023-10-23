@@ -19,6 +19,7 @@ module Data.Number.Flint.Arb.FFI (
   , arb_init
   , arb_clear
   , arb_midref
+  , arb_radref
   , _arb_vec_init
   , _arb_vec_clear
   , arb_swap
@@ -396,6 +397,8 @@ module Data.Number.Flint.Arb.FFI (
 
 -- Real numbers ----------------------------------------------------------------
 
+import System.IO.Unsafe
+
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.C.Types
@@ -470,8 +473,15 @@ foreign import ccall "arb.h &arb_clear"
   p_arb_clear :: FunPtr (Ptr CArb -> IO ())
 
 foreign import ccall "arb.h arb_midref_"
-  arb_midref :: Ptr CArb -> IO (Ptr CArf)
-  
+  arb_midref_ :: Ptr CArb -> IO (Ptr CArf)
+
+arb_midref = unsafePerformIO . arb_midref_
+
+foreign import ccall "arb.h arb_radref_"
+  arb_radref_ :: Ptr CArb -> IO (Ptr CMag)
+
+arb_radref = unsafePerformIO . arb_radref_
+
 -- | /_arb_vec_init/ /n/ 
 -- 
 -- Returns a pointer to an array of /n/ initialized @arb_struct@ entries.

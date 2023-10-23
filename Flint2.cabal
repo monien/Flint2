@@ -413,6 +413,7 @@ library
       csrc/d_mat/entry.c
       csrc/d_mat/io.c
       csrc/arb/midref.c
+      csrc/arb/radref.c
       csrc/arf/inlines.c
       csrc/mag/get_str.c
       csrc/arb/get_strd.c

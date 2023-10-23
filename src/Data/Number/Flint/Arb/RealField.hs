@@ -97,10 +97,9 @@ instance forall n. KnownNat n => RealFloat (RF n) where
     man <- newFmpz
     exp <- newFmpz 
     withArb x $ \a -> do
-      arf <- arb_midref a
       withFmpz man $ \man -> do
         withFmpz exp $ \exp -> do
-          arf_get_fmpz_2exp man exp arf
+          arf_get_fmpz_2exp man exp (arb_midref a)
     return (toInteger man, fromIntegral exp)
   encodeFloat man exp = unsafePerformIO $ do
     let prec = fromInteger $ natVal (Proxy :: Proxy n)
