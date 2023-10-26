@@ -177,6 +177,7 @@ module Data.Number.Flint.Fmpz.FFI (
   , fmpz_powm_ui
   , fmpz_powm
   , fmpz_clog
+  , fmpz_clog_ui
   , fmpz_flog
   , fmpz_dlog
   , fmpz_sqrtmod
@@ -1459,6 +1460,9 @@ foreign import ccall "fmpz.h fmpz_powm"
 -- fits into a signed @slong@.
 foreign import ccall "fmpz.h fmpz_clog"
   fmpz_clog :: Ptr CFmpz -> Ptr CFmpz -> IO CLong
+
+foreign import ccall "fmpz.h fmpz_clog_ui"
+  fmpz_clog_ui :: Ptr CFmpz -> CULong -> IO CLong
 
 -- | /fmpz_flog/ /x/ /b/ 
 -- 
