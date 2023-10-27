@@ -19,6 +19,8 @@ module Data.Number.Flint.Qadic.FFI (
   , newQadic
   , withQadic
   , withNewQadic
+  , newQadicWithPrec
+  , withNewQadicWithPrec
   -- * q-adic context
   --
   -- | Context
@@ -158,6 +160,18 @@ withNewQadic f = do
   x <- newQadic
   withQadic x f
 
+newQadicWithPrec prec = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> qadic_init2 x prec
+  addForeignPtrFinalizer p_qadic_clear x
+  return $ Qadic x
+
+-- | Apply `f` to new q-adic
+{-# INLINE withNewQadicWithPrec #-}
+withNewQadicWithPrec prec f = do
+  x <- newQadicWithPrec prec 
+  withQadic x f
+  
 -- qadic_ctx_t ----------------------------------------------------------------
 
 data QadicCtx = QadicCtx {-# UNPACK #-} !(ForeignPtr CQadicCtx)

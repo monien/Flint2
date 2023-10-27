@@ -137,7 +137,12 @@ instance Storable CPadicPoly where
     `ap` #{peek padic_poly_struct, length} ptr
     `ap` #{peek padic_poly_struct, val   } ptr
     `ap` #{peek padic_poly_struct, N     } ptr
-  poke = undefined
+  poke ptr (CPadicPoly coeffs alloc length val n) = do
+    (#poke padic_poly_struct, coeffs) ptr coeffs
+    (#poke padic_poly_struct, alloc ) ptr alloc
+    (#poke padic_poly_struct, length) ptr length
+    (#poke padic_poly_struct, val   ) ptr val
+    (#poke padic_poly_struct, N     ) ptr n
 
 newPadicPoly = do
   x <- mallocForeignPtr
