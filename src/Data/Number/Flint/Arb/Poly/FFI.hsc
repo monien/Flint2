@@ -249,6 +249,7 @@ module Data.Number.Flint.Arb.Poly.FFI (
   , _arb_poly_rising_ui_series
   , arb_poly_rising_ui_series
   -- * Zeta function
+  , _arb_poly_zeta_series
   , arb_poly_zeta_series
   , _arb_poly_riemann_siegel_theta_series
   , arb_poly_riemann_siegel_theta_series
@@ -1823,6 +1824,12 @@ foreign import ccall "arb_poly.h arb_poly_rising_ui_series"
   arb_poly_rising_ui_series :: Ptr CArbPoly -> Ptr CArbPoly -> CULong -> CLong -> CLong -> IO ()
 
 -- Zeta function ---------------------------------------------------------------
+
+-- | /_arb_poly_zeta_series/ /res/ /h/ /hlen/ /a/ /deflate/ /len/ /prec/
+--
+foreign import ccall "arb_poly.h _arb_poly_zeta_series"
+  _arb_poly_zeta_series :: Ptr CArb -> Ptr CArb-> CLong -> Ptr CArb -> CInt
+                        -> CLong -> CLong -> IO ()
 
 -- | /arb_poly_zeta_series/ /res/ /s/ /a/ /deflate/ /n/ /prec/ 
 --

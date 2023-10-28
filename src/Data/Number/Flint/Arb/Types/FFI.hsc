@@ -22,6 +22,8 @@ import Data.Number.Flint.Fmpz
 #include <flint/mag.h>
 #include <flint/arb.h>
 
+-- mag_t -----------------------------------------------------------------------
+
 -- | Data structure containing the CMag pointer
 data Mag = Mag {-# UNPACK #-} !(ForeignPtr CMag)
 data CMag = CMag CFmpz CMpLimb

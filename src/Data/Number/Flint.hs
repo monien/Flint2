@@ -143,6 +143,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Dirichlet
 , module Data.Number.Flint.Acb.DFT
 , module Data.Number.Flint.Acb.Calc
+-- ** Exact real and complex numbers
+, module Data.Number.Flint.Calcium
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -295,6 +297,8 @@ import Data.Number.Flint.Acb.Hypgeom
 import Data.Number.Flint.Acb.DFT
 import Data.Number.Flint.Acb.ComplexField
 import Data.Number.Flint.Acb.Calc
+-- Exact real and complex numbers
+import Data.Number.Flint.Calcium
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers
