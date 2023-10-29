@@ -188,6 +188,7 @@ library:
    # Exact real and complex numbers
    - Data.Number.Flint.Calcium
    - Data.Number.Flint.Calcium.Ca
+   - Data.Number.Flint.Calcium.Ca.Vec
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
@@ -325,6 +326,7 @@ library:
    # Calcium
    - Data.Number.Flint.Calcium.FFI
    - Data.Number.Flint.Calcium.Ca.FFI
+   - Data.Number.Flint.Calcium.Ca.Vec.FFI
    # Other 
    - Data.Number.Flint.Bernoulli.FFI 
    - Data.Number.Flint.Partitions.FFI
