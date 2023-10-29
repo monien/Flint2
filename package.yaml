@@ -187,6 +187,7 @@ library:
    - Data.Number.Flint.Acb.Calc
    # Exact real and complex numbers
    - Data.Number.Flint.Calcium
+   - Data.Number.Flint.Calcium.Ca
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
@@ -321,8 +322,9 @@ library:
    - Data.Number.Flint.Acb.Dirichlet.FFI
    - Data.Number.Flint.Acb.DFT.FFI
    - Data.Number.Flint.Acb.Calc.FFI
-   #
+   # Calcium
    - Data.Number.Flint.Calcium.FFI
+   - Data.Number.Flint.Calcium.Ca.FFI
    # Other 
    - Data.Number.Flint.Bernoulli.FFI 
    - Data.Number.Flint.Partitions.FFI

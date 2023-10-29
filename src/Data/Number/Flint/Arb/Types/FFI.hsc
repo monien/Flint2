@@ -109,32 +109,25 @@ instance Storable CArb where
   poke = error "CArb.poke undefined."
   
 -- | string options
-newtype ArbStrOption = ArbStrOption {_ArbStrOption :: CULong}
-  deriving (Show, Eq)
+type ArbStrOption = CULong
 
-instance Num ArbStrOption where
-  (+) (ArbStrOption x) (ArbStrOption y) = ArbStrOption (x + y)
-  (*) = undefined
-  abs = undefined
-  signum = error "ArbStrOption: \"signum\" not defined."
-  fromInteger = error "ArbStrOption: \"fromInteger\" not defined."
-  negate = error "ArbStrOption: \"negate\" not defined."
+arb_str_none, arb_str_more, arb_str_no_radius, arb_str_condense :: ArbStrOption
 
 -- | Default print option
-arb_str_none      = ArbStrOption 0
+arb_str_none      = 0
 -- | If /arb_str_more/ is added to flags, more (possibly incorrect)
 -- digits may be printed
-arb_str_more      = ArbStrOption #const ARB_STR_MORE
+arb_str_more      = #const ARB_STR_MORE
 -- | If /arb_str_no_radius/ is added to /flags/, the radius is not
 -- included in the output if at least 1 digit of the midpoint can be
 -- printed.
-arb_str_no_radius = ArbStrOption #const ARB_STR_NO_RADIUS
+arb_str_no_radius = #const ARB_STR_NO_RADIUS
 -- | By adding a multiple m of /arb_str_condense/ to /flags/, strings of
 -- more than three times m consecutive digits are condensed, only
 -- printing the leading and trailing m digits along with brackets
 -- indicating the number of digits omitted (useful when computing
 -- values to extremely high precision).
-arb_str_condense  = ArbStrOption #const ARB_STR_CONDENSE
+arb_str_condense  = #const ARB_STR_CONDENSE
 
 -- arb_poly_t ------------------------------------------------------------------
 

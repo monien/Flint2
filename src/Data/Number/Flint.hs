@@ -145,6 +145,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Acb.Calc
 -- ** Exact real and complex numbers
 , module Data.Number.Flint.Calcium
+, module Data.Number.Flint.Calcium.Ca
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -299,6 +300,7 @@ import Data.Number.Flint.Acb.ComplexField
 import Data.Number.Flint.Acb.Calc
 -- Exact real and complex numbers
 import Data.Number.Flint.Calcium
+import Data.Number.Flint.Calcium.Ca
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers

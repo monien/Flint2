@@ -1,6 +1,6 @@
 cabal-version: 1.18
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -162,6 +162,7 @@ library
       Data.Number.Flint.Acb.ComplexField
       Data.Number.Flint.Acb.Calc
       Data.Number.Flint.Calcium
+      Data.Number.Flint.Calcium.Ca
       Data.Number.Flint.Bernoulli
       Data.Number.Flint.Partitions
       Data.Number.Flint.Hypgeom
@@ -279,6 +280,7 @@ library
       Data.Number.Flint.Acb.DFT.FFI
       Data.Number.Flint.Acb.Calc.FFI
       Data.Number.Flint.Calcium.FFI
+      Data.Number.Flint.Calcium.Ca.FFI
       Data.Number.Flint.Bernoulli.FFI
       Data.Number.Flint.Partitions.FFI
       Data.Number.Flint.Hypgeom.FFI

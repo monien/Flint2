@@ -8,16 +8,21 @@ module Data.Number.Flint.Calcium.FFI (
   -- * Calcium
     CalciumStream (..)
   , CCalciumStream (..)
+  , newCalciumStreamFile
+  , newCalciumStreamStr
+  , withCalciumStream
+  , CTruth
   -- * Version
   , calcium_version
   -- * Triple-valued logic
   -- * Flint, Arb and Antic extras
---, calcium_fmpz_hash
+  --, calcium_fmpz_hash
+  , calcium_func_name
   -- * Input and output
   , calcium_stream_init_file
---, calcium_stream_init_str
+  , calcium_stream_init_str
   , calcium_write
---, calcium_write_free
+  , calcium_write_free
   , calcium_write_si
   , calcium_write_fmpz
   , calcium_write_arb
@@ -31,6 +36,7 @@ import Foreign.C.String
 import Foreign.ForeignPtr
 import Foreign.Ptr
 import Foreign.Storable
+import Foreign.Marshal.Alloc (free)
 
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Arb.Types
@@ -54,7 +60,26 @@ instance Storable CCalciumStream where
     <*> #{peek calcium_stream_struct, s    } ptr
     <*> #{peek calcium_stream_struct, len  } ptr
     <*> #{peek calcium_stream_struct, alloc} ptr
-  poke = undefined
+  poke ptr (CCalciumStream fp s len alloc) = do
+    #{poke calcium_stream_struct, fp   } ptr fp
+    #{poke calcium_stream_struct, s    } ptr s
+    #{poke calcium_stream_struct, len  } ptr len
+    #{poke calcium_stream_struct, alloc} ptr alloc
+    
+newCalciumStreamFile fp = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    calcium_stream_init_file p fp
+  return $ CalciumStream p
+
+newCalciumStreamStr s = do
+  p <- mallocForeignPtr
+  withForeignPtr p $ \p -> do
+    calcium_stream_init_str p
+  return $ CalciumStream p
+  
+withCalciumStream (CalciumStream p) f = do
+  withForeignPtr p $ \fp -> (CalciumStream p,) <$> f fp
   
 -- Version ---------------------------------------------------------------------
 
@@ -130,16 +155,15 @@ newtype CCalciumFunctionCode =
 
 -- Flint, Arb and Antic extras -------------------------------------------------
 
--- Here we collect various utility methods for Flint, Arb and Antic types
--- that are missing in those libraries. Some of these functions may be
--- migrated upstream in the future.
---
 -- -- | /calcium_fmpz_hash/ /x/ 
 --
 -- -- Hash function for integers. The algorithm may change; presently, this
 -- -- simply extracts the low word (with sign).
 -- foreign import ccall "calcium.h calcium_fmpz_hash"
 --   calcium_fmpz_hash :: Ptr CFmpz -> IO CULong
+
+foreign import ccall "calcium.h calcium_stream_init_file"
+  calcium_func_name :: CCalciumFunctionCode -> IO CString
 
 -- Input and output ------------------------------------------------------------
 
@@ -150,26 +174,29 @@ newtype CCalciumFunctionCode =
 foreign import ccall "calcium.h calcium_stream_init_file"
   calcium_stream_init_file :: Ptr CCalciumStream -> Ptr CFile -> IO ()
 
--- -- | /calcium_stream_init_str/ /out/ 
---
--- -- Initializes the stream /out/ for writing to a string in memory. When
--- -- finished, the user should free the string (the /s/ member of /out/ with
--- -- @flint_free()@).
--- foreign import ccall "calcium.h calcium_stream_init_str"
---   calcium_stream_init_str :: Ptr CCalciumStream -> IO ()
+-- | /calcium_stream_init_str/ /out/ 
 
+-- Initializes the stream /out/ for writing to a string in memory. When
+-- finished, the user should free the string (the /s/ member of /out/ with
+-- @flint_free()@).
+calcium_stream_init_str out = do
+  cs <- newCString (replicate 16 '\0')
+  poke out (CCalciumStream nullPtr cs 0 16)
+  
 -- | /calcium_write/ /out/ /s/ 
 --
 -- Writes the string /s/ to /out/.
 foreign import ccall "calcium.h calcium_write"
   calcium_write :: Ptr CCalciumStream -> CString -> IO ()
 
--- -- | /calcium_write_free/ /out/ /s/ 
+-- | /calcium_write_free/ /out/ /s/ 
 --
--- -- Writes /s/ to /out/ and then frees /s/ by calling @flint_free()@.
--- foreign import ccall "calcium.h calcium_write_free"
---   calcium_write_free :: Ptr CCalciumStream -> CString -> IO ()
-
+-- Writes /s/ to /out/ and then frees /s/ by calling @flint_free()@.
+calcium_write_free :: Ptr CCalciumStream -> CString -> IO ()
+calcium_write_free out s = do
+  calcium_write out s
+  free s
+  
 -- | /calcium_write_si/ /out/ /x/ 
 foreign import ccall "calcium.h calcium_write_si"
   calcium_write_si :: Ptr CCalciumStream -> CLong -> IO ()
@@ -185,6 +212,7 @@ foreign import ccall "calcium.h calcium_write_fmpz"
 foreign import ccall "calcium.h calcium_write_arb"
   calcium_write_arb :: Ptr CCalciumStream
                     -> Ptr CArb -> CLong -> CULong -> IO ()
+                    
 -- | /calcium_write_acb/ /out/ /z/ /digits/ /flags/ 
 --
 -- Writes the Arb number /z/ to /out/, showing /digits/ digits and with the
