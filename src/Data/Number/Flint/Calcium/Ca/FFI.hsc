@@ -6,6 +6,7 @@ module Data.Number.Flint.Calcium.Ca.FFI (
   , CCaCtx (..)
   , newCa
   , withCa
+  , withNewCa
   , newCaCtx
   , withCaCtx
   -- * Number objects
@@ -13,6 +14,8 @@ module Data.Number.Flint.Calcium.Ca.FFI (
   , ca_ctx_init
   , ca_ctx_clear
   , ca_ctx_print
+  , ca_ctx_get_option
+  , ca_ctx_set_option
   -- * Memory management for numbers
   , ca_init
   , ca_clear
@@ -301,7 +304,7 @@ import Data.Number.Flint.Calcium
 
 data CFexpr
 data CCaField
-
+  
 -- ca_t ------------------------------------------------------------------------
 
 data Ca = Ca {-# UNPACK #-} !(ForeignPtr CCa)
@@ -443,6 +446,14 @@ foreign import ccall "ca.h &ca_ctx_clear"
 foreign import ccall "ca.h ca_ctx_print"
   ca_ctx_print :: Ptr CCaCtx -> IO ()
 
+-- | /ca_ctx_get_options/ /ctx/ /i/
+foreign import ccall "ca.h ca_ctx_get_option"
+  ca_ctx_get_option :: Ptr CCaCtx -> CLong -> IO ()
+
+-- | /ca_ctx_set_option/ /ctx/ /i/ /value/
+foreign import ccall "ca.h ca_ctx_set_option"
+  ca_ctx_set_option :: Ptr CCaCtx -> CLong -> CLong -> IO ()
+  
 -- Memory management for numbers -----------------------------------------------
 
 -- | /ca_init/ /x/ /ctx/ 
@@ -486,9 +497,6 @@ foreign import ccall "ca.h ca_set_fexpr"
   ca_set_fexpr :: Ptr CCa -> Ptr CFexpr -> Ptr CCaCtx -> IO CInt
 
 -- Printing --------------------------------------------------------------------
-
--- newtype CalciumPrintOption = CalciumPrintOption {_CalciumPrintOption :: CULong}
---   deriving (Show, Eq)
 
 type CalciumPrintOption = CULong
 
@@ -1977,7 +1985,7 @@ ca_factor_zz_full = #const CA_FACTOR_ZZ_FULL
 -- the expected behavior. Superficial options (printing) can be changed at
 -- any time.
 
-type CaOption = CULong
+type CaOption = CLong
 
 ca_opt_verbose, ca_opt_print_flags, ca_opt_mpoly_ord, ca_opt_prec_limit, ca_opt_qqbar_deg_limit, ca_opt_low_prec, ca_opt_smooth_limit, ca_opt_lll_prec, ca_opt_pow_limit, ca_opt_use_groebner, ca_opt_groebner_length_limit, ca_opt_groebner_poly_length_limit, ca_opt_groebner_poly_bits_limit, ca_opt_vieta_limit, ca_opt_trig_form, ca_trig_direct, ca_trig_exponential, ca_trig_sine_cosine, ca_trig_tangent :: CaOption
 
