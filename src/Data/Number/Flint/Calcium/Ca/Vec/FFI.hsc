@@ -57,13 +57,11 @@ import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
 import Data.Number.Flint.Calcium
 import Data.Number.Flint.Calcium.Ca
+import Data.Number.Flint.Calcium.Ca.Types
 
 #include <flint/ca_vec.h>
 
 -- ca_vec_t --------------------------------------------------------------------
-
-data CaVec = CaVec {-# UNPACK #-} !(ForeignPtr CCaVec)
-type CCaVec = CFlint CaVec
 
 instance Storable CCaVec where
   {-# INLINE sizeOf #-}

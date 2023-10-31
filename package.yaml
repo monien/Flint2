@@ -188,7 +188,10 @@ library:
    # Exact real and complex numbers
    - Data.Number.Flint.Calcium
    - Data.Number.Flint.Calcium.Ca
+   - Data.Number.Flint.Calcium.Ca.Types
+   - Data.Number.Flint.Calcium.Ca.Poly
    - Data.Number.Flint.Calcium.Ca.Vec
+   - Data.Number.Flint.Calcium.Ca.Field
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
@@ -326,7 +329,10 @@ library:
    # Calcium
    - Data.Number.Flint.Calcium.FFI
    - Data.Number.Flint.Calcium.Ca.FFI
+   - Data.Number.Flint.Calcium.Ca.Types.FFI
+   - Data.Number.Flint.Calcium.Ca.Poly.FFI
    - Data.Number.Flint.Calcium.Ca.Vec.FFI
+   - Data.Number.Flint.Calcium.Ca.Field.FFI
    # Other 
    - Data.Number.Flint.Bernoulli.FFI 
    - Data.Number.Flint.Partitions.FFI
@@ -483,6 +489,8 @@ library:
     - csrc/acb_modular/inlines.c
     - csrc/acb_modular/get_str.c
     - csrc/mpfr_mat/swap_entrywise.c
+    # calcium
+    - csrc/ca_poly/io.c
     # word problem
     - csrc/psl2z/word_problem.c
     # perm

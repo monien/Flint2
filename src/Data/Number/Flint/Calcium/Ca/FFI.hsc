@@ -297,18 +297,11 @@ import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Acb.Types
 
 import Data.Number.Flint.Calcium
+import Data.Number.Flint.Calcium.Ca.Types
 
 #include <flint/ca.h>
 
--- to be defined ---------------------------------------------------------------
-
-data CFexpr
-data CCaField
-  
 -- ca_t ------------------------------------------------------------------------
-
-data Ca = Ca {-# UNPACK #-} !(ForeignPtr CCa)
-type CCa = CFlint Ca
 
 instance Storable CCa where
   {-# INLINE sizeOf #-}
@@ -336,9 +329,6 @@ withNewCa ctx f = do
   
 -- ca_factor -------------------------------------------------------------------
 
-data CaFactor = CaFactor {-# UNPACK #-} !(ForeignPtr CCaFactor)
-type CCaFactor = CFlint CaFactor
-
 instance Storable CCaFactor where
   {-# INLINE sizeOf #-}
   sizeOf _ = #{size ca_factor_t}
@@ -364,42 +354,8 @@ withNewCaFactor ctx f = do
   withCaCtx ctx $ \ctx -> do
     withCaFactor x $ \x -> do
       f x ctx
-
--- -- ca_field -------------------------------------------------------------------
-
--- data CaField = CaField {-# UNPACK #-} !(ForeignPtr CCaField)
--- type CCaField = CFlint CaField
-
--- instance Storable CCaField where
---   {-# INLINE sizeOf #-}
---   sizeOf _ = #{size ca_field_t}
---   {-# INLINE alignment #-}
---   alignment _ = #{alignment ca_field_t}
---   peek = error "CCaField.peek: Not defined"
---   poke = error "CCaField.poke: Not defined"
-
--- newCaField ctx@(CaCtx fctx) = do
---   x <- mallocForeignPtr
---   withForeignPtr x $ \xp -> do
---     withCaCtx ctx $ \ctxp -> do
---       ca_field_init xp ctxp
---     addForeignPtrFinalizerEnv p_ca_field_clear xp fctx
---   return $ CaField x
-
--- {-# INLINE withCaField #-}
--- withCaField (CaField x) f = do
---   withForeignPtr x $ \xp -> f xp >>= return . (CaField x,)
-
--- withNewCaField ctx f = do
---   x <- newCaField ctx
---   withCaCtx ctx $ \ctx -> do
---     withCaField x $ \x -> do
---       f x ctx
-      
+    
 -- ca_ctx ----------------------------------------------------------------------
-
-data CaCtx = CaCtx {-# UNPACK #-} !(ForeignPtr CCaCtx)
-type CCaCtx = CFlint CaCtx
 
 instance Storable CCaCtx where
   {-# INLINE sizeOf #-}

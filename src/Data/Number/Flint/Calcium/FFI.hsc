@@ -11,7 +11,8 @@ module Data.Number.Flint.Calcium.FFI (
   , newCalciumStreamFile
   , newCalciumStreamStr
   , withCalciumStream
-  , CTruth
+  , CTruth (..)
+  , CCalciumFunctionCode (..)
   -- * Version
   , calcium_version
   -- * Triple-valued logic
