@@ -148,7 +148,9 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Calcium.Ca
 , module Data.Number.Flint.Calcium.Ca.Poly
 , module Data.Number.Flint.Calcium.Ca.Vec
+, module Data.Number.Flint.Calcium.Ca.Mat
 , module Data.Number.Flint.Calcium.Ca.Field
+, module Data.Number.Flint.Calcium.Ca.Ext
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -306,7 +308,9 @@ import Data.Number.Flint.Calcium
 import Data.Number.Flint.Calcium.Ca
 import Data.Number.Flint.Calcium.Ca.Poly
 import Data.Number.Flint.Calcium.Ca.Vec
+import Data.Number.Flint.Calcium.Ca.Mat
 import Data.Number.Flint.Calcium.Ca.Field
+import Data.Number.Flint.Calcium.Ca.Ext
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers

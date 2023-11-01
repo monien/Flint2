@@ -3,6 +3,8 @@ module Data.Number.Flint.Calcium.Ca.Types.FFI (
 , CCa (..)
 , CaVec (..)
 , CCaVec (..)
+, CaMat (..)
+, CCaMat (..)
 , CaPoly (..)
 , CCaPoly (..)
 , CaPolyVec (..)
@@ -15,12 +17,16 @@ module Data.Number.Flint.Calcium.Ca.Types.FFI (
 , CCaField (..)
 , CaFieldCache (..)
 , CCaFieldCache (..)
+, CaExt (..)
+, CCaExt (..)
+, CaExtCache (..)
+, CCaExtCache (..)
 , CFexpr
-, CCaExt
 ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.C.Types
 import Data.Number.Flint.Flint
 
 data Ca = Ca {-# UNPACK #-} !(ForeignPtr CCa)
@@ -35,6 +41,9 @@ type CCaCtx = CFlint CaCtx
 data CaVec = CaVec {-# UNPACK #-} !(ForeignPtr CCaVec)
 type CCaVec = CFlint CaVec
 
+data CaMat = CaMat {-# UNPACK #-} !(ForeignPtr CCaMat)
+data CCaMat = CCaMat (Ptr CCa) CLong CLong (Ptr CCa)
+
 data CaPoly = CaPoly {-# UNPACK #-} !(ForeignPtr CCaPoly)
 type CCaPoly = CFlint CaPoly
 
@@ -47,5 +56,10 @@ type CCaField = CFlint CaField
 data CaFieldCache = CaFieldCache {-# UNPACK #-} !(ForeignPtr CCaFieldCache)
 type CCaFieldCache = CFlint CaFieldCache
 
+data CaExt = CaExt {-# UNPACK #-} !(ForeignPtr CCaExt)
+type CCaExt = CFlint CaExt
+
+data CaExtCache = CaExtCache {-# UNPACK #-} !(ForeignPtr CCaExtCache)
+type CCaExtCache = CFlint CaExtCache
+
 data CFexpr
-data CCaExt

@@ -191,7 +191,9 @@ library:
    - Data.Number.Flint.Calcium.Ca.Types
    - Data.Number.Flint.Calcium.Ca.Poly
    - Data.Number.Flint.Calcium.Ca.Vec
+   - Data.Number.Flint.Calcium.Ca.Mat
    - Data.Number.Flint.Calcium.Ca.Field
+   - Data.Number.Flint.Calcium.Ca.Ext
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
@@ -332,7 +334,9 @@ library:
    - Data.Number.Flint.Calcium.Ca.Types.FFI
    - Data.Number.Flint.Calcium.Ca.Poly.FFI
    - Data.Number.Flint.Calcium.Ca.Vec.FFI
+   - Data.Number.Flint.Calcium.Ca.Mat.FFI
    - Data.Number.Flint.Calcium.Ca.Field.FFI
+   - Data.Number.Flint.Calcium.Ca.Ext.FFI
    # Other 
    - Data.Number.Flint.Bernoulli.FFI 
    - Data.Number.Flint.Partitions.FFI
@@ -491,6 +495,8 @@ library:
     - csrc/mpfr_mat/swap_entrywise.c
     # calcium
     - csrc/ca_poly/io.c
+    - csrc/ca_mat/io.c
+    - csrc/ca_ext/io.c
     # word problem
     - csrc/psl2z/word_problem.c
     # perm

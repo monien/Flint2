@@ -1,18 +1,20 @@
 module Data.Number.Flint.Calcium.Ca.Vec.FFI (
   -- * Vectors of real and complex numbers
   -- * Types, macros and constants
-  -- * Memory management
     CaVec (..)
   , CCaVec (..)
   , newCaVec
   , withCaVec
   , withNewCaVec
+  -- * Memory management
   , _ca_vec_init
   , ca_vec_init
   , _ca_vec_clear
   , ca_vec_clear
   , _ca_vec_swap
   , ca_vec_swap
+  -- * Entry
+  , ca_vec_entry_ptr
   -- * Length
   , ca_vec_length
   , _ca_vec_fit_length
@@ -52,6 +54,7 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.Storable
+import Foreign.Marshal.Array
 
 import Data.Number.Flint.Flint
 import Data.Number.Flint.Fmpz
@@ -87,7 +90,7 @@ withNewCaVec len ctx f = do
   withCaCtx ctx $ \ctx -> do
     withCaVec x $ \x -> do
       f x
-      
+
 -- Memory management -----------------------------------------------------------
 
 -- | /_ca_vec_init/ /len/ /ctx/ 
@@ -149,6 +152,11 @@ foreign import ccall "ca_vec.h _ca_vec_fit_length"
 -- be zero-extended. If /vec/ is longer on input, it will be truncated.
 foreign import ccall "ca_vec.h ca_vec_set_length"
   ca_vec_set_length :: Ptr CCaVec -> CLong -> Ptr CCaCtx -> IO ()
+
+-- Entry -----------------------------------------------------------------------
+
+foreign import ccall "ca_vec.h ca_vec_entry_ptr"
+  ca_vec_entry_ptr :: Ptr CCaVec -> CLong -> Ptr CCa
 
 -- Assignment ------------------------------------------------------------------
 

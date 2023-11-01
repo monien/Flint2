@@ -15,6 +15,9 @@ module Data.Number.Flint.NF.QQbar.FFI (
   , newQQbarFromDouble
   , withQQbar
   , withNewQQbar
+  -- * Memory management
+  , _qqbar_vec_init
+  , _qqbar_vec_clear 
   -- * Assignment
   , qqbar_swap
   , qqbar_set
@@ -208,6 +211,7 @@ import Data.Number.Flint.Fmpz.MPoly
 
 import Data.Number.Flint.Fmpq
 import Data.Number.Flint.Fmpq.Poly
+import Data.Number.Flint.Fmpq.Mat
 
 import Data.Number.Flint.Arb.Types
 import Data.Number.Flint.Acb.Types
@@ -1052,7 +1056,7 @@ foreign import ccall "qqbar.h qqbar_eigenvalues_fmpz_mat"
 -- matrix /mat/. These functions compute the characteristic polynomial of
 -- /mat/ and then call @qqbar_roots_fmpz_poly@ with the same flags.
 foreign import ccall "qqbar.h qqbar_eigenvalues_fmpq_mat"
-  qqbar_eigenvalues_fmpq_mat :: Ptr CQQbar -> Ptr CFmpzMat -> CInt -> IO ()
+  qqbar_eigenvalues_fmpq_mat :: Ptr CQQbar -> Ptr CFmpqMat -> CInt -> IO ()
 
 -- Roots of unity and trigonometric functions ----------------------------------
 

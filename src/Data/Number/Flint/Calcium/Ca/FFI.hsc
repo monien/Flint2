@@ -913,100 +913,100 @@ foreign import ccall "ca.h ca_is_generic_elem"
 -- element (and hence a complex number), @T_FALSE@ if /x/ is an infinity or
 -- /Undefined/, and @T_UNKNOWN@ if /x/ is /Unknown/.
 foreign import ccall "ca.h ca_check_is_number"
-  ca_check_is_number :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_number :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_zero/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_zero"
-  ca_check_is_zero :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_zero :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_one/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_one"
-  ca_check_is_one :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_one :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_neg_one/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_neg_one"
-  ca_check_is_neg_one :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_neg_one :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_i/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_i"
-  ca_check_is_i :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_i :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_neg_i/ /x/ /ctx/ 
 --
 -- Tests if /x/ is equal to the number \(0\), \(1\), \(-1\), \(i\), or
 -- \(-i\).
 foreign import ccall "ca.h ca_check_is_neg_i"
-  ca_check_is_neg_i :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_neg_i :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_algebraic/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_algebraic"
-  ca_check_is_algebraic :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_algebraic :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_rational/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_rational"
-  ca_check_is_rational :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_rational :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_integer/ /x/ /ctx/ 
 --
 -- Tests if /x/ is respectively an algebraic number, a rational number, or
 -- an integer.
 foreign import ccall "ca.h ca_check_is_integer"
-  ca_check_is_integer :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_integer :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_real/ /x/ /ctx/ 
 --
 -- Tests if /x/ is a real number. Warning: this returns @T_FALSE@ if /x/ is
 -- an infinity with real sign.
 foreign import ccall "ca.h ca_check_is_real"
-  ca_check_is_real :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_real :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_negative_real/ /x/ /ctx/ 
 --
 -- Tests if /x/ is a negative real number. Warning: this returns @T_FALSE@
 -- if /x/ is negative infinity.
 foreign import ccall "ca.h ca_check_is_negative_real"
-  ca_check_is_negative_real :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_negative_real :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_imaginary/ /x/ /ctx/ 
 --
 -- Tests if /x/ is an imaginary number. Warning: this returns @T_FALSE@ if
 -- /x/ is an infinity with imaginary sign.
 foreign import ccall "ca.h ca_check_is_imaginary"
-  ca_check_is_imaginary :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_imaginary :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_undefined/ /x/ /ctx/ 
 --
 -- Tests if /x/ is the special value /Undefined/.
 foreign import ccall "ca.h ca_check_is_undefined"
-  ca_check_is_undefined :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_undefined :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_infinity/ /x/ /ctx/ 
 --
 -- Tests if /x/ is any infinity (unsigned or signed).
 foreign import ccall "ca.h ca_check_is_infinity"
-  ca_check_is_infinity :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_infinity :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_uinf/ /x/ /ctx/ 
 --
 -- Tests if /x/ is unsigned infinity \({\tilde \infty}\).
 foreign import ccall "ca.h ca_check_is_uinf"
-  ca_check_is_uinf :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_uinf :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_signed_inf/ /x/ /ctx/ 
 --
 -- Tests if /x/ is any signed infinity.
 foreign import ccall "ca.h ca_check_is_signed_inf"
-  ca_check_is_signed_inf :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_signed_inf :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_is_pos_inf/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_pos_inf"
-  ca_check_is_pos_inf :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_pos_inf :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_neg_inf/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_neg_inf"
-  ca_check_is_neg_inf :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_neg_inf :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_pos_i_inf/ /x/ /ctx/ 
 foreign import ccall "ca.h ca_check_is_pos_i_inf"
-  ca_check_is_pos_i_inf :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_pos_i_inf :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_is_neg_i_inf/ /x/ /ctx/ 
 --
 -- Tests if /x/ is equal to the signed infinity \(+\infty\), \(-\infty\),
 -- \(+i \infty\), \(-i \infty\), respectively.
 foreign import ccall "ca.h ca_check_is_neg_i_inf"
-  ca_check_is_neg_i_inf :: Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_is_neg_i_inf :: Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- Comparisons -----------------------------------------------------------------
 
@@ -1017,19 +1017,19 @@ foreign import ccall "ca.h ca_check_is_neg_i_inf"
 -- and /y/ are numerically indistinguishable and cannot be proved equal or
 -- unequal by an exact computation.
 foreign import ccall "ca.h ca_check_equal"
-  ca_check_equal :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_equal :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- | /ca_check_lt/ /x/ /y/ /ctx/ 
 foreign import ccall "ca.h ca_check_lt"
-  ca_check_lt :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_lt :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO CTruth
   
 -- | /ca_check_le/ /x/ /y/ /ctx/ 
 foreign import ccall "ca.h ca_check_le"
-  ca_check_le :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_le :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO CTruth
   
 -- | /ca_check_gt/ /x/ /y/ /ctx/ 
 foreign import ccall "ca.h ca_check_gt"
-  ca_check_gt :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_gt :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO CTruth
 -- | /ca_check_ge/ /x/ /y/ /ctx/ 
 --
 -- Compares /x/ and /y/, implementing the respective operations \(x < y\),
@@ -1038,7 +1038,7 @@ foreign import ccall "ca.h ca_check_gt"
 -- @T_UNKNOWN@) if either operand is not comparable (being a nonreal
 -- complex number, unsigned infinity, or undefined).
 foreign import ccall "ca.h ca_check_ge"
-  ca_check_ge :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO (Ptr CTruth)
+  ca_check_ge :: Ptr CCa -> Ptr CCa -> Ptr CCaCtx -> IO CTruth
 
 -- Field structure operations --------------------------------------------------
 

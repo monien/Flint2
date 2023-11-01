@@ -11,11 +11,14 @@ module Data.Number.Flint.Calcium.FFI (
   , newCalciumStreamFile
   , newCalciumStreamStr
   , withCalciumStream
-  , CTruth (..)
   , CCalciumFunctionCode (..)
   -- * Version
   , calcium_version
   -- * Triple-valued logic
+  , t_true
+  , t_false
+  , t_unknown
+  , CTruth (..)
   -- * Flint, Arb and Antic extras
   --, calcium_fmpz_hash
   , calcium_func_name
@@ -28,6 +31,54 @@ module Data.Number.Flint.Calcium.FFI (
   , calcium_write_fmpz
   , calcium_write_arb
   , calcium_write_acb
+  -- * Function codes
+  , ca_QQBar
+  , ca_Neg
+  , ca_Add
+  , ca_Sub
+  , ca_Mul
+  , ca_Div
+  , ca_Sqrt
+  , ca_Cbrt
+  , ca_Root
+  , ca_Floor
+  , ca_Ceil
+  , ca_Abs
+  , ca_Sign
+  , ca_Re
+  , ca_Im
+  , ca_Arg
+  , ca_Conjugate
+  , ca_Pi
+  , ca_Sin
+  , ca_Cos
+  , ca_Exp
+  , ca_Log
+  , ca_Pow
+  , ca_Tan
+  , ca_Cot
+  , ca_Cosh
+  , ca_Sinh
+  , ca_Tanh
+  , ca_Coth
+  , ca_Atan
+  , ca_Acos
+  , ca_Asin
+  , ca_Acot
+  , ca_Atanh
+  , ca_Acosh
+  , ca_Asinh
+  , ca_Acoth
+  , ca_Euler
+  , ca_Gamma
+  , ca_LogGamma
+  , ca_Psi
+  , ca_Erf
+  , ca_Erfc
+  , ca_Erfi
+  , ca_RiemannZeta
+  , ca_HurwitzZeta
+  , ca_FUNC_CODE_LENGTH
 ) where
 
 -- Calcium ---------------------------------------------------------------------
@@ -93,7 +144,7 @@ foreign import ccall "calcium.h calcium_version"
 -- Triple-valued logic ---------------------------------------------------------
 
 -- | Triple-valued logic
-newtype CTruth = CTruth {_CTruth :: CULong} deriving (Show, Eq)
+newtype CTruth = CTruth {_CTruth :: CULong} deriving Eq
 
 #{enum CTruth, CTruth
   , t_true    = T_TRUE
@@ -101,6 +152,12 @@ newtype CTruth = CTruth {_CTruth :: CULong} deriving (Show, Eq)
   , t_unknown = T_UNKNOWN
   }
 
+instance Show CTruth where
+  show x
+    | x == t_true    = "T_TRUE"
+    | x == t_false   = "T_FALSE"
+    | x == t_unknown = "T_UNKNOWN"
+  
 newtype CCalciumFunctionCode =
   CCalciumFunctionCode {_CCalciumFunctionCode :: CULong} deriving (Show, Eq)
 
