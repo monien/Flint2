@@ -273,8 +273,13 @@ module Data.Number.Flint.Fmpz.Mod.Poly.FFI (
   , _fmpz_mod_poly_tree_free
   , _fmpz_mod_poly_tree_build
   -- * Radix conversion
+  , FmpzModPolyRadix (..)
+  , CFmpzModPolyRadix (..)
+  , newFmpzModPolyRadix
+  , withFmpzModPolyRadix
   , _fmpz_mod_poly_radix_init
   , fmpz_mod_poly_radix_init
+  , fmpz_mod_poly_radix_clear
   , _fmpz_mod_poly_radix
   , fmpz_mod_poly_radix
   -- * Input and output
@@ -359,14 +364,38 @@ instance Storable CFmpzModPoly where
     `ap` #{peek fmpz_mod_poly_struct, alloc } ptr
     `ap` #{peek fmpz_mod_poly_struct, length} ptr
   poke = error "poke undefined for CFmpzModPoly"
-  
+
+-- fmpz_mod_poly_radix_t -------------------------------------------------------
+
+data FmpzModPolyRadix =
+  FmpzModPolyRadix {-# UNPACK #-} !(ForeignPtr CFmpzModPolyRadix)
+type CFmpzModPolyRadix = CFlint FmpzModPolyRadix
+
+instance Storable CFmpzModPolyRadix where
+  {-# INLINE sizeOf #-}
+  sizeOf _ = #{size fmpz_mod_poly_radix_t}
+  {-# INLINE alignment #-}
+  alignment _ = #{alignment fmpz_mod_poly_radix_t}
+  peek = error "peek undefined for CFmpzModPolyRadix"
+  poke = error "poke undefined for CFmpzModPolyRadix"
+
+newFmpzModPolyRadix r degF ctx = do
+  x <- mallocForeignPtr
+  withForeignPtr x $ \x -> do
+    withFmpzModPoly  r $ \r -> do
+      withFmpzModCtx ctx $ \ctx -> do
+        fmpz_mod_poly_radix_init x r degF ctx
+  addForeignPtrFinalizer p_fmpz_mod_poly_radix_clear x
+  return $ FmpzModPolyRadix x
+
+{-# INLINE withFmpzModPolyRadix #-}
+withFmpzModPolyRadix (FmpzModPolyRadix x) f = do
+  withForeignPtr x $ \px -> f px >>= return . (FmpzModPolyRadix x,)
+
 -- various other structures ----------------------------------------------------
 
 data FmpzModBerlekampMassey = FmpzModBerlekampMassey {-# UNPACK #-} !(ForeignPtr CFmpzModBerlekampMassey)
 type CFmpzModBerlekampMassey = CFlint FmpzModBerlekampMassey
-
-data FmpzModPolyRadix = FmpzModPolyRadix {-# UNPACK #-} !(ForeignPtr CFmpzModPolyRadix)
-type CFmpzModPolyRadix = CFlint FmpzModPolyRadix
 
 data FmpzModPolyFrobeniusPowers = FmpzModPolyFrobeniusPowers {-# UNPACK #-} !(ForeignPtr CFmpzModPolyFrobeniusPowers)
 type CFmpzModPolyFrobeniusPowers = CFlint FmpzModPolyFrobeniusPowers
@@ -2719,9 +2748,6 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_tree_build"
 -- conversion problems for polynomials, which is to express a polynomial
 -- \(f(X)\) with respect to a given radix \(r(X)\) as
 --
-
-
-
 -- where \(N = \lfloor\deg(f) / \deg(r)\rfloor\). The algorithm implemented
 -- here is a recursive one, which performs Euclidean divisions by powers of
 -- \(r\) of the form \(r^{2^i}\), and it has time complexity
@@ -2731,6 +2757,7 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_tree_build"
 -- and it is computed using the function @fmpz_mod_poly_radix_init@, which
 -- only depends on~\`r\` and an upper bound on the degree of~\`f\`.
 --
+
 -- | /_fmpz_mod_poly_radix_init/ /Rpow/ /Rinv/ /R/ /lenR/ /k/ /invL/ /p/ 
 -- 
 -- Computes powers of \(R\) of the form \(R^{2^i}\) and their Newton
@@ -2754,6 +2781,7 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_tree_build"
 foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_radix_init"
   _fmpz_mod_poly_radix_init :: Ptr (Ptr CFmpz) -> Ptr (Ptr CFmpz) -> Ptr CFmpz -> CLong -> CLong -> Ptr CFmpz -> Ptr CFmpz -> IO ()
 
+
 -- | /fmpz_mod_poly_radix_init/ /D/ /R/ /degF/ /ctx/ 
 -- 
 -- Carries out the precomputation necessary to perform radix conversion to
@@ -2763,6 +2791,12 @@ foreign import ccall "fmpz_mod_poly.h _fmpz_mod_poly_radix_init"
 -- the leading coefficient is a unit.
 foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_radix_init"
   fmpz_mod_poly_radix_init :: Ptr CFmpzModPolyRadix -> Ptr CFmpzModPoly -> CLong -> Ptr CFmpzModCtx -> IO ()
+
+foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_radix_clear"
+  fmpz_mod_poly_radix_clear :: Ptr CFmpzModPolyRadix -> IO ()
+
+foreign import ccall "fmpz_mod_poly.h &fmpz_mod_poly_radix_clear"
+  p_fmpz_mod_poly_radix_clear :: FunPtr (Ptr CFmpzModPolyRadix -> IO ())
 
 -- | /_fmpz_mod_poly_radix/ /B/ /F/ /Rpow/ /Rinv/ /degR/ /k/ /i/ /W/ /p/ 
 -- 
@@ -2892,9 +2926,6 @@ foreign import ccall "fmpz_mod_poly.h fmpz_mod_poly_deflation"
   fmpz_mod_poly_deflation :: Ptr CFmpzModPoly -> Ptr CFmpzModCtx -> IO CULong
 
 -- Berlekamp-Massey Algorithm --------------------------------------------------
-
-
-
 
 -- | /fmpz_mod_berlekamp_massey_init/ /B/ /ctx/ 
 -- 
