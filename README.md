@@ -15,7 +15,7 @@ cabal install Flint2 --lib
 ## Quick Start
 
 A simple example for the application of the library is the
-factorization of $2^256-1$:
+factorization of $2^{256}-1$:
 
 ```haskell
 import Data.Number.Flint
