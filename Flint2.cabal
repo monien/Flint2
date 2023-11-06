@@ -7,7 +7,27 @@ cabal-version: 1.18
 name:           Flint2
 version:        0.1.0.1
 synopsis:       Haskell bindings for the flint library for number theory
-description:    Please see the README on GitHub at <https://github.com/monien/Flint2#readme>
+description:    # A Haskell Wrapper for Flint
+                This library provides access to the functionality of the FLINT.
+                .
+                # So what is it?
+                FLINT is a C library for doing number theory, freely
+                available under the GNU LGPL at
+                [https://flintlib.org](https://flintlib.org)
+                .
+                Some domains handled by FLINT are $\mathbb{Z}$, $\mathbb{Q}$,
+                $\mathbb{F}_q$, $\overline{\mathbb{Q}}$, $\mathbb{C}$ and $Q[x,y,z]$.
+                At its core, FLINT provides arithmetic in standard rings such as the
+                integers, rationals, algebraic, real, complex and p-adic numbers,
+                finite fields, and number fields. It also provides polynomials
+                (univariate and multivariate), power series, and matrices.
+                .
+                # At the research frontier
+                FLINT has been used for many large scale research computations (for
+                example: A Trillion Triangles) and has been cited in hundreds of
+                publications. FLINT's authors themselves have published more than 20
+                papers describing new algorithms first implemented within or on top
+                of FLINT.
 category:       Math
 homepage:       https://github.com/monien/Flint2#readme
 bug-reports:    https://github.com/monien/Flint2/issues

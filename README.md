@@ -14,42 +14,19 @@ cabal install Flint2 --lib
 
 ## Quick Start
 
-A simple program using the thin wrapper would be
+A simple example for the application of the library is the
+factorization of $2^256-1$:
 
 ```haskell
 import Data.Number.Flint
 
-main = do 
-  x <- newFmpz
-  y <- newFmpz
-  withFmpz x $ \x -> do
-    withFmpz y $ \y -> do
-      fmpz_set_ui x 7
-      fmpz_set_ui y 6
-      fmpz_mul x x y
-      fmpz_print x  
+main = print $ factor (2^256 - 1 :: Fmpz)
 ```
 
-which will print the numerical value 42.
-
-The above example simplifies using instances to 
-
-```haskell
-import Data.Number.Flint
-
-main = do
-  let x = 7 :: Fmpz 
-      y = 6 :: Fmpz
-  print $ x*y
-  print $ factor (42 :: Fmpz)
-  
-```
-
-which prints 
+runnnig main prints 
 
 ```
-42 
-[(2,1),(3,1),(7,1)]
+[(3,1),(5,1),(17,1),(257,1),(641,1),(65537,1),(274177,1),(6700417,1),(67280421310721,1),(59649589127497217,1),(5704689200685129054721,1)]
 ```
 
-For more examples see 
+examples can be found soon @FLINT2-Examples@.
