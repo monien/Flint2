@@ -1,4 +1,4 @@
-![examples of complex_plot in Flint2-examples](https://hackage.haskell.org/package/Flint2-0.1.0.1/docs/docs/out.png)
+![examples of complex_plot in Flint2-examples](/docs/docs/out.png)
 
 # Flint2
 **Flint2** provides a thin Haskell wrapper for [Flint](https://flintlib.org) C-library. 
