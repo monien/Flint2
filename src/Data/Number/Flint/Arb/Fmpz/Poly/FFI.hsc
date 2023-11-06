@@ -24,6 +24,7 @@ module Data.Number.Flint.Arb.Fmpz.Poly.FFI (
   , arb_fmpz_poly_deflate
   -- * Polynomial roots
   , arb_fmpz_poly_complex_roots
+  , arb_fmpz_poly_roots_verbose
   -- * Special polynomials
   , arb_fmpz_poly_cos_minpoly
   , arb_fmpz_poly_gauss_period_minpoly
@@ -51,6 +52,15 @@ import Data.Number.Flint.Arb.Poly
 import Data.Number.Flint.Acb
 import Data.Number.Flint.Acb.Types
 import Data.Number.Flint.Acb.Poly
+
+#include <flint/arb_fmpz_poly.h>
+
+-- Flags -----------------------------------------------------------------------
+
+type ArbFmpzPolyFlags = CInt
+
+arb_fmpz_poly_roots_verbose :: ArbFmpzPolyFlags
+arb_fmpz_poly_roots_verbose = #const ARB_FMPZ_POLY_ROOTS_VERBOSE
 
 -- Evaluation ------------------------------------------------------------------
 
@@ -174,7 +184,7 @@ foreign import ccall "arb_fmpz_poly.h arb_fmpz_poly_deflate"
 -- 
 -- The following /flags/ are supported:
 -- 
--- -   /ARB_FMPZ_POLY_ROOTS_VERBOSE/
+-- -   /arb_fmpz_poly_roots_verbose/
 foreign import ccall "arb_fmpz_poly.h arb_fmpz_poly_complex_roots"
   arb_fmpz_poly_complex_roots :: Ptr CAcb -> Ptr CFmpzPoly -> CInt -> CLong -> IO ()
 

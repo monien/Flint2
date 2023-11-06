@@ -235,6 +235,7 @@ import Data.Number.Flint.Arb.Types
 
 #define ARF_INLINES_C
 #include <flint/arf.h>
+#include <flint/arb_calc.h>
 
 -- arf_t -----------------------------------------------------------------------
 
@@ -252,7 +253,7 @@ withArf (Arf p) f = withForeignPtr p $ fmap (Arf p,) . f
 withNewArf f = do
   x <- newArf
   withArf x $ \x -> f x
-  
+ 
 -- Memory management -----------------------------------------------------------
 
 -- | /arf_init/ /x/ 

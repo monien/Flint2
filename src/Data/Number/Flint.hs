@@ -1,4 +1,3 @@
-
 {-|
 module      :  Data.Number.Flint.Flint
 copyright   :  (c) 2022 Hartmut Monien
@@ -151,6 +150,7 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Calcium.Ca.Mat
 , module Data.Number.Flint.Calcium.Ca.Field
 , module Data.Number.Flint.Calcium.Ca.Ext
+, module Data.Number.Flint.Calcium.Fexpr
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -311,6 +311,7 @@ import Data.Number.Flint.Calcium.Ca.Vec
 import Data.Number.Flint.Calcium.Ca.Mat
 import Data.Number.Flint.Calcium.Ca.Field
 import Data.Number.Flint.Calcium.Ca.Ext
+import Data.Number.Flint.Calcium.Fexpr
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers
@@ -357,3 +358,5 @@ import Data.Number.Flint.Groups.Qfb.Instances
 import Data.Number.Flint.Groups.Bool.Mat.Instances
 
 import Data.Number.Flint.Support.D.Mat.Instances
+
+import Data.Number.Flint.Calcium.Fexpr.Instances

@@ -21,6 +21,7 @@ import Data.Number.Flint.Fmpz
 #include <flint/arf.h>
 #include <flint/mag.h>
 #include <flint/arb.h>
+#include <flint/arb_calc.h>
 
 -- mag_t -----------------------------------------------------------------------
 

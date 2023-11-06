@@ -66,9 +66,12 @@ module Data.Number.Flint.Groups.Dirichlet.FFI (
 -- Dirichlet characters --------------------------------------------------------
 
 import Foreign.C.Types
+import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Storable
+
+import Data.Number.Flint.Flint
 
 #include <flint/dirichlet.h>
 
@@ -186,7 +189,8 @@ data CDirichletChar = CDirichletChar CULong (Ptr CULong)
 newDirichletChar group = do
   x <- mallocForeignPtr
   withForeignPtr x $ \x -> do
-    dirichlet_char_init x group
+    withDirichletGroup group $ \group -> do
+      dirichlet_char_init x group
   addForeignPtrFinalizer p_dirichlet_char_clear x
   return $ DirichletChar x
 
@@ -234,8 +238,15 @@ foreign import ccall "dirichlet.h &dirichlet_char_clear"
 -- | /dirichlet_char_print/ /G/ /chi/ 
 -- 
 -- Prints the array of exponents representing this character.
-foreign import ccall "dirichlet.h dirichlet_char_print"
-  dirichlet_char_print :: Ptr CDirichletGroup -> Ptr CDirichletChar -> IO ()
+dirichlet_char_print :: Ptr CDirichletGroup -> Ptr CDirichletChar -> IO ()
+dirichlet_char_print g c = do
+  printCStr (dirichlet_char_get_str g) c
+  return ()
+  
+
+foreign import ccall "dirichlet.h dirichlet_char_get_str"
+  dirichlet_char_get_str :: Ptr CDirichletGroup
+                         -> Ptr CDirichletChar -> IO CString
 
 -- | /dirichlet_char_log/ /x/ /G/ /m/ 
 -- 

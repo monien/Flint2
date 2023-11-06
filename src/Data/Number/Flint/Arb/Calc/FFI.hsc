@@ -10,6 +10,7 @@ module Data.Number.Flint.Arb.Calc.FFI (
   , CArfInterval (..)
   , newArfInterval
   , withArfInterval
+  , withNewArfInterval
   , CArbCalcFunc
   , arf_interval_init
   , arf_interval_clear
@@ -26,6 +27,10 @@ module Data.Number.Flint.Arb.Calc.FFI (
   , arb_calc_newton_conv_factor
   , arb_calc_newton_step
   , arb_calc_refine_root_newton
+  -- * Return types
+  , arb_calc_success 
+  , arb_calc_imprecise_input 
+  , arb_calc_no_convergence
 ) where
 
 -- Calculus with real-valued functions -----------------------------------------
@@ -48,6 +53,7 @@ import Data.Number.Flint.Arb.Types
 
 #include <flint/flint.h>
 #include <flint/arf_types.h>
+#include <flint/arb_calc.h>
 
 -- arf_interval_t --------------------------------------------------------------
 
@@ -80,7 +86,17 @@ withNewArfInterval f = newArfInterval >>= flip withArfInterval f
 
 -- arb_calc_func_t -------------------------------------------------------------
 
-type CArbCalcFunc = Ptr CArb -> Ptr CArb -> Ptr () -> CLong -> CLong
+type CArbCalcFunc = Ptr CArb -> Ptr CArb -> Ptr () -> CLong -> CLong -> IO CInt
+
+-- arb_calc_returns ------------------------------------------------------------
+
+type ArbCalcReturn = CInt
+
+arb_calc_success, arb_calc_imprecise_input, arb_calc_no_convergence :: ArbCalcReturn
+
+arb_calc_success = #const ARB_CALC_SUCCESS
+arb_calc_imprecise_input = #const ARB_CALC_IMPRECISE_INPUT
+arb_calc_no_convergence = #const ARB_CALC_NO_CONVERGENCE
 
 -- Subdivision-based root finding ----------------------------------------------
 
@@ -189,7 +205,7 @@ foreign import ccall "arb_calc.h arf_interval_fprintd"
 -- represented exactly as floating-point numbers in memory. Do not pass
 -- \(1 \pm 2^{-10^{100}}\) as input.
 foreign import ccall "arb_calc.h arb_calc_isolate_roots"
-  arb_calc_isolate_roots :: Ptr (Ptr CArfInterval) -> Ptr (Ptr CInt) -> FunPtr CArbCalcFunc -> Ptr () -> Ptr CArfInterval -> CLong -> CLong -> CLong -> CLong -> IO CLong
+  arb_calc_isolate_roots :: Ptr (Ptr CArfInterval) -> Ptr (Ptr CInt)-> FunPtr CArbCalcFunc -> Ptr () -> Ptr CArfInterval -> CLong -> CLong -> CLong -> CLong -> IO CLong
 
 -- | /arb_calc_refine_root_bisect/ /r/ /func/ /param/ /start/ /iter/ /prec/ 
 --

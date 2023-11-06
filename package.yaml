@@ -194,6 +194,8 @@ library:
    - Data.Number.Flint.Calcium.Ca.Mat
    - Data.Number.Flint.Calcium.Ca.Field
    - Data.Number.Flint.Calcium.Ca.Ext
+   - Data.Number.Flint.Calcium.Fexpr
+   - Data.Number.Flint.Calcium.Fexpr.Instances
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
@@ -337,6 +339,7 @@ library:
    - Data.Number.Flint.Calcium.Ca.Mat.FFI
    - Data.Number.Flint.Calcium.Ca.Field.FFI
    - Data.Number.Flint.Calcium.Ca.Ext.FFI
+   - Data.Number.Flint.Calcium.Fexpr.FFI
    # Other 
    - Data.Number.Flint.Bernoulli.FFI 
    - Data.Number.Flint.Partitions.FFI
@@ -346,6 +349,7 @@ library:
    - Data.Number.Flint.NF.Elem.FFI
    - Data.Number.Flint.NF.Fmpzi.FFI
    - Data.Number.Flint.NF.QQbar.FFI
+  include-dirs: csrc
   install-includes:
     - acb.h
     - acb_mat.h
@@ -360,6 +364,7 @@ library:
     - arf.h
     - bool_mat.h
     - d_mat.h
+    - dirichlet.h
     - double_interval.h
     - fmpq.h
     - fmpq_mat.h
@@ -432,6 +437,7 @@ library:
     - csrc/aprcl/get_str.c
     # Groups
     - csrc/bool_mat/get_str.c
+    - csrc/dirichlet/io.c
     - csrc/qfb/get_str.c
     - csrc/qfb/fprint.c
     - csrc/qqbar/fprint.c
@@ -504,7 +510,6 @@ library:
     - csrc/perm/print_pretty.c
     - csrc/perm/power.c
     - csrc/perm/mat.c
-  include-dirs: csrc
   build-tools: hsc2hs
   extra-libraries: flint
   pkgconfig-depends: flint >= 2.9, gmp
