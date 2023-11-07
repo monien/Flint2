@@ -14,6 +14,9 @@
 cabal install Flint2 --lib
 ```
 
+The depencies are minimal. Flint2 relies on just three libraries:
+QuickCheck, groups, containers.
+
 ## Quick Start
 
 A simple example for the application of the library is the
@@ -31,4 +34,4 @@ runnnig main prints
 [(3,1),(5,1),(17,1),(257,1),(641,1),(65537,1),(274177,1),(6700417,1),(67280421310721,1),(59649589127497217,1),(5704689200685129054721,1)]
 ```
 
-examples can be found soon @FLINT2-Examples@.
+examples can be found soon in **FLINT2-Examples**.

@@ -151,6 +151,8 @@ module Data.Number.Flint (
 , module Data.Number.Flint.Calcium.Ca.Field
 , module Data.Number.Flint.Calcium.Ca.Ext
 , module Data.Number.Flint.Calcium.Fexpr
+, module Data.Number.Flint.Calcium.Fexpr.Instances
+, module Data.Number.Flint.Calcium.Fexpr.Builtin
 -- ** Partitions
 , module Data.Number.Flint.Partitions
 -- ** Bernoulli numbers
@@ -312,6 +314,7 @@ import Data.Number.Flint.Calcium.Ca.Mat
 import Data.Number.Flint.Calcium.Ca.Field
 import Data.Number.Flint.Calcium.Ca.Ext
 import Data.Number.Flint.Calcium.Fexpr
+import Data.Number.Flint.Calcium.Fexpr.Builtin
 -- Partitions
 import Data.Number.Flint.Partitions
 -- Bernoulli numbers

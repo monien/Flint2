@@ -191,6 +191,7 @@ library
       Data.Number.Flint.Calcium.Ca.Ext
       Data.Number.Flint.Calcium.Fexpr
       Data.Number.Flint.Calcium.Fexpr.Instances
+      Data.Number.Flint.Calcium.Fexpr.Builtin
       Data.Number.Flint.Bernoulli
       Data.Number.Flint.Partitions
       Data.Number.Flint.Hypgeom
@@ -496,6 +497,7 @@ library
   build-depends:
       QuickCheck
     , base >=4.7 && <5
+    , containers
     , groups
   default-language: Haskell2010
 

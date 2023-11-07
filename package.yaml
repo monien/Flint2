@@ -217,6 +217,7 @@ library:
    - Data.Number.Flint.Calcium.Ca.Ext
    - Data.Number.Flint.Calcium.Fexpr
    - Data.Number.Flint.Calcium.Fexpr.Instances
+   - Data.Number.Flint.Calcium.Fexpr.Builtin
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
@@ -537,6 +538,7 @@ library:
   dependencies:
     - QuickCheck
     - groups
+    - containers
   
 tests:
   Flint2-test:
