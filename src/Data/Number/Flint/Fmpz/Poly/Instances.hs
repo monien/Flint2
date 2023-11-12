@@ -7,8 +7,6 @@ maintainer  :  hmonien@uni-bonn.de
 module Data.Number.Flint.Fmpz.Poly.Instances (
     FmpzPoly (..)
   , module GHC.Exts
-  , hermitePolynomial
-  , cyclotomicPolynomial
 ) where
 
 import Test.QuickCheck
@@ -170,17 +168,3 @@ parseFmpzPoly = do
       d <- munch1 isNumber
       return $ s ++ d
   
--- special functions -----------------------------------------------------------
-
-cyclotomicPolynomial n = unsafePerformIO $ do
-  poly <- newFmpzPoly
-  withFmpzPoly poly $ \poly ->
-    fmpz_poly_cyclotomic poly n
-  return poly
-  
-hermitePolynomial n = unsafePerformIO $ do
-  poly <- newFmpzPoly
-  withFmpzPoly poly $ \poly ->
-    fmpz_poly_hermite_h poly n
-  return poly
-
