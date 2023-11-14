@@ -1,8 +1,8 @@
 {- | 
-module      : Data.Number.Flint.Fq.Poly
-copyright   : (c) 2022 Hartmut Monien
-license     : MIT-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+module      :  Data.Number.Flint.Fq.Poly
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 An @FqPoly@ represents a polynomial over a finite field.
 This module implements operations on polynomials over a finite field.

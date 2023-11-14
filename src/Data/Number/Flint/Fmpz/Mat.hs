@@ -1,8 +1,8 @@
 {- | 
-module      : Data.Number.Flint.Fmpz.Mat
-copyright   : (c) 2022 Hartmut Monien
-license     : MIT-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+module      :  Data.Number.Flint.Fmpz.Mat
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 An @FmpzMat@ represents an matrix over integer.
 This module implements operations on matrices over integers.

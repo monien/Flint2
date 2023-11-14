@@ -1,8 +1,8 @@
 {- | 
-module      : Data.Number.Flint.Fq.Mat
-copyright   : (c) 2022 Hartmut Monien
-license     : MIT-style (see LICENSE)
-maintainer  : hmonien@uni-bonn.de
+module      :  Data.Number.Flint.Fq.Mat
+copyright   :  (c) 2022 Hartmut Monien
+license     :  GNU GPL, version 2 or above (see LICENSE)
+maintainer  :  hmonien@uni-bonn.de
 
 An @FqNModMat@ represents an matrix over a finite field (word-size
 characteristic). This module implements operations on matrices over a
