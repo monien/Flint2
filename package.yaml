@@ -1,10 +1,10 @@
 name:                Flint2
-version:             0.1.0.1
+version:             0.1.0.4
 github:              "monien/Flint2"
-license:             GPL2
+license:             GPL-2
 author:              "Hartmut Monien"
 maintainer:        "hmonien@uni-bonn.de"
-copyright:         "Copyright (c) 2022 Hartmut Monien"
+copyright:         "Copyright (c) 2023 Hartmut Monien"
 category:           Math
 synopsis:          "Haskell bindings for the flint library for number theory"
 
@@ -17,28 +17,22 @@ extra-source-files:
 
 extra-doc-files:  docs/*.png
 
-description: |
-    # A Haskell Wrapper for Flint
+description:
     This library provides access to the functionality of the FLINT.
 
-    # So what is it?
     FLINT is a C library for doing number theory, freely
-    available under the GNU LGPL at
-    [https://flintlib.org](https://flintlib.org)
+    available under the GNU LGPL.
 
-    Some domains handled by FLINT are $\mathbb{Z}$, $\mathbb{Q}$,
-    $\mathbb{F}_q$, $\overline{\mathbb{Q}}$, $\mathbb{C}$ and $Q[x,y,z]$.
     At its core, FLINT provides arithmetic in standard rings such as the
     integers, rationals, algebraic, real, complex and p-adic numbers,
     finite fields, and number fields. It also provides polynomials
     (univariate and multivariate), power series, and matrices.
-
-    # At the research frontier
-    FLINT has been used for many large scale research computations (for
-    example: A Trillion Triangles) and has been cited in hundreds of
-    publications. FLINT's authors themselves have published more than 20
-    papers describing new algorithms first implemented within or on top
-    of FLINT.
+      
+    FLINT has been used for many large scale research computations
+    (e.g. A Trillion Triangles) and has been cited in hundreds
+    of publications. FLINT's authors themselves have published more
+    than 20 papers describing new algorithms first implemented within
+    or on top of FLINT.
 
 dependencies:
 - base >= 4.7 && < 5
@@ -385,6 +379,9 @@ library:
     - arb_poly.h
     - arf.h
     - bool_mat.h
+    - ca_ext.h
+    - ca_mat.h
+    - ca_poly.h
     - d_mat.h
     - dirichlet.h
     - double_interval.h
@@ -536,9 +533,9 @@ library:
   extra-libraries: flint
   pkgconfig-depends: flint >= 2.9, gmp
   dependencies:
-    - QuickCheck
-    - groups
-    - containers
+    - QuickCheck >= 2.14.3 && < 2.15
+    - groups         >= 0.5.3 && < 0.6
+    - containers   >= 0.6.5 && < 0.7
   
 tests:
   Flint2-test:
