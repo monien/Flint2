@@ -34,4 +34,4 @@ runnnig main prints
 [(3,1),(5,1),(17,1),(257,1),(641,1),(65537,1),(274177,1),(6700417,1),(67280421310721,1),(59649589127497217,1),(5704689200685129054721,1)]
 ```
 
-examples can be found soon in ![Flint2-Examples](https://hackage.haskell.org/package/Flint2-Examples)
+examples can be found soon in [Flint2-Examples](https://hackage.haskell.org/package/Flint2-Examples)
