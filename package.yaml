@@ -516,6 +516,7 @@ library:
     - csrc/acb_mat/fprintn.c
     - csrc/acb_mat/entry.c
     - csrc/acb_modular/inlines.c
+    - csrc/acb_dft/inlines.c
     - csrc/acb_modular/get_str.c
     - csrc/mpfr_mat/swap_entrywise.c
     # calcium

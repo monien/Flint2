@@ -1,6 +1,6 @@
 cabal-version: 1.18
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -464,6 +464,7 @@ library
       csrc/acb_mat/fprintn.c
       csrc/acb_mat/entry.c
       csrc/acb_modular/inlines.c
+      csrc/acb_dft/inlines.c
       csrc/acb_modular/get_str.c
       csrc/mpfr_mat/swap_entrywise.c
       csrc/ca_poly/io.c
