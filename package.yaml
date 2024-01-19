@@ -531,8 +531,8 @@ library:
     - csrc/perm/power.c
     - csrc/perm/mat.c
   build-tools: hsc2hs
-  extra-libraries: flint
-  pkgconfig-depends: flint >= 2.9, gmp
+  extra-libraries: flint, gmp, mpfr, ntl
+  pkgconfig-depends: flint >= 2.9, gmp >= 6.3, mpfr >= 4.2
   dependencies:
     - QuickCheck >= 2.14.3 && < 2.15
     - groups         >= 0.5.3 && < 0.6

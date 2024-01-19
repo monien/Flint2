@@ -1,6 +1,6 @@
 cabal-version: 1.18
 
--- This file has been generated from package.yaml by hpack version 0.35.2.
+-- This file has been generated from package.yaml by hpack version 0.36.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -478,7 +478,7 @@ library
   extra-libraries:
       flint
   pkgconfig-depends:
-      flint >= 2.9, gmp
+      flint >= 2.9, gmp, mpfr >= 4.2
   build-tools:
       hsc2hs
   build-depends:
