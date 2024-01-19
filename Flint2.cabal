@@ -22,12 +22,12 @@ license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
     package.yaml
     stack.yaml
     gpl-2.0.txt
 extra-doc-files:
     docs/out.png
+    ChangeLog.md
 
 source-repository head
   type: git
