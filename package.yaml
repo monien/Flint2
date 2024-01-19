@@ -180,7 +180,7 @@ library:
    - Data.Number.Flint.Arb.Fmpz.Poly
    - Data.Number.Flint.Arb.Mat
    - Data.Number.Flint.Arb.Mat.Instances
-   - Data.Number.Flint.Arb.Hypgeom
+   - Data.Number.Flint.Arb.HypGeom
    - Data.Number.Flint.Arb.RealField
    - Data.Number.Flint.Arb.Calc
    - Data.Number.Flint.Arb.FpWrap
@@ -193,7 +193,7 @@ library:
    - Data.Number.Flint.Acb.Poly.Instances
    - Data.Number.Flint.Acb.Mat
    - Data.Number.Flint.Acb.Mat.Instances
-   - Data.Number.Flint.Acb.Hypgeom
+   - Data.Number.Flint.Acb.HypGeom
    - Data.Number.Flint.Acb.Elliptic 
    - Data.Number.Flint.Acb.Modular
    - Data.Number.Flint.Acb.Modular.Instances
@@ -216,7 +216,7 @@ library:
    # Other
    - Data.Number.Flint.Bernoulli 
    - Data.Number.Flint.Partitions
-   - Data.Number.Flint.Hypgeom
+   - Data.Number.Flint.HypGeom
    # NF
    - Data.Number.Flint.NF
    - Data.Number.Flint.NF.Elem
@@ -332,7 +332,7 @@ library:
    - Data.Number.Flint.Arb.Poly.FFI
    - Data.Number.Flint.Arb.Fmpz.Poly.FFI
    - Data.Number.Flint.Arb.Mat.FFI
-   - Data.Number.Flint.Arb.Hypgeom.FFI
+   - Data.Number.Flint.Arb.HypGeom.FFI
    - Data.Number.Flint.Arb.Calc.FFI
    - Data.Number.Flint.Arb.FpWrap.FFI
    # Acb
@@ -341,7 +341,7 @@ library:
    - Data.Number.Flint.Acb.Acf.FFI
    - Data.Number.Flint.Acb.Poly.FFI
    - Data.Number.Flint.Acb.Mat.FFI
-   - Data.Number.Flint.Acb.Hypgeom.FFI
+   - Data.Number.Flint.Acb.HypGeom.FFI
    - Data.Number.Flint.Acb.Elliptic.FFI
    - Data.Number.Flint.Acb.Modular.FFI
    - Data.Number.Flint.Acb.Dirichlet.FFI
