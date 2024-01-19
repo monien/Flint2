@@ -10,13 +10,14 @@ synopsis:          "Haskell bindings for the flint library for number theory"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 - package.yaml
 - stack.yaml
 - gpl-2.0.txt
 
-extra-doc-files:  docs/*.png
-
+extra-doc-files:
+  - docs/*.png
+  - ChangeLog.md
+  
 description:
     This library provides access to the functionality of the FLINT.
 
