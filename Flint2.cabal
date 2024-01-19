@@ -5,7 +5,7 @@ cabal-version: 1.18
 -- see: https://github.com/sol/hpack
 
 name:           Flint2
-version:        0.1.0.4
+version:        0.1.0.5
 synopsis:       Haskell bindings for the flint library for number theory
 description:    This library provides access to the functionality of the FLINT.
                 FLINT is a C library for doing number theory, freely available under the GNU LGPL.
@@ -476,9 +476,9 @@ library
       csrc/perm/power.c
       csrc/perm/mat.c
   extra-libraries:
-      flint
+      flint, gmp, mpfr, ntl
   pkgconfig-depends:
-      flint >= 2.9, gmp, mpfr >= 4.2
+      flint >= 2.9, gmp >= 6.3, mpfr >= 4.2
   build-tools:
       hsc2hs
   build-depends:
